@@ -3,12 +3,14 @@ import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
 import './App.css'
-
+import Navbar from './components/layout/Navbar'
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
+      <Navbar />
+      <div className="pt-24 pb-8 flex-grow">
       <section id="center">
         <div className="hero">
           <img src={heroImg} className="base" width="170" height="179" alt="" />
@@ -115,6 +117,7 @@ function App() {
 
       <div className="ticks"></div>
       <section id="spacer"></section>
+      </div>
     </>
   )
 }

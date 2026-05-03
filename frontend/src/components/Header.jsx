@@ -1,65 +1,97 @@
-import React, { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-    faGraduationCap,
-    faArrowRight,
-} from "@fortawesome/free-solid-svg-icons";
+import React, { useState, useEffect } from "react";
 
 export default function Header() {
-    const [active, setActive] = useState("");
+    const [scrolled, setScrolled] = useState(false);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => setScrolled(window.scrollY > 10);
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
 
     const navLinks = [
-        "About",
-        "Eligibility",
-        "Process",
-        "Guidelines",
-        "Team",
-        "FAQ",
-        "Contact",
+        { name: "About", href: "#about" },
+        { name: "Eligibility", href: "#" },
+        { name: "Process", href: "#process" },
+        { name: "Guidelines", href: "#" },
+        { name: "Team", href: "#" },
+        { name: "FAQ", href: "#" },
+        { name: "Contact", href: "#contact" },
     ];
 
     return (
-        <header className="w-full h-[80px] bg-white shadow-[0_1px_14px_rgba(15,23,42,0.06)]">
-            <div className="flex h-full w-full items-center justify-between">
-                {/* LOGO */}
-                <div className="ml-[80px] flex items-center gap-4">
-                    <div className="flex h-[58px] w-[58px] items-center justify-center rounded-full bg-[#1e3a8a] text-white shadow-sm">
-                        <FontAwesomeIcon icon={faGraduationCap} className="text-[24px]" />
+        <nav
+            className={`fixed top-0 left-0 right-0 z-[100] bg-white/95 backdrop-blur-[14px] border-b border-blue-100 transition-shadow duration-200 ${scrolled ? "shadow-[0_4px_24px_rgba(30,58,138,0.08)]" : ""
+                }`}
+        >
+            <div className="max-w-[1280px] mx-auto px-4 sm:px-6 h-[64px] sm:h-[72px] flex items-center justify-between gap-4">
+                <a href="/" className="flex items-center gap-2.5 no-underline shrink-0">
+                    <div className="w-[36px] h-[36px] bg-primary text-white rounded-lg flex items-center justify-center text-base">
+                        <i className="fas fa-graduation-cap"></i>
                     </div>
-
-                    <div className="leading-none">
-                        <h2 className="text-[21px] font-black tracking-[-0.03em] text-[#1e3a8a]">
+                    <div className="flex flex-col">
+                        <span className="text-[0.95rem] font-black text-primary leading-[1.2]">
                             CUI Abbottabad
-                        </h2>
-
-                        <p className="mt-1 text-[10px] font-black uppercase tracking-[0.25em] text-sky-500">
-                            FYP PORTAL
-                        </p>
+                        </span>
+                        <span className="text-[0.6rem] font-bold text-blue-400 uppercase tracking-[0.2em] leading-[1.2]">
+                            FYP Portal
+                        </span>
                     </div>
+                </a>
+
+                <div className="hidden lg:flex items-center gap-4">
+                    {navLinks.map((item) => (
+                        <a
+                            key={item.name}
+                            href={item.href}
+                            className="text-[13px] font-bold text-gray-500 no-underline transition-colors duration-150 hover:text-primary"
+                        >
+                            {item.name}
+                        </a>
+                    ))}
                 </div>
 
-                {/* NAV LINKS */}
-                <nav className="hidden items-center gap-9 lg:flex">
-                    {navLinks.map((item) => (
-                        <button
-                            key={item}
-                            onClick={() => setActive(item)}
-                            className={`text-[15px] font-bold transition-colors duration-200 ${active === item
-                                ? "text-[#1e3a8a]"
-                                : "text-gray-500 hover:text-[#1e3a8a]"
-                                }`}
-                        >
-                            {item}
-                        </button>
-                    ))}
-                </nav>
-
-                {/* BUTTON */}
-                <button className="mr-[80px] hidden h-[40px] min-w-[175px] items-center justify-center gap-3 rounded-full bg-[#1e3a8a] px-9 text-[15px] font-black text-white shadow-[0_10px_22px_rgba(30,58,138,0.3)] transition hover:bg-[#162f74] sm:flex">
-                    Portal Login
-                    <FontAwesomeIcon icon={faArrowRight} className="text-[14px]" />
-                </button>
+                <div className="flex items-center gap-3">
+                    <a
+                        href="/login"
+                        className="hidden sm:inline-flex items-center justify-center gap-2 py-2.5 px-5 rounded-full font-poppins text-[13px] font-bold bg-primary text-white shadow-[0_8px_24px_rgba(30,58,138,0.18)] hover:bg-blue-800 hover:shadow-[0_16px_48px_rgba(30,58,138,0.22)] hover:-translate-y-px transition-all whitespace-nowrap"
+                    >
+                        Portal Login <i className="fas fa-arrow-right"></i>
+                    </a>
+                    <button
+                        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                        className="lg:hidden w-[40px] h-[40px] rounded-lg bg-white border-[1.5px] border-blue-100 text-primary flex items-center justify-center cursor-pointer text-base transition-all hover:bg-blue-50"
+                    >
+                        <i className={mobileMenuOpen ? "fas fa-times" : "fas fa-bars"}></i>
+                    </button>
+                </div>
             </div>
-        </header>
+
+            {/* Mobile Menu */}
+            <div
+                className={`lg:hidden overflow-hidden bg-white border-t border-blue-100 transition-all duration-300 ${mobileMenuOpen ? "max-h-[640px]" : "max-h-0"
+                    }`}
+            >
+                <div className="p-4 sm:p-6 flex flex-col gap-2">
+                    {navLinks.map((item) => (
+                        <a
+                            key={item.name}
+                            href={item.href}
+                            onClick={() => setMobileMenuOpen(false)}
+                            className="block py-3 px-3 rounded-lg text-[13px] font-bold text-gray-700 no-underline transition-all hover:bg-blue-50 hover:text-primary"
+                        >
+                            {item.name}
+                        </a>
+                    ))}
+                    <a
+                        href="/login"
+                        className="mt-2 w-full inline-flex items-center justify-center gap-2 py-2.5 px-5 rounded-full font-poppins text-[13px] font-bold bg-primary text-white shadow-[0_8px_24px_rgba(30,58,138,0.18)] hover:bg-blue-800 transition-all"
+                    >
+                        Portal Login <i className="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </nav>
     );
 }

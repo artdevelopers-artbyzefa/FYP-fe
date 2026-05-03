@@ -27,9 +27,7 @@ export default function Header() {
         >
             <div className="max-w-[1280px] mx-auto px-4 sm:px-6 h-[64px] sm:h-[72px] flex items-center justify-between gap-4">
                 <a href="/" className="flex items-center gap-2.5 no-underline shrink-0">
-                    <div className="w-[36px] h-[36px] bg-primary text-white rounded-lg flex items-center justify-center text-base">
-                        <i className="fas fa-graduation-cap"></i>
-                    </div>
+                    <img src="/cuilogo.png" alt="CUI Logo" className="h-[44px] w-auto" />
                     <div className="flex flex-col">
                         <span className="text-[0.95rem] font-black text-primary leading-[1.2]">
                             CUI Abbottabad

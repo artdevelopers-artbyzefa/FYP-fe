@@ -56,307 +56,122 @@ const steps = [
 
 export default function Process() {
     return (
-        <div style={styles.page}>
+        <>
             <Header />
 
-            {/* Hero Section */}
-            <section style={styles.hero}>
-                <div style={styles.heroInner}>
-                    <div style={styles.heroLeft}>
-                        <div style={styles.badge}>
-                            <span style={styles.dot}></span>
+            <div className="font-['Segoe_UI',sans-serif] bg-white text-[#111827]">
+                {/* HERO */}
+                <section className="h-[630px] w-full bg-gradient-to-br from-[#cfe6ff] via-[#e3f1ff] to-[#f8fcff] flex items-center">
+                    <div className="max-w-7xl mx-auto w-full px-6 mt-10 flex justify-between items-center gap-12">
+                        {/* LEFT */}
+                        <div className="w-[60%]">
+                            {/* BADGE */}
+                            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#9ecfff] bg-[#dbeeff] px-5 py-2.5 shadow-[0_6px_18px_rgba(80,150,255,0.15)]">
+                                <span
+                                    className="h-2.5 w-2.5 rounded-full bg-[#5aa9e6]"
+                                    style={{ animation: "dotPulse 1.4s ease-in-out infinite" }}
+                                ></span>
 
-                            <span style={styles.badgeIcon}>
-                                <FontAwesomeIcon icon={faShareNodes} />
-                            </span>
+                                <FontAwesomeIcon
+                                    icon={faShareNodes}
+                                    className="text-[11px] text-[#214fa3]"
+                                />
 
-                            <span style={styles.badgeText}>FYP WORKFLOW</span>
-                        </div>
-
-                        <h1 style={styles.heroHeading}>
-                            A clear lifecycle
-                            <br />
-                            from project idea to
-                            <br />
-                            final evaluation.
-                        </h1>
-
-                        <p style={styles.heroSubtext}>
-                            The process page gives students a practical view of each major
-                            stage, the expected output, and how the portal supports progress
-                            throughout the year.
-                        </p>
-                    </div>
-
-                    <div style={styles.heroCard}>
-                        <div style={styles.featureRow}>
-                            <div style={styles.featureIcon}>
-                                <FontAwesomeIcon icon={faClock} />
+                                <span className="text-[11px] font-extrabold uppercase tracking-[0.25em] text-[#214fa3]">
+                                    FYP WORKFLOW
+                                </span>
                             </div>
 
-                            <div>
-                                <div style={styles.featureTitle}>Milestone Based</div>
-                                <div style={styles.featureDesc}>
-                                    Each phase has clear submissions, reviews, and feedback
-                                    checkpoints.
+                            {/* HEADING */}
+                            <h1 className="text-[70px] font-black leading-[1.05] tracking-[-0.04em] text-[#0b132a]">
+                                A clear lifecycle
+                                <br />
+                                from project idea to
+                                <br />
+                                final evaluation.
+                            </h1>
+
+                            {/* TEXT */}
+                            <p className="mt-6 text-sm font-semibold leading-[1.8] text-gray-500 max-w-[600px]">
+                                The process page gives students a practical view of each major
+                                stage, the expected output, and how the portal supports progress
+                                throughout the year.
+                            </p>
+                        </div>
+
+                        {/* RIGHT BOX */}
+                        <div className="w-[460px] h-[210px] bg-white/90 rounded-[40px] p-6 shadow-[0_25px_60px_rgba(0,0,0,0.12)] flex flex-col justify-between">
+                            {/* ITEM 1 */}
+                            <div className="flex items-center gap-3 p-2">
+                                <div className="w-12 h-12 aspect-square shrink-0 flex items-center justify-center rounded-full bg-[#edf5ff] text-[#214fa3]">
+                                    <FontAwesomeIcon icon={faClock} className="text-[15px]" />
+                                </div>
+
+                                <div className="pl-2">
+                                    <h3 className="font-extrabold text-gray-900">
+                                        Milestone Based
+                                    </h3>
+                                    <p className="text-sm font-semibold text-gray-600 leading-relaxed">
+                                        Each phase has clear submissions, reviews, and feedback
+                                        checkpoints.
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* ITEM 2 */}
+                            <div className="flex items-center gap-3 p-2">
+                                <div className="w-12 h-12 aspect-square shrink-0 flex items-center justify-center rounded-full bg-[#edf5ff] text-[#214fa3]">
+                                    <FontAwesomeIcon icon={faComments} className="text-[15px]" />
+                                </div>
+
+                                <div className="pl-2">
+                                    <h3 className="font-extrabold text-gray-900">
+                                        Coordinated Review
+                                    </h3>
+                                    <p className="text-sm font-semibold text-gray-600 leading-relaxed">
+                                        Students, supervisors, coordinators, and evaluators stay
+                                        aligned through the portal.
+                                    </p>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </section>
 
-                        <div style={styles.featureRow}>
-                            <div style={styles.featureIcon}>
-                                <FontAwesomeIcon icon={faComments} />
-                            </div>
+                {/* TIMELINE */}
+                <section className="bg-white px-6 pt-[88px] pb-24">
+                    <div className="relative mx-auto max-w-[1180px]">
+                        <div className="absolute bottom-7 left-[25px] top-7 w-0.5 bg-[#dbeeff]" />
 
-                            <div>
-                                <div style={styles.featureTitle}>Coordinated Review</div>
-                                <div style={styles.featureDesc}>
-                                    Students, supervisors, coordinators, and evaluators stay
-                                    aligned through the portal.
+                        {steps.map((step) => (
+                            <div
+                                key={step.number}
+                                className="relative mb-7 flex items-center gap-[62px]"
+                            >
+                                <div className="z-[2] flex h-12 w-12 min-w-12 items-center justify-center rounded-full border-[1.5px] border-[#c6dcff] bg-white text-[17px] text-[#214fa3] shadow-[0_8px_20px_rgba(28,66,130,0.1)]">
+                                    <FontAwesomeIcon icon={step.icon} />
+                                </div>
+
+                                <div className="min-h-[154px] flex-1 rounded-[31px] border-[1.5px] border-[#c9e0ff] bg-white p-[30px] shadow-[0_7px_16px_rgba(18,49,91,0.025)]">
+                                    <p className="mb-[13px] text-xs font-black tracking-[0.16em] text-[#245fc6]">
+                                        STEP {step.number}
+                                    </p>
+
+                                    <h3 className="mb-3 text-[22px] font-black leading-[1.1] tracking-[-0.04em] text-[#071327]">
+                                        {step.title}
+                                    </h3>
+
+                                    <p className="text-[15.5px] font-medium leading-[1.7] text-[#5f6877]">
+                                        {step.desc}
+                                    </p>
                                 </div>
                             </div>
-                        </div>
+                        ))}
                     </div>
-                </div>
-            </section>
-
-            {/* Steps Section */}
-            <section style={styles.stepsSection}>
-                <div style={styles.stepsWrap}>
-                    <div style={styles.timelineLine}></div>
-
-                    {steps.map((step) => (
-                        <div key={step.number} style={styles.stepRow}>
-                            <div style={styles.stepIcon}>
-                                <FontAwesomeIcon icon={step.icon} />
-                            </div>
-
-                            <div style={styles.stepCard}>
-                                <p style={styles.stepNumber}>STEP {step.number}</p>
-                                <h3 style={styles.stepTitle}>{step.title}</h3>
-                                <p style={styles.stepDesc}>{step.desc}</p>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </section>
+                </section>
+            </div>
 
             <Footer />
-        </div>
+        </>
     );
 }
-
-const styles = {
-    page: {
-        fontFamily: "'Segoe UI', sans-serif",
-        backgroundColor: "#ffffff",
-        color: "#111827",
-    },
-
-    hero: {
-        background:
-            "linear-gradient(160deg, #dbe9ff 0%, #eef4ff 50%, #f0f4ff 100%)",
-        padding: "70px 20px 90px",
-    },
-
-    heroInner: {
-        maxWidth: "1200px",
-        margin: "0 auto",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        gap: "24px",
-        flexWrap: "wrap",
-    },
-
-    heroLeft: {
-        flex: "1 1 560px",
-    },
-    badge: {
-        display: "inline-flex",
-        alignItems: "center",
-        gap: "10px",
-
-        /* size chota */
-        padding: "8px 18px",
-
-        borderRadius: "999px",
-
-        /* exact light gradient like image */
-        background: "linear-gradient(180deg, #f3f7ff 0%, #e6f0ff 100%)",
-
-        border: "1px solid #cfe0ff",
-
-        boxShadow: "0 2px 6px rgba(59,130,246,0.08)",
-    },
-
-    dot: {
-        width: "9px",
-        height: "9px",
-        borderRadius: "50%",
-        backgroundColor: "#3b82f6",
-    },
-
-    badgeIcon: {
-        width: "22px",
-        height: "22px",
-        borderRadius: "50%",
-
-        /* icon background subtle */
-        backgroundColor: "#edf4ff",
-
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-
-        color: "#1e3a8a",
-        fontSize: "11px",
-    },
-
-    badgeText: {
-        fontSize: "13px",   // smaller
-        fontWeight: "900",
-        letterSpacing: "0.18em",
-        color: "#1e3a8a",
-    },
-
-
-
-    heroHeading: {
-        fontSize: "clamp(44px, 6vw, 72px)",
-        fontWeight: "950",
-        lineHeight: "0.98",
-        letterSpacing: "-0.045em",
-        color: "#071a3d",
-        marginBottom: "24px",
-    },
-
-    heroSubtext: {
-        fontSize: "17px",
-        color: "#4b5563",
-        lineHeight: "1.7",
-        maxWidth: "620px",
-    },
-
-    heroCard: {
-        flex: "0 1 430px",
-        width: "100%",
-        backgroundColor: "#ffffff",
-        borderRadius: "28px",
-        padding: "34px",
-        boxShadow: "0 24px 55px rgba(15,43,88,0.14)",
-        alignSelf: "center",
-    },
-
-    featureRow: {
-        display: "flex",
-        alignItems: "flex-start",
-        gap: "14px",
-        marginBottom: "20px",
-    },
-
-    featureIcon: {
-        width: "42px",
-        height: "42px",
-        borderRadius: "50%",
-        backgroundColor: "#eff6ff",
-        color: "#1e3a8a",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        fontSize: "17px",
-        flexShrink: 0,
-    },
-
-    featureTitle: {
-        fontSize: "16px",
-        fontWeight: "800",
-        color: "#0f172a",
-        marginBottom: "4px",
-    },
-
-    featureDesc: {
-        fontSize: "14px",
-        color: "#6b7280",
-        lineHeight: "1.6",
-    },
-
-    stepsSection: {
-        backgroundColor: "#ffffff",
-        padding: "88px 24px 96px",
-    },
-
-    stepsWrap: {
-        maxWidth: "1180px",
-        margin: "0 auto",
-        position: "relative",
-    },
-
-    timelineLine: {
-        position: "absolute",
-        left: "25px",
-        top: "28px",
-        bottom: "28px",
-        width: "2px",
-        backgroundColor: "#dbeeff",
-    },
-
-    stepRow: {
-        position: "relative",
-        display: "flex",
-        alignItems: "center",
-        gap: "62px",
-        marginBottom: "28px",
-    },
-
-    stepIcon: {
-        width: "48px",
-        height: "48px",
-        minWidth: "48px",
-        borderRadius: "50%",
-        backgroundColor: "#ffffff",
-        border: "1px solid #dbeeff",
-        boxShadow: "0 8px 20px rgba(28, 66, 130, 0.1)",
-        color: "#214fa3",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        fontSize: "17px",
-        zIndex: 2,
-    },
-
-    stepCard: {
-        flex: 1,
-        minHeight: "154px",
-        border: "1px solid #d9eafa",
-        borderRadius: "31px",
-        backgroundColor: "#ffffff",
-        boxShadow: "0 7px 16px rgba(18, 49, 91, 0.025)",
-        padding: "30px",
-    },
-
-    stepNumber: {
-        margin: "0 0 13px",
-        color: "#245fc6",
-        fontSize: "12px",
-        fontWeight: "900",
-        letterSpacing: "0.16em",
-    },
-
-    stepTitle: {
-        margin: "0 0 12px",
-        color: "#071327",
-        fontSize: "22px",
-        lineHeight: "1.1",
-        fontWeight: "900",
-        letterSpacing: "-0.04em",
-    },
-
-    stepDesc: {
-        margin: 0,
-        color: "#5f6877",
-        fontSize: "15.5px",
-        lineHeight: "1.7",
-        fontWeight: "500",
-    },
-};

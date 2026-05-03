@@ -8,9 +8,9 @@ export default function Footer() {
                     <span className="text-[13px] font-black text-gray-400 tracking-[0.1em]">CUI FYP System</span>
                 </div>
                 <div className="flex flex-wrap gap-4 sm:gap-6">
-                    <a href="#" className="text-[13px] font-bold text-gray-500 no-underline transition-colors hover:text-primary">Privacy Policy</a>
-                    <a href="#" className="text-[13px] font-bold text-gray-500 no-underline transition-colors hover:text-primary">Terms of Service</a>
-                    <a href="#" className="text-[13px] font-bold text-gray-500 no-underline transition-colors hover:text-primary">Accessibility</a>
+                    <a href="#" className="text-[13px] font-bold text-gray-400 no-underline transition-colors hover:text-primary">Privacy Policy</a>
+                    <a href="#" className="text-[13px] font-bold text-gray-400 no-underline transition-colors hover:text-primary">Terms of Service</a>
+                    <a href="#" className="text-[13px] font-bold text-gray-400 no-underline transition-colors hover:text-primary">Accessibility</a>
                 </div>
                 <div className="text-[12px] font-semibold text-gray-400">
                     © 2026 CUI Abbottabad — Department of Computer Science. All rights reserved.

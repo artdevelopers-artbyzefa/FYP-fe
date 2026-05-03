@@ -4,6 +4,8 @@ export default function Header() {
     const [scrolled, setScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+    const isHomePage = window.location.pathname === "/";
+
     useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 10);
         window.addEventListener("scroll", handleScroll);
@@ -13,11 +15,11 @@ export default function Header() {
     const navLinks = [
         { name: "About", href: "#about" },
         { name: "Eligibility", href: "#" },
-        { name: "Process", href: "#process" },
-        { name: "Guidelines", href: "#" },
-        { name: "Team", href: "#" },
-        { name: "FAQ", href: "#" },
-        { name: "Contact", href: "#contact" },
+        { name: "Process", href: "/process" },
+        { name: "Guidelines", href: "/guidelines" },
+        { name: "Team", href: "/team" },
+        { name: "FAQ", href: "/faq" },
+        { name: "Contact", href: "/contact" },
     ];
 
     return (
@@ -26,8 +28,20 @@ export default function Header() {
                 }`}
         >
             <div className="max-w-[1280px] mx-auto px-4 sm:px-6 h-[64px] sm:h-[72px] flex items-center justify-between gap-4">
+
+                {/* LOGO + TEXT */}
                 <a href="/" className="flex items-center gap-2.5 no-underline shrink-0">
-                    <img src="/cuilogo.png" alt="CUI Logo" className="h-[44px] w-auto" />
+
+                    {/* ICON SWITCH */}
+                    {isHomePage ? (
+                        <img src="/cuilogo.png" alt="CUI Logo" className="h-[44px] w-auto" />
+                    ) : (
+                        <div className="w-[38px] h-[38px] rounded-full bg-primary flex items-center justify-center shadow-[0_8px_20px_rgba(33,79,163,0.25)]">
+                            <i className="fas fa-graduation-cap text-white text-[16px]"></i>
+                        </div>
+                    )}
+
+                    {/* TEXT */}
                     <div className="flex flex-col">
                         <span className="text-[0.95rem] font-black text-primary leading-[1.2]">
                             CUI Abbottabad
@@ -36,8 +50,10 @@ export default function Header() {
                             FYP Portal
                         </span>
                     </div>
+
                 </a>
 
+                {/* NAV LINKS */}
                 <div className="hidden lg:flex items-center gap-4">
                     {navLinks.map((item) => (
                         <a
@@ -50,13 +66,18 @@ export default function Header() {
                     ))}
                 </div>
 
+                {/* RIGHT SIDE */}
                 <div className="flex items-center gap-3">
+
+                    {/* DESKTOP BUTTON */}
                     <a
                         href="/login"
-                        className="hidden sm:inline-flex items-center justify-center gap-2 py-2.5 px-5 rounded-full font-poppins text-[13px] font-bold bg-primary text-white shadow-[0_8px_24px_rgba(30,58,138,0.18)] hover:bg-blue-800 hover:shadow-[0_16px_48px_rgba(30,58,138,0.22)] hover:-translate-y-px transition-all whitespace-nowrap"
+                        className="hidden sm:inline-flex items-center justify-center gap-2 h-[32px] px-5 rounded-full text-[13px] font-bold bg-primary text-white shadow-[0_8px_24px_rgba(30,58,138,0.18)] hover:bg-blue-800 active:bg-blue-900 transition-all whitespace-nowrap"
                     >
                         Portal Login <i className="fas fa-arrow-right"></i>
                     </a>
+
+                    {/* MOBILE MENU BUTTON */}
                     <button
                         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                         className="lg:hidden w-[40px] h-[40px] rounded-lg bg-white border-[1.5px] border-blue-100 text-primary flex items-center justify-center cursor-pointer text-base transition-all hover:bg-blue-50"
@@ -66,7 +87,7 @@ export default function Header() {
                 </div>
             </div>
 
-            {/* Mobile Menu */}
+            {/* MOBILE MENU */}
             <div
                 className={`lg:hidden overflow-hidden bg-white border-t border-blue-100 transition-all duration-300 ${mobileMenuOpen ? "max-h-[640px]" : "max-h-0"
                     }`}
@@ -82,9 +103,11 @@ export default function Header() {
                             {item.name}
                         </a>
                     ))}
+
+                    {/* MOBILE BUTTON */}
                     <a
                         href="/login"
-                        className="mt-2 w-full inline-flex items-center justify-center gap-2 py-2.5 px-5 rounded-full font-poppins text-[13px] font-bold bg-primary text-white shadow-[0_8px_24px_rgba(30,58,138,0.18)] hover:bg-blue-800 transition-all"
+                        className="hidden sm:inline-flex items-center justify-center gap-2 h-[32px] px-5 rounded-full text-[13px] font-bold bg-[#214fa3] text-white shadow-[0_8px_24px_rgba(30,58,138,0.18)] hover:bg-[#163172] active:bg-[#0f2554] transition-all whitespace-nowrap"
                     >
                         Portal Login <i className="fas fa-arrow-right"></i>
                     </a>

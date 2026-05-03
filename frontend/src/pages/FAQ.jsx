@@ -2,175 +2,122 @@ import React, { useState } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-    faCircleQuestion,
-    faMagnifyingGlass,
-    faHeadset,
-    faChevronDown,
-    faChevronUp,
-} from "@fortawesome/free-solid-svg-icons";
-
-const faqs = [
-    {
-        question: "Who is eligible to enroll in FYP?",
-        answer:
-            "Students who meet the department's credit hour, prerequisite course, CGPA, and registration requirements can enroll. Confirm your status before forming a group.",
-    },
-    {
-        question: "How do we submit a project idea?",
-        answer:
-            "Project ideas are submitted through the FYP portal according to the announced proposal submission timeline.",
-    },
-    {
-        question: "Can students choose their supervisor?",
-        answer:
-            "Students may suggest or request a supervisor, but final allocation depends on availability, department policy, and project relevance.",
-    },
-    {
-        question: "Where are deadlines announced?",
-        answer:
-            "Deadlines are announced through the FYP portal and official department communication channels.",
-    },
-    {
-        question: "What happens after proposal approval?",
-        answer:
-            "After approval, students continue with implementation, milestone submissions, supervisor meetings, and scheduled progress reviews.",
-    },
-    {
-        question: "How is final evaluation handled?",
-        answer:
-            "Final evaluation is conducted by assigned evaluators based on project work, documentation, presentation, and viva performance.",
-    },
-];
-
 const FAQ = () => {
-    const [openIndex, setOpenIndex] = useState(0);
+  const faqs = [
+    {
+      question: "Who is eligible to enroll in FYP?",
+      answer: "Students who meet the department's credit hour, prerequisite course, CGPA, and registration requirements can enroll. Confirm your status before forming a group.",
+    },
+    {
+      question: "How do we submit a project idea?",
+      answer: "Log in to the portal, open the proposal section, and submit the required title, abstract, objectives, methodology, tools, and group details.",
+    },
+    {
+      question: "Can students choose their supervisor?",
+      answer: "Students may suggest a preferred supervisor where allowed, but final allocation depends on domain fit, workload, and coordinator approval.",
+    },
+    {
+      question: "Where are deadlines announced?",
+      answer: "Deadlines are posted through portal announcements and may also be communicated by the FYP coordinator or department office.",
+    },
+    {
+      question: "What happens after proposal approval?",
+      answer: "The group enters the development phase, submits progress updates, meets the supervisor, and prepares milestone evidence for review.",
+    },
+    {
+      question: "How is final evaluation handled?",
+      answer: "Final evaluation normally includes report review, project demonstration, viva or defense, evaluator remarks, and rubric-based scoring.",
+    },
+  ];
 
-    return (
-        <>
-            <Header />
+  const [openIndex, setOpenIndex] = useState(0);
 
-            <main className="w-full bg-white">
+  const toggleFAQ = (index) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
 
-                {/* HERO */}
-                <section className="h-[630px] w-full bg-gradient-to-br from-[#cfe6ff] via-[#e3f1ff] to-[#f8fcff] flex items-center">
-                    <div className="max-w-7xl mx-auto w-full px-6 mt-10 flex justify-between items-center gap-15">
-
-                        <div className="w-[60%]">
-
-                            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#9ecfff] bg-[#dbeeff] px-5 py-2.5 shadow-[0_6px_18px_rgba(80,150,255,0.15)]">
-                                <span
-                                    className="h-2.5 w-2.5 rounded-full bg-[#5aa9e6]"
-                                    style={{ animation: "dotPulse 1.4s ease-in-out infinite" }}
-                                ></span>
-
-                                <FontAwesomeIcon icon={faCircleQuestion} className="text-[11px] text-primary" />
-
-                                <span className="text-[11px] font-extrabold uppercase tracking-[0.25em] text-primary">
-                                    FAQ
-                                </span>
-                            </div>
-
-                            <h1 className="text-[68px] font-extrabold leading-[1.05] tracking-[-0.04em] text-[#0b132a]">
-                                Quick answers to <br />
-                                common FYP <br />
-                                questions.
-                            </h1>
-
-                            <p className="mt-6 text-sm font-semibold leading-[1.8] text-gray-500 max-w-[600px]">
-                                Find guidance on eligibility, submissions, supervisor coordination,
-                                deadlines, reviews, and how students should use the portal.
-                            </p>
-                        </div>
-
-                        {/* RIGHT BOX */}
-                        <div className="w-[460px] h-[210px] bg-white/90 rounded-[40px] p-6 shadow-[0_25px_60px_rgba(0,0,0,0.12)] flex flex-col justify-between">
-
-                            {/* ITEM 1 */}
-                            <div className="flex gap-3 p-2 items-center">
-                                <div className="w-12 h-12 flex items-center justify-center rounded-full bg-[#edf5ff] text-[#214fa3] shrink-0">
-                                    <FontAwesomeIcon icon={faMagnifyingGlass} className="text-[16px]" />
-                                </div>
-
-                                <div className="pl-2">
-                                    <h3 className="font-extrabold text-gray-900">Scan Faster</h3>
-                                    <p className="text-sm font-semibold text-gray-600">
-                                        Expand only the questions you need and keep the rest collapsed.
-                                    </p>
-                                </div>
-                            </div>
-
-                            {/* ITEM 2 */}
-                            <div className="flex gap-3 p-2 items-center">
-                                <div className="w-12 h-12 flex items-center justify-center rounded-full bg-[#edf5ff] text-[#214fa3] shrink-0">
-                                    <FontAwesomeIcon icon={faHeadset} className="text-[16px]" />
-                                </div>
-
-                                <div className="pl-2">
-                                    <h3 className="font-extrabold text-gray-900">Still Unsure?</h3>
-                                    <p className="text-sm font-semibold text-gray-600">
-                                        Contact the FYP office for department-specific decisions or unusual cases.
-                                    </p>
-                                </div>
-                            </div>
-
-                        </div>
+  return (
+    <div className="font-poppins bg-lightbg text-gray-700 min-h-screen flex flex-col">
+      <Header />
+      
+      <main className="flex-grow pt-20">
+        {/* Page Hero */}
+        <section className="bg-gradient-to-br from-blue-50/95 via-blue-100/80 to-blue-50/90 py-16 md:py-24 border-b border-blue-100">
+          <div className="container max-w-[1280px] mx-auto px-4 sm:px-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+              <div>
+                <div className="inline-flex items-center gap-2 py-1.5 px-4 bg-blue-900/5 border border-blue-900/10 rounded-full text-primary text-[0.7rem] font-extrabold uppercase tracking-[0.24em] mb-6">
+                  <span className="w-1.5 h-1.5 bg-secondary rounded-full"></span>
+                  <i className="fas fa-circle-question"></i> FAQ
+                </div>
+                <h1 className="text-[clamp(1.8rem,4vw,2.5rem)] font-black text-gray-900 leading-tight mb-5">
+                  Quick answers to common FYP questions.
+                </h1>
+                <p className="text-[15px] md:text-[17px] text-gray-500 leading-relaxed max-w-[600px]">
+                  Find guidance on eligibility, submissions, supervisor coordination, deadlines, reviews, and how students should use the portal.
+                </p>
+              </div>
+              <div className="bg-white rounded-3xl p-8 border border-blue-100 shadow-xl">
+                <div className="space-y-6">
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center text-primary shrink-0">
+                      <i className="fas fa-magnifying-glass"></i>
                     </div>
-                </section>
-
-                {/* FAQ LIST */}
-                <section className="w-full bg-white py-[120px]">
-                    <div className="max-w-[1140px] mx-auto px-6">
-                        <div className="flex flex-col gap-5">
-                            {faqs.map((item, index) => {
-                                const isOpen = openIndex === index;
-
-                                return (
-                                    <div
-                                        key={index}
-                                        className={`rounded-[26px] border border-[#cfe5ff] bg-white transition-all duration-300 ${isOpen ? "py-8 px-8" : "py-6 px-8"
-                                            }`}
-                                    >
-                                        <button
-                                            onClick={() => setOpenIndex(isOpen ? null : index)}
-                                            className="w-full flex justify-between"
-                                        >
-                                            <h3 className="text-[18px] font-black text-[#071126]">
-                                                {item.question}
-                                            </h3>
-
-                                            <FontAwesomeIcon
-                                                icon={isOpen ? faChevronUp : faChevronDown}
-                                                className="text-[#214fa3]"
-                                            />
-                                        </button>
-
-                                        {isOpen && (
-                                            <p className="mt-7 text-[15px] text-gray-600">
-                                                {item.answer}
-                                            </p>
-                                        )}
-                                    </div>
-                                );
-                            })}
-                        </div>
+                    <div>
+                      <h3 className="font-bold text-gray-900 mb-1">Scan Faster</h3>
+                      <p className="text-sm text-gray-500">Expand only the questions you need and keep the rest collapsed.</p>
                     </div>
-                </section>
+                  </div>
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center text-primary shrink-0">
+                      <i className="fas fa-headset"></i>
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-gray-900 mb-1">Still Unsure?</h3>
+                      <p className="text-sm text-gray-500">Contact the FYP office for department-specific decisions or unusual cases.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
 
-                <style>
-                    {`
-                        @keyframes dotPulse {
-                            0%,100%{opacity:1;transform:scale(1);}
-                            50%{opacity:0.45;transform:scale(1.35);}
-                        }
-                    `}
-                </style>
-            </main>
+        {/* FAQ List */}
+        <section className="py-16 md:py-24 bg-white border-b border-blue-100">
+          <div className="container max-w-[800px] mx-auto px-4 sm:px-6">
+            <div className="space-y-4">
+              {faqs.map((faq, index) => (
+                <div 
+                  key={index} 
+                  className={`border-[1.5px] rounded-[1.5rem] overflow-hidden transition-all duration-300 ${openIndex === index ? 'border-primary shadow-md' : 'border-blue-100 hover:border-blue-200'}`}
+                >
+                  <button 
+                    onClick={() => toggleFAQ(index)}
+                    className="w-full text-left px-6 py-5 flex items-center justify-between gap-4 group"
+                  >
+                    <span className={`text-[15px] font-bold transition-colors ${openIndex === index ? 'text-primary' : 'text-gray-900 group-hover:text-primary'}`}>
+                      {faq.question}
+                    </span>
+                    <i className={`fas fa-chevron-down text-xs transition-transform duration-300 ${openIndex === index ? 'rotate-180 text-primary' : 'text-gray-400 group-hover:text-primary'}`}></i>
+                  </button>
+                  <div 
+                    className={`px-6 overflow-hidden transition-all duration-300 ${openIndex === index ? 'pb-6 max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}
+                  >
+                    <p className="text-[14px] text-gray-500 leading-relaxed font-medium">
+                      {faq.answer}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      </main>
 
-            <Footer />
-        </>
-    );
+      <Footer />
+    </div>
+  );
 };
 
 export default FAQ;

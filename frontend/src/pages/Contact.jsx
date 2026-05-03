@@ -3,179 +3,154 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 const Contact = () => {
-    return (
-        <>
-            <Header />
-
-            <main className="bg-white text-[#111827] pt-10">
-                {/* Hero Section */}
-                <section className="h-[590px] w-full bg-gradient-to-br from-[#cfe6ff] via-[#e3f1ff] to-[#f8fcff] flex items-center">
-                    <div className="max-w-7xl mx-auto w-full px-6 mt-10 flex justify-between items-center gap-15">
-
-                        {/* LEFT CONTENT */}
-                        <div className="w-[60%]">
-
-                            {/* BADGE */}
-                            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#9ecfff] bg-[#dbeeff] px-5 py-2.5 shadow-[0_6px_18px_rgba(80,150,255,0.15)]">
-
-                                <span
-                                    className="h-2.5 w-2.5 rounded-full bg-[#5aa9e6]"
-                                    style={{ animation: "dotPulse 1.4s ease-in-out infinite" }}
-                                ></span>
-
-                                <i className="fa-solid fa-envelope text-[13px] text-primary"></i>
-
-                                <span className="text-[11px] font-extrabold uppercase tracking-[0.25em] text-primary">
-                                    CONTACT
-                                </span>
-                            </div>
-
-                            {/* HEADING */}
-                            <h1 className="text-[66px] font-extrabold leading-[1.1] tracking-[-0.02em] text-[#0b132a]">
-                                Reach the FYP office
-                                <br />for support,
-                                <br />guidance, and
-                                <br />coordination.
-                            </h1>
-
-                            {/* TEXT */}
-                            <p className="mt-6 text-sm font-semibold leading-[1.8] text-gray-500 max-w-[600px]">
-                                Use the contact form for general questions, eligibility concerns, portal
-                                issues, or guidance about submissions and review schedules.
-                            </p>
-                        </div>
-
-
-                        {/* RIGHT BOX (CONTACT CARD) */}
-                        <div className="w-[470px] h-[200px] mt-12 bg-white/90 rounded-[40px] p-8 shadow-[0_25px_60px_rgba(0,0,0,0.12)] flex flex-col gap-3">
-
-                            {/* Office Hours */}
-                            <div className="flex items-start gap-3">
-                                <div className="w-12 h-12 min-w-[40px] rounded-full bg-[#edf5ff] flex items-center justify-center text-[#214fa3]">
-                                    <i className="fa-solid fa-clock text-[15px]"></i>
-                                </div>
-
-                                <div>
-                                    <h3 className="font-bold text-gray-800 leading-tight text-[15px]">
-                                        Office Hours
-                                    </h3>
-                                    <p className="text-sm font-semibold text-gray-500 leading-relaxed mt-1">
-                                        Monday to Friday, 08:30 AM to 04:30 PM.
-                                    </p>
-                                </div>
-                            </div>
-
-                            {/* Support Scope */}
-                            <div className="flex items-start gap-3">
-                                <div className="w-12 h-12 min-w-[40px] rounded-full bg-[#edf5ff] flex items-center justify-center text-[#214fa3]">
-                                    <i className="fa-solid fa-reply text-[15px]"></i>
-                                </div>
-
-                                <div>
-                                    <h3 className="font-bold text-gray-800 leading-tight text-[15px]">
-                                        Support Scope
-                                    </h3>
-                                    <p className="text-sm font-semibold text-gray-500 leading-relaxed mt-1">
-                                        Eligibility, deadlines, portal access, proposal review, and
-                                        evaluation coordination.
-                                    </p>
-                                </div>
-                            </div>
-
-                        </div>
+  return (
+    <div className="font-poppins bg-lightbg text-gray-700 min-h-screen flex flex-col">
+      <Header />
+      
+      <main className="flex-grow pt-20">
+        {/* Page Hero */}
+        <section className="bg-gradient-to-br from-blue-50/95 via-blue-100/80 to-blue-50/90 py-16 md:py-24 border-b border-blue-100">
+          <div className="container max-w-[1280px] mx-auto px-4 sm:px-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+              <div>
+                <div className="inline-flex items-center gap-2 py-1.5 px-4 bg-blue-900/5 border border-blue-900/10 rounded-full text-primary text-[0.7rem] font-extrabold uppercase tracking-[0.24em] mb-6">
+                  <span className="w-1.5 h-1.5 bg-secondary rounded-full"></span>
+                  <i className="fas fa-envelope"></i> Contact
+                </div>
+                <h1 className="text-[clamp(1.8rem,4vw,2.5rem)] font-black text-gray-900 leading-tight mb-5">
+                  Reach the FYP office for support, guidance, and coordination.
+                </h1>
+                <p className="text-[15px] md:text-[17px] text-gray-500 leading-relaxed max-w-[600px]">
+                  Use the contact form for general questions, eligibility concerns, portal issues, or guidance about submissions and review schedules.
+                </p>
+              </div>
+              <div className="bg-white rounded-3xl p-8 border border-blue-100 shadow-xl">
+                <div className="space-y-6">
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center text-primary shrink-0">
+                      <i className="fas fa-clock"></i>
                     </div>
-                </section>
-                {/* Content */}
-                <section className="py-24">
-                    <div className="max-w-[1280px] mx-auto px-8 grid lg:grid-cols-2 gap-10">
-
-                        {/* Form */}
-                        <div className="border rounded-[30px] p-8">
-                            <p className="text-blue-600 font-bold text-sm tracking-widest mb-4">
-                                SEND MESSAGE
-                            </p>
-
-                            <h2 className="text-3xl font-black mb-6">
-                                How can we help?
-                            </h2>
-
-                            <form className="space-y-5 text-sm">
-                                <input
-                                    type="text"
-                                    placeholder="Enter your name"
-                                    className="w-full border rounded-xl p-3"
-                                />
-
-                                <input
-                                    type="email"
-                                    placeholder="name@example.com"
-                                    className="w-full border rounded-xl p-3"
-                                />
-
-                                <textarea
-                                    rows="4"
-                                    placeholder="Write your message"
-                                    className="w-full border rounded-xl p-3 text-primary"
-                                />
-
-                                <button className="w-full h-[33px] bg-primary font-semibold text-sm text-white py-3 rounded-full flex justify-center items-center gap-2">
-                                    Submit Query
-                                    <i className="fa-solid fa-arrow-right"></i>
-                                </button>
-                            </form>
-                        </div>
-
-                        {/* Right Side */}
-                        <div className="space-y-6">
-
-                            {/* Details */}
-                            <div className="border rounded-[30px] p-8">
-                                <p className="text-blue-600 font-bold text-sm tracking-widest mb-6">
-                                    OFFICIAL DETAILS
-                                </p>
-
-                                <div className="space-y-6">
-                                    <InfoItem icon="fa-envelope" title="Email" text="csfyp@cuiatd.edu.pk" />
-                                    <InfoItem icon="fa-phone" title="Phone" text="+92-992-383591 Ext. 240" />
-                                    <InfoItem icon="fa-location-dot" title="Address" text="FYP Office, CS Department, COMSATS University Islamabad, Abbottabad Campus" />
-                                </div>
-                            </div>
-
-                            {/* Location */}
-                            <div className="border rounded-[30px] p-8 bg-[linear-gradient(#e5e7eb_1px,transparent_1px),linear-gradient(90deg,#e5e7eb_1px,transparent_1px)] bg-[size:30px_30px]">
-
-                                <div className="w-14 h-14 bg-primary text-white rounded-full flex items-center justify-center mb-4">
-                                    <i className="fa-solid fa-location-dot"></i>
-                                </div>
-
-                                <h3 className="text-xl font-bold mb-2">Campus Location</h3>
-
-                                <p className="text-gray-500 text-sm">
-                                    Use the official university website or campus contact desk for precise route guidance and visitor information.
-                                </p>
-
-                            </div>
-                        </div>
-
+                    <div>
+                      <h3 className="font-bold text-gray-900 mb-1">Office Hours</h3>
+                      <p className="text-sm text-gray-500">Monday to Friday, 08:30 AM to 04:30 PM.</p>
                     </div>
-                </section>
-            </main >
+                  </div>
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center text-primary shrink-0">
+                      <i className="fas fa-reply"></i>
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-gray-900 mb-1">Support Scope</h3>
+                      <p className="text-sm text-gray-500">Eligibility, deadlines, portal access, proposal review, and evaluation coordination.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
 
-            <Footer />
-        </>
-    );
-};
+        {/* Contact Layout */}
+        <section className="py-16 md:py-24 bg-white border-b border-blue-100">
+          <div className="container max-w-[1280px] mx-auto px-4 sm:px-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
+              {/* Contact Form */}
+              <div className="bg-white border-[1.5px] border-blue-100 rounded-[2.5rem] p-8 sm:p-10 shadow-sm">
+                <p className="text-[0.7rem] font-extrabold text-secondary uppercase tracking-[0.24em] mb-3">Send Message</p>
+                <h2 className="text-2xl md:text-3xl font-black text-gray-900 mb-8">How can we help?</h2>
+                
+                <form className="space-y-6">
+                  <div className="flex flex-col gap-2">
+                    <label className="text-xs font-bold text-gray-600" htmlFor="name">Name</label>
+                    <input 
+                      className="w-full py-3 px-4 border-[1.5px] border-gray-200 rounded-xl text-sm text-gray-800 bg-white outline-none focus:border-secondary focus:ring-4 focus:ring-blue-600/5 transition-all" 
+                      id="name" 
+                      name="name" 
+                      type="text" 
+                      placeholder="Enter your name" 
+                      required 
+                    />
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <label className="text-xs font-bold text-gray-600" htmlFor="email">Email</label>
+                    <input 
+                      className="w-full py-3 px-4 border-[1.5px] border-gray-200 rounded-xl text-sm text-gray-800 bg-white outline-none focus:border-secondary focus:ring-4 focus:ring-blue-600/5 transition-all" 
+                      id="email" 
+                      name="email" 
+                      type="email" 
+                      placeholder="name@example.com" 
+                      required 
+                    />
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <label className="text-xs font-bold text-gray-600" htmlFor="message">Message</label>
+                    <textarea 
+                      className="w-full py-3 px-4 border-[1.5px] border-gray-200 rounded-xl text-sm text-gray-800 bg-white outline-none focus:border-secondary focus:ring-4 focus:ring-blue-600/5 transition-all min-h-[120px] resize-y" 
+                      id="message" 
+                      name="message" 
+                      placeholder="Write your message" 
+                      required 
+                    ></textarea>
+                  </div>
+                  <button type="submit" className="inline-flex items-center justify-center gap-2 py-4 px-8 rounded-full font-bold bg-primary text-white shadow-lg hover:bg-blue-800 hover:-translate-y-px transition-all">
+                    Submit Query <i className="fas fa-arrow-right"></i>
+                  </button>
+                </form>
+              </div>
 
-const InfoItem = ({ icon, title, text }) => (
-    <div className="flex gap-4">
-        <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center text-[#2446a2]">
-            <i className={`fa-solid ${icon}`}></i>
-        </div>
-        <div>
-            <h3 className="font-bold">{title}</h3>
-            <p className="text-gray-500 text-sm">{text}</p>
-        </div>
+              {/* Contact Details */}
+              <div className="space-y-8">
+                <div className="bg-blue-50/50 border border-blue-100 rounded-[2.5rem] p-10">
+                  <p className="text-[0.7rem] font-extrabold text-secondary uppercase tracking-[0.24em] mb-8">Official Details</p>
+                  <div className="space-y-8">
+                    <div className="flex items-start gap-5">
+                      <div className="w-11 h-11 bg-white border border-blue-100 rounded-xl flex items-center justify-center text-primary shrink-0 shadow-sm">
+                        <i className="fas fa-envelope"></i>
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-bold text-gray-900 mb-1">Email</h3>
+                        <a href="mailto:csfyp@cuiatd.edu.pk" className="text-sm text-primary font-medium hover:underline">csfyp@cuiatd.edu.pk</a>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-5">
+                      <div className="w-11 h-11 bg-white border border-blue-100 rounded-xl flex items-center justify-center text-primary shrink-0 shadow-sm">
+                        <i className="fas fa-phone"></i>
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-bold text-gray-900 mb-1">Phone</h3>
+                        <p className="text-sm text-gray-600">+92-992-383591 Ext. 240</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-5">
+                      <div className="w-11 h-11 bg-white border border-blue-100 rounded-xl flex items-center justify-center text-primary shrink-0 shadow-sm">
+                        <i className="fas fa-location-dot"></i>
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-bold text-gray-900 mb-1">Address</h3>
+                        <p className="text-sm text-gray-600 leading-relaxed">FYP Office, CS Department, COMSATS University Islamabad, Abbottabad Campus</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white border border-blue-100 rounded-[2.5rem] p-10 flex items-center gap-6 shadow-sm">
+                  <div className="w-12 h-12 bg-red-50 text-red-500 rounded-full flex items-center justify-center text-xl shrink-0">
+                    <i className="fas fa-location-dot"></i>
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-gray-900 mb-1">Campus Location</h3>
+                    <p className="text-[13px] text-gray-500 leading-relaxed">Use the official university website or campus contact desk for precise route guidance and visitor information.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <Footer />
     </div>
-);
+  );
+};
 
 export default Contact;

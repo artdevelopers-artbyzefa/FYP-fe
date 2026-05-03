@@ -2,197 +2,144 @@ import React from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-    faFileLines,
-    faBook,
-    faUpload,
-    faScaleBalanced,
-    faTriangleExclamation,
-    faCircleInfo,
-    faCalendarCheck,
-    faList
-} from "@fortawesome/free-solid-svg-icons";
-
 const Guidelines = () => {
-    return (
-        <>
-            <Header />
-
-            {/* HERO */}
-            <section className="h-[630px] w-full bg-gradient-to-br from-[#cfe6ff] via-[#e3f1ff] to-[#f8fcff] flex items-center">
-                <div className="max-w-7xl mx-auto w-full px-6 mt-10 flex justify-between items-center gap-12">
-
-                    {/* LEFT */}
-                    <div className="w-[60%]">
-
-                        {/* BADGE */}
-                        <div className="mb-6 inline-flex items-center text-primary gap-2 rounded-full border border-[#9ecfff] bg-[#dbeeff] px-5 py-2.5 shadow-[0_6px_18px_rgba(80,150,255,0.15)]">
-                            <span
-                                className="h-2.5 w-2.5 rounded-full bg-[#5aa9e6]"
-                                style={{ animation: "dotPulse 1.4s ease-in-out infinite" }}
-                            ></span>
-
-                            <FontAwesomeIcon
-                                icon={faBook}
-                                className="text-[11px] text-[#214fa3]"
-                            />
-
-                            <span className="text-[11px] font-extrabold uppercase tracking-[0.25em] text-[#214fa3]">
-                                GUIDELINES
-                            </span>
-                        </div>
-
-                        {/* HEADING */}
-                        <h1 className="text-[66px] tracking-wide font-black leading-[1.05] tracking-[-0.04em] text-[#0b132a]">
-                            Rules and best
-                            <br />
-                            practices for a
-                            <br />
-                            smooth FYP cycle.
-                        </h1>
-
-                        {/* TEXT */}
-                        <p className="mt-6 text-sm font-semibold leading-[1.8] text-gray-500 max-w-[600px]">
-                            Use these guidelines to prepare submissions, follow documentation
-                            standards, meet deadlines, and keep the project academically sound.
-                        </p>
-                    </div>
-
-                    {/* RIGHT BOX */}
-                    <div className="w-[460px] h-[210px] bg-white/90 rounded-[40px] p-6 shadow-[0_25px_60px_rgba(0,0,0,0.12)] flex flex-col justify-between">
-
-                        {/* ITEM 1 */}
-                        <div className="flex items-center gap-3 p-2">
-                            <div className="w-12 h-12 aspect-square shrink-0 flex items-center justify-center rounded-full bg-[#edf5ff] text-[#214fa3]">
-                                <FontAwesomeIcon icon={faFileLines} className="text-[15px]" />
-                            </div>
-
-                            <div className="pl-2">
-                                <h3 className="font-extrabold text-gray-900">
-                                    Documentation
-                                </h3>
-                                <p className="text-sm font-semibold text-gray-600 leading-relaxed">
-                                    Keep every report, diagram, citation, and appendix complete
-                                    and consistent.
-                                </p>
-                            </div>
-                        </div>
-
-                        {/* ITEM 2 */}
-                        <div className="flex items-center gap-3 p-2">
-                            <div className="w-12 h-12 aspect-square shrink-0 flex items-center justify-center rounded-full bg-[#edf5ff] text-[#214fa3]">
-                                <FontAwesomeIcon icon={faCalendarCheck} className="text-[15px]" />
-                            </div>
-
-                            <div className="pl-2">
-                                <h3 className="font-extrabold text-gray-900">
-                                    Deadlines
-                                </h3>
-                                <p className="text-sm font-semibold text-gray-600 leading-relaxed">
-                                    Late submissions can affect review scheduling and evaluation
-                                    readiness.
-                                </p>
-                            </div>
-                        </div>
-
-                    </div>
+  return (
+    <div className="font-poppins bg-lightbg text-gray-700 min-h-screen flex flex-col">
+      <Header />
+      
+      <main className="flex-grow pt-20">
+        {/* Page Hero */}
+        <section className="bg-gradient-to-br from-blue-50/95 via-blue-100/80 to-blue-50/90 py-16 md:py-24 border-b border-blue-100">
+          <div className="container max-w-[1280px] mx-auto px-4 sm:px-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+              <div>
+                <div className="inline-flex items-center gap-2 py-1.5 px-4 bg-blue-900/5 border border-blue-900/10 rounded-full text-primary text-[0.7rem] font-extrabold uppercase tracking-[0.24em] mb-6">
+                  <span className="w-1.5 h-1.5 bg-secondary rounded-full"></span>
+                  <i className="fas fa-book"></i> Guidelines
                 </div>
-            </section>
-
-            {/* SECTION 2 */}
-            <section className="bg-white py-24">
-                <div className="max-w-7xl mx-auto px-6 grid grid-cols-[1.1fr_0.9fr] gap-10">
-
-                    {/* LEFT SIDE */}
-                    <div className="space-y-8">
-
-                        {/* CARD 1 */}
-                        <div className="rounded-[28px] border border-[#cfe4ff] p-10">
-                            <div className="flex items-center gap-3 mb-7">
-                                <FontAwesomeIcon icon={faFileLines} className="text-[#2463eb] text-[22px]" />
-                                <h2 className="text-xl font-black text-[#0b132a]">
-                                    Documentation Requirements
-                                </h2>
-                            </div>
-
-                            <ul className="space-y-4 text-sm text-gray-600 list-disc pl-6">
-                                <li>Use the department-approved proposal and final report structure.</li>
-                                <li>Include problem statement, objectives, scope, methodology, tools, timeline, and expected outcomes.</li>
-                                <li>Maintain proper citations and avoid plagiarism in all written submissions.</li>
-                                <li>Attach relevant diagrams, screenshots, test results, and appendices where required.</li>
-                            </ul>
-                        </div>
-
-                        {/* CARD 2 */}
-                        <div className="rounded-[28px] border border-[#cfe4ff] p-10">
-                            <div className="flex items-center gap-3 mb-7">
-                                <FontAwesomeIcon icon={faUpload} className="text-[#2463eb] text-[22px]" />
-                                <h2 className="text-xl font-black text-[#0b132a]">
-                                    Submission Format
-                                </h2>
-                            </div>
-
-                            <ul className="space-y-4 text-sm text-gray-600 list-disc pl-6">
-                                <li>Submit documents in PDF unless another format is officially announced.</li>
-                                <li>Name files clearly with group ID, project title, and submission type.</li>
-                                <li>Upload source code, datasets, or supporting files only in the requested format.</li>
-                                <li>Verify that all files open correctly before final submission.</li>
-                            </ul>
-                        </div>
-
-                        {/* CARD 3 */}
-                        <div className="rounded-[28px] border border-[#cfe4ff] p-10">
-                            <div className="flex items-center gap-3 mb-7">
-                                <FontAwesomeIcon icon={faScaleBalanced} className="text-[#2463eb] text-[22px]" />
-                                <h2 className="text-xl font-black text-[#0b132a]">
-                                    Academic Policies
-                                </h2>
-                            </div>
-
-                            <ul className="space-y-4 text-sm text-gray-600 list-disc pl-6">
-                                <li>All work must be original and completed by registered group members.</li>
-                                <li>Major scope changes require supervisor and coordinator approval.</li>
-                                <li>Students must attend scheduled reviews, demos, and final defense sessions.</li>
-                                <li>Evaluation decisions are based on rubrics, deliverables, presentation, and technical quality.</li>
-                            </ul>
-                        </div>
-
-                    </div>
-
-                    {/* RIGHT SIDE */}
-                    <div className="space-y-5">
-
-                        <div className="rounded-[24px] border border-[#f7c84b] bg-[#fff7e6] p-8">
-                            <div className="flex items-center gap-3 mb-4">
-                                <FontAwesomeIcon icon={faTriangleExclamation} className="text-[#a85512] text-[18px]" />
-                                <h3 className="font-black text-[#a85512]">Important Note</h3>
-                            </div>
-
-                            <p className="text-[#9a3f0d] text-sm">
-                                Missing a deadline or submitting incomplete documents can delay supervisor review and may affect eligibility for evaluation.
-                            </p>
-                        </div>
-
-                        <div className="rounded-[24px] border border-[#cfe4ff] bg-[#edf6ff] p-8">
-                            <div className="flex items-center gap-3 mb-4">
-                                <FontAwesomeIcon icon={faCircleInfo} className="text-[#214fa3] text-[18px]" />
-                                <h3 className="font-black text-[#214fa3]">Best Practice</h3>
-                            </div>
-
-                            <p className="text-[#1747a6] text-sm">
-                                Meet your supervisor regularly, record feedback, update progress logs, and keep a backup of every submission.
-                            </p>
-                        </div>
-
-                    </div>
-
+                <h1 className="text-[clamp(1.8rem,4vw,2.5rem)] font-black text-gray-900 leading-tight mb-5">
+                  Rules and best practices for a smooth FYP cycle.
+                </h1>
+                <p className="text-[15px] md:text-[17px] text-gray-500 leading-relaxed max-w-[600px]">
+                  Use these guidelines to prepare submissions, follow documentation standards, meet deadlines, and keep the project academically sound.
+                </p>
+              </div>
+              <div className="bg-white rounded-3xl p-8 border border-blue-100 shadow-xl space-y-6">
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center text-primary shrink-0 text-lg">
+                    <i className="fas fa-file-lines"></i>
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-gray-900 mb-1 text-base">Documentation</h3>
+                    <p className="text-sm text-gray-500 leading-relaxed">Keep every report, diagram, citation, and appendix complete and consistent.</p>
+                  </div>
                 </div>
-            </section>
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center text-primary shrink-0 text-lg">
+                    <i className="fas fa-calendar-check"></i>
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-gray-900 mb-1 text-base">Deadlines</h3>
+                    <p className="text-sm text-gray-500 leading-relaxed">Late submissions can affect review scheduling and evaluation readiness.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
 
-            <Footer />
-        </>
-    );
+        {/* Guideline Layout */}
+        <section className="py-16 md:py-24 bg-white border-b border-blue-100">
+          <div className="container max-w-[1280px] mx-auto px-4 sm:px-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
+              {/* Main Content */}
+              <div className="lg:col-span-2 space-y-12">
+                <section className="space-y-6">
+                  <h2 className="text-2xl font-black text-gray-900 flex items-center gap-3">
+                    <i className="fas fa-file-alt text-secondary"></i> Documentation Requirements
+                  </h2>
+                  <ul className="space-y-4">
+                    {[
+                      "Use the department-approved proposal and final report structure.",
+                      "Include problem statement, objectives, scope, methodology, tools, timeline, and expected outcomes.",
+                      "Maintain proper citations and avoid plagiarism in all written submissions.",
+                      "Attach relevant diagrams, screenshots, test results, and appendices where required."
+                    ].map((item, i) => (
+                      <li key={i} className="flex items-start gap-3 text-[15px] text-gray-500 font-medium">
+                        <i className="fas fa-check text-secondary mt-1 text-xs"></i>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+
+                <section className="space-y-6">
+                  <h2 className="text-2xl font-black text-gray-900 flex items-center gap-3">
+                    <i className="fas fa-upload text-secondary"></i> Submission Format
+                  </h2>
+                  <ul className="space-y-4">
+                    {[
+                      "Submit documents in PDF unless another format is officially announced.",
+                      "Name files clearly with group ID, project title, and submission type.",
+                      "Upload source code, datasets, or supporting files only in the requested format.",
+                      "Verify that all files open correctly before final submission."
+                    ].map((item, i) => (
+                      <li key={i} className="flex items-start gap-3 text-[15px] text-gray-500 font-medium">
+                        <i className="fas fa-check text-secondary mt-1 text-xs"></i>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+
+                <section className="space-y-6">
+                  <h2 className="text-2xl font-black text-gray-900 flex items-center gap-3">
+                    <i className="fas fa-scale-balanced text-secondary"></i> Academic Policies
+                  </h2>
+                  <ul className="space-y-4">
+                    {[
+                      "All work must be original and completed by registered group members.",
+                      "Major scope changes require supervisor and coordinator approval.",
+                      "Students must attend scheduled reviews, demos, and final defense sessions.",
+                      "Evaluation decisions are based on rubrics, deliverables, presentation, and technical quality."
+                    ].map((item, i) => (
+                      <li key={i} className="flex items-start gap-3 text-[15px] text-gray-500 font-medium">
+                        <i className="fas fa-check text-secondary mt-1 text-xs"></i>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              </div>
+
+              {/* Sidebar Notices */}
+              <aside className="space-y-6">
+                <div className="bg-amber-50 border-[1.5px] border-amber-200 rounded-[2rem] p-8 shadow-sm">
+                  <h3 className="text-lg font-black text-amber-900 mb-4 flex items-center gap-3">
+                    <i className="fas fa-triangle-exclamation"></i> Important Note
+                  </h3>
+                  <p className="text-[14px] text-amber-800 font-medium leading-relaxed">
+                    Missing a deadline or submitting incomplete documents can delay supervisor review and may affect eligibility for evaluation.
+                  </p>
+                </div>
+
+                <div className="bg-blue-50 border-[1.5px] border-blue-200 rounded-[2rem] p-8 shadow-sm">
+                  <h3 className="text-lg font-black text-blue-900 mb-4 flex items-center gap-3">
+                    <i className="fas fa-circle-info"></i> Best Practice
+                  </h3>
+                  <p className="text-[14px] text-blue-800 font-medium leading-relaxed">
+                    Meet your supervisor regularly, record feedback, update progress logs, and keep a backup of every submission.
+                  </p>
+                </div>
+              </aside>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <Footer />
+    </div>
+  );
 };
 
 export default Guidelines;

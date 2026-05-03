@@ -9,11 +9,14 @@ import Guidelines from './pages/Guidelines';
 import Team from './pages/Team';
 import FAQ from './pages/FAQ';
 import Contact from './pages/Contact';
+import Login from './pages/Login';
+
 
 function App() {
   return (
     <Router>
       <Routes>
+        <Route path="/login" element={<Login />} />
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="about" element={<About />} />

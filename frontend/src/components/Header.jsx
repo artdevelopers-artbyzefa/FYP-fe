@@ -31,17 +31,7 @@ export default function Header() {
 
                 {/* LOGO + TEXT */}
                 <a href="/" className="flex items-center gap-2.5 no-underline shrink-0">
-
-                    {/* ICON SWITCH */}
-                    {isHomePage ? (
-                        <img src="/cuilogo.png" alt="CUI Logo" className="h-[44px] w-auto" />
-                    ) : (
-                        <div className="w-[38px] h-[38px] rounded-full bg-primary flex items-center justify-center shadow-[0_8px_20px_rgba(33,79,163,0.25)]">
-                            <i className="fas fa-graduation-cap text-white text-[16px]"></i>
-                        </div>
-                    )}
-
-                    {/* TEXT */}
+                    <img src="/cuilogo.png" alt="CUI Logo" className="h-[44px] w-auto" />
                     <div className="flex flex-col">
                         <span className="text-[0.95rem] font-black text-primary leading-[1.2]">
                             CUI Abbottabad

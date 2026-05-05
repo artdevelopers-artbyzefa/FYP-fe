@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { 
-  Mail, Lock, User, Eye, EyeOff, ArrowLeft, ArrowRight, 
-  ChevronDown, GraduationCap, ShieldCheck, Building, Users, Briefcase 
-} from 'lucide-react';
+// Removed lucide-react import
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -11,15 +8,15 @@ const Login = () => {
   const [role, setRole] = useState('Student');
 
   const roles = [
-    { id: 'student', label: 'Student', icon: GraduationCap },
-    { id: 'hod', label: 'HOD', icon: ShieldCheck },
-    { id: 'fyp-office', label: 'FYP Office', icon: Building },
-    { id: 'admin', label: 'System Administrator', icon: User },
-    { id: 'faculty', label: 'Faculty Supervisor', icon: Users },
-    { id: 'industry', label: 'Industry Supervisor', icon: Briefcase },
+    { id: 'student', label: 'Student', icon: 'fa-graduation-cap' },
+    { id: 'hod', label: 'HOD', icon: 'fa-shield-halved' },
+    { id: 'fyp-office', label: 'FYP Office', icon: 'fa-building' },
+    { id: 'admin', label: 'System Administrator', icon: 'fa-user' },
+    { id: 'faculty', label: 'Faculty Supervisor', icon: 'fa-users' },
+    { id: 'industry', label: 'Industry Supervisor', icon: 'fa-briefcase' },
   ];
 
-  const SelectedIcon = roles.find(r => r.label === role)?.icon || User;
+  const SelectedIcon = roles.find(r => r.label === role)?.icon || 'fa-user';
 
   return (
     <div className="min-h-screen bg-navy flex items-center justify-center p-4">
@@ -31,7 +28,7 @@ const Login = () => {
           to="/" 
           className="absolute top-8 left-8 flex items-center gap-2 text-gray-500 hover:text-navy transition-colors font-medium text-sm"
         >
-          <ArrowLeft className="w-4 h-4" />
+          <i className="fas fa-arrow-left text-sm"></i>
           Back to Home
         </Link>
 
@@ -63,12 +60,12 @@ const Login = () => {
               }`}
             >
               <div className="flex items-center gap-3">
-                <div className="p-1.5 bg-white rounded-full text-gray-400 shadow-sm border border-gray-100">
-                  <SelectedIcon className="w-5 h-5" />
+                <div className="p-1.5 bg-white rounded-full text-gray-400 shadow-sm border border-gray-100 flex items-center justify-center w-8 h-8">
+                  <i className={`fas ${SelectedIcon} text-sm`}></i>
                 </div>
                 <span className="text-gray-700 font-bold">{role}</span>
               </div>
-              <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`} />
+              <i className={`fas fa-chevron-down text-sm text-gray-400 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`}></i>
             </button>
 
             {/* Dropdown Menu - Full width, specific internal padding */}
@@ -105,7 +102,7 @@ const Login = () => {
           <div className="space-y-2">
             <label className="block text-sm font-bold text-navy ml-1">Email Address</label>
             <div className="relative">
-              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <i className="fas fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
               <input 
                 type="email" 
                 placeholder="Enter your email"
@@ -118,7 +115,7 @@ const Login = () => {
           <div className="space-y-2">
             <label className="block text-sm font-bold text-navy ml-1">Password</label>
             <div className="relative">
-              <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <i className="fas fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
               <input 
                 type={showPassword ? "text" : "password"} 
                 placeholder="Enter your password"
@@ -129,7 +126,7 @@ const Login = () => {
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
               >
-                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                <i className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'} text-sm`}></i>
               </button>
             </div>
           </div>
@@ -151,7 +148,7 @@ const Login = () => {
             className="w-full bg-navy text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-blue-bright transition-all transform active:scale-[0.98] shadow-lg shadow-blue-900/20"
           >
             Sign In
-            <ArrowRight className="w-5 h-5" />
+            <i className="fas fa-arrow-right text-sm"></i>
           </button>
         </form>
       </div>

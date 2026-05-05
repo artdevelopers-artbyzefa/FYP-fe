@@ -8,11 +8,13 @@ import FAQ from "../pages/FAQ";
 import Team from "../pages/Team";
 import Guidelines from "../pages/Guidelines";
 import Eligibility from "../pages/Eligibility";
+import Login from "../pages/Login";
 
 const AppRoutes = () => {
     return (
         <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/about" element={<About />} />
             <Route path="/process" element={<Process />} />
             <Route path="/contact" element={<Contact />} />

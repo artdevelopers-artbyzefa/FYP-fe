@@ -1,22 +1,22 @@
-﻿import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
 
-const Footer = () => {
-  return (
-    <footer className="bg-white border-t border-gray-100 py-8 px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-sm">
-        <span className="text-gray-400 font-medium">CUI FYP System</span>
-        <div className="flex gap-8">
-          <Link to="/about" className="text-gray-400 hover:text-blue-bright transition-colors">About</Link>
-          <Link to="/guidelines" className="text-gray-400 hover:text-blue-bright transition-colors">Guidelines</Link>
-          <Link to="/contact" className="text-gray-400 hover:text-blue-bright transition-colors">Contact</Link>
-        </div>
-        <span className="text-gray-400 text-xs">
-          © 2026 CUI Abbottabad – Department of Computer Science. All rights reserved.
-        </span>
-      </div>
-    </footer>
-  );
-};
-
-export default Footer;
+export default function Footer() {
+    return (
+        <footer className="py-12 border-t border-gray-200 bg-white">
+            <div className="max-w-[1280px] mx-auto px-4 sm:px-6 flex flex-wrap items-center justify-between gap-8">
+                <div className="flex items-center gap-3">
+                    <img src="/cuilogo.png" alt="CUI" className="h-[32px] w-auto opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all" />
+                    <span className="text-[13px] font-black text-gray-400 tracking-[0.1em]">CUI FYP System</span>
+                </div>
+                <div className="flex flex-wrap gap-4 sm:gap-6">
+                    <a href="#" className="text-[13px] font-bold text-gray-400 no-underline transition-colors hover:text-primary">Privacy Policy</a>
+                    <a href="#" className="text-[13px] font-bold text-gray-400 no-underline transition-colors hover:text-primary">Terms of Service</a>
+                    <a href="#" className="text-[13px] font-bold text-gray-400 no-underline transition-colors hover:text-primary">Accessibility</a>
+                </div>
+                <div className="text-[12px] font-semibold text-gray-400">
+                    © 2026 CUI Abbottabad — Department of Computer Science. All rights reserved.
+                </div>
+            </div>
+        </footer>
+    );
+}

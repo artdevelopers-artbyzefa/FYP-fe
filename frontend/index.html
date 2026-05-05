@@ -13,15 +13,30 @@
       tailwind.config = {
         theme: {
           extend: {
-            fontFamily: { poppins: ['Poppins', 'sans-serif'] },
+            fontFamily: { 
+              poppins: ['Poppins', 'sans-serif'],
+              display: ['Inter', 'system-ui', 'sans-serif']
+            },
             colors: {
-              primary: '#1E3A8A',
-              secondary: '#2563EB',
-              lightbg: '#EFF6FF',
+              primary: '#1e3a8a',
+              secondary: '#2563eb',
+              lightbg: '#eff6ff',
+              navy: {
+                DEFAULT: '#1e3a8a', 
+                dark: '#172554',
+              },
+              blue: {
+                bright: '#2563eb', 
+                soft: '#eff6ff',   
+              },
               success: '#059669',
-              warning: '#D97706',
-              danger: '#DC2626',
-              pending: '#B45309'
+              warning: '#d97706',
+              danger: '#dc2626',
+              pending: '#b45309'
+            },
+            borderRadius: {
+              '4xl': '2rem',
+              '5xl': '2.5rem',
             },
             keyframes: {
               pulseDot: {

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
@@ -31,9 +32,9 @@ export default function Home() {
               Management System. Streamlining academic oversight, supervisor coordination, and evaluation workflows.
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
-              <a href="/login" className="inline-flex items-center justify-center gap-2 py-4 px-8 rounded-3xl font-poppins text-[1.125rem] font-bold bg-primary text-white shadow-[0_8px_24px_rgba(30,58,138,0.18)] hover:bg-blue-800 hover:shadow-[0_16px_48px_rgba(30,58,138,0.22)] hover:-translate-y-px transition-all text-center">
+              <Link to="/login" className="inline-flex items-center justify-center gap-2 py-4 px-8 rounded-3xl font-poppins text-[1.125rem] font-bold bg-primary text-white shadow-[0_8px_24px_rgba(30,58,138,0.18)] hover:bg-blue-800 hover:shadow-[0_16px_48px_rgba(30,58,138,0.22)] hover:-translate-y-px transition-all text-center">
                 Access Portal <i className="fas fa-arrow-right"></i>
-              </a>
+              </Link>
               <a href="#about" className="inline-flex items-center justify-center gap-2 py-4 px-8 rounded-3xl font-poppins text-[1.125rem] font-bold bg-transparent text-gray-900 border-[1.5px] border-gray-200 hover:bg-gray-50 hover:border-secondary hover:text-secondary transition-all text-center">
                 Learn More About Program
               </a>

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 export default function Header() {
     const [scrolled, setScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-    const isHomePage = window.location.pathname === "/";
+    const location = useLocation();
 
     useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 10);
@@ -30,7 +30,7 @@ export default function Header() {
             <div className="max-w-[1280px] mx-auto px-4 sm:px-6 h-[64px] sm:h-[72px] flex items-center justify-between gap-4">
 
                 {/* LOGO + TEXT */}
-                <a href="/" className="flex items-center gap-2.5 no-underline shrink-0">
+                <Link to="/" className="flex items-center gap-2.5 no-underline shrink-0">
                     <img src="/cuilogo.png" alt="CUI Logo" className="h-[44px] w-auto" />
                     <div className="flex flex-col">
                         <span className="text-[0.95rem] font-black text-primary leading-[1.2]">
@@ -40,19 +40,20 @@ export default function Header() {
                             FYP Portal
                         </span>
                     </div>
-
-                </a>
+                </Link>
 
                 {/* NAV LINKS */}
                 <div className="hidden lg:flex items-center gap-4">
                     {navLinks.map((item) => (
-                        <a
+                        <Link
                             key={item.name}
-                            href={item.href}
-                            className="text-[13px] font-bold text-gray-500 no-underline transition-colors duration-150 hover:text-primary"
+                            to={item.href}
+                            className={`text-[13px] font-bold no-underline transition-colors duration-150 ${
+                                location.pathname === item.href ? "text-primary" : "text-gray-500 hover:text-primary"
+                            }`}
                         >
                             {item.name}
-                        </a>
+                        </Link>
                     ))}
                 </div>
 
@@ -60,12 +61,12 @@ export default function Header() {
                 <div className="flex items-center gap-3">
 
                     {/* DESKTOP BUTTON */}
-                    <a
-                        href="/login"
+                    <Link
+                        to="/login"
                         className="hidden sm:inline-flex items-center justify-center gap-2 h-[32px] px-5 rounded-full text-[13px] font-bold bg-primary text-white shadow-[0_8px_24px_rgba(30,58,138,0.18)] hover:bg-blue-800 active:bg-blue-900 transition-all whitespace-nowrap"
                     >
                         Portal Login <i className="fas fa-arrow-right"></i>
-                    </a>
+                    </Link>
 
                     {/* MOBILE MENU BUTTON */}
                     <button
@@ -84,23 +85,26 @@ export default function Header() {
             >
                 <div className="p-4 sm:p-6 flex flex-col gap-2">
                     {navLinks.map((item) => (
-                        <a
+                        <Link
                             key={item.name}
-                            href={item.href}
+                            to={item.href}
                             onClick={() => setMobileMenuOpen(false)}
-                            className="block py-3 px-3 rounded-lg text-[13px] font-bold text-gray-700 no-underline transition-all hover:bg-blue-50 hover:text-primary"
+                            className={`block py-3 px-3 rounded-lg text-[13px] font-bold no-underline transition-all ${
+                                location.pathname === item.href ? "bg-blue-50 text-primary" : "text-gray-700 hover:bg-blue-50 hover:text-primary"
+                            }`}
                         >
                             {item.name}
-                        </a>
+                        </Link>
                     ))}
 
                     {/* MOBILE BUTTON */}
-                    <a
-                        href="/login"
-                        className="hidden sm:inline-flex items-center justify-center gap-2 h-[32px] px-5 rounded-full text-[13px] font-bold bg-[#214fa3] text-white shadow-[0_8px_24px_rgba(30,58,138,0.18)] hover:bg-[#163172] active:bg-[#0f2554] transition-all whitespace-nowrap"
+                    <Link
+                        to="/login"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="flex sm:hidden items-center justify-center gap-2 h-[44px] px-5 rounded-xl text-[13px] font-bold bg-primary text-white shadow-lg transition-all whitespace-nowrap"
                     >
                         Portal Login <i className="fas fa-arrow-right"></i>
-                    </a>
+                    </Link>
                 </div>
             </div>
         </nav>

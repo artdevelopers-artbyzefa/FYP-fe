@@ -5,6 +5,38 @@ import Footer from "../components/Footer";
 const Team = () => {
   const categories = [
     {
+      title: "Faculty Leadership & Supervision",
+      members: [
+        {
+          initials: "MG",
+          name: "Dr. Muhammad Ibtisam Gul",
+          image: "/ibtisam.png",
+          role: "Lecturer & Head Of CS Internship Office",
+          desc: "Expertise in Parallel and Distributed Computing. Managing internship workflows and industry relations.",
+        },
+        {
+          initials: "MF",
+          name: "Muhammad Ali Faisal",
+          image: "/mfaisal.jpeg",
+          role: "Lecturer & Head Of CS Liaison Office",
+          desc: "Specializing in Big Data, IoT, Multimedia, and Wireless Networks. Bridging the gap between academia and industry.",
+        },
+        {
+          initials: "AI",
+          name: "Ms. Ayesha Irshad",
+          role: "FYP Coordinator · Lecturer",
+          desc: "Expertise in Trust in IoT devices. Coordinating project lifecycles and academic standards for the FYP Portal.",
+        },
+        
+        {
+          initials: "FA",
+          name: "Dr. Faraz Ahmad",
+          role: "FYP Coordinator · Lecturer",
+          desc: "Focused on core computing principles and guiding student development across various technology stacks.",
+        },
+      ],
+    },
+    {
       title: "Leadership & Management",
       members: [
         {
@@ -124,7 +156,11 @@ const Team = () => {
                 {category.members.map((member, index) => (
                   <article key={index} className="bg-white border-[1.5px] border-blue-100 rounded-[2.5rem] p-10 text-center flex flex-col items-center group hover:border-primary hover:shadow-xl transition-all duration-300">
                     <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mb-6 border-[3px] border-white ring-1 ring-blue-100 overflow-hidden shadow-sm">
-                      <img src="/cuilogo.png" alt={member.name} className="w-12 h-12 object-contain opacity-80 group-hover:scale-110 transition-transform duration-300" />
+                      <img 
+                        src={member.image || "/cuilogo.png"} 
+                        alt={member.name} 
+                        className={`w-full h-full ${member.image ? 'object-cover' : 'w-12 h-12 object-contain opacity-80'} group-hover:scale-110 transition-transform duration-300`} 
+                      />
                     </div>
                     <h3 className="text-xl font-black text-gray-900 mb-1">{member.name}</h3>
                     <div className="text-[12px] font-black text-secondary uppercase tracking-wider mb-6">{member.role}</div>

@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import Process from "../pages/Process";
 import Home from "../pages/Home";
@@ -8,6 +8,8 @@ import FAQ from "../pages/FAQ";
 import Team from "../pages/Team";
 import Guidelines from "../pages/Guidelines";
 import Eligibility from "../pages/Eligibility";
+import Login from "../pages/Login";
+import Dashboard from "../pages/Dashboard";
 
 const AppRoutes = () => {
     return (
@@ -20,6 +22,11 @@ const AppRoutes = () => {
             <Route path="/team" element={<Team />} />
             <Route path="/guidelines" element={<Guidelines />} />
             <Route path="/eligibility" element={<Eligibility />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            
+            {/* Catch-all route to redirect back home if path is unknown, prevents blank page */}
+            <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
     );
 };

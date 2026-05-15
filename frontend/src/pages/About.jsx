@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
@@ -24,12 +25,12 @@ const About = () => {
                   The Final Year Project program helps students apply research, engineering, design, and teamwork skills to meaningful computing problems under faculty supervision.
                 </p>
                 <div className="flex flex-wrap gap-4">
-                  <a href="/eligibility" className="inline-flex items-center justify-center gap-2 py-3.5 px-7 rounded-full font-bold bg-primary text-white shadow-lg hover:bg-blue-800 hover:-translate-y-px transition-all text-sm">
+                  <Link to="/eligibility" className="inline-flex items-center justify-center gap-2 py-3.5 px-7 rounded-full font-bold bg-primary text-white shadow-lg hover:bg-blue-800 hover:-translate-y-px transition-all text-sm">
                     Check Eligibility <i className="fas fa-arrow-right"></i>
-                  </a>
-                  <a href="/process" className="inline-flex items-center justify-center gap-2 py-3.5 px-7 rounded-full font-bold bg-transparent text-gray-900 border-[1.5px] border-gray-200 hover:bg-gray-50 transition-all text-sm">
+                  </Link>
+                  <Link to="/process" className="inline-flex items-center justify-center gap-2 py-3.5 px-7 rounded-full font-bold bg-transparent text-gray-900 border-[1.5px] border-gray-200 hover:bg-gray-50 transition-all text-sm">
                     View Workflow
-                  </a>
+                  </Link>
                 </div>
               </div>
               <div className="bg-white rounded-3xl p-8 border border-blue-100 shadow-xl space-y-6">

@@ -135,7 +135,7 @@ const Sidebar = () => {
             {openMenus.project && (
               <div className="space-y-1 mt-1">
                 <NavLink to="/project/new" className={subMenuClass}>New Idea</NavLink>
-                <NavLink to="/project/status" className={subMenuClass}>My Ideas</NavLink>
+                <NavLink to="/project/approved" className={subMenuClass}>Approved Ideas</NavLink>
               </div>
             )}
 

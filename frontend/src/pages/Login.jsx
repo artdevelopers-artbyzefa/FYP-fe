@@ -48,8 +48,12 @@ const Login = () => {
       <div className="bg-white rounded-2xl p-6 sm:p-8 w-full max-w-[440px] relative shadow-2xl animate-fade-in">
         
         {/* Back to Home */}
-        <Link to="/" className="inline-flex items-center gap-2 text-xs font-bold text-gray-400 hover:text-primary transition-colors mb-6">
-          <i className="fas fa-arrow-left"></i> Back to Home
+        <Link 
+          to="/" 
+          className="absolute top-8 left-8 flex items-center gap-2 text-gray-500 hover:text-navy transition-colors font-medium text-sm"
+        >
+          <i className="fas fa-arrow-left text-sm"></i>
+          Back to Home
         </Link>
 
         {/* Logo & Header */}
@@ -75,10 +79,14 @@ const Login = () => {
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
               className="w-full py-3 pr-10 pl-11 border-[1.5px] border-gray-200 rounded-xl text-sm text-gray-800 bg-white cursor-pointer relative"
             >
-              <i className="fas fa-user-circle absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none z-10"></i>
-              <span>{activeRoleLabel}</span>
-              <i className="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none"></i>
-            </div>
+              <div className="flex items-center gap-3">
+                <div className="p-1.5 bg-white rounded-full text-gray-400 shadow-sm border border-gray-100 flex items-center justify-center w-8 h-8">
+                  <i className={`fas ${SelectedIcon} text-sm`}></i>
+                </div>
+                <span className="text-gray-700 font-bold">{role}</span>
+              </div>
+              <i className={`fas fa-chevron-down text-sm text-gray-400 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`}></i>
+            </button>
 
             {isDropdownOpen && (
               <>
@@ -139,7 +147,7 @@ const Login = () => {
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-secondary text-sm p-1 transition-colors z-10 focus:outline-none"
               >
-                <i className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+                <i className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'} text-sm`}></i>
               </button>
             </div>
             {errors.password && <p className="text-red-500 text-[10px] font-bold mt-1 ml-1">{errors.password.message}</p>}

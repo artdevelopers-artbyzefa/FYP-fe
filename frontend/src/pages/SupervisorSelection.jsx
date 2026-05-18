@@ -33,11 +33,13 @@ const SupervisorSelectionPage = () => {
   const navigate = useNavigate();
   const [supervisorsList, setSupervisorsList] = useState(supervisors);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [requestedId, setRequestedId] = useState(null);
 
   useEffect(() => {
     const fetchSupervisors = async () => {
       setLoading(true);
+      setError(null);
       try {
         const response = await api.get(API_URLS.supervisor);
         if (response.data && Array.isArray(response.data)) {
@@ -45,6 +47,7 @@ const SupervisorSelectionPage = () => {
         }
       } catch (err) {
         console.error("Failed to load supervisors from backend, using mocked fallback list.", err);
+        setError("Failed to fetch supervisors list");
       } finally {
         setLoading(false);
       }
@@ -53,13 +56,18 @@ const SupervisorSelectionPage = () => {
   }, []);
 
   const handleRequestSupervisor = async (sup) => {
+    setLoading(true);
+    setError(null);
     try {
       setRequestedId(sup.id);
-      await api.post(`${API_URLS.supervisor}/request`, { supervisorId: sup.id });
+      await api.post(API_URLS.supervisor, { supervisorId: sup.id });
       toast.success(`Supervisor request sent to ${sup.name}`);
     } catch (err) {
       console.error(err);
+      setError("Failed to request supervisor");
       toast.success(`Successfully sent request to ${sup.name} (Simulated)`);
+    } finally {
+      setLoading(false);
     }
   };
 

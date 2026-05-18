@@ -239,10 +239,14 @@ const TaskManager = () => {
   };
 
   const handleDeleteTask = async (id) => {
+    setLoading(true);
     try {
       await api.delete(`${API_URLS.tasks}/${id}`);
     } catch (err) {
+      console.error("Error deleting task:", err);
       console.log("Deleted task locally", id);
+    } finally {
+      setLoading(false);
     }
     const updatedTasks = {};
     Object.keys(tasks).forEach(col => {
@@ -266,10 +270,14 @@ const TaskManager = () => {
       assignee: newTaskAssignee
     };
 
+    setLoading(true);
     try {
       await api.post(API_URLS.tasks, newTask);
     } catch (err) {
+      console.error("Error creating task:", err);
       console.log("Created task locally", newTask);
+    } finally {
+      setLoading(false);
     }
 
     setTasks({
@@ -292,10 +300,14 @@ const TaskManager = () => {
     e.preventDefault();
     if (!selectedTask || !selectedTask.title.trim()) return;
 
+    setLoading(true);
     try {
       await api.put(`${API_URLS.tasks}/${selectedTask.id}`, selectedTask);
     } catch (err) {
+      console.error("Error updating task:", err);
       console.log("Updated task locally", selectedTask);
+    } finally {
+      setLoading(false);
     }
 
     const updatedTasks = {};

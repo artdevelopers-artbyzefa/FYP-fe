@@ -21,6 +21,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const dynamicUser = getUserInfo();
 
+  const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -29,7 +30,11 @@ const Dashboard = () => {
       setLoading(true);
       setError(null);
       try {
-        await api.get(API_URLS.dashboardStats);
+        const response = await api.get(API_URLS.dashboardStats);
+        if (response.data) {
+          setStats(response.data);
+          console.log("Dashboard connected", response.data);
+        }
       } catch (err) {
         console.error("Dashboard stats fetched failed, using local mocked states", err);
       } finally {

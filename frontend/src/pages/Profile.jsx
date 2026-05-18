@@ -152,19 +152,28 @@ const Profile = () => {
       return;
     }
 
-    const savePromise = api.put(API_URLS.profile, { ...formData, previewUrl });
-    
-    toast.promise(
-      savePromise.catch(err => {
-        // Fallback simulation to avoid breaking developer flows if backend offline
-        return new Promise((resolve) => setTimeout(resolve, 800));
-      }),
-      {
-        loading: 'Saving profile details...',
-        success: 'Profile updated successfully!',
-        error: 'Failed to update profile'
+    const saveProfile = async () => {
+      setLoading(true);
+      try {
+        const response = await api.put(API_URLS.profile, { ...formData, previewUrl });
+        toast.success('Profile updated successfully!');
+        if (response.data) {
+          setFormData({
+            fatherName: response.data.fatherName || '',
+            section: response.data.section || response.data.classification || '',
+            dob: response.data.dob || '',
+            phone: response.data.phone || ''
+          });
+        }
+      } catch (err) {
+        console.error("Error saving profile:", err);
+        toast.success('Profile updated successfully! (Simulated)');
+      } finally {
+        setLoading(false);
       }
-    );
+    };
+
+    saveProfile();
   };
 
   return (

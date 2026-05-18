@@ -1,5 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { 
+  ResponsiveContainer, 
+  PieChart, 
+  Pie, 
+  Cell, 
+  BarChart, 
+  Bar, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip 
+} from 'recharts';
 import {
   Bell,
   ChevronDown,
@@ -783,64 +795,46 @@ const TaskManager = () => {
             </div>
           </div>
         ) : activeTab === 'Analytics' ? (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 px-6 pb-6 bg-slate-50/50 mt-2">
             {/* Task Status Doughnut Chart */}
-            <div className="bg-white border border-gray-100 rounded-[24px] p-8 shadow-sm flex flex-col items-center">
+            <div className="bg-white border border-gray-100 rounded-[24px] p-8 shadow-[0_4px_20px_rgba(0,0,0,0.02)] flex flex-col items-center">
               <h3 className="text-[16px] font-bold text-[#1e293b] self-start mb-6">Task Status</h3>
-              <div className="relative w-[220px] h-[220px] flex items-center justify-center">
-                <svg width="220" height="220" viewBox="0 0 40 40" className="transform -rotate-90">
-                  {/* Not Started (Grey - 35%) */}
-                  <circle
-                    cx="20"
-                    cy="20"
-                    r="15.9155"
-                    fill="transparent"
-                    stroke="#cbd5e1"
-                    strokeWidth="4"
-                    strokeDasharray="35 65"
-                    strokeDashoffset="-65"
-                    className="transition-all duration-500"
-                  />
-                  {/* Review (Orange - 15%) */}
-                  <circle
-                    cx="20"
-                    cy="20"
-                    r="15.9155"
-                    fill="transparent"
-                    stroke="#d97706"
-                    strokeWidth="4"
-                    strokeDasharray="15 85"
-                    strokeDashoffset="-50"
-                    className="transition-all duration-500"
-                  />
-                  {/* In Progress (Blue - 25%) */}
-                  <circle
-                    cx="20"
-                    cy="20"
-                    r="15.9155"
-                    fill="transparent"
-                    stroke="#2563eb"
-                    strokeWidth="4"
-                    strokeDasharray="25 75"
-                    strokeDashoffset="-25"
-                    className="transition-all duration-500"
-                  />
-                  {/* Completed (Green - 25%) */}
-                  <circle
-                    cx="20"
-                    cy="20"
-                    r="15.9155"
-                    fill="transparent"
-                    stroke="#16a34a"
-                    strokeWidth="4"
-                    strokeDasharray="25 75"
-                    strokeDashoffset="0"
-                    className="transition-all duration-500"
-                  />
-                </svg>
+              <div className="relative w-[220px] h-[220px] flex items-center justify-center font-poppins">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={[
+                        { name: 'Completed', value: 5, color: '#16a34a' },
+                        { name: 'In Progress', value: 5, color: '#2563eb' },
+                        { name: 'Review', value: 3, color: '#d97706' },
+                        { name: 'Not Started', value: 7, color: '#cbd5e1' }
+                      ]}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={65}
+                      outerRadius={85}
+                      paddingAngle={0}
+                      dataKey="value"
+                      startAngle={90}
+                      endAngle={-270}
+                      isAnimationActive={true}
+                      animationDuration={1500}
+                      animationEasing="ease-out"
+                    >
+                      {[
+                        { name: 'Completed', value: 5, color: '#16a34a' },
+                        { name: 'In Progress', value: 5, color: '#2563eb' },
+                        { name: 'Review', value: 3, color: '#d97706' },
+                        { name: 'Not Started', value: 7, color: '#cbd5e1' }
+                      ].map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} stroke="none" />
+                      ))}
+                    </Pie>
+                  </PieChart>
+                </ResponsiveContainer>
 
                 {/* Inner label */}
-                <div className="absolute flex flex-col items-center justify-center text-center">
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
                   <span className="text-[26px] font-black text-slate-800 leading-none">20</span>
                   <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mt-1">Total Tasks</span>
                 </div>
@@ -866,7 +860,7 @@ const TaskManager = () => {
             </div>
 
             {/* Member Contribution Bar Chart */}
-            <div className="lg:col-span-2 bg-white border border-gray-100 rounded-[24px] p-8 shadow-sm flex flex-col">
+            <div className="lg:col-span-2 bg-white border border-gray-100 rounded-[24px] p-8 shadow-[0_4px_20px_rgba(0,0,0,0.02)] flex flex-col">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-[16px] font-bold text-[#1e293b]">Member Contribution</h3>
                 
@@ -883,60 +877,69 @@ const TaskManager = () => {
                 </div>
               </div>
 
-              {/* Custom CSS Bar Chart */}
-              <div className="relative flex-grow flex flex-col justify-between h-[280px] mt-6 pr-4">
-                {/* Y-Axis Grid Lines */}
-                <div className="absolute inset-0 flex flex-col justify-between text-gray-300 pointer-events-none">
-                  {[6, 5, 4, 3, 2, 1, 0].map((val, idx) => (
-                    <div key={idx} className="flex items-center w-full border-b border-gray-100 h-0">
-                      <span className="text-[12px] font-bold text-gray-400 w-8 shrink-0 -ml-8 text-right pr-3">{val}</span>
-                      <div className="flex-grow border-b border-gray-100/80"></div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Bars Area */}
-                <div className="flex justify-around items-end h-[240px] pl-8 relative z-10 w-full mt-4">
-                  {[
-                    { name: 'Ahmed', assigned: 6, completed: 2 },
-                    { name: 'Fatima', assigned: 5, completed: 2 },
-                    { name: 'Usman', assigned: 6, completed: 1 },
-                    { name: 'Ayesha', assigned: 3, completed: 0 }
-                  ].map((member, idx) => {
-                    const assignedHeight = (member.assigned / 6) * 100;
-                    const completedHeight = (member.completed / 6) * 100;
-
-                    return (
-                      <div key={idx} className="flex flex-col items-center w-1/4 group">
-                        {/* Side-by-side Bars */}
-                        <div className="flex items-end justify-center gap-2.5 w-full h-[200px]">
-                          {/* Assigned Bar */}
-                          <div
-                            style={{ height: `${assignedHeight}%` }}
-                            className="w-8 bg-[#e2e8f0] hover:bg-slate-300 rounded-t-lg transition-all duration-300 relative group-hover:shadow-md cursor-pointer"
-                          >
-                            <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] font-bold px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-30 shadow-sm pointer-events-none">
-                              {member.assigned} Assigned
+              {/* Recharts Bar Chart */}
+              <div className="relative flex-grow h-[280px] mt-6 w-full pr-4 font-poppins">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart
+                    data={[
+                      { name: 'Ahmed', assigned: 6, completed: 2 },
+                      { name: 'Fatima', assigned: 5, completed: 2 },
+                      { name: 'Usman', assigned: 6, completed: 1 },
+                      { name: 'Ayesha', assigned: 3, completed: 0 }
+                    ]}
+                    margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+                    barGap={10}
+                  >
+                    <CartesianGrid vertical={false} stroke="#f1f5f9" />
+                    <XAxis 
+                      dataKey="name" 
+                      axisLine={false} 
+                      tickLine={false} 
+                      tick={{ fill: '#64748b', fontSize: 13, fontWeight: 700 }}
+                      dy={10}
+                    />
+                    <YAxis 
+                      axisLine={false} 
+                      tickLine={false} 
+                      tick={{ fill: '#94a3b8', fontSize: 12, fontWeight: 700 }}
+                      domain={[0, 6]}
+                      ticks={[0, 1, 2, 3, 4, 5, 6]}
+                    />
+                    <Tooltip 
+                      cursor={{ fill: 'rgba(241, 245, 249, 0.4)' }}
+                      content={({ active, payload }) => {
+                        if (active && payload && payload.length) {
+                          return (
+                            <div className="bg-slate-800 text-white text-[11px] font-bold px-3 py-2 rounded-xl shadow-lg border border-slate-700/50 flex flex-col gap-1">
+                              <p className="text-slate-300 font-extrabold text-[12px] mb-0.5">{payload[0].payload.name}</p>
+                              <p className="text-[#93c5fd]">{payload[0].value} Assigned</p>
+                              {payload[1] && <p className="text-[#34d399]">{payload[1].value} Completed</p>}
                             </div>
-                          </div>
-                          {/* Completed Bar */}
-                          <div
-                            style={{ height: `${completedHeight}%` }}
-                            className="w-8 bg-[#1e3a8a] hover:bg-[#1e40af] rounded-t-lg transition-all duration-300 relative group-hover:shadow-md cursor-pointer"
-                          >
-                            {member.completed > 0 && (
-                              <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[#1e3a8a] text-white text-[10px] font-bold px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-30 shadow-sm pointer-events-none">
-                                {member.completed} Completed
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                        {/* X-Axis Name */}
-                        <span className="text-[13px] font-extrabold text-[#1e293b] mt-4 tracking-tight">{member.name}</span>
-                      </div>
-                    );
-                  })}
-                </div>
+                          );
+                        }
+                        return null;
+                      }}
+                    />
+                    <Bar 
+                      dataKey="assigned" 
+                      fill="#e2e8f0" 
+                      radius={[6, 6, 0, 0]} 
+                      maxBarSize={32}
+                      isAnimationActive={true}
+                      animationDuration={1200}
+                      animationEasing="ease-out"
+                    />
+                    <Bar 
+                      dataKey="completed" 
+                      fill="#1e3a8a" 
+                      radius={[6, 6, 0, 0]} 
+                      maxBarSize={32}
+                      isAnimationActive={true}
+                      animationDuration={1200}
+                      animationEasing="ease-out"
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
               </div>
             </div>
           </div>

@@ -35,11 +35,11 @@ const Dashboard = () => {
   return (
     <div className="font-poppins bg-[#f4f7fe] min-h-screen p-6 lg:p-8 space-y-6 select-none">
       {/* Top Header Bar */}
-      <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white/40 backdrop-blur-md rounded-[24px] p-4 border border-white/50 shadow-sm shrink-0">
+      <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-2 px-1 shrink-0">
         <div className="flex items-center gap-3">
           <button 
             onClick={() => navigate(-1)}
-            className="w-10 h-10 border border-slate-200 rounded-full flex items-center justify-center hover:bg-slate-50 transition-colors focus:outline-none shrink-0"
+            className="w-10 h-10 border border-slate-200 rounded-full flex items-center justify-center hover:bg-slate-50 transition-colors focus:outline-none shrink-0 shadow-sm bg-white"
             aria-label="Go back"
           >
             <ChevronLeft className="w-5 h-5 text-slate-600" />
@@ -52,18 +52,18 @@ const Dashboard = () => {
 
         <div className="flex items-center gap-4">
           {/* Phase Pill */}
-          <div className="flex items-center gap-2 bg-emerald-50/60 border border-emerald-200/80 rounded-full px-4.5 py-1.5 shrink-0">
+          <div className="flex items-center gap-2 bg-[#eefdf5] border border-emerald-200/80 rounded-full px-4.5 py-1.5 shrink-0">
             <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
             <span className="text-[13px] font-bold text-emerald-700 font-poppins">Phase 1: Student Registration</span>
           </div>
 
           {/* Bell Icon */}
           <button 
-            className="w-10 h-10 border border-slate-200 rounded-2xl flex items-center justify-center hover:bg-slate-50 transition-colors focus:outline-none relative shrink-0"
+            className="w-10 h-10 border border-slate-200 rounded-2xl flex items-center justify-center hover:bg-slate-50 transition-colors focus:outline-none relative shrink-0 bg-white shadow-sm"
             aria-label="View notifications"
           >
             <Bell className="w-5 h-5 text-slate-600" />
-            <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-red-500 rounded-full border border-white"></span>
+            <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
           </button>
 
           {/* Profile Dropdown */}
@@ -83,8 +83,8 @@ const Dashboard = () => {
       {/* Main Info Card */}
       <div className="bg-white rounded-[32px] p-6 lg:p-8 shadow-sm border border-slate-100 flex flex-col md:flex-row gap-6 md:items-center">
         {/* Profile Card Placeholder */}
-        <div className="w-28 h-28 bg-[#f8fafc] border border-slate-100 rounded-[28px] flex items-center justify-center shrink-0">
-          <User className="w-12 h-12 text-slate-300" />
+        <div className="w-24 h-24 bg-[#f8fafc] border border-slate-100 rounded-[20px] flex items-center justify-center shrink-0">
+          <User className="w-10 h-10 text-slate-300" />
         </div>
 
         {/* Text Info */}

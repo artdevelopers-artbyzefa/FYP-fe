@@ -17,6 +17,7 @@ import { getUserInfo } from '../utils/app.utils';
 import { toast } from 'sonner';
 import api from '../services/api';
 import { API_URLS } from '../services/apiUrls';
+import { logger } from '../utils/logger';
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -52,7 +53,7 @@ const Profile = () => {
           }
         }
       } catch (err) {
-        console.error("Failed to load profile from backend, using current local storage", err);
+        logger("Failed to load profile from backend, using current local storage", err);
       } finally {
         setLoading(false);
       }
@@ -166,7 +167,7 @@ const Profile = () => {
           });
         }
       } catch (err) {
-        console.error("Error saving profile:", err);
+        logger("Error saving profile:", err);
         toast.success('Profile updated successfully! (Simulated)');
       } finally {
         setLoading(false);

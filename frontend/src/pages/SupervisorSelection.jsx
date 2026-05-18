@@ -4,6 +4,7 @@ import { Bell, ChevronDown, Tag, User } from 'lucide-react';
 import api from '../services/api';
 import { API_URLS } from '../services/apiUrls';
 import { toast } from 'sonner';
+import { logger } from '../utils/logger';
 
 const supervisors = [
   {
@@ -46,8 +47,12 @@ const SupervisorSelectionPage = () => {
           setSupervisorsList(response.data);
         }
       } catch (err) {
-        console.error("Failed to load supervisors from backend, using mocked fallback list.", err);
-        setError("Failed to fetch supervisors list");
+        // Fix 3: dev silently falls back to hardcoded list; production shows error banner
+        if (import.meta.env.DEV) {
+          logger("[DEV] Failed to load supervisors, using hardcoded fallback list.", err);
+        } else {
+          setError("Unable to load supervisors. Please refresh or contact support.");
+        }
       } finally {
         setLoading(false);
       }
@@ -63,9 +68,15 @@ const SupervisorSelectionPage = () => {
       await api.post(API_URLS.supervisor, { supervisorId: sup.id });
       toast.success(`Supervisor request sent to ${sup.name}`);
     } catch (err) {
-      console.error(err);
-      setError("Failed to request supervisor");
-      toast.success(`Successfully sent request to ${sup.name} (Simulated)`);
+      // Fix 3: dev shows simulated success; production shows real error
+      if (import.meta.env.DEV) {
+        logger("[DEV] Supervisor request failed, simulating success.", err);
+        setRequestedId(sup.id);
+        toast.success(`Request sent to ${sup.name} (Simulated — Dev Mode)`);
+      } else {
+        setError(`Failed to send request to ${sup.name}. Please try again.`);
+        toast.error(`Failed to send request to ${sup.name}.`);
+      }
     } finally {
       setLoading(false);
     }
@@ -73,6 +84,15 @@ const SupervisorSelectionPage = () => {
 
   return (
     <div className="flex-1 flex flex-col min-w-0 min-h-screen bg-[#f4f7fe] font-poppins antialiased selection:bg-blue-500/10">
+      {/* Fix 3: Production error banner */}
+      {error && (
+        <div className="mx-8 mt-4 flex items-center gap-3 bg-red-50 border border-red-200 text-red-700 px-5 py-3.5 rounded-2xl text-[13px] font-semibold shadow-sm">
+          <svg className="w-4 h-4 shrink-0 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+          </svg>
+          {error}
+        </div>
+      )}
       {/* Header Section */}
       <header className="h-[90px] bg-white border-b border-gray-200/65 shadow-sm shadow-gray-200/20 flex items-center justify-between px-8 shrink-0 sticky top-0 z-40">
         <div className="flex items-center gap-4">

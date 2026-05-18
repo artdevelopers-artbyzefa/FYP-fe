@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import api from '../services/api';
 import { API_URLS } from '../services/apiUrls';
+import { logger } from '../utils/logger';
 import {
   ChevronLeft,
   Bell,
@@ -23,20 +24,25 @@ const Dashboard = () => {
 
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [fetchError, setFetchError] = useState(null); // Fix 3
 
   useEffect(() => {
     const fetchDashboardStats = async () => {
       setLoading(true);
-      setError(null);
+      setFetchError(null);
       try {
         const response = await api.get(API_URLS.dashboardStats);
         if (response.data) {
           setStats(response.data);
-          console.log("Dashboard connected", response.data);
+          logger("Dashboard connected", response.data);
         }
       } catch (err) {
-        console.error("Dashboard stats fetched failed, using local mocked states", err);
+        // Fix 3: dev gets silent fallback; production shows visible error banner
+        if (import.meta.env.DEV) {
+          logger("[DEV] Dashboard stats fetch failed, using mocked fallback.", err);
+        } else {
+          setFetchError("Unable to load dashboard data. Please refresh or contact support.");
+        }
       } finally {
         setLoading(false);
       }
@@ -60,6 +66,15 @@ const Dashboard = () => {
 
   return (
     <div className="font-poppins bg-[#f4f7fe] min-h-screen p-6 lg:p-8 space-y-6 select-none">
+      {/* Fix 3: Production error banner */}
+      {fetchError && (
+        <div className="flex items-center gap-3 bg-red-50 border border-red-200 text-red-700 px-5 py-3.5 rounded-2xl text-[13px] font-semibold shadow-sm">
+          <svg className="w-4 h-4 shrink-0 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+          </svg>
+          {fetchError}
+        </div>
+      )}
       {/* Top Header Bar */}
       <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-2 px-1 shrink-0">
         <div className="flex items-center gap-3">

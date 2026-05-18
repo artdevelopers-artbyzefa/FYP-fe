@@ -51,7 +51,7 @@ const Sidebar = () => {
     }`;
 
   return (
-    <div className="w-72 bg-[#1e3a8a] min-h-screen text-white flex flex-col p-6 sticky top-0 h-screen overflow-y-auto border-r border-white/5 shadow-2xl">
+    <div className="w-72 bg-[#1e3a8a] h-screen text-white flex flex-col p-6 fixed left-0 top-0 overflow-y-auto border-r border-white/5 shadow-2xl z-50">
       {/* Brand Logo */}
       <div className="flex items-center gap-3 mb-10 px-2">
         <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center border border-white/10 backdrop-blur-sm">

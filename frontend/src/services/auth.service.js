@@ -49,16 +49,20 @@ export const loginUser = async (credentials) => {
    * 1. Check Demo Database
    * Allows login for demo accounts without a backend connection.
    */
-  const demoUser = FYP_USERS.find(u => 
-    u.email.toLowerCase() === email.toLowerCase() && 
-    u.password === password &&
-    u.role === role
-  );
+  const matchedEmailUser = FYP_USERS.find(u => u.email.toLowerCase() === email.toLowerCase());
 
-  if (demoUser) {
+  if (matchedEmailUser) {
+    if (matchedEmailUser.password !== password) {
+      throw { title: 'Incorrect Password', message: 'The password you entered is incorrect.' };
+    }
+    if (matchedEmailUser.role !== role) {
+      throw { title: 'Role Mismatch', message: `This account belongs to a ${matchedEmailUser.role}, not ${role}.` };
+    }
+
+    // Both match -> login
     const mockResponse = {
       token: 'demo-token-12345',
-      user: { ...demoUser }
+      user: { ...matchedEmailUser }
     };
     // Don't leak password into storage
     delete mockResponse.user.password;
@@ -81,7 +85,10 @@ export const loginUser = async (credentials) => {
     
     return response.data;
   } catch (error) {
-    throw error.mappedError || { title: 'Login Failed', message: 'Invalid credentials' };
+    if (error.mappedError && error.mappedError.title === 'Connection Error') {
+      throw { title: 'Account Not Found', message: 'The credentials were not found in the demo database and the backend server is offline.' };
+    }
+    throw error.mappedError || { title: 'Login Failed', message: 'Invalid credentials or account not found.' };
   }
 };
 

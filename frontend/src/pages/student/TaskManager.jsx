@@ -34,9 +34,9 @@ import {
   Check,
   Calendar
 } from 'lucide-react';
-import api from '../services/api';
-import { API_URLS } from '../services/apiUrls';
-import { logger } from '../utils/logger';
+import apiClient from '../../api/apiClient';
+import { STUDENT_TASKS_API_URL } from '../../utils/constants/api-url.constant';
+import { logger } from '../../utils/logger';
 
 /**
  * Fix 1: Task Response Normalizer
@@ -229,7 +229,7 @@ const TaskManager = () => {
       setLoading(true);
       setFetchError(null);
       try {
-        const response = await api.get(API_URLS.tasks);
+        const response = await apiClient.get(STUDENT_TASKS_API_URL);
         // Fix 1: normalize response — works with both flat array and grouped object
         const normalized = normalizeTasksResponse(response.data);
         if (normalized) setTasks(normalized);
@@ -274,7 +274,7 @@ const TaskManager = () => {
   const handleDeleteTask = async (id) => {
     setLoading(true);
     try {
-      await api.delete(`${API_URLS.tasks}/${id}`);
+      await apiClient.delete(`${STUDENT_TASKS_API_URL}/${id}`);
     } catch (err) {
       if (import.meta.env.DEV) {
         logger("[DEV] Error deleting task (applied locally):", err);
@@ -308,7 +308,7 @@ const TaskManager = () => {
 
     setLoading(true);
     try {
-      await api.post(API_URLS.tasks, newTask);
+      await apiClient.post(STUDENT_TASKS_API_URL, newTask);
     } catch (err) {
       logger("Error creating task:", err);
       logger("Created task locally", newTask);
@@ -338,7 +338,7 @@ const TaskManager = () => {
 
     setLoading(true);
     try {
-      await api.put(`${API_URLS.tasks}/${selectedTask.id}`, selectedTask);
+      await apiClient.put(`${STUDENT_TASKS_API_URL}/${selectedTask.id}`, selectedTask);
     } catch (err) {
       logger("Error updating task:", err);
       logger("Updated task locally", selectedTask);
@@ -395,57 +395,6 @@ const TaskManager = () => {
           {fetchError}
         </div>
       )}
-      {/* 1. Header Section */}
-      <header className="h-[90px] w-full bg-white border-b border-gray-200/65 shadow-sm shadow-gray-200/20 flex items-center justify-center shrink-0 sticky top-0 z-40">
-        <div className="w-full max-w-[1400px] mx-auto px-6 md:px-8 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => navigate(-1)}
-              className="w-10 h-10 rounded-xl border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-50 hover:border-gray-300 transition-all shadow-sm group"
-            >
-              <svg className="w-5 h-5 stroke-[2.5] group-hover:-translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-              </svg>
-            </button>
-
-            <div className="flex flex-col">
-              <h1 className="text-[22px] font-extrabold text-[#1e293b] tracking-tight leading-none">Task Manager</h1>
-              <span className="text-[13px] text-gray-400 font-semibold mt-1.5">CUI Abbottabad</span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-5">
-            <div className="hidden md:flex items-center gap-2 px-4 py-2 bg-[#f0fdf4] border border-[#bbf7d0] rounded-full">
-              <div className="w-2 h-2 rounded-full bg-[#16a34a]"></div>
-              <span className="text-[13px] font-bold text-[#16a34a] tracking-tight">Phase 1: Student Registration</span>
-            </div>
-
-            <button
-              onClick={() => setShowNotifications(!showNotifications)}
-              className="w-10 h-10 rounded-xl bg-gray-50 border border-gray-200/80 flex items-center justify-center text-gray-500 hover:bg-gray-100 transition-all relative group cursor-pointer"
-            >
-              <Bell className="w-[19px] h-[19px] group-hover:rotate-12 transition-transform" />
-              {notifications.filter(n => n.unread).length > 0 && (
-                <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-[#f23c3c] border-2 border-white rounded-full animate-ping-once"></span>
-              )}
-            </button>
-
-            <div className="flex items-center gap-3 pl-4 border-l border-gray-200 group cursor-pointer">
-              <div className="w-10 h-10 bg-blue-100 border border-blue-200 rounded-xl flex items-center justify-center text-blue-700 font-bold text-[14px] shadow-sm">
-                ST
-              </div>
-              <div className="flex flex-col hidden sm:flex">
-                <div className="flex items-center gap-1">
-                  <span className="text-[14px] font-bold text-gray-800 leading-tight">Student User</span>
-                  <ChevronDown className="w-3.5 h-3.5 text-gray-400 group-hover:translate-y-0.5 transition-transform" />
-                </div>
-                <span className="text-[11px] text-gray-400 font-bold uppercase tracking-wider mt-0.5">Student</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
-
       {/* Main Content Padding Wrapper */}
       <div className="p-6 md:p-8 max-w-[1400px] w-full mx-auto space-y-8">
 

@@ -9,15 +9,15 @@ import Team from "../pages/Team";
 import Guidelines from "../pages/Guidelines";
 import Eligibility from "../pages/Eligibility";
 import Login from "../pages/Login";
-import Dashboard from "../pages/Dashboard";
-import DashboardLayout from "../components/DashboardLayout";
-import IncomingRequests from "../pages/IncomingRequests";
-import ApprovedIdeas from "../pages/ApprovedIdeas";
-import NewRequest from "../pages/NewRequest";
-import NewIdea from "../pages/NewIdea";
-import SupervisorSelection from "../pages/SupervisorSelection";
-import TaskManager from "../pages/TaskManager";
-import Profile from "../pages/Profile";
+import StudentLayout from "../pages/student/StudentLayout";
+import StudentDashboard from "../pages/student/StudentDashboard";
+import StudentProfile from "../pages/student/StudentProfile";
+import IncomingRequests from "../pages/student/IncomingRequests";
+import ApprovedIdeas from "../pages/student/ApprovedIdeas";
+import NewRequest from "../pages/student/NewRequest";
+import NewIdea from "../pages/student/NewIdea";
+import SupervisorSelection from "../pages/student/SupervisorSelection";
+import TaskManager from "../pages/student/TaskManager";
 
 // Placeholder components for new pages
 const FYPPartners = () => <div className="p-6 bg-white rounded-2xl shadow-sm border border-gray-100"> <h1 className="text-2xl font-black text-navy mb-4">FYP Partners</h1> <p className="text-gray-500">Partner management page coming soon.</p> </div>;
@@ -38,10 +38,10 @@ const AppRoutes = () => {
             <Route path="/eligibility" element={<Eligibility />} />
             <Route path="/login" element={<Login />} />
             
-            {/* Portal Routes (Authenticated) */}
-            <Route element={<DashboardLayout />}>
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/profile" element={<Profile />} />
+            {/* Student Portal Routes (Authenticated) */}
+            <Route element={<StudentLayout />}>
+                <Route path="/dashboard" element={<StudentDashboard />} />
+                <Route path="/profile" element={<StudentProfile />} />
                 <Route path="/partners/new" element={<NewRequest />} />
                 <Route path="/partners/requests" element={<IncomingRequests />} />
                 <Route path="/supervisor-selection" element={<SupervisorSelection />} />

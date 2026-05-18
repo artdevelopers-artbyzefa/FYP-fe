@@ -1,34 +1,185 @@
-import { toast } from 'sonner';
+import React from 'react';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+
+const MySwal = withReactContent(Swal);
+
+// Professional Toast Configuration (State-of-the-art replacement for Toastify)
+const Toast = MySwal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    showCloseButton: true, // Enabled globally for all toasts
+    timer: 4000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+        toast.addEventListener('mouseenter', Swal.stopTimer);
+        toast.addEventListener('mouseleave', Swal.resumeTimer);
+    }
+});
 
 /**
- * AppToast Utility
- * Wrapper around 'sonner' for consistent feedback across the app.
+ * Designs based on the provided UI image:
+ * Yellow background, amber icon, premium brown text
  */
-const AppToast = {
-  success: (message, description = '') => {
-    toast.success(message, {
-      description,
-      duration: 3000,
-    });
-  },
-  error: (message, description = '') => {
-    toast.error(message, {
-      description,
-      duration: 4000,
-    });
-  },
-  info: (message, description = '') => {
-    toast.info(message, {
-      description,
-      duration: 3000,
-    });
-  },
-  warning: (message, description = '') => {
-    toast.warning(message, {
-      description,
-      duration: 4000,
-    });
-  },
+const toastThemes = {
+    error: {
+        background: '#FEF9C3', // Light yellow as per image
+        color: '#78350F',      // Amber-900 brown
+        icon: 'warning',
+        iconColor: '#92400E'   // Amber-800
+    },
+    success: {
+        background: '#ECFDF5', // Emerald-50
+        color: '#064E3B',      // Emerald-900
+        icon: 'success',
+        iconColor: '#059669'   // Emerald-600
+    },
+    warning: {
+        background: '#FFFBEB', // Amber-50
+        color: '#92400E',      // Amber-800
+        icon: 'warning',
+        iconColor: '#D97706'   // Amber-600
+    },
+    info: {
+        background: '#EFF6FF', // Blue-50
+        color: '#1E3A8A',      // Blue-900
+        icon: 'info',
+        iconColor: '#3B82F6'   // Blue-500
+    }
 };
 
-export default AppToast;
+const triggerToast = (msg, themeKey) => {
+    const theme = toastThemes[themeKey];
+    Toast.fire({
+        icon: theme.icon,
+        iconColor: theme.iconColor,
+        background: theme.background,
+        color: theme.color,
+        title: msg,
+        customClass: {
+            popup: 'rounded-2xl border border-shadow-sm shadow-xl font-medium text-[13px] px-5 py-3 relative',
+            timerProgressBar: 'bg-black/10',
+            closeButton: 'toast-close-btn'
+        }
+    });
+};
+
+export const showToast = {
+    success: (msg) => triggerToast(msg, 'success'),
+    error: (msg) => triggerToast(msg, 'error'),
+    info: (msg) => triggerToast(msg, 'info'),
+    warning: (msg) => triggerToast(msg, 'warning'),
+};
+
+// Professional Modal Alerts
+export const showAlert = {
+    success: (title, text) => MySwal.fire({
+        icon: 'success',
+        title: <span className="text-secondary">{title}</span>,
+        text: text,
+        confirmButtonColor: '#1E3A8A', // primary color
+        customClass: {
+            popup: 'rounded-3xl',
+            confirmButton: 'rounded-xl px-8'
+        }
+    }),
+    error: (title, text) => MySwal.fire({
+        icon: 'error',
+        title: <span className="text-danger">{title}</span>,
+        html: `<p class="text-gray-500">${text}</p>`,
+        confirmButtonColor: '#1E3A8A',
+        customClass: {
+            popup: 'rounded-3xl',
+            confirmButton: 'rounded-xl px-8'
+        }
+    }),
+    confirm: async (title, text, confirmText = 'Yes, Proceed') => {
+        const result = await MySwal.fire({
+            title: title,
+            text: text,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#1E3A8A',
+            cancelButtonColor: '#EF4444',
+            confirmButtonText: confirmText,
+            customClass: {
+                popup: 'rounded-3xl',
+                confirmButton: 'rounded-xl px-6 py-3',
+                cancelButton: 'rounded-xl px-6 py-3'
+            }
+        });
+        return result.isConfirmed;
+    },
+    datePrompt: async (title, text) => {
+        const result = await MySwal.fire({
+            title: title,
+            html: `
+                <p class="text-sm text-gray-500 mb-4">${text}</p>
+                <input type="datetime-local" id="swal-date" class="swal2-input rounded-xl border-gray-200">
+            `,
+            focusConfirm: false,
+            showCancelButton: true,
+            confirmButtonText: 'Confirm & Start',
+            confirmButtonColor: '#1E3A8A',
+            preConfirm: () => {
+                const date = document.getElementById('swal-date').value;
+                if (!date) {
+                    Swal.showValidationMessage('Please select a deadline');
+                }
+                return date;
+            },
+            customClass: {
+                popup: 'rounded-3xl',
+                confirmButton: 'rounded-xl px-6 py-3',
+                cancelButton: 'rounded-xl px-6 py-3'
+            }
+        });
+        return result.isConfirmed ? result.value : null;
+    },
+    reschedulePrompt: async (currentData) => {
+        const result = await MySwal.fire({
+            title: 'Reschedule Internship',
+            html: `
+                <div class="space-y-4 text-left p-2">
+                    <div class="mb-4">
+                        <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Internship Duration</label>
+                        <select id="swal-duration" class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm font-bold text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="4 Weeks" ${currentData.duration === '4 Weeks' ? 'selected' : ''}>4 Weeks</option>
+                            <option value="6 Weeks" ${currentData.duration === '6 Weeks' ? 'selected' : ''}>6 Weeks</option>
+                            <option value="8 Weeks" ${currentData.duration === '8 Weeks' ? 'selected' : ''}>8 Weeks</option>
+                            <option value="Above 8 Weeks" ${currentData.duration === 'Above 8 Weeks' ? 'selected' : ''}>Above 8 Weeks</option>
+                        </select>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Start Date</label>
+                            <input type="date" id="swal-start" class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm font-bold text-gray-700" value="${currentData.startDate ? new Date(currentData.startDate).toISOString().split('T')[0] : ''}">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">End Date</label>
+                            <input type="date" id="swal-end" class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm font-bold text-gray-700" value="${currentData.endDate ? new Date(currentData.endDate).toISOString().split('T')[0] : ''}">
+                        </div>
+                    </div>
+                </div>
+            `,
+            focusConfirm: false,
+            showCancelButton: true,
+            confirmButtonText: 'Update Details',
+            confirmButtonColor: '#1E3A8A',
+            preConfirm: () => {
+                return {
+                    duration: document.getElementById('swal-duration').value,
+                    startDate: document.getElementById('swal-start').value,
+                    endDate: document.getElementById('swal-end').value
+                }
+            },
+            customClass: {
+                popup: 'rounded-[2rem]',
+                confirmButton: 'rounded-xl px-8 py-3 font-bold',
+                cancelButton: 'rounded-xl px-8 py-3 font-bold'
+            }
+        });
+        return result.isConfirmed ? result.value : null;
+    }
+};

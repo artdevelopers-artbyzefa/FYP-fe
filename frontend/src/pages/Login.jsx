@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { loginUser } from '../services/auth.service';
-import AppToast from '../components/AppToast';
+import { showToast as AppToast } from '../components/AppToast';
 
 const roles = [
   { id: 'Student', label: 'Student' },
@@ -15,27 +15,14 @@ const roles = [
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   
-  const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm({
+  const { register, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
       role: 'Student'
     }
   });
-
-  const selectedRole = watch('role');
-  const activeRoleLabel = roles.find(r => r.id === selectedRole)?.label || 'Student';
-
-  const SelectedIcon = {
-    'Student': 'fa-user-graduate',
-    'HOD': 'fa-user-tie',
-    'FYP Office': 'fa-building',
-    'Admin': 'fa-user-shield',
-    'Faculty': 'fa-chalkboard-teacher',
-    'Industry': 'fa-industry'
-  }[selectedRole] || 'fa-user';
 
   const onSubmit = async (data) => {
     setIsLoading(true);
@@ -81,49 +68,25 @@ const Login = () => {
         {/* Form */}
         <form onSubmit={handleSubmit(onSubmit)}>
           
-          {/* Role Selection - ONLY corners rounded, NO font changes */}
+          {/* Role Selection */}
           <div className="flex flex-col gap-1.5 mb-5 relative">
             <label className="text-xs font-bold text-gray-600">Select Role</label>
-            <button 
-              type="button"
-              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="w-full py-3 pr-4 pl-11 border-[1.5px] border-gray-200 rounded-xl text-sm text-gray-800 bg-white cursor-pointer relative flex items-center justify-between focus:outline-none focus:border-secondary focus:ring-[3px] focus:ring-blue-600/10"
-            >
-              <div className="flex items-center gap-3">
-                <div className="p-1.5 bg-white rounded-full text-gray-400 shadow-sm border border-gray-100 flex items-center justify-center w-8 h-8">
-                  <i className={`fas ${SelectedIcon} text-sm`}></i>
-                </div>
-                <span className="text-gray-700 font-bold">{activeRoleLabel}</span>
-              </div>
-              <i className={`fas fa-chevron-down text-sm text-gray-400 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`}></i>
-            </button>
-
-            {isDropdownOpen && (
-              <>
-                <div className="absolute z-50 w-full top-full mt-1 bg-white border border-gray-200 rounded-xl shadow-xl overflow-hidden">
-                  <div className="flex flex-col">
-                    {roles.map((role) => (
-                      <button
-                        key={role.id}
-                        type="button"
-                        onClick={() => {
-                          setValue('role', role.id);
-                          setIsDropdownOpen(false);
-                        }}
-                        className={`w-full text-left px-4 py-3 text-sm font-normal transition-all ${
-                          selectedRole === role.id 
-                            ? 'bg-blue-600 text-white' 
-                            : 'text-gray-800 hover:bg-gray-50'
-                        }`}
-                      >
-                        {role.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className="fixed inset-0 z-40" onClick={() => setIsDropdownOpen(false)} />
-              </>
-            )}
+            <div className="relative">
+              <i className="fas fa-user-circle absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none z-10"></i>
+              <select 
+                {...register('role', { required: 'Role is required' })}
+                className="w-full py-3 pr-10 pl-11 border-[1.5px] border-gray-200 rounded-xl text-sm text-gray-800 bg-white outline-none transition-all focus:border-secondary focus:ring-[3px] focus:ring-blue-600/10 appearance-none cursor-pointer"
+              >
+                <option value="Student">Student</option>
+                <option value="FYP Office Assistant">FYP Office Assistant</option>
+                <option value="FYP Office In-charge">FYP Office In-charge</option>
+                <option value="Faculty Supervisor">Faculty Supervisor</option>
+                <option value="HOD">HOD</option>
+                <option value="System Administrator">System Administrator</option>
+                <option value="Industry Supervisor">Industry Supervisor</option>
+              </select>
+              <i className="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none"></i>
+            </div>
           </div>
 
           {/* Email Address */}

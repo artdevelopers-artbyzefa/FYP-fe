@@ -12,7 +12,7 @@ import {
   GraduationCap
 } from 'lucide-react';
 import { logoutUser } from '../services/auth.service';
-import { toast } from 'sonner';
+import { showToast as toast } from './AppToast';
 
 const Sidebar = ({ isOpen, onClose }) => {
   const navigate = useNavigate();

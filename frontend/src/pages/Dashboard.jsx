@@ -1,25 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { 
-  ChevronLeft, 
-  Bell, 
-  ChevronDown, 
-  User, 
-  Mail, 
-  CreditCard, 
-  FolderOpen, 
-  Users, 
-  ClipboardList, 
-  Lightbulb 
-} from 'lucide-react';
-import { getUserInfo } from '../utils/app.utils';
+
 import api from '../services/api';
 import { API_URLS } from '../services/apiUrls';
+import {
+  ChevronLeft,
+  Bell,
+  ChevronDown,
+  User,
+  Mail,
+  CreditCard,
+  FolderOpen,
+  Users,
+  ClipboardList,
+  Lightbulb
+} from 'lucide-react';
+import { getUserInfo } from '../utils/app.utils';
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const dynamicUser = getUserInfo();
-  
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -37,7 +38,7 @@ const Dashboard = () => {
     };
     fetchDashboardStats();
   }, []);
-  
+
   // Tab states for the bottom left card
   const [activeTab, setActiveTab] = useState('members');
 
@@ -57,7 +58,7 @@ const Dashboard = () => {
       {/* Top Header Bar */}
       <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-2 px-1 shrink-0">
         <div className="flex items-center gap-3">
-          <button 
+          <button
             onClick={() => navigate(-1)}
             className="w-10 h-10 border border-slate-200 rounded-full flex items-center justify-center hover:bg-slate-50 transition-colors focus:outline-none shrink-0 shadow-sm bg-white"
             aria-label="Go back"
@@ -78,7 +79,7 @@ const Dashboard = () => {
           </div>
 
           {/* Bell Icon */}
-          <button 
+          <button
             className="w-10 h-10 border border-slate-200 rounded-2xl flex items-center justify-center hover:bg-slate-50 transition-colors focus:outline-none relative shrink-0 bg-white shadow-sm"
             aria-label="View notifications"
           >
@@ -152,11 +153,10 @@ const Dashboard = () => {
           {/* Tab Headers */}
           <div>
             <div className="flex items-center gap-6 border-b border-slate-100 pb-3 shrink-0">
-              <button 
+              <button
                 onClick={() => setActiveTab('members')}
-                className={`relative pb-3 text-[15px] font-bold font-poppins transition-colors focus:outline-none flex items-center gap-2 ${
-                  activeTab === 'members' ? 'text-[#1e3a8a]' : 'text-slate-400 hover:text-slate-600'
-                }`}
+                className={`relative pb-3 text-[15px] font-bold font-poppins transition-colors focus:outline-none flex items-center gap-2 ${activeTab === 'members' ? 'text-[#1e3a8a]' : 'text-slate-400 hover:text-slate-600'
+                  }`}
               >
                 <Users className="w-4 h-4 shrink-0" />
                 <span>Group Members</span>
@@ -165,11 +165,10 @@ const Dashboard = () => {
                 )}
               </button>
 
-              <button 
+              <button
                 onClick={() => setActiveTab('requests')}
-                className={`relative pb-3 text-[15px] font-bold font-poppins transition-colors focus:outline-none flex items-center gap-2 ${
-                  activeTab === 'requests' ? 'text-[#1e3a8a]' : 'text-slate-400 hover:text-slate-600'
-                }`}
+                className={`relative pb-3 text-[15px] font-bold font-poppins transition-colors focus:outline-none flex items-center gap-2 ${activeTab === 'requests' ? 'text-[#1e3a8a]' : 'text-slate-400 hover:text-slate-600'
+                  }`}
               >
                 <ClipboardList className="w-4 h-4 shrink-0" />
                 <span>Requests</span>
@@ -178,11 +177,10 @@ const Dashboard = () => {
                 )}
               </button>
 
-              <button 
+              <button
                 onClick={() => setActiveTab('ideas')}
-                className={`relative pb-3 text-[15px] font-bold font-poppins transition-colors focus:outline-none flex items-center gap-2 ${
-                  activeTab === 'ideas' ? 'text-[#1e3a8a]' : 'text-slate-400 hover:text-slate-600'
-                }`}
+                className={`relative pb-3 text-[15px] font-bold font-poppins transition-colors focus:outline-none flex items-center gap-2 ${activeTab === 'ideas' ? 'text-[#1e3a8a]' : 'text-slate-400 hover:text-slate-600'
+                  }`}
               >
                 <Lightbulb className="w-4 h-4 shrink-0" />
                 <span>Ideas</span>
@@ -219,25 +217,25 @@ const Dashboard = () => {
               {/* Outer Shadow Circle Ring */}
               <svg className="w-full h-full transform -rotate-90 select-none" viewBox="0 0 100 100">
                 {/* Background Ring Track */}
-                <circle 
-                  cx="50" 
-                  cy="50" 
-                  r="38" 
-                  stroke="#eff6ff" 
-                  strokeWidth="10" 
-                  fill="transparent" 
+                <circle
+                  cx="50"
+                  cy="50"
+                  r="38"
+                  stroke="#eff6ff"
+                  strokeWidth="10"
+                  fill="transparent"
                 />
                 {/* Active Colored Sector Segment Ring */}
-                <circle 
-                  cx="50" 
-                  cy="50" 
-                  r="38" 
-                  stroke="#2563eb" 
-                  strokeWidth="10" 
-                  fill="transparent" 
-                  strokeDasharray="238.76" 
-                  strokeDashoffset="179.07" 
-                  strokeLinecap="round" 
+                <circle
+                  cx="50"
+                  cy="50"
+                  r="38"
+                  stroke="#2563eb"
+                  strokeWidth="10"
+                  fill="transparent"
+                  strokeDasharray="238.76"
+                  strokeDashoffset="179.07"
+                  strokeLinecap="round"
                   className="transition-all duration-[1500ms] ease-out"
                 />
               </svg>
@@ -255,4 +253,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-

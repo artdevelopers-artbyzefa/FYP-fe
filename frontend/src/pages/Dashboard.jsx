@@ -103,23 +103,23 @@ const Dashboard = () => {
             </div>
           </div>
 
-          {/* Details Row Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-5 border-t border-slate-100">
-            <div>
+          {/* Details Container Box with separator lines */}
+          <div className="bg-[#f8fafc] border border-slate-100/80 rounded-[20px] p-5 px-6 md:px-8 grid grid-cols-2 md:grid-cols-4 gap-6 w-full">
+            <div className="md:border-r border-slate-200/60 md:pr-4">
               <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 font-poppins">Father's Name</p>
-              <p className="text-[15px] font-extrabold text-[#1e3a8a] font-poppins">{studentInfo.fatherName}</p>
+              <p className="text-[14.5px] font-extrabold text-[#1e3a8a] font-poppins">{studentInfo.fatherName}</p>
             </div>
-            <div>
+            <div className="md:border-r border-slate-200/60 md:px-4">
               <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 font-poppins">Classification</p>
-              <p className="text-[15px] font-extrabold text-[#1e3a8a] font-poppins">{studentInfo.classification}</p>
+              <p className="text-[14.5px] font-extrabold text-[#1e3a8a] font-poppins">{studentInfo.classification}</p>
             </div>
-            <div>
+            <div className="md:border-r border-slate-200/60 md:px-4">
               <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 font-poppins">Academic Merit</p>
-              <p className="text-[15px] font-extrabold text-[#1e3a8a] font-poppins">{studentInfo.academicMerit}</p>
+              <p className="text-[14.5px] font-extrabold text-[#1e3a8a] font-poppins">{studentInfo.academicMerit}</p>
             </div>
-            <div>
+            <div className="md:pl-4">
               <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 font-poppins">Course</p>
-              <p className="text-[15px] font-extrabold text-[#1e3a8a] font-poppins">{studentInfo.course}</p>
+              <p className="text-[14.5px] font-extrabold text-[#1e3a8a] font-poppins">{studentInfo.course}</p>
             </div>
           </div>
         </div>

@@ -181,7 +181,7 @@ const Sidebar = ({ isOpen, onClose }) => {
 
               <NavLink to="/task-manager" onClick={handleLinkClick} className={menuClass}>
                 <ClipboardList className="w-5 h-5 shrink-0" />
-                <span>Task Manager</span>
+                <span>Project Management</span>
               </NavLink>
             </div>
           </div>

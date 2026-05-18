@@ -17,8 +17,8 @@ import { toast } from 'sonner';
 const Sidebar = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
   const [openMenus, setOpenMenus] = useState({
-    partners: true,
-    project: true
+    partners: false,
+    project: false
   });
 
   const toggleMenu = (menu) => {
@@ -64,6 +64,17 @@ const Sidebar = ({ isOpen, onClose }) => {
 
   return (
     <>
+      {/* Custom Styles to Hide Scrollbar Track */}
+      <style>{`
+        .no-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .no-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
+
       {/* Backdrop overlay on mobile */}
       {isOpen && (
         <div 
@@ -88,7 +99,7 @@ const Sidebar = ({ isOpen, onClose }) => {
         </div>
 
         {/* Scrollable Nav Area */}
-        <nav className="flex-grow overflow-y-auto pr-1 -mr-2 space-y-7 select-none scrollbar-thin">
+        <nav className="flex-grow overflow-y-auto pr-1 -mr-2 space-y-7 select-none no-scrollbar">
           {/* Overview Section */}
           <div>
             <p className="px-4 text-[10.5px] font-bold text-[#93c5fd]/50 uppercase tracking-[0.08em] mb-2.5 block font-poppins">Overview</p>
@@ -122,7 +133,9 @@ const Sidebar = ({ isOpen, onClose }) => {
                 {openMenus.partners ? <ChevronUp className="w-4 h-4 text-blue-200/60" /> : <ChevronDown className="w-4 h-4 text-blue-200/60" />}
               </button>
               
-              {openMenus.partners && (
+              <div className={`transition-all duration-300 ease-in-out overflow-hidden ${
+                openMenus.partners ? 'max-h-[120px] opacity-100 mt-1' : 'max-h-0 opacity-0 pointer-events-none'
+              }`}>
                 <div className="space-y-0.5 mt-0.5">
                   <NavLink to="/partners/new" onClick={handleLinkClick} className={subMenuClass}>
                     <span className="w-1.5 h-1.5 rounded-full bg-blue-400 shrink-0"></span>
@@ -133,11 +146,11 @@ const Sidebar = ({ isOpen, onClose }) => {
                     Incoming Requests
                   </NavLink>
                 </div>
-              )}
+              </div>
 
               <NavLink to="/supervisor-selection" onClick={handleLinkClick} className={menuClass}>
                 <User className="w-5 h-5 shrink-0" />
-                <span>Supervisor Selection</span>
+                <span className="whitespace-nowrap">Supervisor Selection</span>
               </NavLink>
             </div>
           </div>
@@ -157,12 +170,14 @@ const Sidebar = ({ isOpen, onClose }) => {
                 {openMenus.project ? <ChevronUp className="w-4 h-4 text-blue-200/60" /> : <ChevronDown className="w-4 h-4 text-blue-200/60" />}
               </button>
               
-              {openMenus.project && (
+              <div className={`transition-all duration-300 ease-in-out overflow-hidden ${
+                openMenus.project ? 'max-h-[120px] opacity-100 mt-1' : 'max-h-0 opacity-0 pointer-events-none'
+              }`}>
                 <div className="space-y-0.5 mt-0.5">
                   <NavLink to="/project/new" onClick={handleLinkClick} className={subMenuClass}>New Idea</NavLink>
                   <NavLink to="/project/approved" onClick={handleLinkClick} className={subMenuClass}>Approved Ideas</NavLink>
                 </div>
-              )}
+              </div>
 
               <NavLink to="/task-manager" onClick={handleLinkClick} className={menuClass}>
                 <ClipboardList className="w-5 h-5 shrink-0" />

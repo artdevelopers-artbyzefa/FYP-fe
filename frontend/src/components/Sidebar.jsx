@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { 
-  LayoutDashboard, 
-  UserCircle, 
+  Home, 
+  User, 
   Users, 
-  UserCheck, 
   Lightbulb, 
   ClipboardList, 
   LogOut, 
@@ -15,11 +14,11 @@ import {
 import { logoutUser } from '../services/auth.service';
 import { toast } from 'sonner';
 
-const Sidebar = () => {
+const Sidebar = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
   const [openMenus, setOpenMenus] = useState({
     partners: true,
-    project: false
+    project: true
   });
 
   const toggleMenu = (menu) => {
@@ -37,127 +36,157 @@ const Sidebar = () => {
   };
 
   const menuClass = ({ isActive }) => 
-    `flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group ${
+    `flex items-center gap-3.5 px-4 py-3 rounded-[16px] transition-all duration-200 group font-poppins font-semibold text-[15px] ${
       isActive 
-        ? 'bg-white/10 text-white shadow-lg shadow-black/5' 
+        ? 'bg-[#2563eb] text-white shadow-lg shadow-[#2563eb]/20' 
         : 'text-blue-100/70 hover:bg-white/5 hover:text-white'
     }`;
 
   const subMenuClass = ({ isActive }) => 
-    `flex items-center gap-3 pl-12 pr-4 py-2.5 rounded-xl text-sm transition-all duration-200 ${
+    `flex items-center gap-2.5 pl-12 pr-4 py-2.5 rounded-xl text-[13.5px] font-medium font-poppins transition-all duration-200 ${
       isActive 
-        ? 'text-white font-semibold' 
-        : 'text-blue-100/60 hover:text-white hover:bg-white/5'
+        ? 'text-white font-bold' 
+        : 'text-[#93c5fd]/70 hover:text-white'
     }`;
 
+  const subMenuHeaderClass = (menuOpen) => 
+    `w-full flex items-center justify-between px-4 py-3 rounded-[16px] transition-all duration-200 font-poppins font-semibold text-[15px] ${
+      menuOpen 
+        ? 'text-white' 
+        : 'text-blue-100/70 hover:bg-white/5 hover:text-white'
+    }`;
+
+  const handleLinkClick = () => {
+    if (onClose) {
+      onClose();
+    }
+  };
+
   return (
-    <div className="w-72 bg-[#1e3a8a] h-screen text-white flex flex-col p-6 fixed left-0 top-0 overflow-y-auto border-r border-white/5 shadow-2xl z-50">
-      {/* Brand Logo */}
-      <div className="flex items-center gap-3 mb-10 px-2">
-        <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center border border-white/10 backdrop-blur-sm">
-          <GraduationCap className="w-6 h-6 text-white" />
-        </div>
-        <div className="flex flex-col">
-          <span className="font-display font-black text-lg tracking-tight leading-none">CUI DFYP</span>
-          <span className="text-[10px] font-bold text-blue-200/60 uppercase tracking-[0.2em] mt-1">Student Portal</span>
-        </div>
-      </div>
+    <>
+      {/* Backdrop overlay on mobile */}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 lg:hidden"
+          onClick={onClose}
+        />
+      )}
 
-      <nav className="flex-grow space-y-8">
-        {/* Overview Section */}
-        <div>
-          <p className="px-4 text-[11px] font-black text-blue-200/40 uppercase tracking-[0.2em] mb-3">Overview</p>
-          <NavLink to="/dashboard" className={menuClass}>
-            <LayoutDashboard className="w-5 h-5" />
-            <span className="font-semibold text-[15px]">Dashboard</span>
-          </NavLink>
-        </div>
-
-        {/* Account Section */}
-        <div>
-          <p className="px-4 text-[11px] font-black text-blue-200/40 uppercase tracking-[0.2em] mb-3">Account</p>
-          <NavLink to="/profile" className={menuClass}>
-            <UserCircle className="w-5 h-5" />
-            <span className="font-semibold text-[15px]">My Profile</span>
-          </NavLink>
-        </div>
-
-        {/* Group & Supervisor Section */}
-        <div>
-          <p className="px-4 text-[11px] font-black text-blue-200/40 uppercase tracking-[0.2em] mb-3">Group & Supervisor</p>
-          <div className="space-y-1">
-            <button 
-              onClick={() => toggleMenu('partners')}
-              className="w-full flex items-center justify-between px-4 py-3 rounded-xl text-blue-100/70 hover:bg-white/5 hover:text-white transition-all duration-200"
-            >
-              <div className="flex items-center gap-3">
-                <Users className="w-5 h-5" />
-                <span className="font-semibold text-[15px]">FYP Partners</span>
-              </div>
-              {openMenus.partners ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-            </button>
-            
-            {openMenus.partners && (
-              <div className="space-y-1 mt-1">
-                <NavLink to="/partners/new" className={subMenuClass}>
-                  <span className="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
-                  New Request
-                </NavLink>
-                <NavLink to="/partners/requests" className={subMenuClass}>
-                  <span className="w-1.5 h-1.5 rounded-full bg-transparent border border-blue-400"></span>
-                  Incoming Requests
-                </NavLink>
-              </div>
-            )}
-
-            <NavLink to="/supervisor-selection" className={menuClass}>
-              <UserCheck className="w-5 h-5" />
-              <span className="font-semibold text-[15px]">Supervisor Selection</span>
-            </NavLink>
+      {/* Sidebar container */}
+      <div className={`w-[260px] bg-[#1e3a8a] h-screen text-white flex flex-col p-6 fixed left-0 top-0 border-r border-white/5 shadow-2xl z-50 transition-transform duration-300 ease-in-out lg:translate-x-0 ${
+        isOpen ? 'translate-x-0' : '-translate-x-full'
+      }`}>
+        {/* Brand Logo */}
+        <div className="flex items-center gap-3.5 mb-8 px-2 shrink-0">
+          <div className="w-11 h-11 bg-white/10 rounded-2xl flex items-center justify-center border border-white/10 backdrop-blur-sm shadow-sm shrink-0">
+            <GraduationCap className="w-6 h-6 text-white" />
+          </div>
+          <div className="flex flex-col">
+            <span className="font-extrabold text-[17px] tracking-tight leading-none text-white font-poppins">CUI DFYP</span>
+            <span className="text-[11px] font-bold text-blue-200/60 uppercase tracking-[0.1em] mt-1 font-poppins">Student Portal</span>
           </div>
         </div>
 
-        {/* Project Execution Section */}
-        <div>
-          <p className="px-4 text-[11px] font-black text-blue-200/40 uppercase tracking-[0.2em] mb-3">Project Execution</p>
-          <div className="space-y-1">
-            <button 
-              onClick={() => toggleMenu('project')}
-              className="w-full flex items-center justify-between px-4 py-3 rounded-xl text-blue-100/70 hover:bg-white/5 hover:text-white transition-all duration-200"
-            >
-              <div className="flex items-center gap-3">
-                <Lightbulb className="w-5 h-5" />
-                <span className="font-semibold text-[15px]">Project Idea</span>
-              </div>
-              {openMenus.project ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-            </button>
-            
-            {openMenus.project && (
-              <div className="space-y-1 mt-1">
-                <NavLink to="/project/new" className={subMenuClass}>New Idea</NavLink>
-                <NavLink to="/project/approved" className={subMenuClass}>Approved Ideas</NavLink>
-              </div>
-            )}
-
-            <NavLink to="/task-manager" className={menuClass}>
-              <ClipboardList className="w-5 h-5" />
-              <span className="font-semibold text-[15px]">Task Manager</span>
+        {/* Scrollable Nav Area */}
+        <nav className="flex-grow overflow-y-auto pr-1 -mr-2 space-y-7 select-none scrollbar-thin">
+          {/* Overview Section */}
+          <div>
+            <p className="px-4 text-[10.5px] font-bold text-[#93c5fd]/50 uppercase tracking-[0.08em] mb-2.5 block font-poppins">Overview</p>
+            <NavLink to="/dashboard" onClick={handleLinkClick} className={menuClass}>
+              <Home className="w-5 h-5 shrink-0" />
+              <span>Dashboard</span>
             </NavLink>
           </div>
-        </div>
-      </nav>
 
-      {/* Logout at bottom */}
-      <div className="pt-6 mt-6 border-t border-white/10">
-        <button 
-          onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-rose-200/70 hover:bg-rose-500/10 hover:text-rose-300 transition-all duration-200"
-        >
-          <LogOut className="w-5 h-5" />
-          <span className="font-semibold text-[15px]">Logout</span>
-        </button>
+          {/* Account Section */}
+          <div>
+            <p className="px-4 text-[10.5px] font-bold text-[#93c5fd]/50 uppercase tracking-[0.08em] mb-2.5 block font-poppins">Account</p>
+            <NavLink to="/profile" onClick={handleLinkClick} className={menuClass}>
+              <User className="w-5 h-5 shrink-0" />
+              <span>My Profile</span>
+            </NavLink>
+          </div>
+
+          {/* Group & Supervisor Section */}
+          <div>
+            <p className="px-4 text-[10.5px] font-bold text-[#93c5fd]/50 uppercase tracking-[0.08em] mb-2.5 block font-poppins">Group & Supervisor</p>
+            <div className="space-y-1">
+              <button 
+                onClick={() => toggleMenu('partners')}
+                className={subMenuHeaderClass(openMenus.partners)}
+              >
+                <div className="flex items-center gap-3.5">
+                  <Users className="w-5 h-5 shrink-0" />
+                  <span>FYP Partners</span>
+                </div>
+                {openMenus.partners ? <ChevronUp className="w-4 h-4 text-blue-200/60" /> : <ChevronDown className="w-4 h-4 text-blue-200/60" />}
+              </button>
+              
+              {openMenus.partners && (
+                <div className="space-y-0.5 mt-0.5">
+                  <NavLink to="/partners/new" onClick={handleLinkClick} className={subMenuClass}>
+                    <span className="w-1.5 h-1.5 rounded-full bg-blue-400 shrink-0"></span>
+                    New Request
+                  </NavLink>
+                  <NavLink to="/partners/requests" onClick={handleLinkClick} className={subMenuClass}>
+                    <span className="w-1.5 h-1.5 rounded-full bg-transparent border border-blue-400 shrink-0"></span>
+                    Incoming Requests
+                  </NavLink>
+                </div>
+              )}
+
+              <NavLink to="/supervisor-selection" onClick={handleLinkClick} className={menuClass}>
+                <User className="w-5 h-5 shrink-0" />
+                <span>Supervisor Selection</span>
+              </NavLink>
+            </div>
+          </div>
+
+          {/* Project Execution Section */}
+          <div>
+            <p className="px-4 text-[10.5px] font-bold text-[#93c5fd]/50 uppercase tracking-[0.08em] mb-2.5 block font-poppins">Project Execution</p>
+            <div className="space-y-1">
+              <button 
+                onClick={() => toggleMenu('project')}
+                className={subMenuHeaderClass(openMenus.project)}
+              >
+                <div className="flex items-center gap-3.5">
+                  <Lightbulb className="w-5 h-5 shrink-0" />
+                  <span>Project Idea</span>
+                </div>
+                {openMenus.project ? <ChevronUp className="w-4 h-4 text-blue-200/60" /> : <ChevronDown className="w-4 h-4 text-blue-200/60" />}
+              </button>
+              
+              {openMenus.project && (
+                <div className="space-y-0.5 mt-0.5">
+                  <NavLink to="/project/new" onClick={handleLinkClick} className={subMenuClass}>New Idea</NavLink>
+                  <NavLink to="/project/approved" onClick={handleLinkClick} className={subMenuClass}>Approved Ideas</NavLink>
+                </div>
+              )}
+
+              <NavLink to="/task-manager" onClick={handleLinkClick} className={menuClass}>
+                <ClipboardList className="w-5 h-5 shrink-0" />
+                <span>Task Manager</span>
+              </NavLink>
+            </div>
+          </div>
+        </nav>
+
+        {/* Logout Option at Bottom */}
+        <div className="pt-6 mt-6 border-t border-white/10 shrink-0">
+          <button 
+            onClick={() => {
+              handleLinkClick();
+              handleLogout();
+            }}
+            className="w-full flex items-center gap-3.5 px-4 py-3 rounded-[16px] text-blue-100/70 hover:bg-white/5 hover:text-white transition-all duration-200 font-poppins font-semibold text-[15px]"
+          >
+            <LogOut className="w-5 h-5 shrink-0" />
+            <span className="font-semibold">Logout</span>
+          </button>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

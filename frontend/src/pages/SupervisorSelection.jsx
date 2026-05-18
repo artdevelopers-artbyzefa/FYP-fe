@@ -1,6 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Bell, ChevronDown, Tag, User } from 'lucide-react';
+import api from '../services/api';
+import { API_URLS } from '../services/apiUrls';
+import { toast } from 'sonner';
+import { logger } from '../utils/logger';
 
 const supervisors = [
   {
@@ -28,9 +32,67 @@ const supervisors = [
 
 const SupervisorSelectionPage = () => {
   const navigate = useNavigate();
+  const [supervisorsList, setSupervisorsList] = useState(supervisors);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [requestedId, setRequestedId] = useState(null);
+
+  useEffect(() => {
+    const fetchSupervisors = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await api.get(API_URLS.supervisor);
+        if (response.data && Array.isArray(response.data)) {
+          setSupervisorsList(response.data);
+        }
+      } catch (err) {
+        // Fix 3: dev silently falls back to hardcoded list; production shows error banner
+        if (import.meta.env.DEV) {
+          logger("[DEV] Failed to load supervisors, using hardcoded fallback list.", err);
+        } else {
+          setError("Unable to load supervisors. Please refresh or contact support.");
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchSupervisors();
+  }, []);
+
+  const handleRequestSupervisor = async (sup) => {
+    setLoading(true);
+    setError(null);
+    try {
+      setRequestedId(sup.id);
+      await api.post(API_URLS.supervisor, { supervisorId: sup.id });
+      toast.success(`Supervisor request sent to ${sup.name}`);
+    } catch (err) {
+      // Fix 3: dev shows simulated success; production shows real error
+      if (import.meta.env.DEV) {
+        logger("[DEV] Supervisor request failed, simulating success.", err);
+        setRequestedId(sup.id);
+        toast.success(`Request sent to ${sup.name} (Simulated — Dev Mode)`);
+      } else {
+        setError(`Failed to send request to ${sup.name}. Please try again.`);
+        toast.error(`Failed to send request to ${sup.name}.`);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="flex-1 flex flex-col min-w-0 min-h-screen bg-[#f4f7fe] font-poppins antialiased selection:bg-blue-500/10">
+      {/* Fix 3: Production error banner */}
+      {error && (
+        <div className="mx-8 mt-4 flex items-center gap-3 bg-red-50 border border-red-200 text-red-700 px-5 py-3.5 rounded-2xl text-[13px] font-semibold shadow-sm">
+          <svg className="w-4 h-4 shrink-0 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+          </svg>
+          {error}
+        </div>
+      )}
       {/* Header Section */}
       <header className="h-[90px] bg-white border-b border-gray-200/65 shadow-sm shadow-gray-200/20 flex items-center justify-between px-8 shrink-0 sticky top-0 z-40">
         <div className="flex items-center gap-4">
@@ -78,7 +140,7 @@ const SupervisorSelectionPage = () => {
       {/* Main Content */}
       <main className="flex-1 px-6 md:px-8 lg:px-10 py-10 max-w-[1400px] w-full mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {supervisors.map((supervisor) => (
+          {supervisorsList.map((supervisor) => (
             <div
               key={supervisor.id}
               className="bg-white border border-gray-100 rounded-[24px] p-6 shadow-[0_4px_20px_rgba(0,0,0,0.02)] transition-all hover:shadow-[0_8px_30px_rgba(0,0,0,0.04)] hover:-translate-y-0.5 group"
@@ -99,8 +161,15 @@ const SupervisorSelectionPage = () => {
               </div>
 
               <div className="flex items-center gap-3">
-                <button className="flex-1 py-3.5 bg-[#1e3a8a] hover:bg-[#172554] text-white rounded-xl font-bold text-[14px] tracking-wide shadow-lg shadow-blue-900/10 transition-all active:scale-[0.98]">
-                  Request Supervisor
+                <button 
+                  onClick={() => handleRequestSupervisor(supervisor)}
+                  className={`flex-1 py-3.5 rounded-xl font-bold text-[14px] tracking-wide shadow-lg transition-all active:scale-[0.98] ${
+                    requestedId === supervisor.id 
+                      ? 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-emerald-900/10'
+                      : 'bg-[#1e3a8a] hover:bg-[#172554] text-white shadow-blue-900/10'
+                  }`}
+                >
+                  {requestedId === supervisor.id ? 'Requested' : 'Request Supervisor'}
                 </button>
                 <button className="w-[52px] h-[52px] border border-gray-200 rounded-xl flex items-center justify-center text-gray-500 hover:bg-gray-50 transition-all">
                   <User className="w-5 h-5" />

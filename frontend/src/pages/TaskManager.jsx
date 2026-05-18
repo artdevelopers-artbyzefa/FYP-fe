@@ -34,6 +34,34 @@ import {
   Check,
   Calendar
 } from 'lucide-react';
+import api from '../services/api';
+import { API_URLS } from '../services/apiUrls';
+import { logger } from '../utils/logger';
+
+/**
+ * Fix 1: Task Response Normalizer
+ * Handles both response shapes from the backend:
+ *   - Flat array:    [{ id, title, status: 'todo' | 'in-progress' | 'review' | 'done' }]
+ *   - Grouped obj:  { 'Not Started': [...], 'In Progress': [...], ... }
+ */
+const normalizeTasksResponse = (data) => {
+  if (!data) return null;
+
+  // Already grouped object — use as-is
+  if (!Array.isArray(data) && data['Not Started'] !== undefined) return data;
+
+  // Flat array — group by status
+  if (Array.isArray(data)) {
+    return {
+      'Not Started': data.filter(t => t.status === 'todo' || t.status === 'not-started'),
+      'In Progress': data.filter(t => t.status === 'in-progress'),
+      'Review':      data.filter(t => t.status === 'review'),
+      'Completed':   data.filter(t => t.status === 'done' || t.status === 'completed'),
+    };
+  }
+
+  return null; // unknown shape
+};
 
 const taskBoardData = {
   'Not Started': [
@@ -193,6 +221,31 @@ const TaskManager = () => {
   const [selectedTask, setSelectedTask] = useState(null);
   const [showNotifications, setShowNotifications] = useState(false);
   const [toast, setToast] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [fetchError, setFetchError] = useState(null); // Fix 3
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      setLoading(true);
+      setFetchError(null);
+      try {
+        const response = await api.get(API_URLS.tasks);
+        // Fix 1: normalize response — works with both flat array and grouped object
+        const normalized = normalizeTasksResponse(response.data);
+        if (normalized) setTasks(normalized);
+      } catch (err) {
+        // Fix 3: dev gets silent fallback; production shows visible error
+        if (import.meta.env.DEV) {
+          logger("[DEV] Failed to load tasks from backend, using mocked fallback.", err);
+        } else {
+          setFetchError("Unable to load tasks. Please refresh or contact support.");
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTasks();
+  }, []);
 
   // Form states for Add Task Modal
   const [newTaskTitle, setNewTaskTitle] = useState('');
@@ -218,7 +271,19 @@ const TaskManager = () => {
     }, 4000);
   };
 
-  const handleDeleteTask = (id) => {
+  const handleDeleteTask = async (id) => {
+    setLoading(true);
+    try {
+      await api.delete(`${API_URLS.tasks}/${id}`);
+    } catch (err) {
+      if (import.meta.env.DEV) {
+        logger("[DEV] Error deleting task (applied locally):", err);
+      } else {
+        showToastMessage('Failed to delete task. Please try again.');
+      }
+    } finally {
+      setLoading(false);
+    }
     const updatedTasks = {};
     Object.keys(tasks).forEach(col => {
       updatedTasks[col] = tasks[col].filter(t => t.id !== id);
@@ -227,7 +292,7 @@ const TaskManager = () => {
     showToastMessage('Task deleted successfully!');
   };
 
-  const handleCreateTask = (e) => {
+  const handleCreateTask = async (e) => {
     e.preventDefault();
     if (!newTaskTitle.trim()) return;
 
@@ -240,6 +305,16 @@ const TaskManager = () => {
       overdue: true,
       assignee: newTaskAssignee
     };
+
+    setLoading(true);
+    try {
+      await api.post(API_URLS.tasks, newTask);
+    } catch (err) {
+      logger("Error creating task:", err);
+      logger("Created task locally", newTask);
+    } finally {
+      setLoading(false);
+    }
 
     setTasks({
       ...tasks,
@@ -257,9 +332,19 @@ const TaskManager = () => {
     showToastMessage('New task created successfully!');
   };
 
-  const handleUpdateTask = (e) => {
+  const handleUpdateTask = async (e) => {
     e.preventDefault();
     if (!selectedTask || !selectedTask.title.trim()) return;
+
+    setLoading(true);
+    try {
+      await api.put(`${API_URLS.tasks}/${selectedTask.id}`, selectedTask);
+    } catch (err) {
+      logger("Error updating task:", err);
+      logger("Updated task locally", selectedTask);
+    } finally {
+      setLoading(false);
+    }
 
     const updatedTasks = {};
     Object.keys(tasks).forEach(col => {
@@ -301,6 +386,15 @@ const TaskManager = () => {
 
   return (
     <div className="flex-1 flex flex-col min-w-0 min-h-screen bg-[#f4f7fe] font-poppins antialiased">
+      {/* Fix 3: Production error banner — only shown when backend is unreachable in prod */}
+      {fetchError && (
+        <div className="mx-6 mt-4 flex items-center gap-3 bg-red-50 border border-red-200 text-red-700 px-5 py-3.5 rounded-2xl text-[13px] font-semibold shadow-sm">
+          <svg className="w-4 h-4 shrink-0 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+          </svg>
+          {fetchError}
+        </div>
+      )}
       {/* 1. Header Section */}
       <header className="h-[90px] w-full bg-white border-b border-gray-200/65 shadow-sm shadow-gray-200/20 flex items-center justify-center shrink-0 sticky top-0 z-40">
         <div className="w-full max-w-[1400px] mx-auto px-6 md:px-8 flex items-center justify-between">

@@ -1,23 +1,55 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { 
-  ChevronLeft, 
-  Bell, 
-  ChevronDown, 
-  User, 
-  Mail, 
-  CreditCard, 
-  FolderOpen, 
-  Users, 
-  ClipboardList, 
-  Lightbulb 
+
+import api from '../services/api';
+import { API_URLS } from '../services/apiUrls';
+import { logger } from '../utils/logger';
+import {
+  ChevronLeft,
+  Bell,
+  ChevronDown,
+  User,
+  Mail,
+  CreditCard,
+  FolderOpen,
+  Users,
+  ClipboardList,
+  Lightbulb
 } from 'lucide-react';
 import { getUserInfo } from '../utils/app.utils';
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const dynamicUser = getUserInfo();
-  
+
+  const [stats, setStats] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [fetchError, setFetchError] = useState(null); // Fix 3
+
+  useEffect(() => {
+    const fetchDashboardStats = async () => {
+      setLoading(true);
+      setFetchError(null);
+      try {
+        const response = await api.get(API_URLS.dashboardStats);
+        if (response.data) {
+          setStats(response.data);
+          logger("Dashboard connected", response.data);
+        }
+      } catch (err) {
+        // Fix 3: dev gets silent fallback; production shows visible error banner
+        if (import.meta.env.DEV) {
+          logger("[DEV] Dashboard stats fetch failed, using mocked fallback.", err);
+        } else {
+          setFetchError("Unable to load dashboard data. Please refresh or contact support.");
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchDashboardStats();
+  }, []);
+
   // Tab states for the bottom left card
   const [activeTab, setActiveTab] = useState('members');
 
@@ -34,10 +66,19 @@ const Dashboard = () => {
 
   return (
     <div className="font-poppins bg-[#f4f7fe] min-h-screen p-6 lg:p-8 space-y-6 select-none">
+      {/* Fix 3: Production error banner */}
+      {fetchError && (
+        <div className="flex items-center gap-3 bg-red-50 border border-red-200 text-red-700 px-5 py-3.5 rounded-2xl text-[13px] font-semibold shadow-sm">
+          <svg className="w-4 h-4 shrink-0 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+          </svg>
+          {fetchError}
+        </div>
+      )}
       {/* Top Header Bar */}
       <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-2 px-1 shrink-0">
         <div className="flex items-center gap-3">
-          <button 
+          <button
             onClick={() => navigate(-1)}
             className="w-10 h-10 border border-slate-200 rounded-full flex items-center justify-center hover:bg-slate-50 transition-colors focus:outline-none shrink-0 shadow-sm bg-white"
             aria-label="Go back"
@@ -58,7 +99,7 @@ const Dashboard = () => {
           </div>
 
           {/* Bell Icon */}
-          <button 
+          <button
             className="w-10 h-10 border border-slate-200 rounded-2xl flex items-center justify-center hover:bg-slate-50 transition-colors focus:outline-none relative shrink-0 bg-white shadow-sm"
             aria-label="View notifications"
           >
@@ -132,11 +173,10 @@ const Dashboard = () => {
           {/* Tab Headers */}
           <div>
             <div className="flex items-center gap-6 border-b border-slate-100 pb-3 shrink-0">
-              <button 
+              <button
                 onClick={() => setActiveTab('members')}
-                className={`relative pb-3 text-[15px] font-bold font-poppins transition-colors focus:outline-none flex items-center gap-2 ${
-                  activeTab === 'members' ? 'text-[#1e3a8a]' : 'text-slate-400 hover:text-slate-600'
-                }`}
+                className={`relative pb-3 text-[15px] font-bold font-poppins transition-colors focus:outline-none flex items-center gap-2 ${activeTab === 'members' ? 'text-[#1e3a8a]' : 'text-slate-400 hover:text-slate-600'
+                  }`}
               >
                 <Users className="w-4 h-4 shrink-0" />
                 <span>Group Members</span>
@@ -145,11 +185,10 @@ const Dashboard = () => {
                 )}
               </button>
 
-              <button 
+              <button
                 onClick={() => setActiveTab('requests')}
-                className={`relative pb-3 text-[15px] font-bold font-poppins transition-colors focus:outline-none flex items-center gap-2 ${
-                  activeTab === 'requests' ? 'text-[#1e3a8a]' : 'text-slate-400 hover:text-slate-600'
-                }`}
+                className={`relative pb-3 text-[15px] font-bold font-poppins transition-colors focus:outline-none flex items-center gap-2 ${activeTab === 'requests' ? 'text-[#1e3a8a]' : 'text-slate-400 hover:text-slate-600'
+                  }`}
               >
                 <ClipboardList className="w-4 h-4 shrink-0" />
                 <span>Requests</span>
@@ -158,11 +197,10 @@ const Dashboard = () => {
                 )}
               </button>
 
-              <button 
+              <button
                 onClick={() => setActiveTab('ideas')}
-                className={`relative pb-3 text-[15px] font-bold font-poppins transition-colors focus:outline-none flex items-center gap-2 ${
-                  activeTab === 'ideas' ? 'text-[#1e3a8a]' : 'text-slate-400 hover:text-slate-600'
-                }`}
+                className={`relative pb-3 text-[15px] font-bold font-poppins transition-colors focus:outline-none flex items-center gap-2 ${activeTab === 'ideas' ? 'text-[#1e3a8a]' : 'text-slate-400 hover:text-slate-600'
+                  }`}
               >
                 <Lightbulb className="w-4 h-4 shrink-0" />
                 <span>Ideas</span>
@@ -199,25 +237,25 @@ const Dashboard = () => {
               {/* Outer Shadow Circle Ring */}
               <svg className="w-full h-full transform -rotate-90 select-none" viewBox="0 0 100 100">
                 {/* Background Ring Track */}
-                <circle 
-                  cx="50" 
-                  cy="50" 
-                  r="38" 
-                  stroke="#eff6ff" 
-                  strokeWidth="10" 
-                  fill="transparent" 
+                <circle
+                  cx="50"
+                  cy="50"
+                  r="38"
+                  stroke="#eff6ff"
+                  strokeWidth="10"
+                  fill="transparent"
                 />
                 {/* Active Colored Sector Segment Ring */}
-                <circle 
-                  cx="50" 
-                  cy="50" 
-                  r="38" 
-                  stroke="#2563eb" 
-                  strokeWidth="10" 
-                  fill="transparent" 
-                  strokeDasharray="238.76" 
-                  strokeDashoffset="179.07" 
-                  strokeLinecap="round" 
+                <circle
+                  cx="50"
+                  cy="50"
+                  r="38"
+                  stroke="#2563eb"
+                  strokeWidth="10"
+                  fill="transparent"
+                  strokeDasharray="238.76"
+                  strokeDashoffset="179.07"
+                  strokeLinecap="round"
                   className="transition-all duration-[1500ms] ease-out"
                 />
               </svg>
@@ -235,4 +273,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-

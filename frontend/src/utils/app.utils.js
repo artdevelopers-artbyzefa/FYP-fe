@@ -1,3 +1,5 @@
+import { logger } from './logger';
+
 const TOKEN_KEY = "token";
 const USER_INFO_KEY = "user";
 
@@ -17,7 +19,7 @@ export const getUserInfo = () => {
     if (!data || data === "undefined" || data === "null") return null;
     return JSON.parse(data);
   } catch (error) {
-    console.error("Error parsing userInfo:", error);
+    logger("Error parsing userInfo:", error);
     return null;
   }
 };

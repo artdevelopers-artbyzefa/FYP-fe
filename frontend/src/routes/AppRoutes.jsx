@@ -16,15 +16,13 @@ import ApprovedIdeas from "../pages/ApprovedIdeas";
 import NewRequest from "../pages/NewRequest";
 import NewIdea from "../pages/NewIdea";
 import SupervisorSelection from "../pages/SupervisorSelection";
+import TaskManager from "../pages/TaskManager";
+import Profile from "../pages/Profile";
 
 // Placeholder components for new pages
-const Profile = () => <div className="p-6 bg-white rounded-2xl shadow-sm border border-gray-100"> <h1 className="text-2xl font-black text-navy mb-4">My Profile</h1> <p className="text-gray-500">Profile management page coming soon.</p> </div>;
 const FYPPartners = () => <div className="p-6 bg-white rounded-2xl shadow-sm border border-gray-100"> <h1 className="text-2xl font-black text-navy mb-4">FYP Partners</h1> <p className="text-gray-500">Partner management page coming soon.</p> </div>;
 
-
-
 const ProjectIdea = () => <div className="p-6 bg-white rounded-2xl shadow-sm border border-gray-100"> <h1 className="text-2xl font-black text-navy mb-4">Project Ideas</h1> <p className="text-gray-500">Project idea submission page coming soon.</p> </div>;
-const TaskManager = () => <div className="p-6 bg-white rounded-2xl shadow-sm border border-gray-100"> <h1 className="text-2xl font-black text-navy mb-4">Task Manager</h1> <p className="text-gray-500">Task management page coming soon.</p> </div>;
 
 const AppRoutes = () => {
     return (
@@ -59,4 +57,4 @@ const AppRoutes = () => {
     );
 };
 
-export default AppRoutes;
+export default AppRoutes;

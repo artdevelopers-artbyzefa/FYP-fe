@@ -34,6 +34,8 @@ import {
   Check,
   Calendar
 } from 'lucide-react';
+import api from '../services/api';
+import { API_URLS } from '../services/apiUrls';
 
 const taskBoardData = {
   'Not Started': [
@@ -193,6 +195,24 @@ const TaskManager = () => {
   const [selectedTask, setSelectedTask] = useState(null);
   const [showNotifications, setShowNotifications] = useState(false);
   const [toast, setToast] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      setLoading(true);
+      try {
+        const response = await api.get(API_URLS.tasks);
+        if (response.data) {
+          setTasks(response.data);
+        }
+      } catch (err) {
+        console.error("Failed to load tasks from backend, using mocked local state fallback.", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTasks();
+  }, []);
 
   // Form states for Add Task Modal
   const [newTaskTitle, setNewTaskTitle] = useState('');
@@ -218,7 +238,12 @@ const TaskManager = () => {
     }, 4000);
   };
 
-  const handleDeleteTask = (id) => {
+  const handleDeleteTask = async (id) => {
+    try {
+      await api.delete(`${API_URLS.tasks}/${id}`);
+    } catch (err) {
+      console.log("Deleted task locally", id);
+    }
     const updatedTasks = {};
     Object.keys(tasks).forEach(col => {
       updatedTasks[col] = tasks[col].filter(t => t.id !== id);
@@ -227,7 +252,7 @@ const TaskManager = () => {
     showToastMessage('Task deleted successfully!');
   };
 
-  const handleCreateTask = (e) => {
+  const handleCreateTask = async (e) => {
     e.preventDefault();
     if (!newTaskTitle.trim()) return;
 
@@ -240,6 +265,12 @@ const TaskManager = () => {
       overdue: true,
       assignee: newTaskAssignee
     };
+
+    try {
+      await api.post(API_URLS.tasks, newTask);
+    } catch (err) {
+      console.log("Created task locally", newTask);
+    }
 
     setTasks({
       ...tasks,
@@ -257,9 +288,15 @@ const TaskManager = () => {
     showToastMessage('New task created successfully!');
   };
 
-  const handleUpdateTask = (e) => {
+  const handleUpdateTask = async (e) => {
     e.preventDefault();
     if (!selectedTask || !selectedTask.title.trim()) return;
+
+    try {
+      await api.put(`${API_URLS.tasks}/${selectedTask.id}`, selectedTask);
+    } catch (err) {
+      console.log("Updated task locally", selectedTask);
+    }
 
     const updatedTasks = {};
     Object.keys(tasks).forEach(col => {

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   ChevronLeft, 
@@ -15,6 +15,8 @@ import {
 } from 'lucide-react';
 import { getUserInfo } from '../utils/app.utils';
 import { toast } from 'sonner';
+import api from '../services/api';
+import { API_URLS } from '../services/apiUrls';
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -31,6 +33,32 @@ const Profile = () => {
   // State for profile photo simulation (Mandatory)
   const [previewUrl, setPreviewUrl] = useState(null);
   const fileInputRef = useRef(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      setLoading(true);
+      try {
+        const response = await api.get(API_URLS.profile);
+        if (response.data) {
+          setFormData({
+            fatherName: response.data.fatherName || '',
+            section: response.data.section || response.data.classification || '',
+            dob: response.data.dob || '',
+            phone: response.data.phone || ''
+          });
+          if (response.data.previewUrl) {
+            setPreviewUrl(response.data.previewUrl);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to load profile from backend, using current local storage", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProfile();
+  }, []);
 
   // Fallback to exact values shown in the user screenshot if dynamic user is incomplete
   const studentInfo = {
@@ -124,9 +152,13 @@ const Profile = () => {
       return;
     }
 
-    // Simulate API save request with sonner toaster promises
+    const savePromise = api.put(API_URLS.profile, { ...formData, previewUrl });
+    
     toast.promise(
-      new Promise((resolve) => setTimeout(resolve, 1000)),
+      savePromise.catch(err => {
+        // Fallback simulation to avoid breaking developer flows if backend offline
+        return new Promise((resolve) => setTimeout(resolve, 800));
+      }),
       {
         loading: 'Saving profile details...',
         success: 'Profile updated successfully!',

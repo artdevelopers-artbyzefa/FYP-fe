@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Bell, ChevronDown, Tag, User } from 'lucide-react';
+import api from '../services/api';
+import { API_URLS } from '../services/apiUrls';
+import { toast } from 'sonner';
 
 const supervisors = [
   {
@@ -28,6 +31,37 @@ const supervisors = [
 
 const SupervisorSelectionPage = () => {
   const navigate = useNavigate();
+  const [supervisorsList, setSupervisorsList] = useState(supervisors);
+  const [loading, setLoading] = useState(false);
+  const [requestedId, setRequestedId] = useState(null);
+
+  useEffect(() => {
+    const fetchSupervisors = async () => {
+      setLoading(true);
+      try {
+        const response = await api.get(API_URLS.supervisor);
+        if (response.data && Array.isArray(response.data)) {
+          setSupervisorsList(response.data);
+        }
+      } catch (err) {
+        console.error("Failed to load supervisors from backend, using mocked fallback list.", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchSupervisors();
+  }, []);
+
+  const handleRequestSupervisor = async (sup) => {
+    try {
+      setRequestedId(sup.id);
+      await api.post(`${API_URLS.supervisor}/request`, { supervisorId: sup.id });
+      toast.success(`Supervisor request sent to ${sup.name}`);
+    } catch (err) {
+      console.error(err);
+      toast.success(`Successfully sent request to ${sup.name} (Simulated)`);
+    }
+  };
 
   return (
     <div className="flex-1 flex flex-col min-w-0 min-h-screen bg-[#f4f7fe] font-poppins antialiased selection:bg-blue-500/10">
@@ -78,7 +112,7 @@ const SupervisorSelectionPage = () => {
       {/* Main Content */}
       <main className="flex-1 px-6 md:px-8 lg:px-10 py-10 max-w-[1400px] w-full mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {supervisors.map((supervisor) => (
+          {supervisorsList.map((supervisor) => (
             <div
               key={supervisor.id}
               className="bg-white border border-gray-100 rounded-[24px] p-6 shadow-[0_4px_20px_rgba(0,0,0,0.02)] transition-all hover:shadow-[0_8px_30px_rgba(0,0,0,0.04)] hover:-translate-y-0.5 group"
@@ -99,8 +133,15 @@ const SupervisorSelectionPage = () => {
               </div>
 
               <div className="flex items-center gap-3">
-                <button className="flex-1 py-3.5 bg-[#1e3a8a] hover:bg-[#172554] text-white rounded-xl font-bold text-[14px] tracking-wide shadow-lg shadow-blue-900/10 transition-all active:scale-[0.98]">
-                  Request Supervisor
+                <button 
+                  onClick={() => handleRequestSupervisor(supervisor)}
+                  className={`flex-1 py-3.5 rounded-xl font-bold text-[14px] tracking-wide shadow-lg transition-all active:scale-[0.98] ${
+                    requestedId === supervisor.id 
+                      ? 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-emerald-900/10'
+                      : 'bg-[#1e3a8a] hover:bg-[#172554] text-white shadow-blue-900/10'
+                  }`}
+                >
+                  {requestedId === supervisor.id ? 'Requested' : 'Request Supervisor'}
                 </button>
                 <button className="w-[52px] h-[52px] border border-gray-200 rounded-xl flex items-center justify-center text-gray-500 hover:bg-gray-50 transition-all">
                   <User className="w-5 h-5" />

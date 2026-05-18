@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   ChevronLeft, 
@@ -13,10 +13,30 @@ import {
   Lightbulb 
 } from 'lucide-react';
 import { getUserInfo } from '../utils/app.utils';
+import api from '../services/api';
+import { API_URLS } from '../services/apiUrls';
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const dynamicUser = getUserInfo();
+  
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchDashboardStats = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        await api.get(API_URLS.dashboardStats);
+      } catch (err) {
+        console.error("Dashboard stats fetched failed, using local mocked states", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchDashboardStats();
+  }, []);
   
   // Tab states for the bottom left card
   const [activeTab, setActiveTab] = useState('members');

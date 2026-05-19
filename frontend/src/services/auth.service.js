@@ -11,7 +11,7 @@ const FYP_USERS = [
     id: 'S001', role: 'Student', name: 'Ahmed Farooq',
     email: 'student@cuiatd.edu.pk', password: 'Student@123',
     regNo: 'SP21-BCS-001', department: 'Computer Science',
-    semester: '8th', avatar: 'AF',
+    semester: '8th', avatar: 'AF', profileCompleted: true,
     group: {
       id: 'G-042',
       title: 'AI-Powered Traffic Management System Using Computer Vision',
@@ -66,10 +66,10 @@ export const loginUser = async (credentials) => {
     };
     // Don't leak password into storage
     delete mockResponse.user.password;
-    
+
     setAccessToken(mockResponse.token);
     setUserInfo(mockResponse.user);
-    
+
     return mockResponse;
   }
 
@@ -79,10 +79,10 @@ export const loginUser = async (credentials) => {
   try {
     const response = await postRequest(LOGIN_API_URL, credentials);
     const { token, user } = response.data;
-    
+
     if (token) setAccessToken(token);
     if (user) setUserInfo(user);
-    
+
     return response.data;
   } catch (error) {
     if (error.mappedError && error.mappedError.title === 'Connection Error') {

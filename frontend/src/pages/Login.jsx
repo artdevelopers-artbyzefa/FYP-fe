@@ -27,9 +27,13 @@ const Login = () => {
   const onSubmit = async (data) => {
     setIsLoading(true);
     try {
-      await loginUser(data);
+      const response = await loginUser(data);
       AppToast.success('Login Successful', 'Welcome back to the FYP Portal!');
-      navigate('/dashboard');
+      if (response?.user?.role === 'Faculty Supervisor') {
+        navigate('/faculty/dashboard');
+      } else {
+        navigate('/dashboard');
+      }
     } catch (error) {
       AppToast.error(error.title || 'Login Failed', error.message || 'Invalid credentials');
     } finally {

@@ -27,9 +27,22 @@ const Login = () => {
   const onSubmit = async (data) => {
     setIsLoading(true);
     try {
-      await loginUser(data);
+      const response = await loginUser(data);
       AppToast.success('Login Successful', 'Welcome back to the FYP Portal!');
-      navigate('/dashboard');
+      
+      // Role-based navigation
+      const userRole = response.user?.role || data.role;
+      if (userRole === 'HOD') {
+        navigate('/hod/dashboard');
+      } else if (userRole === 'FYP Office Assistant') {
+        navigate('/office-assistant/dashboard');
+      } else if (userRole === 'System Administrator' || userRole === 'Admin') {
+        navigate('/admin/dashboard');
+      } else if (userRole === 'Industry Supervisor' || userRole === 'Industry') {
+        navigate('/industry/dashboard');
+      } else {
+        navigate('/dashboard');
+      }
     } catch (error) {
       AppToast.error(error.title || 'Login Failed', error.message || 'Invalid credentials');
     } finally {

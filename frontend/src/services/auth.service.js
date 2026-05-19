@@ -39,6 +39,18 @@ const FYP_USERS = [
     email: 'evaluator@cuiatd.edu.pk', password: 'Eval@123',
     designation: 'External Evaluator · Associate Professor',
     department: 'Computer Science', avatar: 'UQ'
+  },
+  {
+    id: 'H001', role: 'HOD', name: 'Prof. Dr. Zafar Ali',
+    email: 'hod@cuiatd.edu.pk', password: 'Hod@123',
+    designation: 'Head of Department CS',
+    department: 'Computer Science', avatar: 'ZA'
+  },
+  {
+    id: 'O001', role: 'FYP Office Assistant', name: 'Mr. Tariq Mehmood',
+    email: 'office@cuiatd.edu.pk', password: 'Office@123',
+    designation: 'FYP Office Assistant',
+    department: 'FYP Office', avatar: 'TM'
   }
 ];
 

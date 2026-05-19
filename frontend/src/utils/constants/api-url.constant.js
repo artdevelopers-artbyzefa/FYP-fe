@@ -35,3 +35,27 @@ export const STUDENT_SUBMIT_IDEA_URL = '/student/ideas/submit';
 export const STUDENT_GET_APPROVED_IDEAS_URL = '/student/ideas/approved';
 export const STUDENT_SELECT_IDEA_URL = '/student/ideas/select';
 export const STUDENT_TASKS_API_URL = '/student/tasks';
+
+/**
+ * HOD Endpoints
+ */
+export const HOD_DASHBOARD_API_URL = '/hod/dashboard';
+export const HOD_ESCALATIONS_API_URL = '/hod/escalations';
+export const HOD_FACULTY_API_URL = '/hod/faculty-oversight';
+export const HOD_GOVERNANCE_API_URL = '/hod/governance';
+export const HOD_ANALYTICS_API_URL = '/hod/analytics';
+
+/**
+ * FYP Office Assistant Endpoints
+ */
+export const OFFICE_DASHBOARD_API_URL = '/office-assistant/dashboard';
+export const OFFICE_USERS_API_URL = '/office-assistant/users';
+export const OFFICE_STUDENTS_API_URL = '/office-assistant/students';
+export const OFFICE_FACULTY_API_URL = '/office-assistant/faculty';
+export const OFFICE_PROJECTS_API_URL = '/office-assistant/projects';
+export const OFFICE_CONTENT_API_URL = '/office-assistant/content';
+export const OFFICE_PROPOSAL_COMM_API_URL = '/office-assistant/proposal-committee';
+export const OFFICE_EVAL_COMM_API_URL = '/office-assistant/eval-committee';
+export const OFFICE_EXTERNAL_API_URL = '/office-assistant/external';
+export const OFFICE_RESULTS_API_URL = '/office-assistant/results';
+

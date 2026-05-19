@@ -1,0 +1,131 @@
+import React, { useEffect, useState } from 'react';
+import { getOfficeUsers } from '../../services/office-assistant.service';
+import { showToast, showAlert } from '../../components/AppToast';
+
+const AssistantUsers = () => {
+  const [users, setUsers] = useState([]);
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
+
+  useEffect(() => {
+    getOfficeUsers().then(res => setUsers(res.data)).catch(console.error);
+  }, []);
+
+  const handleCreate = (e) => {
+    e.preventDefault();
+    showToast.success('User registered successfully!');
+    setIsCreateOpen(false);
+  };
+
+  const handleDeactivate = (name) => {
+    showAlert.confirm('Deactivate User', `Are you sure you want to deactivate ${name}?`, 'Deactivate', 'Cancel')
+      .then((res) => { if (res.isConfirmed) showToast.warning(`${name} deactivated.`); });
+  };
+
+  return (
+    <>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4 border-b border-gray-100 pb-4">
+        <div>
+          <h2 className="text-xl font-black text-gray-800">User Account Management</h2>
+          <p className="text-xs text-gray-500 mt-0.5 font-medium">Manage system accounts, assign or revoke roles, and handle account locks</p>
+        </div>
+        <button onClick={() => setIsCreateOpen(true)} className="bg-secondary hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg shadow-blue-600/20 transition-all flex items-center gap-2 cursor-pointer">
+          <i className="fas fa-user-plus"></i> Create New User
+        </button>
+      </div>
+
+      <div className="bg-white rounded-2xl border border-gray-100 p-4 mb-6 shadow-sm flex flex-col sm:flex-row gap-4 items-center justify-between">
+        <div className="relative w-full sm:w-80">
+          <i className="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+          <input type="text" placeholder="Search by name, email, or role..." className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm outline-none focus:border-secondary focus:bg-white transition-all" />
+        </div>
+        <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
+          <span className="text-xs font-bold text-gray-500">Filter Status:</span>
+          <select className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-sm font-bold text-gray-700 outline-none focus:border-secondary cursor-pointer">
+            <option value="">All Statuses</option>
+            <option value="Active">Active</option>
+            <option value="Locked">Locked</option>
+            <option value="Deactivated">Deactivated</option>
+          </select>
+        </div>
+      </div>
+
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="bg-gray-50/75 border-b border-gray-100 text-[11px] font-black text-gray-500 uppercase tracking-wider">
+                <th className="py-3.5 px-6">User Details</th>
+                <th className="py-3.5 px-6">Email Address</th>
+                <th className="py-3.5 px-6">Assigned Role(s)</th>
+                <th className="py-3.5 px-6">Account Status</th>
+                <th className="py-3.5 px-6 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100 text-sm font-medium text-gray-700">
+              {users.map(u => (
+                <tr key={u.id} className="hover:bg-gray-50/50 transition-colors">
+                  <td className="py-4 px-6 flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-blue-50 text-secondary flex items-center justify-center font-bold flex-shrink-0">{u.id}</div>
+                    <div>
+                      <div className="font-bold text-gray-900">{u.name}</div>
+                      <div className="text-xs text-gray-400">{u.roleDetail}</div>
+                    </div>
+                  </td>
+                  <td className="py-4 px-6 text-gray-600">{u.email}</td>
+                  <td className="py-4 px-6">
+                    {u.roles.map((r, i) => <span key={i} className="bg-blue-50 text-secondary font-bold text-xs px-2.5 py-1 rounded-lg border border-blue-100 mr-1 block sm:inline-block mt-1 sm:mt-0">{r}</span>)}
+                  </td>
+                  <td className="py-4 px-6">
+                    <span className={`font-bold text-xs px-2.5 py-1 rounded-lg border ${u.status === 'Active' ? 'bg-success/10 text-success border-success/20' : u.status === 'Locked' ? 'bg-amber-50 text-amber-600 border-amber-200' : 'bg-red-50 text-red-600 border-red-200'}`}>
+                      {u.status}
+                    </span>
+                  </td>
+                  <td className="py-4 px-6 text-right space-x-1">
+                    {u.status === 'Locked' && <button onClick={() => showToast.success('Account unlocked!')} className="px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold transition-all hover:bg-emerald-100">Unlock</button>}
+                    {u.status === 'Deactivated' && <button onClick={() => showToast.success('Account reactivated!')} className="px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold transition-all hover:bg-emerald-100">Reactivate</button>}
+                    {u.status === 'Active' && <button onClick={() => handleDeactivate(u.name)} className="px-3 py-1.5 rounded-lg bg-red-50 text-red-600 border border-red-100 text-xs font-bold transition-all hover:bg-red-100">Deactivate</button>}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {isCreateOpen && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[150] flex items-center justify-center p-4">
+          <div className="bg-white rounded-[2rem] w-full max-w-lg p-6 sm:p-8 shadow-2xl border border-gray-100">
+            <div className="flex justify-between items-center mb-6 pb-3 border-b border-gray-50">
+              <h3 className="text-lg font-black text-gray-900">Create New System User</h3>
+              <i className="fas fa-times text-gray-400 hover:text-gray-600 cursor-pointer text-lg" onClick={() => setIsCreateOpen(false)}></i>
+            </div>
+            <form onSubmit={handleCreate} className="space-y-5">
+              <div>
+                <label className="block text-xs font-bold text-gray-700 mb-1.5">Full Name</label>
+                <input type="text" placeholder="Enter full name" className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-secondary focus:bg-white transition-all" required />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-gray-700 mb-1.5">Email Address</label>
+                <input type="email" placeholder="user@cuiatd.edu.pk" className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-secondary focus:bg-white transition-all" required />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-gray-700 mb-2">Role Assignment (Checklist)</label>
+                <div className="grid grid-cols-2 gap-3 p-4 bg-gray-50 rounded-2xl border border-gray-200 max-h-40 overflow-y-auto">
+                  <label className="flex items-center gap-2 text-xs font-bold text-gray-700 cursor-pointer"><input type="checkbox" className="accent-primary" value="Student" /> Student</label>
+                  <label className="flex items-center gap-2 text-xs font-bold text-gray-700 cursor-pointer"><input type="checkbox" className="accent-primary" value="FYP Office Assistant" /> FYP Office Assistant</label>
+                  <label className="flex items-center gap-2 text-xs font-bold text-gray-700 cursor-pointer"><input type="checkbox" className="accent-primary" value="Faculty Supervisor" /> Faculty Supervisor</label>
+                </div>
+              </div>
+              <div className="flex justify-end gap-3 pt-4 border-t border-gray-50">
+                <button type="button" onClick={() => setIsCreateOpen(false)} className="px-5 py-2.5 rounded-xl text-xs font-bold text-gray-600 hover:bg-gray-50 transition-colors cursor-pointer">Cancel</button>
+                <button type="submit" className="bg-secondary hover:bg-blue-700 text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow-lg shadow-blue-600/20 transition-all cursor-pointer">Register User</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
+
+export default AssistantUsers;

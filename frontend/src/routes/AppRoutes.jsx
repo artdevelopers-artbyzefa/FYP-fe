@@ -28,6 +28,27 @@ const FYPPartners = () => <div className="p-6 bg-white rounded-2xl shadow-sm bor
 
 const ProjectIdea = () => <div className="p-6 bg-white rounded-2xl shadow-sm border border-gray-100"> <h1 className="text-2xl font-black text-navy mb-4">Project Ideas</h1> <p className="text-gray-500">Project idea submission page coming soon.</p> </div>;
 
+// HOD Pages
+import HodLayout from '../components/hod/HodLayout';
+import HodDashboard from '../pages/hod/HodDashboard';
+import HodEscalations from '../pages/hod/HodEscalations';
+import HodFacultyOversight from '../pages/hod/HodFacultyOversight';
+import HodGovernance from '../pages/hod/HodGovernance';
+import HodAnalytics from '../pages/hod/HodAnalytics';
+
+// Office Assistant Components
+import AssistantLayout from '../components/office-assistant/AssistantLayout';
+import AssistantDashboard from '../pages/office-assistant/AssistantDashboard';
+import AssistantUsers from '../pages/office-assistant/AssistantUsers';
+import AssistantStudents from '../pages/office-assistant/AssistantStudents';
+import AssistantFaculty from '../pages/office-assistant/AssistantFaculty';
+import AssistantProjects from '../pages/office-assistant/AssistantProjects';
+import AssistantContent from '../pages/office-assistant/AssistantContent';
+import AssistantProposalCommittees from '../pages/office-assistant/AssistantProposalCommittees';
+import AssistantEvalCommittees from '../pages/office-assistant/AssistantEvalCommittees';
+import AssistantExternal from '../pages/office-assistant/AssistantExternal';
+import AssistantResults from '../pages/office-assistant/AssistantResults';
+
 const GroupDetails = () => <div className="p-6 bg-white rounded-2xl shadow-sm border border-gray-100"> <h1 className="text-2xl font-black text-navy mb-4">Group Details</h1> <p className="text-gray-500">Group details management coming soon.</p> </div>;
 
 const NotFound = () => (
@@ -53,7 +74,7 @@ const AppRoutes = () => {
             <Route path="/guidelines" element={<Guidelines />} />
             <Route path="/eligibility" element={<Eligibility />} />
             <Route path="/login" element={<Login />} />
-            
+
             {/* Student Portal Routes (Authenticated) */}
             <Route element={<StudentLayout />}>
                 <Route path="/dashboard" element={<StudentDashboard />} />
@@ -66,22 +87,34 @@ const AppRoutes = () => {
                 <Route path="/project/*" element={<ProjectIdea />} />
                 <Route path="/task-manager" element={<TaskManager />} />
             </Route>
-            
-            {/* Faculty Supervisor Portal Routes (Authenticated) */}
-            {facultyRoutes}
-            
-            {/* Added requested routes mapping */}
-            <Route element={<StudentLayout />}>
-                 <Route path="/groups/:id" element={<GroupDetails />} />
+
+            {/* HOD Portal Routes */}
+            <Route path="/hod" element={<HodLayout />}>
+                <Route index element={<Navigate to="dashboard" replace />} />
+                <Route path="dashboard" element={<HodDashboard />} />
+                <Route path="escalations" element={<HodEscalations />} />
+                <Route path="faculty-oversight" element={<HodFacultyOversight />} />
+                <Route path="governance" element={<HodGovernance />} />
+                <Route path="analytics" element={<HodAnalytics />} />
             </Route>
-            
-            <Route path="/supervision" element={<Navigate to="/faculty/dashboard" replace />} />
-            <Route path="/messages" element={<Navigate to="/faculty/messages" replace />} />
-            <Route path="/evaluations" element={<Navigate to="/faculty/evaluations" replace />} />
-            <Route path="/head-management" element={<Navigate to="/faculty/head-management" replace />} />
-            
-            {/* Redirect unknown routes to a 404 page */}
-            <Route path="*" element={<NotFound />} />
+
+            {/* Office Assistant Layout Routes */}
+            <Route path="/office-assistant" element={<AssistantLayout />}>
+                <Route index element={<Navigate to="dashboard" replace />} />
+                <Route path="dashboard" element={<AssistantDashboard />} />
+                <Route path="users" element={<AssistantUsers />} />
+                <Route path="students" element={<AssistantStudents />} />
+                <Route path="faculty" element={<AssistantFaculty />} />
+                <Route path="projects" element={<AssistantProjects />} />
+                <Route path="content" element={<AssistantContent />} />
+                <Route path="proposal-committee" element={<AssistantProposalCommittees />} />
+                <Route path="eval-committee" element={<AssistantEvalCommittees />} />
+                <Route path="external" element={<AssistantExternal />} />
+                <Route path="results" element={<AssistantResults />} />
+            </Route>
+
+            {/* Catch-all route to redirect back home if path is unknown, prevents blank page */}
+            <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
     );
 };

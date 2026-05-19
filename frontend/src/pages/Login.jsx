@@ -4,15 +4,6 @@ import { useForm } from 'react-hook-form';
 import { loginUser } from '../services/auth.service';
 import { showToast as AppToast } from '../components/AppToast';
 
-const roles = [
-  { id: 'Student', label: 'Student' },
-  { id: 'HOD', label: 'HOD' },
-  { id: 'FYP Office', label: 'FYP Office' },
-  { id: 'Admin', label: 'System Administrator' },
-  { id: 'Faculty', label: 'Faculty Supervisor' },
-  { id: 'Industry', label: 'Industry Supervisor' },
-];
-
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -38,6 +29,8 @@ const Login = () => {
         navigate('/office-assistant/dashboard');
       } else if (userRole === 'Faculty Supervisor' || userRole === 'Faculty') {
         navigate('/faculty/dashboard');
+      } else if (userRole === 'FYP Office In-charge') {
+        navigate('/office-incharge/dashboard');
       } else if (userRole === 'System Administrator' || userRole === 'Admin') {
         navigate('/admin/dashboard');
       } else if (userRole === 'Industry Supervisor' || userRole === 'Industry') {
@@ -147,7 +140,7 @@ const Login = () => {
               <input type="checkbox" id="remMe" className="w-4 h-4 accent-primary cursor-pointer border-gray-300 rounded" />
               <label htmlFor="remMe" className="text-xs font-bold text-gray-500 cursor-pointer select-none">Remember me</label>
             </div>
-            <Link to="/forgot-password" strokeLinecap="round" className="text-xs font-bold text-primary hover:underline">Forgot Password?</Link>
+            <Link to="/forgot-password" className="text-xs font-bold text-primary hover:underline">Forgot Password?</Link>
           </div>
 
           {/* Submit Button */}

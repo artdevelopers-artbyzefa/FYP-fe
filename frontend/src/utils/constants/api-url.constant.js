@@ -71,4 +71,15 @@ export const FACULTY_MESSAGING_API_URL = '/faculty/messaging';
 export const FACULTY_EVALUATIONS_API_URL = '/faculty/evaluations';
 export const FACULTY_HEAD_DUTIES_API_URL = '/faculty/head-duties';
 
-
+/**
+ * FYP Office In-charge Endpoints
+ */
+export const INCHARGE_DASHBOARD_API_URL = '/office-incharge/dashboard';
+export const INCHARGE_RUBRICS_API_URL = '/office-incharge/rubrics';
+export const INCHARGE_SESSIONS_API_URL = '/office-incharge/sessions';
+export const INCHARGE_SUPERVISION_REQS_API_URL = '/office-incharge/supervision-requests';
+export const INCHARGE_COMMITTEE_OVERSIGHT_API_URL = '/office-incharge/committee-oversight';
+export const INCHARGE_GRIEVANCES_API_URL = '/office-incharge/grievances';
+export const INCHARGE_FACULTY_REPORTS_API_URL = '/office-incharge/faculty-reports';
+export const INCHARGE_STUDENT_REPORTS_API_URL = '/office-incharge/student-reports';
+export const INCHARGE_AUDIT_LOG_API_URL = '/office-incharge/audit-log';

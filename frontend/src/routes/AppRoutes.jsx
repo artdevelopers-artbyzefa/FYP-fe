@@ -9,6 +9,7 @@ import Team from "../pages/Team";
 import Guidelines from "../pages/Guidelines";
 import Eligibility from "../pages/Eligibility";
 import Login from "../pages/Login";
+
 import StudentLayout from "../pages/student/StudentLayout";
 import StudentDashboard from "../pages/student/StudentDashboard";
 import StudentProfile from "../pages/student/StudentProfile";
@@ -18,15 +19,6 @@ import NewRequest from "../pages/student/NewRequest";
 import NewIdea from "../pages/student/NewIdea";
 import SupervisorSelection from "../pages/student/SupervisorSelection";
 import TaskManager from "../pages/student/TaskManager";
-
-// Faculty Supervisor Portal Routes are imported from facultyRoutes.jsx
-
-import { facultyRoutes } from "./facultyRoutes";
-
-// Placeholder components for new pages
-const FYPPartners = () => <div className="p-6 bg-white rounded-2xl shadow-sm border border-gray-100"> <h1 className="text-2xl font-black text-navy mb-4">FYP Partners</h1> <p className="text-gray-500">Partner management page coming soon.</p> </div>;
-
-const ProjectIdea = () => <div className="p-6 bg-white rounded-2xl shadow-sm border border-gray-100"> <h1 className="text-2xl font-black text-navy mb-4">Project Ideas</h1> <p className="text-gray-500">Project idea submission page coming soon.</p> </div>;
 
 // HOD Pages
 import HodLayout from '../components/hod/HodLayout';
@@ -60,7 +52,20 @@ import FacultyMessaging from '../pages/faculty/FacultyMessaging';
 import FacultyEvaluations from '../pages/faculty/FacultyEvaluations';
 import FacultyHeadDuties from '../pages/faculty/FacultyHeadDuties';
 
-const GroupDetails = () => <div className="p-6 bg-white rounded-2xl shadow-sm border border-gray-100"> <h1 className="text-2xl font-black text-navy mb-4">Group Details</h1> <p className="text-gray-500">Group details management coming soon.</p> </div>;
+// FYP Office In-charge Components
+import InchargeLayout from '../components/office-incharge/InchargeLayout';
+import InchargeDashboard from '../pages/office-incharge/InchargeDashboard';
+import InchargeRubrics from '../pages/office-incharge/InchargeRubrics';
+import InchargeSessions from '../pages/office-incharge/InchargeSessions';
+import InchargeSupervisionRequests from '../pages/office-incharge/InchargeSupervisionRequests';
+import InchargeCommitteeOversight from '../pages/office-incharge/InchargeCommitteeOversight';
+import InchargeGrievances from '../pages/office-incharge/InchargeGrievances';
+import InchargeFacultyReports from '../pages/office-incharge/InchargeFacultyReports';
+import InchargeStudentReports from '../pages/office-incharge/InchargeStudentReports';
+import InchargeAuditLog from '../pages/office-incharge/InchargeAuditLog';
+
+// Placeholder components
+const ProjectIdea = () => <div className="p-6 bg-white rounded-2xl shadow-sm border border-gray-100"> <h1 className="text-2xl font-black text-navy mb-4">Project Ideas</h1> <p className="text-gray-500">Project idea submission page coming soon.</p> </div>;
 
 const NotFound = () => (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
@@ -86,7 +91,7 @@ const AppRoutes = () => {
             <Route path="/eligibility" element={<Eligibility />} />
             <Route path="/login" element={<Login />} />
 
-            {/* Student Portal Routes (Authenticated) */}
+            {/* Student Portal Routes */}
             <Route element={<StudentLayout />}>
                 <Route path="/dashboard" element={<StudentDashboard />} />
                 <Route path="/profile" element={<StudentProfile />} />
@@ -137,7 +142,21 @@ const AppRoutes = () => {
                 <Route path="head-duties" element={<FacultyHeadDuties />} />
             </Route>
 
-            {/* Catch-all route to redirect back home if path is unknown, prevents blank page */}
+            {/* FYP Office In-charge Layout Routes */}
+            <Route path="/office-incharge" element={<InchargeLayout />}>
+                <Route index element={<Navigate to="dashboard" replace />} />
+                <Route path="dashboard" element={<InchargeDashboard />} />
+                <Route path="rubrics" element={<InchargeRubrics />} />
+                <Route path="sessions" element={<InchargeSessions />} />
+                <Route path="supervision-requests" element={<InchargeSupervisionRequests />} />
+                <Route path="committee-oversight" element={<InchargeCommitteeOversight />} />
+                <Route path="grievances" element={<InchargeGrievances />} />
+                <Route path="faculty-reports" element={<InchargeFacultyReports />} />
+                <Route path="student-reports" element={<InchargeStudentReports />} />
+                <Route path="audit-log" element={<InchargeAuditLog />} />
+            </Route>
+
+            {/* Catch-all */}
             <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
     );

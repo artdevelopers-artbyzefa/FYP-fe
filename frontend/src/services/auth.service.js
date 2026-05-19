@@ -21,7 +21,7 @@ const FYP_USERS = [
   },
   {
     id: 'F001', role: 'Faculty Supervisor', name: 'Dr. Ali Hassan',
-    email: 'supervisor@cuiatd.edu.pk', password: 'Super@123',
+    email: 'faculty@cuiatd.edu.pk', password: 'Faculty@123',
     designation: 'Associate Professor',
     department: 'Computer Science',
     specialization: 'Artificial Intelligence · Machine Learning · Computer Vision',
@@ -29,9 +29,9 @@ const FYP_USERS = [
     phone: '+92-992-383591', avatar: 'AH', projects: 4
   },
   {
-    id: 'C001', role: 'FYP Office', name: 'Dr. Sara Malik',
-    email: 'coordinator@cuiatd.edu.pk', password: 'Coord@123',
-    designation: 'FYP Coordinator · Senior Lecturer',
+    id: 'C001', role: 'FYP Office In-charge', name: 'Dr. Sara Malik',
+    email: 'incharge@cuiatd.edu.pk', password: 'Incharge@123',
+    designation: 'FYP Office In-charge · Senior Lecturer',
     department: 'Computer Science', avatar: 'SM'
   },
   {
@@ -51,12 +51,6 @@ const FYP_USERS = [
     email: 'office@cuiatd.edu.pk', password: 'Office@123',
     designation: 'FYP Office Assistant',
     department: 'FYP Office', avatar: 'TM'
-  },
-  {
-    id: 'F001', role: 'Faculty Supervisor', name: 'Dr. Ali Hassan',
-    email: 'faculty@cuiatd.edu.pk', password: 'Faculty@123',
-    designation: 'Associate Professor',
-    department: 'Computer Science', avatar: 'AH'
   }
 ];
 
@@ -93,6 +87,7 @@ export const loginUser = async (credentials) => {
 
   /**
    * 2. Production API Fallback
+   * // return await postRequest(LOGIN_API_URL, credentials);
    */
   try {
     const response = await postRequest(LOGIN_API_URL, credentials);

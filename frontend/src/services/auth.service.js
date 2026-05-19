@@ -51,6 +51,12 @@ const FYP_USERS = [
     email: 'office@cuiatd.edu.pk', password: 'Office@123',
     designation: 'FYP Office Assistant',
     department: 'FYP Office', avatar: 'TM'
+  },
+  {
+    id: 'F001', role: 'Faculty Supervisor', name: 'Dr. Ali Hassan',
+    email: 'faculty@cuiatd.edu.pk', password: 'Faculty@123',
+    designation: 'Associate Professor',
+    department: 'Computer Science', avatar: 'AH'
   }
 ];
 

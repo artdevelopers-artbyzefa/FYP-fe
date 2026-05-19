@@ -49,6 +49,17 @@ import AssistantEvalCommittees from '../pages/office-assistant/AssistantEvalComm
 import AssistantExternal from '../pages/office-assistant/AssistantExternal';
 import AssistantResults from '../pages/office-assistant/AssistantResults';
 
+// Faculty Supervisor Components
+import FacultyLayout from '../components/faculty/FacultyLayout';
+import FacultyDashboard from '../pages/faculty/FacultyDashboard';
+import FacultyProfile from '../pages/faculty/FacultyProfile';
+import FacultyAvailability from '../pages/faculty/FacultyAvailability';
+import FacultyProposals from '../pages/faculty/FacultyProposals';
+import FacultySupervision from '../pages/faculty/FacultySupervision';
+import FacultyMessaging from '../pages/faculty/FacultyMessaging';
+import FacultyEvaluations from '../pages/faculty/FacultyEvaluations';
+import FacultyHeadDuties from '../pages/faculty/FacultyHeadDuties';
+
 const GroupDetails = () => <div className="p-6 bg-white rounded-2xl shadow-sm border border-gray-100"> <h1 className="text-2xl font-black text-navy mb-4">Group Details</h1> <p className="text-gray-500">Group details management coming soon.</p> </div>;
 
 const NotFound = () => (
@@ -111,6 +122,19 @@ const AppRoutes = () => {
                 <Route path="eval-committee" element={<AssistantEvalCommittees />} />
                 <Route path="external" element={<AssistantExternal />} />
                 <Route path="results" element={<AssistantResults />} />
+            </Route>
+
+            {/* Faculty Supervisor Layout Routes */}
+            <Route path="/faculty" element={<FacultyLayout />}>
+                <Route index element={<Navigate to="dashboard" replace />} />
+                <Route path="dashboard" element={<FacultyDashboard />} />
+                <Route path="profile" element={<FacultyProfile />} />
+                <Route path="availability" element={<FacultyAvailability />} />
+                <Route path="proposals" element={<FacultyProposals />} />
+                <Route path="supervision" element={<FacultySupervision />} />
+                <Route path="messaging" element={<FacultyMessaging />} />
+                <Route path="evaluations" element={<FacultyEvaluations />} />
+                <Route path="head-duties" element={<FacultyHeadDuties />} />
             </Route>
 
             {/* Catch-all route to redirect back home if path is unknown, prevents blank page */}

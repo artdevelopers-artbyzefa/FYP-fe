@@ -59,3 +59,16 @@ export const OFFICE_EVAL_COMM_API_URL = '/office-assistant/eval-committee';
 export const OFFICE_EXTERNAL_API_URL = '/office-assistant/external';
 export const OFFICE_RESULTS_API_URL = '/office-assistant/results';
 
+/**
+ * Faculty Supervisor Endpoints
+ */
+export const FACULTY_DASHBOARD_API_URL = '/faculty/dashboard';
+export const FACULTY_PROFILE_API_URL = '/faculty/profile';
+export const FACULTY_AVAILABILITY_API_URL = '/faculty/availability';
+export const FACULTY_PROPOSALS_API_URL = '/faculty/proposals';
+export const FACULTY_SUPERVISION_API_URL = '/faculty/supervision';
+export const FACULTY_MESSAGING_API_URL = '/faculty/messaging';
+export const FACULTY_EVALUATIONS_API_URL = '/faculty/evaluations';
+export const FACULTY_HEAD_DUTIES_API_URL = '/faculty/head-duties';
+
+

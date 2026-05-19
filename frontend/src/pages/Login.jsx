@@ -28,7 +28,6 @@ const Login = () => {
     setIsLoading(true);
     try {
       const response = await loginUser(data);
-      const response = await loginUser(data);
       AppToast.success('Login Successful', 'Welcome back to the FYP Portal!');
 
       // Role-based navigation
@@ -37,15 +36,12 @@ const Login = () => {
         navigate('/hod/dashboard');
       } else if (userRole === 'FYP Office Assistant') {
         navigate('/office-assistant/dashboard');
+      } else if (userRole === 'Faculty Supervisor' || userRole === 'Faculty') {
+        navigate('/faculty/dashboard');
       } else if (userRole === 'System Administrator' || userRole === 'Admin') {
         navigate('/admin/dashboard');
       } else if (userRole === 'Industry Supervisor' || userRole === 'Industry') {
         navigate('/industry/dashboard');
-      } else {
-        navigate('/dashboard');
-      }
-      if (response?.user?.role === 'Faculty Supervisor') {
-        navigate('/faculty/dashboard');
       } else {
         navigate('/dashboard');
       }

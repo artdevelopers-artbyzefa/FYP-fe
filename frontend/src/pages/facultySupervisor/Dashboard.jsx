@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 import api from '../../services/api';
 import { API_URLS } from '../../services/apiUrls';
 import { 
@@ -12,6 +12,7 @@ import {
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const { user } = useOutletContext();
   const [data, setData] = useState({
     pendingProposalsCount: 1,
     defensesCount: 2,
@@ -50,7 +51,7 @@ export default function Dashboard() {
         {/* Left Welcome Info */}
         <div className="max-w-xl space-y-3 z-10">
           <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight flex items-center gap-2">
-            Welcome, Dr. Ali Hassan! <span className="inline-block animate-bounce">🎓</span>
+            Welcome, {user?.name || 'Faculty'}!
           </h1>
           <p className="text-sm md:text-base text-blue-100/90 leading-relaxed font-light">
             Here is your academic supervision and committee management dashboard. Track active student groups, review pending project proposals, and input committee evaluation scores.

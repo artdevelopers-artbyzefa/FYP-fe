@@ -19,6 +19,7 @@ const InchargeLayout = () => {
 
   const navLinks = [
     { to: '/office-incharge/dashboard', icon: 'fa-home', label: 'Dashboard', section: 'Overview' },
+    { to: '/office-incharge/phases', icon: 'fa-toggle-on', label: 'Phase Control', section: 'Overview' },
     
     { to: '/office-incharge/rubrics', icon: 'fa-tasks', label: 'Rubric Builder', section: 'Curriculum & Sessions' },
     { to: '/office-incharge/sessions', icon: 'fa-calendar-alt', label: 'Academic Sessions', section: 'Curriculum & Sessions' },
@@ -162,7 +163,7 @@ const InchargeLayout = () => {
         {/* MAIN CONTENT AREA */}
         <main className="flex-1 overflow-y-auto p-4 md:p-6 bg-lightbg scroll-smooth relative">
           <div className="max-w-[1600px] mx-auto w-full animate-[fadeIn_0.3s_ease-out]">
-            <Outlet />
+            <Outlet context={{ user }} />
           </div>
         </main>
       </div>

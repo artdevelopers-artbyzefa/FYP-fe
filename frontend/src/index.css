@@ -1,6 +1,36 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --font-poppins: 'Poppins', sans-serif;
+  --font-display: 'Inter', 'system-ui', sans-serif;
+
+  --color-primary: #1e3a8a;
+  --color-secondary: #2563eb;
+  --color-lightbg: #eff6ff;
+  --color-navy: #1e3a8a;
+  --color-navy-dark: #172554;
+  --color-blue-bright: #2563eb;
+  --color-blue-soft: #eff6ff;
+  --color-success: #059669;
+  --color-warning: #d97706;
+  --color-danger: #dc2626;
+  --color-pending: #b45309;
+
+  --radius-4xl: 2rem;
+  --radius-5xl: 2.5rem;
+
+  --animate-pulseDot: pulseDot 1.5s infinite;
+  --animate-bounceSlow: bounceSlow 3s infinite;
+
+  @keyframes pulseDot {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.4); opacity: 0.6; }
+  }
+  @keyframes bounceSlow {
+    0%, 100% { transform: translateY(-5px); }
+    50% { transform: translateY(0); }
+  }
+}
 
 @layer base {
   body {

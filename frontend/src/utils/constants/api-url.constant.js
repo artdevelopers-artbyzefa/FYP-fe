@@ -83,3 +83,26 @@ export const INCHARGE_GRIEVANCES_API_URL = '/office-incharge/grievances';
 export const INCHARGE_FACULTY_REPORTS_API_URL = '/office-incharge/faculty-reports';
 export const INCHARGE_STUDENT_REPORTS_API_URL = '/office-incharge/student-reports';
 export const INCHARGE_AUDIT_LOG_API_URL = '/office-incharge/audit-log';
+
+/**
+ * Admin Endpoints
+ */
+export const ADMIN_DASHBOARD_STATS_URL = '/admin/dashboard/stats';
+export const ADMIN_GET_USERS_URL = '/admin/users';
+export const ADMIN_CREATE_USER_URL = '/admin/users';
+export const ADMIN_RESET_PASSWORD_URL = '/admin/users/:id/reset-password';
+export const ADMIN_TOGGLE_USER_STATUS_URL = '/admin/users/:id/toggle-status';
+export const ADMIN_GET_RBAC_URL = '/admin/rbac';
+export const ADMIN_GET_AUDIT_LOGS_URL = '/admin/audit-logs';
+export const ADMIN_SYSTEM_HEALTH_URL = '/admin/system-health';
+export const ADMIN_TRIGGER_BACKUP_URL = '/admin/trigger-backup';
+export const ADMIN_CLEAR_CACHE_URL = '/admin/clear-cache';
+export const ADMIN_NOTIFICATIONS_URL = '/admin/notifications';
+
+/**
+ * Industry Supervisor Endpoints
+ */
+export const INDUSTRY_ASSIGNED_PROJECTS_URL = '/industry/assigned-projects';
+export const INDUSTRY_SUBMIT_SCORECARD_URL = '/industry/submit-scorecard';
+export const INDUSTRY_SCORECARD_STATUS_URL = '/industry/scorecard-status';
+export const INDUSTRY_NOTIFICATIONS_URL = '/industry/notifications';

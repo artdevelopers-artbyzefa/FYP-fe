@@ -245,7 +245,7 @@ export default function AdminDashboard() {
                 <div className="rounded-[2rem] p-6 sm:p-8 mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 shadow-sm border border-gray-100"
                   style={{ background: 'linear-gradient(135deg, #111827, #374151)' }}>
                   <div className="text-white">
-                    <h1 className="text-2xl sm:text-3xl font-black mb-2 tracking-tight">System Administration Console ⚡</h1>
+                    <h1 className="text-2xl sm:text-3xl font-black mb-2 tracking-tight">System Administration Console</h1>
                     <p className="text-sm text-white/80 font-medium max-w-2xl leading-relaxed">
                       Welcome, {user.name}. Manage user credentials, configure role-based access control (RBAC), monitor system audit logs, and maintain database backups for the FYP Portal.
                     </p>

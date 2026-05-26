@@ -1,15 +1,16 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const { user } = useOutletContext();
 
   return (
     <div className="animate-[fadeIn_0.4s_ease-out]">
       {/* Welcome Banner */}
       <div className="bg-white rounded-[2rem] border border-gray-100 shadow-sm p-6 sm:p-8 mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6" style={{ background: 'linear-gradient(135deg, #2B3990, #1E3A8A)' }}>
         <div className="text-white">
-          <h1 className="text-2xl sm:text-3xl font-black mb-2 tracking-tight">Welcome back, Dr. Malik! 🌟</h1>
+          <h1 className="text-2xl sm:text-3xl font-black mb-2 tracking-tight">Welcome back, {user?.name || 'In-charge'}!</h1>
           <p className="text-sm text-white/80 font-medium max-w-2xl leading-relaxed">Here is the executive oversight panel for the Spring 2026 academic session. Monitor grievance SLAs, review supervision requests, and manage curriculum rubrics.</p>
         </div>
         <div className="flex gap-3 flex-wrap">

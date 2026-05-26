@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 import { 
   ResponsiveContainer, 
   PieChart, 
@@ -212,6 +212,7 @@ const BoardColumn = ({ title, icon: Icon, count, tasks, onDelete, onEdit }) => {
 
 const TaskManager = () => {
   const navigate = useNavigate();
+  const { user } = useOutletContext();
   const [activeTab, setActiveTab] = useState('Task Board');
 
   // Custom interactive states
@@ -541,11 +542,11 @@ const TaskManager = () => {
               <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8 relative z-10">
                 <div className="flex items-start gap-5">
                   <div className="w-14 h-14 bg-white/10 border border-white/20 rounded-2xl flex items-center justify-center font-bold text-[20px] backdrop-blur-sm shrink-0">
-                    AR
+                    {user?.avatar || 'ST'}
                   </div>
                   <div className="flex flex-col">
                     <h3 className="text-[28px] font-extrabold flex items-center gap-2">
-                      Welcome back, Ahmed! <span className="text-2xl">👋</span>
+                      Welcome back, {user?.name || 'Student'}!
                     </h3>
                     <p className="text-blue-100/80 font-medium text-[15px] mt-1">
                       AI-Powered Recommendation System · Sprint 2 of 4

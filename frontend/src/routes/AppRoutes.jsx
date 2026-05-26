@@ -1,5 +1,4 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-
 import Process from "../pages/Process";
 import Home from "../pages/Home";
 import About from "../pages/About";
@@ -9,7 +8,6 @@ import Team from "../pages/Team";
 import Guidelines from "../pages/Guidelines";
 import Eligibility from "../pages/Eligibility";
 import Login from "../pages/Login";
-
 import StudentLayout from "../pages/student/StudentLayout";
 import StudentDashboard from "../pages/student/StudentDashboard";
 import StudentProfile from "../pages/student/StudentProfile";
@@ -19,16 +17,12 @@ import NewRequest from "../pages/student/NewRequest";
 import NewIdea from "../pages/student/NewIdea";
 import SupervisorSelection from "../pages/student/SupervisorSelection";
 import TaskManager from "../pages/student/TaskManager";
-
-// HOD Pages
 import HodLayout from '../components/hod/HodLayout';
 import HodDashboard from '../pages/hod/HodDashboard';
 import HodEscalations from '../pages/hod/HodEscalations';
 import HodFacultyOversight from '../pages/hod/HodFacultyOversight';
 import HodGovernance from '../pages/hod/HodGovernance';
 import HodAnalytics from '../pages/hod/HodAnalytics';
-
-// Office Assistant Components
 import AssistantLayout from '../components/office-assistant/AssistantLayout';
 import AssistantDashboard from '../pages/office-assistant/AssistantDashboard';
 import AssistantUsers from '../pages/office-assistant/AssistantUsers';
@@ -40,8 +34,6 @@ import AssistantProposalCommittees from '../pages/office-assistant/AssistantProp
 import AssistantEvalCommittees from '../pages/office-assistant/AssistantEvalCommittees';
 import AssistantExternal from '../pages/office-assistant/AssistantExternal';
 import AssistantResults from '../pages/office-assistant/AssistantResults';
-
-// Faculty Supervisor Components
 import FacultyLayout from '../components/faculty/FacultyLayout';
 import FacultyDashboard from '../pages/faculty/FacultyDashboard';
 import FacultyProfile from '../pages/faculty/FacultyProfile';
@@ -51,10 +43,9 @@ import FacultySupervision from '../pages/faculty/FacultySupervision';
 import FacultyMessaging from '../pages/faculty/FacultyMessaging';
 import FacultyEvaluations from '../pages/faculty/FacultyEvaluations';
 import FacultyHeadDuties from '../pages/faculty/FacultyHeadDuties';
-
-// FYP Office In-charge Components
 import InchargeLayout from '../components/office-incharge/InchargeLayout';
 import InchargeDashboard from '../pages/office-incharge/InchargeDashboard';
+import InchargePhaseControl from '../pages/office-incharge/InchargePhaseControl';
 import InchargeRubrics from '../pages/office-incharge/InchargeRubrics';
 import InchargeSessions from '../pages/office-incharge/InchargeSessions';
 import InchargeSupervisionRequests from '../pages/office-incharge/InchargeSupervisionRequests';
@@ -146,6 +137,7 @@ const AppRoutes = () => {
             <Route path="/office-incharge" element={<InchargeLayout />}>
                 <Route index element={<Navigate to="dashboard" replace />} />
                 <Route path="dashboard" element={<InchargeDashboard />} />
+                <Route path="phases" element={<InchargePhaseControl />} />
                 <Route path="rubrics" element={<InchargeRubrics />} />
                 <Route path="sessions" element={<InchargeSessions />} />
                 <Route path="supervision-requests" element={<InchargeSupervisionRequests />} />

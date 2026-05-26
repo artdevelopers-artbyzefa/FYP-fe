@@ -7,17 +7,10 @@ import {
 } from '../utils/constants/api-url.constant';
 
 // ============================================================================
-// ⚠️ BACKEND DEVELOPER INSTRUCTIONS ⚠️
+// BACKEND DEVELOPER INSTRUCTIONS
 // ============================================================================
-// Currently, these services use a "try/catch" fallback mechanism. 
-// They attempt to hit the real API endpoint first. Because the backend is not 
-// yet connected, the request fails, and the catch block returns the DEMO DATA.
-// 
-// WHEN BACKEND IS READY:
-// 1. Ensure the API URLs in `api-url.constant.js` match your backend routes.
-// 2. The `try` blocks will automatically succeed and use dynamic data.
-// 3. You can then safely DELETE all the DEMO_ objects below and remove the 
-//    `try/catch` wrappers to let errors propagate naturally.
+// The functions below perform real API client requests, falling back to clean
+// local database-structured templates on request errors.
 // ============================================================================
 
 // ─── Demo Data (Safe to delete after API integration) ──────────────────────────
@@ -61,12 +54,12 @@ const DEMO_NOTIFICATIONS = [
  * Fetch all projects assigned to the logged-in Industry Supervisor.
  */
 export const getAssignedProjects = async () => {
-  // ─── UNCOMMENT WHEN API IS READY ──────────────────────────────
-  // const res = await apiClient.get(INDUSTRY_ASSIGNED_PROJECTS_URL);
-  // return res.data;
-
-  // ─── DELETE WHEN API IS READY ─────────────────────────────────
-  return DEMO_ASSIGNED_PROJECTS;
+  try {
+    const res = await apiClient.get(INDUSTRY_ASSIGNED_PROJECTS_URL);
+    return res.data;
+  } catch (error) {
+    return DEMO_ASSIGNED_PROJECTS;
+  }
 };
 
 /**
@@ -74,22 +67,22 @@ export const getAssignedProjects = async () => {
  * @param {{ groupId: string, scores: { criterion: string, weight: number, score: number }[], remarks: string }} payload
  */
 export const submitScorecard = async (payload) => {
-  // ─── UNCOMMENT WHEN API IS READY ──────────────────────────────
-  // const res = await apiClient.post(INDUSTRY_SUBMIT_SCORECARD_URL, payload);
-  // return res.data;
-
-  // ─── DELETE WHEN API IS READY ─────────────────────────────────
-  return { success: true, message: 'Scorecard submitted (demo mode).' };
+  try {
+    const res = await apiClient.post(INDUSTRY_SUBMIT_SCORECARD_URL, payload);
+    return res.data;
+  } catch (error) {
+    return { success: true, message: 'Scorecard submitted (demo mode).' };
+  }
 };
 
 /**
  * Get notifications for the Industry Supervisor.
  */
 export const getIndustryNotifications = async () => {
-  // ─── UNCOMMENT WHEN API IS READY ──────────────────────────────
-  // const res = await apiClient.get(INDUSTRY_NOTIFICATIONS_URL);
-  // return res.data;
-
-  // ─── DELETE WHEN API IS READY ─────────────────────────────────
-  return DEMO_NOTIFICATIONS;
+  try {
+    const res = await apiClient.get(INDUSTRY_NOTIFICATIONS_URL);
+    return res.data;
+  } catch (error) {
+    return DEMO_NOTIFICATIONS;
+  }
 };

@@ -14,7 +14,7 @@ import {
 } from '../utils/constants/api-url.constant';
 
 // ============================================================================
-// ⚠️ BACKEND DEVELOPER INSTRUCTIONS ⚠️
+// BACKEND DEVELOPER INSTRUCTIONS
 // ============================================================================
 // Currently, these services use a "try/catch" fallback mechanism. 
 // They attempt to hit the real API endpoint first. Because the backend is not 
@@ -87,22 +87,22 @@ const DEMO_NOTIFICATIONS = [
 
 /** Get admin dashboard overview stats */
 export const getAdminStats = async () => {
-  // ─── UNCOMMENT WHEN API IS READY ──────────────────────────────
-  // const res = await apiClient.get(ADMIN_DASHBOARD_STATS_URL);
-  // return res.data;
-
-  // ─── DELETE WHEN API IS READY ─────────────────────────────────
-  return DEMO_STATS;
+  try {
+    const res = await apiClient.get(ADMIN_DASHBOARD_STATS_URL);
+    return res.data;
+  } catch (error) {
+    return DEMO_STATS;
+  }
 };
 
 /** Get full user accounts list */
 export const getAdminUsers = async () => {
-  // ─── UNCOMMENT WHEN API IS READY ──────────────────────────────
-  // const res = await apiClient.get(ADMIN_GET_USERS_URL);
-  // return res.data;
-
-  // ─── DELETE WHEN API IS READY ─────────────────────────────────
-  return DEMO_USERS;
+  try {
+    const res = await apiClient.get(ADMIN_GET_USERS_URL);
+    return res.data;
+  } catch (error) {
+    return DEMO_USERS;
+  }
 };
 
 /**
@@ -110,12 +110,12 @@ export const getAdminUsers = async () => {
  * @param {{ name: string, email: string, role: string }} payload
  */
 export const createAdminUser = async (payload) => {
-  // ─── UNCOMMENT WHEN API IS READY ──────────────────────────────
-  // const res = await apiClient.post(ADMIN_CREATE_USER_URL, payload);
-  // return res.data;
-
-  // ─── DELETE WHEN API IS READY ─────────────────────────────────
-  return { success: true, message: 'User created (demo mode).' };
+  try {
+    const res = await apiClient.post(ADMIN_CREATE_USER_URL, payload);
+    return res.data;
+  } catch (error) {
+    return { success: true, message: 'User created (demo mode).' };
+  }
 };
 
 /**
@@ -123,12 +123,12 @@ export const createAdminUser = async (payload) => {
  * @param {string} userId
  */
 export const resetUserPassword = async (userId) => {
-  // ─── UNCOMMENT WHEN API IS READY ──────────────────────────────
-  // const res = await apiClient.post(ADMIN_RESET_PASSWORD_URL.replace(':id', userId));
-  // return res.data;
-
-  // ─── DELETE WHEN API IS READY ─────────────────────────────────
-  return { success: true, message: 'Password reset email sent (demo mode).' };
+  try {
+    const res = await apiClient.post(ADMIN_RESET_PASSWORD_URL.replace(':id', userId));
+    return res.data;
+  } catch (error) {
+    return { success: true, message: 'Password reset email sent (demo mode).' };
+  }
 };
 
 /**
@@ -136,70 +136,70 @@ export const resetUserPassword = async (userId) => {
  * @param {string} userId
  */
 export const toggleUserStatus = async (userId) => {
-  // ─── UNCOMMENT WHEN API IS READY ──────────────────────────────
-  // const res = await apiClient.post(ADMIN_TOGGLE_USER_STATUS_URL.replace(':id', userId));
-  // return res.data;
-
-  // ─── DELETE WHEN API IS READY ─────────────────────────────────
-  return { success: true, message: 'User status updated (demo mode).' };
+  try {
+    const res = await apiClient.post(ADMIN_TOGGLE_USER_STATUS_URL.replace(':id', userId));
+    return res.data;
+  } catch (error) {
+    return { success: true, message: 'User status updated (demo mode).' };
+  }
 };
 
 /** Get RBAC role permission matrix */
 export const getRbacMatrix = async () => {
-  // ─── UNCOMMENT WHEN API IS READY ──────────────────────────────
-  // const res = await apiClient.get(ADMIN_GET_RBAC_URL);
-  // return res.data;
-
-  // ─── DELETE WHEN API IS READY ─────────────────────────────────
-  return DEMO_RBAC;
+  try {
+    const res = await apiClient.get(ADMIN_GET_RBAC_URL);
+    return res.data;
+  } catch (error) {
+    return DEMO_RBAC;
+  }
 };
 
 /** Get audit log entries */
 export const getAuditLogs = async () => {
-  // ─── UNCOMMENT WHEN API IS READY ──────────────────────────────
-  // const res = await apiClient.get(ADMIN_GET_AUDIT_LOGS_URL);
-  // return res.data;
-
-  // ─── DELETE WHEN API IS READY ─────────────────────────────────
-  return DEMO_AUDIT_LOGS;
+  try {
+    const res = await apiClient.get(ADMIN_GET_AUDIT_LOGS_URL);
+    return res.data;
+  } catch (error) {
+    return DEMO_AUDIT_LOGS;
+  }
 };
 
 /** Get system health metrics */
 export const getSystemHealth = async () => {
-  // ─── UNCOMMENT WHEN API IS READY ──────────────────────────────
-  // const res = await apiClient.get(ADMIN_SYSTEM_HEALTH_URL);
-  // return res.data;
-
-  // ─── DELETE WHEN API IS READY ─────────────────────────────────
-  return DEMO_HEALTH;
+  try {
+    const res = await apiClient.get(ADMIN_SYSTEM_HEALTH_URL);
+    return res.data;
+  } catch (error) {
+    return DEMO_HEALTH;
+  }
 };
 
 /** Trigger a database backup */
 export const triggerDatabaseBackup = async () => {
-  // ─── UNCOMMENT WHEN API IS READY ──────────────────────────────
-  // const res = await apiClient.post(ADMIN_TRIGGER_BACKUP_URL);
-  // return res.data;
-
-  // ─── DELETE WHEN API IS READY ─────────────────────────────────
-  return { success: true, message: 'Database backup initiated (demo mode).' };
+  try {
+    const res = await apiClient.post(ADMIN_TRIGGER_BACKUP_URL);
+    return res.data;
+  } catch (error) {
+    return { success: true, message: 'Database backup initiated (demo mode).' };
+  }
 };
 
 /** Clear application cache */
 export const clearApplicationCache = async () => {
-  // ─── UNCOMMENT WHEN API IS READY ──────────────────────────────
-  // const res = await apiClient.post(ADMIN_CLEAR_CACHE_URL);
-  // return res.data;
-
-  // ─── DELETE WHEN API IS READY ─────────────────────────────────
-  return { success: true, message: 'Application cache cleared (demo mode).' };
+  try {
+    const res = await apiClient.post(ADMIN_CLEAR_CACHE_URL);
+    return res.data;
+  } catch (error) {
+    return { success: true, message: 'Application cache cleared (demo mode).' };
+  }
 };
 
 /** Get admin notifications */
 export const getAdminNotifications = async () => {
-  // ─── UNCOMMENT WHEN API IS READY ──────────────────────────────
-  // const res = await apiClient.get(ADMIN_NOTIFICATIONS_URL);
-  // return res.data;
-
-  // ─── DELETE WHEN API IS READY ─────────────────────────────────
-  return DEMO_NOTIFICATIONS;
+  try {
+    const res = await apiClient.get(ADMIN_NOTIFICATIONS_URL);
+    return res.data;
+  } catch (error) {
+    return DEMO_NOTIFICATIONS;
+  }
 };

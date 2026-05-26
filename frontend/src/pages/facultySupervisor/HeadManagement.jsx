@@ -144,7 +144,7 @@ export default function HeadManagement() {
       <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
         <div className="space-y-2">
           <div className="flex items-center gap-2.5">
-            <span className="text-xl">👑</span>
+            <Crown className="w-6 h-6 text-[#F59E0B]" />
             <h1 className="text-xl md:text-2xl font-extrabold text-gray-900 tracking-tight">
               Committee Head Management (PEC-1)
             </h1>
@@ -247,7 +247,7 @@ export default function HeadManagement() {
                           ) : (
                             <Volume2 className="w-3.5 h-3.5" />
                           )}
-                          📢 Publish Consensus
+                          Publish Consensus
                         </button>
                       )}
                     </td>

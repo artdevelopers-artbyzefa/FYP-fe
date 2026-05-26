@@ -9,11 +9,20 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const { register, handleSubmit, formState: { errors } } = useForm({
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm({
     defaultValues: {
       role: 'Student'
     }
   });
+
+  const handleQuickLogin = (role, email, password) => {
+    setValue('role', role);
+    setValue('email', email);
+    setValue('password', password);
+    setTimeout(() => {
+      handleSubmit(onSubmit)();
+    }, 50);
+  };
 
   const onSubmit = async (data) => {
     setIsLoading(true);
@@ -152,6 +161,52 @@ const Login = () => {
             <span>{isLoading ? 'Signing In...' : 'Sign In'}</span>
             <i className={`fas ${isLoading ? 'fa-spinner fa-spin' : 'fa-arrow-right'}`}></i>
           </button>
+
+          {/* Quick Demo Logins */}
+          <div className="mt-6 pt-5 border-t border-gray-100">
+            <div className="text-center text-[10px] font-bold text-gray-400 mb-3 uppercase tracking-wider">
+              Quick Demo Login
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => handleQuickLogin('Student', 'student@cuiatd.edu.pk', ',qzG&sQh4OKjrW')}
+                className="py-2 px-3 text-xs font-bold rounded-lg border border-gray-200 text-gray-700 bg-gray-50 hover:bg-secondary hover:text-white hover:border-secondary transition-all text-center focus:outline-none"
+              >
+                Student
+              </button>
+              <button
+                type="button"
+                onClick={() => handleQuickLogin('HOD', 'HOD@cuiatd.edu.pk', 'H-w7b9Z7C#MQ:.')}
+                className="py-2 px-3 text-xs font-bold rounded-lg border border-gray-200 text-gray-700 bg-gray-50 hover:bg-secondary hover:text-white hover:border-secondary transition-all text-center focus:outline-none"
+              >
+                HOD
+              </button>
+              <button
+                type="button"
+                onClick={() => handleQuickLogin('FYP Office In-charge', 'FYPIncharge@cuiatd.edu.pk', '(C?Rg:&00re:Ak')}
+                className="py-2 px-3 text-xs font-bold rounded-lg border border-gray-200 text-gray-700 bg-gray-50 hover:bg-secondary hover:text-white hover:border-secondary transition-all text-center focus:outline-none"
+              >
+                FYP Incharge
+              </button>
+              <button
+                type="button"
+                onClick={() => handleQuickLogin('Faculty Supervisor', 'faculty@cuiatd.edu.pk', 'vTyr,[2cKg=76^')}
+                className="py-2 px-3 text-xs font-bold rounded-lg border border-gray-200 text-gray-700 bg-gray-50 hover:bg-secondary hover:text-white hover:border-secondary transition-all text-center focus:outline-none"
+              >
+                Faculty
+              </button>
+            </div>
+            <div className="flex justify-center mt-2">
+              <button
+                type="button"
+                onClick={() => handleQuickLogin('FYP Office Assistant', 'office@cuiatd.edu.pk', 'q3hd$XgkjYyD=R')}
+                className="w-full py-2 px-3 text-xs font-bold rounded-lg border border-gray-200 text-gray-700 bg-gray-50 hover:bg-secondary hover:text-white hover:border-secondary transition-all text-center focus:outline-none"
+              >
+                Office Assistant
+              </button>
+            </div>
+          </div>
         </form>
       </div>
     </div>

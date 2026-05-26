@@ -164,7 +164,7 @@ const AssistantLayout = () => {
         {/* MAIN CONTENT AREA */}
         <main className="flex-1 overflow-y-auto p-4 md:p-6 bg-lightbg scroll-smooth relative">
           <div className="max-w-[1600px] mx-auto w-full animate-[fadeIn_0.3s_ease-out]">
-            <Outlet />
+            <Outlet context={{ user }} />
           </div>
         </main>
       </div>

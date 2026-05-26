@@ -17,7 +17,7 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100">
+    <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-black">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-[70px]">
           {/* Logo Section */}
@@ -65,7 +65,7 @@ const Navbar = () => {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+            className="md:hidden p-2 rounded-lg hover:bg-white transition-colors"
           >
             {isOpen ? <X className="w-6 h-6 text-navy" /> : <Menu className="w-6 h-6 text-navy" />}
           </button>
@@ -73,7 +73,7 @@ const Navbar = () => {
 
         {/* Mobile Navigation Dropdown */}
         {isOpen && (
-          <div className="md:hidden py-4 border-t border-gray-100">
+          <div className="md:hidden py-4 border-t border-black">
             <ul className="flex flex-col gap-3">
               {navLinks.map((link) => (
                 <li key={link.path}>

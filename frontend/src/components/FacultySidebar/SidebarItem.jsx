@@ -20,7 +20,7 @@ const SidebarItem = ({ to, icon: Icon, label, onClick }) => {
           }
         } else {
           if (isHeadManagement) {
-            colorClass = 'text-yellow-400 hover:bg-white/5 hover:text-yellow-300';
+            colorClass = 'text-black';
           } else {
             colorClass = 'text-blue-100/70 hover:bg-white/5 hover:text-white';
           }

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { ArrowRight } from 'lucide-react';
 
 export default function Header() {
     const [scrolled, setScrolled] = useState(false);
@@ -33,10 +34,10 @@ export default function Header() {
                 <Link to="/" className="flex items-center gap-2.5 no-underline shrink-0">
                     <img src="/cuilogo.png" alt="CUI Logo" className="h-[44px] w-auto" />
                     <div className="flex flex-col">
-                        <span className="text-[0.95rem] font-black text-primary leading-[1.2]">
+                        <span className="text-[0.95rem] font-black text-black leading-[1.2]">
                             CUI Abbottabad
                         </span>
-                        <span className="text-[0.6rem] font-bold text-blue-400 uppercase tracking-[0.2em] leading-[1.2]">
+                        <span className="text-[0.6rem] font-bold text-black uppercase tracking-[0.2em] leading-[1.2]">
                             FYP Portal
                         </span>
                     </div>
@@ -49,7 +50,7 @@ export default function Header() {
                             key={item.name}
                             to={item.href}
                             className={`text-[13px] font-bold no-underline transition-colors duration-150 ${
-                                location.pathname === item.href ? "text-primary" : "text-gray-500 hover:text-primary"
+                                location.pathname === item.href ? "text-black" : "text-gray-500 hover:text-black"
                             }`}
                         >
                             {item.name}
@@ -63,15 +64,15 @@ export default function Header() {
                     {/* DESKTOP BUTTON */}
                     <Link
                         to="/login"
-                        className="hidden sm:inline-flex items-center justify-center gap-2 h-[32px] px-5 rounded-full text-[13px] font-bold bg-primary text-white shadow-[0_8px_24px_rgba(30,58,138,0.18)] hover:bg-blue-800 active:bg-blue-900 transition-all whitespace-nowrap"
+                        className="hidden sm:inline-flex items-center justify-center gap-2 h-[32px] px-5 rounded-full text-[13px] font-bold bg-black text-white shadow-[0_8px_24px_rgba(30,58,138,0.18)] hover:bg-black active:bg-black transition-all whitespace-nowrap"
                     >
-                        Portal Login <i className="fas fa-arrow-right"></i>
+                        Portal Login <ArrowRight className="w-4 h-4" />
                     </Link>
 
                     {/* MOBILE MENU BUTTON */}
                     <button
                         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                        className="lg:hidden w-[40px] h-[40px] rounded-lg bg-white border-[1.5px] border-blue-100 text-primary flex items-center justify-center cursor-pointer text-base transition-all hover:bg-blue-50"
+                        className="lg:hidden w-[40px] h-[40px] rounded-lg bg-white border-[1.5px] border-black text-black flex items-center justify-center cursor-pointer text-base transition-all hover:bg-white"
                     >
                         <i className={mobileMenuOpen ? "fas fa-times" : "fas fa-bars"}></i>
                     </button>
@@ -90,7 +91,7 @@ export default function Header() {
                             to={item.href}
                             onClick={() => setMobileMenuOpen(false)}
                             className={`block py-3 px-3 rounded-lg text-[13px] font-bold no-underline transition-all ${
-                                location.pathname === item.href ? "bg-blue-50 text-primary" : "text-gray-700 hover:bg-blue-50 hover:text-primary"
+                                location.pathname === item.href ? "bg-blue-50 text-black" : "text-gray-700 hover:bg-blue-50 hover:text-black"
                             }`}
                         >
                             {item.name}
@@ -101,9 +102,9 @@ export default function Header() {
                     <Link
                         to="/login"
                         onClick={() => setMobileMenuOpen(false)}
-                        className="flex sm:hidden items-center justify-center gap-2 h-[44px] px-5 rounded-xl text-[13px] font-bold bg-primary text-white shadow-lg transition-all whitespace-nowrap"
+                        className="flex sm:hidden items-center justify-center gap-2 h-[44px] px-5 rounded-xl text-[13px] font-bold bg-black text-white shadow-lg transition-all whitespace-nowrap"
                     >
-                        Portal Login <i className="fas fa-arrow-right"></i>
+                        Portal Login <ArrowRight className="w-4 h-4" />
                     </Link>
                 </div>
             </div>

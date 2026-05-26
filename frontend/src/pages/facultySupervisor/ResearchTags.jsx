@@ -37,34 +37,34 @@ export default function ResearchTags() {
 
       {/* Page Heading - outside card */}
       <div className="space-y-1.5">
-        <h1 className="text-xl md:text-2xl font-extrabold text-gray-900 tracking-tight">
+        <h1 className="text-xl md:text-2xl font-extrabold text-black tracking-tight">
           Research Domain Profile & Tag Management
         </h1>
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-black">
           Configure research alignment tags. These tags power the global supervisor assignment matching engine.
         </p>
       </div>
 
       {/* Main Card */}
-      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm max-w-2xl">
+      <div className="bg-white rounded-2xl border border-black shadow-sm max-w-2xl">
 
         {/* Manage Research Tags */}
         <div className="px-6 pt-6 pb-5">
-          <h2 className="text-base font-bold text-gray-900 mb-4">
+          <h2 className="text-base font-bold text-black mb-4">
             Manage Research Tags
           </h2>
 
           {/* Active Research Domain Tags label */}
-          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
+          <p className="text-xs font-semibold text-black uppercase tracking-wider mb-3">
             Active Research Domain Tags
           </p>
 
           {/* Tags container */}
-          <div className="bg-gray-50 border border-gray-100 rounded-xl p-4 flex flex-wrap gap-2.5 mb-5">
+          <div className="bg-white border border-black rounded-xl p-4 flex flex-wrap gap-2.5 mb-5">
             {tags.map(tag => (
               <span
                 key={tag.id}
-                className="inline-flex items-center gap-1.5 bg-gray-800 text-white text-sm font-medium px-3.5 py-1.5 rounded-full"
+                className="inline-flex items-center gap-1.5 bg-white text-white text-sm font-medium px-3.5 py-1.5 rounded-full"
               >
                 {tag.label}
                 <button
@@ -77,7 +77,7 @@ export default function ResearchTags() {
               </span>
             ))}
             {tags.length === 0 && (
-              <span className="text-sm text-gray-400 italic">
+              <span className="text-sm text-black italic">
                 No research tags configured yet. Add your first tag below.
               </span>
             )}
@@ -91,7 +91,7 @@ export default function ResearchTags() {
               onChange={(e) => setNewTag(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Add new research tag (e.g. NLP, Robotics)..."
-              className="flex-1 px-4 py-2.5 border border-gray-200 rounded-full text-sm text-gray-800 bg-white outline-none transition-all focus:border-[#2563eb] focus:ring-2 focus:ring-blue-500/10 placeholder:text-gray-400"
+              className="flex-1 px-4 py-2.5 border border-black rounded-full text-sm text-black bg-white outline-none transition-all focus:border-[#2563eb] focus:ring-2 focus:ring-blue-500/10 placeholder:text-black"
             />
             <button
               onClick={handleAddTag}
@@ -105,15 +105,15 @@ export default function ResearchTags() {
 
         {/* Info Box */}
         <div className="px-6 pb-6 pt-2">
-          <div className="bg-blue-50/70 border border-blue-100 rounded-xl px-5 py-4 flex items-start gap-3">
+          <div className="bg-white/70 border border-black rounded-xl px-5 py-4 flex items-start gap-3">
             <div className="w-6 h-6 bg-[#2563eb] rounded-full flex items-center justify-center shrink-0 mt-0.5">
               <Info className="w-3.5 h-3.5 text-white" />
             </div>
             <div className="space-y-0.5">
-              <h4 className="text-sm font-bold text-gray-900">
+              <h4 className="text-sm font-bold text-black">
                 Global Matching Engine Active
               </h4>
-              <p className="text-xs text-gray-500 leading-relaxed">
+              <p className="text-xs text-black leading-relaxed">
                 When students submit project proposals, the FYP Office matching algorithm automatically evaluates your active research tags to recommend supervision pairings.
               </p>
             </div>

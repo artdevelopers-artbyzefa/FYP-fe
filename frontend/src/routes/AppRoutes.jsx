@@ -56,12 +56,12 @@ import InchargeStudentReports from '../pages/office-incharge/InchargeStudentRepo
 import InchargeAuditLog from '../pages/office-incharge/InchargeAuditLog';
 
 // Placeholder components
-const ProjectIdea = () => <div className="p-6 bg-white rounded-2xl shadow-sm border border-gray-100"> <h1 className="text-2xl font-black text-navy mb-4">Project Ideas</h1> <p className="text-gray-500">Project idea submission page coming soon.</p> </div>;
+const ProjectIdea = () => <div className="p-6 bg-white rounded-2xl shadow-sm border border-black"> <h1 className="text-2xl font-black text-navy mb-4">Project Ideas</h1> <p className="text-black">Project idea submission page coming soon.</p> </div>;
 
 const NotFound = () => (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-white">
         <h1 className="text-6xl font-black text-[#1e3a8a] mb-4">404</h1>
-        <p className="text-xl text-gray-600 mb-8 font-medium">Oops! The page you're looking for doesn't exist.</p>
+        <p className="text-xl text-black mb-8 font-medium">Oops! The page you're looking for doesn't exist.</p>
         <a href="/" className="px-6 py-3 bg-[#2563eb] text-white font-bold rounded-xl hover:bg-[#1d4ed8] transition-colors">
             Go Back Home
         </a>

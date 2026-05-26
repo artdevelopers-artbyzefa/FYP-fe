@@ -100,13 +100,13 @@ export default function AvailabilityGrid() {
     let border = '';
 
     if (isAvailable) {
-      bg = 'bg-emerald-50/60';
-      text = 'text-emerald-600 font-semibold';
+      bg = 'bg-white';
+      text = 'text-black';
       if (isFriday) {
         border = 'border-r-[3px] border-r-emerald-400';
       }
     } else if (isBreak) {
-      bg = 'bg-gray-50';
+      bg = 'bg-white';
       text = 'text-gray-400 font-medium italic';
     } else {
       bg = 'bg-white';
@@ -120,7 +120,7 @@ export default function AvailabilityGrid() {
     return (
       <div className="flex items-center justify-center py-20">
         <Loader2 className="w-6 h-6 text-[#2563eb] animate-spin" />
-        <span className="ml-2 text-sm text-gray-500 font-medium">Loading schedule...</span>
+        <span className="ml-2 text-sm text-black font-medium">Loading schedule...</span>
       </div>
     );
   }
@@ -131,10 +131,10 @@ export default function AvailabilityGrid() {
       {/* Header Row: Title + Save Button */}
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
         <div className="space-y-1.5">
-          <h1 className="text-xl md:text-2xl font-extrabold text-gray-900 tracking-tight">
+          <h1 className="text-xl md:text-2xl font-extrabold text-black tracking-tight">
             Weekly Availability & Consultation Matrix
           </h1>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-black">
             Block out office hours and consultation slots for student meetings (Mon–Fri, 08:30 to 16:30)
           </p>
         </div>
@@ -142,7 +142,7 @@ export default function AvailabilityGrid() {
         <button
           onClick={handleSave}
           disabled={saving}
-          className="flex items-center gap-2 px-5 py-2.5 bg-emerald-600 text-white text-sm font-bold rounded-xl hover:bg-emerald-700 active:scale-[0.97] transition-all duration-150 shadow-sm hover:shadow-md shrink-0 self-start disabled:opacity-60 disabled:cursor-not-allowed"
+          className="flex items-center gap-2 px-5 py-2.5 bg-white text-white text-sm font-bold rounded-xl hover:bg-white active:scale-[0.97] transition-all duration-150 shadow-sm hover:shadow-md shrink-0 self-start disabled:opacity-60 disabled:cursor-not-allowed"
         >
           {saving ? (
             <Loader2 className="w-4 h-4 animate-spin" />
@@ -154,19 +154,19 @@ export default function AvailabilityGrid() {
       </div>
 
       {/* Schedule Table */}
-      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-2xl border border-black shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full border-collapse min-w-[700px]">
             {/* Table Header */}
             <thead>
-              <tr className="border-b border-gray-100">
-                <th className="px-4 py-3.5 text-left text-[10px] font-bold text-gray-400 uppercase tracking-widest bg-gray-50/50 w-[110px]">
+              <tr className="border-b border-black">
+                <th className="px-4 py-3.5 text-left text-[10px] font-bold text-black uppercase tracking-widest bg-white/50 w-[110px]">
                   Time Slot
                 </th>
                 {days.map((day) => (
                   <th
                     key={day}
-                    className="px-4 py-3.5 text-center text-[10px] font-bold text-gray-400 uppercase tracking-widest bg-gray-50/50"
+                    className="px-4 py-3.5 text-center text-[10px] font-bold text-black uppercase tracking-widest bg-white/50"
                   >
                     {day}
                   </th>
@@ -179,10 +179,10 @@ export default function AvailabilityGrid() {
               {schedule.map((row, rowIdx) => (
                 <tr
                   key={rowIdx}
-                  className="border-b border-gray-100 last:border-b-0"
+                  className="border-b border-black last:border-b-0"
                 >
                   {/* Time Slot Cell */}
-                  <td className="px-4 py-4 text-xs font-bold text-gray-700 whitespace-nowrap bg-white">
+                  <td className="px-4 py-4 text-xs font-bold text-black whitespace-nowrap bg-white">
                     {row.time}
                   </td>
 
@@ -209,9 +209,9 @@ export default function AvailabilityGrid() {
 
       {/* Success Toast */}
       {showSuccess && (
-        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 animate-in fade-in slide-in-from-bottom-4 duration-300">
-          <div className="flex items-center gap-2.5 bg-gray-800 text-white px-6 py-3.5 rounded-full shadow-xl text-sm font-semibold">
-            <CheckCircle className="w-5 h-5 text-emerald-400 shrink-0" />
+        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 animate-in fade-in slide-in- duration-300">
+          <div className="flex items-center gap-2.5 bg-white text-white px-6 py-3.5 rounded-full shadow-xl text-sm font-semibold">
+            <CheckCircle className="w-5 h-5 text-black shrink-0" />
             <span className="italic">Availability schedule saved successfully!</span>
           </div>
         </div>
@@ -219,9 +219,9 @@ export default function AvailabilityGrid() {
 
       {/* Error Toast */}
       {showError && (
-        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 animate-in fade-in slide-in-from-bottom-4 duration-300">
-          <div className="flex items-center gap-2.5 bg-red-600 text-white px-6 py-3.5 rounded-full shadow-xl text-sm font-semibold">
-            <AlertCircle className="w-5 h-5 text-red-200 shrink-0" />
+        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 animate-in fade-in slide-in- duration-300">
+          <div className="flex items-center gap-2.5 bg-white text-white px-6 py-3.5 rounded-full shadow-xl text-sm font-semibold">
+            <AlertCircle className="w-5 h-5 text-black shrink-0" />
             <span>{errorMsg}</span>
           </div>
         </div>

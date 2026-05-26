@@ -78,7 +78,7 @@ const Sidebar = ({ isOpen, onClose }) => {
       {/* Backdrop overlay on mobile */}
       {isOpen && (
         <div 
-          className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 lg:hidden"
+          className="fixed inset-0 bg-white/50 backdrop-blur-sm z-40 lg:hidden"
           onClick={onClose}
         />
       )}
@@ -94,7 +94,7 @@ const Sidebar = ({ isOpen, onClose }) => {
           </div>
           <div className="flex flex-col">
             <span className="font-extrabold text-[17px] tracking-tight leading-none text-white font-poppins">CUI DFYP</span>
-            <span className="text-[11px] font-bold text-blue-200/60 uppercase tracking-[0.1em] mt-1 font-poppins">Student Portal</span>
+            <span className="text-[11px] font-bold text-black/60 uppercase tracking-[0.1em] mt-1 font-poppins">Student Portal</span>
           </div>
         </div>
 
@@ -130,7 +130,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                   <Users className="w-5 h-5 shrink-0" />
                   <span>FYP Partners</span>
                 </div>
-                {openMenus.partners ? <ChevronUp className="w-4 h-4 text-blue-200/60" /> : <ChevronDown className="w-4 h-4 text-blue-200/60" />}
+                {openMenus.partners ? <ChevronUp className="w-4 h-4 text-black/60" /> : <ChevronDown className="w-4 h-4 text-black/60" />}
               </button>
               
               <div className={`transition-all duration-300 ease-in-out overflow-hidden ${
@@ -138,11 +138,11 @@ const Sidebar = ({ isOpen, onClose }) => {
               }`}>
                 <div className="space-y-0.5 mt-0.5">
                   <NavLink to="/partners/new" onClick={handleLinkClick} className={subMenuClass}>
-                    <span className="w-1.5 h-1.5 rounded-full bg-blue-400 shrink-0"></span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-white shrink-0"></span>
                     New Request
                   </NavLink>
                   <NavLink to="/partners/requests" onClick={handleLinkClick} className={subMenuClass}>
-                    <span className="w-1.5 h-1.5 rounded-full bg-transparent border border-blue-400 shrink-0"></span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-transparent border border-black shrink-0"></span>
                     Incoming Requests
                   </NavLink>
                 </div>
@@ -167,7 +167,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                   <Lightbulb className="w-5 h-5 shrink-0" />
                   <span>Project Idea</span>
                 </div>
-                {openMenus.project ? <ChevronUp className="w-4 h-4 text-blue-200/60" /> : <ChevronDown className="w-4 h-4 text-blue-200/60" />}
+                {openMenus.project ? <ChevronUp className="w-4 h-4 text-black/60" /> : <ChevronDown className="w-4 h-4 text-black/60" />}
               </button>
               
               <div className={`transition-all duration-300 ease-in-out overflow-hidden ${
@@ -194,7 +194,7 @@ const Sidebar = ({ isOpen, onClose }) => {
               handleLinkClick();
               handleLogout();
             }}
-            className="w-full flex items-center gap-3.5 px-4 py-3 rounded-[16px] text-blue-100/70 hover:bg-white/5 hover:text-white transition-all duration-200 font-poppins font-semibold text-[15px]"
+            className="w-full flex items-center gap-3.5 px-4 py-3 rounded-[16px] text-black/70 hover:bg-white/5 hover:text-white transition-all duration-200 font-poppins font-semibold text-[15px]"
           >
             <LogOut className="w-5 h-5 shrink-0" />
             <span className="font-semibold">Logout</span>

@@ -2,63 +2,64 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { ArrowRight, Award, Check, Code, GraduationCap, Laptop, Lightbulb, LineChart, Search, User, Users } from 'lucide-react';
 
 const About = () => {
   return (
-    <div className="font-poppins bg-lightbg text-gray-700 min-h-screen flex flex-col">
+    <div className="font-poppins bg-white text-black min-h-screen flex flex-col">
       <Header />
       
       <main className="flex-grow pt-20">
         {/* Page Hero */}
-        <section className="bg-gradient-to-br from-blue-50/95 via-blue-100/80 to-blue-50/90 py-16 md:py-24 border-b border-blue-100">
+        <section className="bg-gradient- /95 /80 /90 py-16 md:py-24 border-b border-black">
           <div className="container max-w-[1280px] mx-auto px-4 sm:px-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
               <div>
-                <div className="inline-flex items-center gap-2 py-1.5 px-4 bg-blue-900/5 border border-blue-900/10 rounded-full text-primary text-[0.7rem] font-extrabold uppercase tracking-[0.24em] mb-6">
-                  <span className="w-1.5 h-1.5 bg-secondary rounded-full"></span>
-                  <i className="fas fa-graduation-cap"></i> About Program
+                <div className="inline-flex items-center gap-2 py-1.5 px-4 bg-black/5 border border-black/10 rounded-full text-black text-[0.7rem] font-extrabold uppercase tracking-[0.24em] mb-6">
+                  <span className="w-1.5 h-1.5 bg-white rounded-full"></span>
+                  <GraduationCap className="w-4 h-4" /> About Program
                 </div>
-                <h1 className="text-[clamp(1.8rem,4vw,2.5rem)] font-black text-gray-900 leading-tight mb-5">
+                <h1 className="text-[clamp(1.8rem,4vw,2.5rem)] font-black text-black leading-tight mb-5">
                   A structured path from classroom learning to professional project delivery.
                 </h1>
-                <p className="text-[15px] md:text-[17px] text-gray-500 leading-relaxed max-w-[600px] mb-8">
+                <p className="text-[15px] md:text-[17px] text-black leading-relaxed max-w-[600px] mb-8">
                   The Final Year Project program helps students apply research, engineering, design, and teamwork skills to meaningful computing problems under faculty supervision.
                 </p>
                 <div className="flex flex-wrap gap-4">
-                  <Link to="/eligibility" className="inline-flex items-center justify-center gap-2 py-3.5 px-7 rounded-full font-bold bg-primary text-white shadow-lg hover:bg-blue-800 hover:-translate-y-px transition-all text-sm">
-                    Check Eligibility <i className="fas fa-arrow-right"></i>
+                  <Link to="/eligibility" className="inline-flex items-center justify-center gap-2 py-3.5 px-7 rounded-full font-bold bg-black text-white shadow-lg hover:bg-black hover:-translate-y-px transition-all text-sm">
+                    Check Eligibility <ArrowRight className="w-4 h-4" />
                   </Link>
-                  <Link to="/process" className="inline-flex items-center justify-center gap-2 py-3.5 px-7 rounded-full font-bold bg-transparent text-gray-900 border-[1.5px] border-gray-200 hover:bg-gray-50 transition-all text-sm">
+                  <Link to="/process" className="inline-flex items-center justify-center gap-2 py-3.5 px-7 rounded-full font-bold bg-transparent text-black border-[1.5px] border-black hover:bg-white transition-all text-sm">
                     View Workflow
                   </Link>
                 </div>
               </div>
-              <div className="bg-white rounded-3xl p-8 border border-blue-100 shadow-xl space-y-6">
+              <div className="bg-white rounded-3xl p-8 border border-black shadow-xl space-y-6">
                 <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center text-primary shrink-0 text-lg">
-                    <i className="fas fa-lightbulb"></i>
+                  <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-black shrink-0 text-lg">
+                    <Lightbulb className="w-4 h-4" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-gray-900 mb-1 text-base">Innovation Focus</h3>
-                    <p className="text-sm text-gray-500 leading-relaxed">Students select, research, build, and defend a solution with measurable academic value.</p>
+                    <h3 className="font-bold text-black mb-1 text-base">Innovation Focus</h3>
+                    <p className="text-sm text-black leading-relaxed">Students select, research, build, and defend a solution with measurable academic value.</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center text-primary shrink-0 text-lg">
-                    <i className="fas fa-user-tie"></i>
+                  <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-black shrink-0 text-lg">
+                    <User className="w-4 h-4" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-gray-900 mb-1 text-base">Faculty Guidance</h3>
-                    <p className="text-sm text-gray-500 leading-relaxed">Supervisors guide scope, milestones, documentation, and evaluation readiness.</p>
+                    <h3 className="font-bold text-black mb-1 text-base">Faculty Guidance</h3>
+                    <p className="text-sm text-black leading-relaxed">Supervisors guide scope, milestones, documentation, and evaluation readiness.</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center text-primary shrink-0 text-lg">
-                    <i className="fas fa-chart-line"></i>
+                  <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-black shrink-0 text-lg">
+                    <LineChart className="w-4 h-4" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-gray-900 mb-1 text-base">Digital Management</h3>
-                    <p className="text-sm text-gray-500 leading-relaxed">The portal keeps submissions, feedback, coordination, and progress records in one place.</p>
+                    <h3 className="font-bold text-black mb-1 text-base">Digital Management</h3>
+                    <p className="text-sm text-black leading-relaxed">The portal keeps submissions, feedback, coordination, and progress records in one place.</p>
                   </div>
                 </div>
               </div>
@@ -67,47 +68,47 @@ const About = () => {
         </section>
 
         {/* Objectives Section */}
-        <section className="py-16 md:py-24 bg-white border-b border-blue-100">
+        <section className="py-16 md:py-24 bg-white border-b border-black">
           <div className="container max-w-[1280px] mx-auto px-4 sm:px-6">
             <div className="text-center mb-16">
-              <p className="text-[0.7rem] font-extrabold text-secondary uppercase tracking-[0.24em] mb-3">Program Objectives</p>
-              <h2 className="text-[clamp(1.6rem,3vw,2.5rem)] font-black text-gray-900 leading-tight">What the FYP program builds</h2>
+              <p className="text-[0.7rem] font-extrabold text-black uppercase tracking-[0.24em] mb-3">Program Objectives</p>
+              <h2 className="text-[clamp(1.6rem,3vw,2.5rem)] font-black text-black leading-tight">What the FYP program builds</h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="bg-white border-[1.5px] border-blue-100 rounded-[2rem] p-8 hover:border-primary transition-all text-center flex flex-col items-center">
-                <div className="w-12 h-12 bg-blue-50 text-primary rounded-xl flex items-center justify-center text-xl mb-6">
-                  <i className="fas fa-search"></i>
+              <div className="bg-white border-[1.5px] border-black rounded-[2rem] p-8 hover:border-black transition-all text-center flex flex-col items-center">
+                <div className="w-12 h-12 bg-white text-black rounded-xl flex items-center justify-center text-xl mb-6">
+                  <Search className="w-4 h-4" />
                 </div>
-                <h3 className="text-lg font-black text-gray-900 mb-4">Research Discipline</h3>
-                <p className="text-sm text-gray-500 leading-relaxed font-medium">Encourage students to identify problems, review related work, define scope, and use an appropriate methodology.</p>
+                <h3 className="text-lg font-black text-black mb-4">Research Discipline</h3>
+                <p className="text-sm text-black leading-relaxed font-medium">Encourage students to identify problems, review related work, define scope, and use an appropriate methodology.</p>
               </div>
-              <div className="bg-white border-[1.5px] border-blue-100 rounded-[2rem] p-8 hover:border-primary transition-all text-center flex flex-col items-center">
-                <div className="w-12 h-12 bg-blue-50 text-primary rounded-xl flex items-center justify-center text-xl mb-6">
-                  <i className="fas fa-code"></i>
+              <div className="bg-white border-[1.5px] border-black rounded-[2rem] p-8 hover:border-black transition-all text-center flex flex-col items-center">
+                <div className="w-12 h-12 bg-white text-black rounded-xl flex items-center justify-center text-xl mb-6">
+                  <Code className="w-4 h-4" />
                 </div>
-                <h3 className="text-lg font-black text-gray-900 mb-4">Practical Engineering</h3>
-                <p className="text-sm text-gray-500 leading-relaxed font-medium">Translate computing concepts into working software, systems, experiments, or prototypes that can be demonstrated.</p>
+                <h3 className="text-lg font-black text-black mb-4">Practical Engineering</h3>
+                <p className="text-sm text-black leading-relaxed font-medium">Translate computing concepts into working software, systems, experiments, or prototypes that can be demonstrated.</p>
               </div>
-              <div className="bg-white border-[1.5px] border-blue-100 rounded-[2rem] p-8 hover:border-primary transition-all text-center flex flex-col items-center">
-                <div className="w-12 h-12 bg-blue-50 text-primary rounded-xl flex items-center justify-center text-xl mb-6">
-                  <i className="fas fa-users"></i>
+              <div className="bg-white border-[1.5px] border-black rounded-[2rem] p-8 hover:border-black transition-all text-center flex flex-col items-center">
+                <div className="w-12 h-12 bg-white text-black rounded-xl flex items-center justify-center text-xl mb-6">
+                  <Users className="w-4 h-4" />
                 </div>
-                <h3 className="text-lg font-black text-gray-900 mb-4">Team Practice</h3>
-                <p className="text-sm text-gray-500 leading-relaxed font-medium">Strengthen collaboration, communication, planning, version control, and accountable delivery across project groups.</p>
+                <h3 className="text-lg font-black text-black mb-4">Team Practice</h3>
+                <p className="text-sm text-black leading-relaxed font-medium">Strengthen collaboration, communication, planning, version control, and accountable delivery across project groups.</p>
               </div>
             </div>
           </div>
         </section>
 
         {/* Outcomes & Portal Helper Section */}
-        <section className="py-16 md:py-24 bg-lightbg">
+        <section className="py-16 md:py-24 bg-white">
           <div className="container max-w-[1280px] mx-auto px-4 sm:px-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="bg-white border-[1.5px] border-blue-100 rounded-[2.5rem] p-10 shadow-sm">
-                <div className="w-12 h-12 bg-blue-50 text-primary rounded-xl flex items-center justify-center text-xl mb-6">
-                  <i className="fas fa-award"></i>
+              <div className="bg-white border-[1.5px] border-black rounded-[2.5rem] p-10 shadow-sm">
+                <div className="w-12 h-12 bg-white text-black rounded-xl flex items-center justify-center text-xl mb-6">
+                  <Award className="w-4 h-4" />
                 </div>
-                <h3 className="text-xl font-black text-gray-900 mb-6">Learning Outcomes</h3>
+                <h3 className="text-xl font-black text-black mb-6">Learning Outcomes</h3>
                 <ul className="space-y-4">
                   {[
                     "Prepare a complete proposal, report, and presentation.",
@@ -115,18 +116,18 @@ const About = () => {
                     "Evaluate results using suitable measures and evidence.",
                     "Communicate decisions clearly to supervisors and panels."
                   ].map((item, i) => (
-                    <li key={i} className="flex items-start gap-3 text-[14px] text-gray-500 font-medium">
-                      <i className="fas fa-check text-emerald-500 mt-1"></i>
+                    <li key={i} className="flex items-start gap-3 text-[14px] text-black font-medium">
+                      <Check className="text-black mt-1" />
                       {item}
                     </li>
                   ))}
                 </ul>
               </div>
-              <div className="bg-white border-[1.5px] border-blue-100 rounded-[2.5rem] p-10 shadow-sm">
-                <div className="w-12 h-12 bg-blue-50 text-primary rounded-xl flex items-center justify-center text-xl mb-6">
-                  <i className="fas fa-laptop-file"></i>
+              <div className="bg-white border-[1.5px] border-black rounded-[2.5rem] p-10 shadow-sm">
+                <div className="w-12 h-12 bg-white text-black rounded-xl flex items-center justify-center text-xl mb-6">
+                  <Laptop className="w-4 h-4" />
                 </div>
-                <h3 className="text-xl font-black text-gray-900 mb-6">How the Portal Helps</h3>
+                <h3 className="text-xl font-black text-black mb-6">How the Portal Helps</h3>
                 <ul className="space-y-4">
                   {[
                     "Centralizes proposal submission and supervisor review.",
@@ -134,8 +135,8 @@ const About = () => {
                     "Improves coordination between students, supervisors, and coordinators.",
                     "Supports transparent evaluation and report management."
                   ].map((item, i) => (
-                    <li key={i} className="flex items-start gap-3 text-[14px] text-gray-500 font-medium">
-                      <i className="fas fa-check text-emerald-500 mt-1"></i>
+                    <li key={i} className="flex items-start gap-3 text-[14px] text-black font-medium">
+                      <Check className="text-black mt-1" />
                       {item}
                     </li>
                   ))}

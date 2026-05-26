@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getOfficeStudents } from '../../services/office-assistant.service';
 import { showToast } from '../../components/AppToast';
+import { Search, Send } from 'lucide-react';
 
 const AssistantStudents = () => {
   const [students, setStudents] = useState([]);
@@ -18,24 +19,24 @@ const AssistantStudents = () => {
 
   return (
     <>
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4 border-b border-gray-100 pb-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4 border-b border-black pb-4">
         <div>
-          <h2 className="text-xl font-black text-gray-800">Student Management</h2>
-          <p className="text-xs text-gray-500 mt-0.5 font-medium">Search registration numbers, filter by FYP status, and dispatch bulk milestone messages</p>
+          <h2 className="text-xl font-black text-black">Student Management</h2>
+          <p className="text-xs text-black mt-0.5 font-medium">Search registration numbers, filter by FYP status, and dispatch bulk milestone messages</p>
         </div>
-        <button onClick={() => setIsBulkOpen(true)} className="bg-secondary hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg shadow-blue-600/20 transition-all flex items-center gap-2 cursor-pointer">
-          <i className="fas fa-paper-plane"></i> Bulk Message
+        <button onClick={() => setIsBulkOpen(true)} className="bg-white hover:bg-black text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg transition-all flex items-center gap-2 cursor-pointer">
+          <Send className="w-4 h-4" /> Bulk Message
         </button>
       </div>
 
-      <div className="bg-white rounded-2xl border border-gray-100 p-4 mb-6 shadow-sm flex flex-col sm:flex-row gap-4 items-center justify-between">
+      <div className="bg-white rounded-2xl border border-black p-4 mb-6 shadow-sm flex flex-col sm:flex-row gap-4 items-center justify-between">
         <div className="relative w-full sm:w-80">
-          <i className="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-          <input type="text" placeholder="Search student name or reg no..." className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm outline-none focus:border-secondary focus:bg-white transition-all" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-black text-sm" />
+          <input type="text" placeholder="Search student name or reg no..." className="w-full pl-10 pr-4 py-2.5 bg-white border border-black rounded-xl text-sm outline-none focus:border-black focus:bg-white transition-all" />
         </div>
         <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
-          <span className="text-xs font-bold text-gray-500">FYP Status:</span>
-          <select className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-sm font-bold text-gray-700 outline-none focus:border-secondary cursor-pointer">
+          <span className="text-xs font-bold text-black">FYP Status:</span>
+          <select className="bg-white border border-black rounded-xl px-4 py-2 text-sm font-bold text-black outline-none focus:border-black cursor-pointer">
             <option value="">All Statuses</option>
             <option value="No Project">No Project</option>
             <option value="FYP-1">FYP-1</option>
@@ -45,11 +46,11 @@ const AssistantStudents = () => {
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-2xl border border-black shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-gray-50/75 border-b border-gray-100 text-[11px] font-black text-gray-500 uppercase tracking-wider">
+              <tr className="bg-white/75 border-b border-black text-[11px] font-black text-black uppercase tracking-wider">
                 <th className="py-3.5 px-6 w-12"><input type="checkbox" className="accent-primary cursor-pointer" /></th>
                 <th className="py-3.5 px-6">Student Name</th>
                 <th className="py-3.5 px-6">Registration Number</th>
@@ -58,19 +59,19 @@ const AssistantStudents = () => {
                 <th className="py-3.5 px-6 text-right">Profile</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100 text-sm font-medium text-gray-700">
+            <tbody className="divide-y divide-black text-sm font-medium text-black">
               {students.map(s => (
-                <tr key={s.id} className="hover:bg-gray-50/50 transition-colors">
+                <tr key={s.id} className="hover:bg-white/50 transition-colors">
                   <td className="py-4 px-6"><input type="checkbox" className="accent-primary cursor-pointer" /></td>
-                  <td className="py-4 px-6 font-bold text-gray-900">{s.name}</td>
-                  <td className="py-4 px-6 text-gray-600 font-mono">{s.id}</td>
+                  <td className="py-4 px-6 font-bold text-black">{s.name}</td>
+                  <td className="py-4 px-6 text-black font-mono">{s.id}</td>
                   <td className="py-4 px-6">
-                    <span className={`font-bold text-xs px-2.5 py-1 rounded-lg border ${s.status === 'Completed' ? 'bg-success/10 text-success border-success/20' : s.status.includes('FYP-1') ? 'bg-blue-50 text-secondary border-blue-100' : 'bg-purple-50 text-purple-700 border-purple-200'}`}>
+                    <span className={`font-bold text-xs px-2.5 py-1 rounded-lg border ${s.status === 'Completed' ? 'bg-success/10 text-success border-success/20' : s.status.includes('FYP-1') ? 'bg-blue-50 text-black border-blue-100' : 'bg-white'}`}>
                       {s.status}
                     </span>
                   </td>
-                  <td className="py-4 px-6 text-gray-600 truncate max-w-xs">{s.project}</td>
-                  <td className="py-4 px-6 text-right"><button className="px-3 py-1.5 rounded-lg bg-gray-50 hover:bg-blue-50 hover:text-secondary border border-gray-200 text-xs font-bold transition-all cursor-pointer">View Profile</button></td>
+                  <td className="py-4 px-6 text-black truncate max-w-xs">{s.project}</td>
+                  <td className="py-4 px-6 text-right"><button className="px-3 py-1.5 rounded-lg bg-white hover:bg-white hover:text-black border border-black text-xs font-bold transition-all cursor-pointer">View Profile</button></td>
                 </tr>
               ))}
             </tbody>
@@ -80,27 +81,27 @@ const AssistantStudents = () => {
 
       {isBulkOpen && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[150] flex items-center justify-center p-4">
-          <div className="bg-white rounded-[2rem] w-full max-w-lg p-6 sm:p-8 shadow-2xl border border-gray-100">
-            <div className="flex justify-between items-center mb-6 pb-3 border-b border-gray-50">
-              <h3 className="text-lg font-black text-gray-900">Compose Bulk Message</h3>
-              <i className="fas fa-times text-gray-400 hover:text-gray-600 cursor-pointer text-lg" onClick={() => setIsBulkOpen(false)}></i>
+          <div className="bg-white rounded-[2rem] w-full max-w-lg p-6 sm:p-8 shadow-2xl border border-black">
+            <div className="flex justify-between items-center mb-6 pb-3 border-b border-black">
+              <h3 className="text-lg font-black text-black">Compose Bulk Message</h3>
+              <i className="fas fa-times text-black hover:text-black cursor-pointer text-lg" onClick={() => setIsBulkOpen(false)}></i>
             </div>
             <form onSubmit={handleBulkSubmit} className="space-y-5">
               <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1.5">Selected Recipients</label>
-                <input type="text" readOnly className="w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-2.5 text-xs font-bold text-gray-600 outline-none" value="All Students Selected" />
+                <label className="block text-xs font-bold text-black mb-1.5">Selected Recipients</label>
+                <input type="text" readOnly className="w-full bg-white border border-black rounded-xl px-4 py-2.5 text-xs font-bold text-black outline-none" value="All Students Selected" />
               </div>
               <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1.5">Message Subject</label>
-                <input type="text" placeholder="e.g. Urgent: FYP Milestone Deliverable Reminder" className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-secondary focus:bg-white transition-all" required />
+                <label className="block text-xs font-bold text-black mb-1.5">Message Subject</label>
+                <input type="text" placeholder="e.g. Urgent: FYP Milestone Deliverable Reminder" className="w-full bg-white border border-black rounded-xl px-4 py-2.5 text-sm outline-none focus:border-black focus:bg-white transition-all" required />
               </div>
               <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1.5">Message Body</label>
-                <textarea placeholder="Compose your official dispatch here..." className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-secondary focus:bg-white transition-all h-32" required></textarea>
+                <label className="block text-xs font-bold text-black mb-1.5">Message Body</label>
+                <textarea placeholder="Compose your official dispatch here..." className="w-full bg-white border border-black rounded-xl px-4 py-3 text-sm outline-none focus:border-black focus:bg-white transition-all h-32" required></textarea>
               </div>
-              <div className="flex justify-end gap-3 pt-4 border-t border-gray-50">
-                <button type="button" onClick={() => setIsBulkOpen(false)} className="px-5 py-2.5 rounded-xl text-xs font-bold text-gray-600 hover:bg-gray-50 transition-colors cursor-pointer">Cancel</button>
-                <button type="submit" className="bg-secondary hover:bg-blue-700 text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow-lg shadow-blue-600/20 transition-all cursor-pointer flex items-center gap-2"><i className="fas fa-paper-plane"></i> Send Broadcast</button>
+              <div className="flex justify-end gap-3 pt-4 border-t border-black">
+                <button type="button" onClick={() => setIsBulkOpen(false)} className="px-5 py-2.5 rounded-xl text-xs font-bold text-black hover:bg-white transition-colors cursor-pointer">Cancel</button>
+                <button type="submit" className="bg-white hover:bg-black text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow-lg transition-all cursor-pointer flex items-center gap-2"><Send className="w-4 h-4" /> Send Broadcast</button>
               </div>
             </form>
           </div>

@@ -150,7 +150,7 @@ export default function StudentProposals() {
     return (
       <div className="flex items-center justify-center py-20">
         <Loader2 className="w-6 h-6 text-[#2563eb] animate-spin" />
-        <span className="ml-2 text-sm text-gray-500 font-medium">Loading proposals...</span>
+        <span className="ml-2 text-sm text-black font-medium">Loading proposals...</span>
       </div>
     );
   }
@@ -159,10 +159,10 @@ export default function StudentProposals() {
     <div className="space-y-8 pb-10">
       {/* Page Header */}
       <div className="space-y-1.5">
-        <h1 className="text-xl md:text-2xl font-extrabold text-gray-900 tracking-tight">
+        <h1 className="text-xl md:text-2xl font-extrabold text-black tracking-tight">
           Student Project Proposals Review
         </h1>
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-black">
           Review incoming student project proposals. Request mandatory revisions or issue formal accept/reject decisions.
         </p>
       </div>
@@ -170,23 +170,23 @@ export default function StudentProposals() {
       {/* Proposals List */}
       <div className="space-y-6">
         {proposals.length === 0 ? (
-          <div className="bg-white rounded-2xl border border-gray-200 p-8 text-center text-gray-500 shadow-sm">
+          <div className="bg-white rounded-2xl border border-black p-8 text-center text-black shadow-sm">
             No pending proposals to review.
           </div>
         ) : (
           proposals.map(proposal => (
-            <div key={proposal.id} className="bg-white rounded-3xl border border-gray-200 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] p-6 md:p-8 space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
+            <div key={proposal.id} className="bg-white rounded-3xl border border-black shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] p-6 md:p-8 space-y-8 animate-in fade-in slide-in- duration-300">
               
               {/* Card Header: Title & Actions */}
               <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
                 <div className="space-y-2">
                   <div className="flex items-center gap-3">
-                    <h2 className="text-xl font-black text-gray-900 tracking-tight">{proposal.title}</h2>
-                    <span className="px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-600 border border-amber-200/60">
+                    <h2 className="text-xl font-black text-black tracking-tight">{proposal.title}</h2>
+                    <span className="px-3 py-1 rounded-full text-xs font-bold bg-white text-black border border-black/60">
                       {proposal.status}
                     </span>
                   </div>
-                  <p className="text-sm font-semibold text-gray-500">
+                  <p className="text-sm font-semibold text-black">
                     Group {proposal.groupId} · Leader: {proposal.leaderName} ({proposal.leaderRegNo})
                   </p>
                 </div>
@@ -209,7 +209,7 @@ export default function StudentProposals() {
                   </button>
                   <button 
                     onClick={() => openModal('reject', proposal)}
-                    className="flex items-center gap-1.5 px-4 py-2 bg-red-50 text-red-600 text-sm font-bold rounded-xl border border-red-100 hover:bg-red-100 active:scale-95 transition-all"
+                    className="flex items-center gap-1.5 px-4 py-2 bg-white text-black text-sm font-bold rounded-xl border border-black hover:bg-white active:scale-95 transition-all"
                   >
                     <X className="w-4 h-4" />
                     Reject
@@ -221,31 +221,31 @@ export default function StudentProposals() {
               <div className="flex flex-col lg:flex-row gap-6 items-stretch">
                 
                 {/* Left: Problem Statement */}
-                <div className="flex-1 bg-gray-50/70 rounded-2xl p-5 md:p-6 border border-gray-100">
-                  <h3 className="text-sm font-extrabold text-gray-900 mb-4">Problem Statement & Methodology</h3>
-                  <p className="text-sm text-gray-500 leading-relaxed">
+                <div className="flex-1 bg-white/70 rounded-2xl p-5 md:p-6 border border-black">
+                  <h3 className="text-sm font-extrabold text-black mb-4">Problem Statement & Methodology</h3>
+                  <p className="text-sm text-black leading-relaxed">
                     {proposal.problemStatement}
                   </p>
                 </div>
 
                 {/* Right: Metadata */}
-                <div className="lg:w-80 bg-gray-50/70 rounded-2xl p-5 md:p-6 border border-gray-100 shrink-0">
-                  <h3 className="text-sm font-extrabold text-gray-900 mb-4">Project Metadata</h3>
+                <div className="lg:w-80 bg-white/70 rounded-2xl p-5 md:p-6 border border-black shrink-0">
+                  <h3 className="text-sm font-extrabold text-black mb-4">Project Metadata</h3>
                   <div className="space-y-3.5">
-                    <div className="flex justify-between items-center border-b border-gray-200/60 pb-3">
-                      <span className="text-xs font-semibold text-gray-500">Target Domain:</span>
-                      <span className="text-xs font-bold text-gray-900">{proposal.targetDomain}</span>
+                    <div className="flex justify-between items-center border-b border-black/60 pb-3">
+                      <span className="text-xs font-semibold text-black">Target Domain:</span>
+                      <span className="text-xs font-bold text-black">{proposal.targetDomain}</span>
                     </div>
-                    <div className="flex justify-between items-center border-b border-gray-200/60 pb-3">
-                      <span className="text-xs font-semibold text-gray-500">Hardware Req:</span>
-                      <span className="text-xs font-bold text-gray-900">{proposal.hardwareReq}</span>
+                    <div className="flex justify-between items-center border-b border-black/60 pb-3">
+                      <span className="text-xs font-semibold text-black">Hardware Req:</span>
+                      <span className="text-xs font-bold text-black">{proposal.hardwareReq}</span>
                     </div>
-                    <div className="flex justify-between items-center border-b border-gray-200/60 pb-3">
-                      <span className="text-xs font-semibold text-gray-500">Members:</span>
-                      <span className="text-xs font-bold text-gray-900">{proposal.membersCount} Students</span>
+                    <div className="flex justify-between items-center border-b border-black/60 pb-3">
+                      <span className="text-xs font-semibold text-black">Members:</span>
+                      <span className="text-xs font-bold text-black">{proposal.membersCount} Students</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-xs font-semibold text-gray-500">Proposal Document:</span>
+                      <span className="text-xs font-semibold text-black">Proposal Document:</span>
                       <button 
                         onClick={(e) => {
                           e.preventDefault();
@@ -272,17 +272,17 @@ export default function StudentProposals() {
           <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={closeModals}></div>
           <div className="bg-white rounded-[2rem] w-full max-w-xl relative z-10 shadow-2xl animate-in zoom-in-95 duration-200 flex flex-col overflow-hidden">
             
-            <div className="px-6 md:px-8 py-5 border-b border-gray-100 flex items-center justify-between">
-              <h3 className="text-xl font-extrabold text-gray-900">
+            <div className="px-6 md:px-8 py-5 border-b border-black flex items-center justify-between">
+              <h3 className="text-xl font-extrabold text-black">
                 {activeModal === 'revise' ? 'Request Proposal Revisions' : 'Reject Project Proposal'}
               </h3>
-              <button onClick={closeModals} className="text-gray-400 hover:text-gray-600 transition-colors p-1 rounded-full hover:bg-gray-100">
+              <button onClick={closeModals} className="text-black hover:text-black transition-colors p-1 rounded-full hover:bg-white">
                 <X className="w-5 h-5" />
               </button>
             </div>
             
-            <div className="p-6 md:p-8 bg-gray-50/50">
-              <label className="block text-xs font-bold text-gray-700 mb-2">
+            <div className="p-6 md:p-8 bg-white/50">
+              <label className="block text-xs font-bold text-black mb-2">
                 {activeModal === 'revise' ? 'Mandatory Revision Comments' : 'Mandatory Rejection Justification'}
               </label>
               <textarea
@@ -294,15 +294,15 @@ export default function StudentProposals() {
                     ? 'Specify exactly what changes are required in the problem statement, methodology, or hardware requirements...' 
                     : 'Provide official justification for rejecting this proposal...'
                 }
-                className="w-full p-4 border border-gray-200 rounded-2xl text-sm bg-white outline-none focus:border-[#2563eb] focus:ring-2 focus:ring-blue-500/10 resize-none"
+                className="w-full p-4 border border-black rounded-2xl text-sm bg-white outline-none focus:border-[#2563eb] focus:ring-2 focus:ring-blue-500/10 resize-none"
               />
             </div>
 
-            <div className="px-6 md:px-8 py-5 border-t border-gray-100 flex items-center justify-center gap-4">
+            <div className="px-6 md:px-8 py-5 border-t border-black flex items-center justify-center gap-4">
               <button 
                 onClick={closeModals}
                 disabled={submitting}
-                className="px-6 py-2.5 text-gray-600 font-bold text-sm hover:text-gray-900 transition-colors"
+                className="px-6 py-2.5 text-black font-bold text-sm hover:text-black transition-colors"
               >
                 Cancel
               </button>
@@ -326,16 +326,16 @@ export default function StudentProposals() {
 
       {/* Toast Notification */}
       {toast.show && (
-        <div className="fixed bottom-8 right-8 z-50 animate-in fade-in slide-in-from-bottom-4 slide-in-from-right-4 duration-300">
+        <div className="fixed bottom-8 right-8 z-50 animate-in fade-in slide-in- slide-in- duration-300">
           <div className={`flex items-center gap-3 px-6 py-4 rounded-xl shadow-xl text-sm font-bold border ${
             toast.type === 'success' 
               ? 'bg-[#1c1917] text-white border-gray-800' 
-              : 'bg-red-50 text-red-700 border-red-100'
+              : 'bg-white'
           }`}>
             {toast.type === 'success' ? (
-              <CheckCircle className="w-5 h-5 text-emerald-400 shrink-0" />
+              <CheckCircle className="w-5 h-5 text-black shrink-0" />
             ) : (
-              <AlertCircle className="w-5 h-5 text-red-500 shrink-0" />
+              <AlertCircle className="w-5 h-5 text-black shrink-0" />
             )}
             <span>{toast.message}</span>
           </div>

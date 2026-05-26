@@ -81,7 +81,7 @@ const FacultySidebar = ({ isOpen, onClose }) => {
       {/* Backdrop overlay on mobile */}
       {isOpen && (
         <div 
-          className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 lg:hidden"
+          className="fixed inset-0 bg-white/50 backdrop-blur-sm z-40 lg:hidden"
           onClick={onClose}
         />
       )}
@@ -97,7 +97,7 @@ const FacultySidebar = ({ isOpen, onClose }) => {
           </div>
           <div className="flex flex-col">
             <span className="font-extrabold text-[16px] tracking-tight leading-none text-white font-poppins uppercase">CUI ABBOTTABAD</span>
-            <span className="text-[13px] font-medium text-blue-200/60 mt-1.5 font-poppins">Faculty Supervisor</span>
+            <span className="text-[13px] font-medium text-black/60 mt-1.5 font-poppins">Faculty Supervisor</span>
           </div>
         </div>
 

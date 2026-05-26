@@ -108,7 +108,7 @@ export default function CommitteeEvaluations() {
     return (
       <div className="flex items-center justify-center py-20">
         <Loader2 className="w-6 h-6 text-[#2563eb] animate-spin" />
-        <span className="ml-2 text-sm text-gray-500 font-medium">Loading evaluation form...</span>
+        <span className="ml-2 text-sm text-black font-medium">Loading evaluation form...</span>
       </div>
     );
   }
@@ -117,34 +117,34 @@ export default function CommitteeEvaluations() {
     <div className="space-y-8 pb-10 max-w-7xl mx-auto">
       {/* Page Header */}
       <div className="space-y-1.5 shrink-0">
-        <h1 className="text-xl md:text-2xl font-extrabold text-gray-900 tracking-tight">
+        <h1 className="text-xl md:text-2xl font-extrabold text-black tracking-tight">
           Committee Defense Evaluations & Rubric Scoring
         </h1>
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-black">
           Input scores per CLO criteria for scheduled student defenses and submit locked evaluation scorecards
         </p>
       </div>
 
       {/* Main Unified Evaluation Card */}
-      <div className="bg-white rounded-2xl p-6 lg:p-8 xl:p-10 shadow-md border border-gray-100 flex flex-col animate-in fade-in slide-in-from-bottom-2 duration-300">
+      <div className="bg-white rounded-2xl p-6 lg:p-8 xl:p-10 shadow-md border border-black flex flex-col animate-in fade-in slide-in- duration-300">
         
         {/* Group Meta Row */}
-        <div className="flex flex-col md:flex-row md:items-start justify-between border-b border-gray-100 pb-6 mb-8 gap-4">
+        <div className="flex flex-col md:flex-row md:items-start justify-between border-b border-black pb-6 mb-8 gap-4">
           <div className="space-y-2">
             <div className="flex flex-wrap items-center gap-3">
-              <h2 className="text-xl md:text-2xl font-black text-gray-900 tracking-tight">
+              <h2 className="text-xl md:text-2xl font-black text-black tracking-tight">
                 Group {evaluationData.groupId}: {evaluationData.title}
               </h2>
               <span className="px-3 py-1 bg-[#eff6ff] text-[#2563eb] rounded-full text-xs font-bold shrink-0 border border-[#bfdbfe]">
                 {evaluationData.panel}
               </span>
             </div>
-            <p className="text-xs font-bold text-gray-400">
-              Scheduled: <span className="text-gray-600">{evaluationData.scheduled}</span>
+            <p className="text-xs font-bold text-black">
+              Scheduled: <span className="text-black">{evaluationData.scheduled}</span>
             </p>
           </div>
           
-          <div className="text-xs font-bold text-gray-500 md:text-right mt-2 md:mt-0">
+          <div className="text-xs font-bold text-black md:text-right mt-2 md:mt-0">
             Evaluation Rubric: <span className="text-[#1e3a8a] font-extrabold">{evaluationData.rubricVersion}</span>
           </div>
         </div>
@@ -152,14 +152,14 @@ export default function CommitteeEvaluations() {
         {/* Card Body - Form */}
         <form onSubmit={handleSubmit} className="space-y-10">
           <div className="space-y-8">
-            <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-wider">
+            <h3 className="text-[10px] font-black text-black uppercase tracking-wider">
               CLO CRITERIA SCORECARD INPUT
             </h3>
 
             {/* CLO-1 */}
-            <div className="flex flex-col md:flex-row md:items-center gap-4 p-6 bg-slate-50/50 border border-gray-100 rounded-3xl shadow-sm">
+            <div className="flex flex-col md:flex-row md:items-center gap-4 p-6 bg-white/50 border border-black rounded-3xl shadow-sm">
               <div className="w-full md:w-[28%] shrink-0 space-y-2">
-                <h4 className="text-sm font-black text-gray-900">Problem Statement & Relevance</h4>
+                <h4 className="text-sm font-black text-black">Problem Statement & Relevance</h4>
                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-black bg-[#eff6ff] text-[#2563eb] border border-[#bfdbfe]">
                   CLO-1 (Weight: 30%)
                 </span>
@@ -175,19 +175,19 @@ export default function CommitteeEvaluations() {
                   style={{
                     background: `linear-gradient(to right, #2563eb 0%, #2563eb ${(scores.clo1 / 30) * 100}%, #e5e7eb ${(scores.clo1 / 30) * 100}%, #e5e7eb 100%)`
                   }}
-                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#2563eb] outline-none transition-all disabled:opacity-75 disabled:cursor-not-allowed"
+                  className="w-full h-2 bg-white rounded-lg appearance-none cursor-pointer accent-[#2563eb] outline-none transition-all disabled:opacity-75 disabled:cursor-not-allowed"
                 />
                 <div className="w-16 text-right shrink-0">
-                  <span className="text-sm font-black text-gray-900">{scores.clo1}</span>
-                  <span className="text-sm font-bold text-gray-400">/30</span>
+                  <span className="text-sm font-black text-black">{scores.clo1}</span>
+                  <span className="text-sm font-bold text-black">/30</span>
                 </div>
               </div>
             </div>
 
             {/* CLO-2 */}
-            <div className="flex flex-col md:flex-row md:items-center gap-4 p-6 bg-slate-50/50 border border-gray-100 rounded-3xl shadow-sm">
+            <div className="flex flex-col md:flex-row md:items-center gap-4 p-6 bg-white/50 border border-black rounded-3xl shadow-sm">
               <div className="w-full md:w-[28%] shrink-0 space-y-2">
-                <h4 className="text-sm font-black text-gray-900">Literature Review & Methodology</h4>
+                <h4 className="text-sm font-black text-black">Literature Review & Methodology</h4>
                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-black bg-[#eff6ff] text-[#2563eb] border border-[#bfdbfe]">
                   CLO-2 (Weight: 40%)
                 </span>
@@ -203,19 +203,19 @@ export default function CommitteeEvaluations() {
                   style={{
                     background: `linear-gradient(to right, #2563eb 0%, #2563eb ${(scores.clo2 / 40) * 100}%, #e5e7eb ${(scores.clo2 / 40) * 100}%, #e5e7eb 100%)`
                   }}
-                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#2563eb] outline-none transition-all disabled:opacity-75 disabled:cursor-not-allowed"
+                  className="w-full h-2 bg-white rounded-lg appearance-none cursor-pointer accent-[#2563eb] outline-none transition-all disabled:opacity-75 disabled:cursor-not-allowed"
                 />
                 <div className="w-16 text-right shrink-0">
-                  <span className="text-sm font-black text-gray-900">{scores.clo2}</span>
-                  <span className="text-sm font-bold text-gray-400">/40</span>
+                  <span className="text-sm font-black text-black">{scores.clo2}</span>
+                  <span className="text-sm font-bold text-black">/40</span>
                 </div>
               </div>
             </div>
 
             {/* CLO-3 */}
-            <div className="flex flex-col md:flex-row md:items-center gap-4 p-6 bg-slate-50/50 border border-gray-100 rounded-3xl shadow-sm">
+            <div className="flex flex-col md:flex-row md:items-center gap-4 p-6 bg-white/50 border border-black rounded-3xl shadow-sm">
               <div className="w-full md:w-[28%] shrink-0 space-y-2">
-                <h4 className="text-sm font-black text-gray-900">Expected Outcomes & Deliverables</h4>
+                <h4 className="text-sm font-black text-black">Expected Outcomes & Deliverables</h4>
                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-black bg-[#eff6ff] text-[#2563eb] border border-[#bfdbfe]">
                   CLO-3 (Weight: 30%)
                 </span>
@@ -231,11 +231,11 @@ export default function CommitteeEvaluations() {
                   style={{
                     background: `linear-gradient(to right, #2563eb 0%, #2563eb ${(scores.clo3 / 30) * 100}%, #e5e7eb ${(scores.clo3 / 30) * 100}%, #e5e7eb 100%)`
                   }}
-                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#2563eb] outline-none transition-all disabled:opacity-75 disabled:cursor-not-allowed"
+                  className="w-full h-2 bg-white rounded-lg appearance-none cursor-pointer accent-[#2563eb] outline-none transition-all disabled:opacity-75 disabled:cursor-not-allowed"
                 />
                 <div className="w-16 text-right shrink-0">
-                  <span className="text-sm font-black text-gray-900">{scores.clo3}</span>
-                  <span className="text-sm font-bold text-gray-400">/30</span>
+                  <span className="text-sm font-black text-black">{scores.clo3}</span>
+                  <span className="text-sm font-bold text-black">/30</span>
                 </div>
               </div>
             </div>
@@ -243,7 +243,7 @@ export default function CommitteeEvaluations() {
 
           {/* Remarks Section */}
           <div className="space-y-3 relative">
-            <h4 className="text-sm font-bold text-slate-500">Committee Member Remarks & Recommendations</h4>
+            <h4 className="text-sm font-bold text-black">Committee Member Remarks & Recommendations</h4>
             <div className="relative">
               <textarea
                 rows={4}
@@ -255,15 +255,15 @@ export default function CommitteeEvaluations() {
                 }}
                 required
                 placeholder="Provide specific feedback regarding the defense presentation and deliverable quality..."
-                className={`w-full p-4 bg-white border ${showErrorTooltip ? 'border-amber-400 focus:ring-amber-400/20' : 'border-gray-200 focus:border-[#2563eb] focus:ring-[#2563eb]/20'} rounded-2xl text-sm font-medium text-gray-700 placeholder:text-gray-400 focus:outline-none focus:ring-2 transition-all resize-y disabled:bg-gray-50 disabled:text-gray-400 disabled:cursor-not-allowed`}
+                className={`w-full p-4 bg-white border ${showErrorTooltip ? 'border-black' : 'border-gray-200 focus:border-[#2563eb] focus:ring-[#2563eb]/20'} rounded-2xl text-sm font-medium text-gray-700 placeholder:text-gray-400 focus:outline-none focus:ring-2 transition-all resize-y disabled:bg-gray-50 disabled:text-gray-400 disabled:cursor-not-allowed`}
               />
               
               {/* Custom Error Tooltip */}
               {showErrorTooltip && (
-                <div className="absolute left-1/2 -bottom-10 -translate-x-1/2 bg-white px-3 py-2 rounded-lg shadow-lg border border-gray-100 flex items-center gap-2 z-10 animate-in fade-in slide-in-from-top-1">
-                  <div className="w-4 h-4 rounded bg-amber-500 flex items-center justify-center text-white font-bold text-[10px] shrink-0">!</div>
-                  <span className="text-xs font-bold text-gray-700">Please fill out this field.</span>
-                  <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-white border-l border-t border-gray-100 rotate-45"></div>
+                <div className="absolute left-1/2 -bottom-10 -translate-x-1/2 bg-white px-3 py-2 rounded-lg shadow-lg border border-black flex items-center gap-2 z-10 animate-in fade-in slide-in-">
+                  <div className="w-4 h-4 rounded bg-white flex items-center justify-center text-white font-bold text-[10px] shrink-0">!</div>
+                  <span className="text-xs font-bold text-black">Please fill out this field.</span>
+                  <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-white border-l border-t border-black rotate-45"></div>
                 </div>
               )}
             </div>
@@ -275,7 +275,7 @@ export default function CommitteeEvaluations() {
               <button 
                 type="button"
                 disabled
-                className="px-6 py-3 bg-gray-100 text-gray-400 font-bold text-sm rounded-xl border border-gray-200 flex items-center gap-2 shadow-sm cursor-not-allowed"
+                className="px-6 py-3 bg-white text-black font-bold text-sm rounded-xl border border-black flex items-center gap-2 shadow-sm cursor-not-allowed"
               >
                 <Lock className="w-4 h-4" />
                 Scorecard Locked & Submitted
@@ -284,7 +284,7 @@ export default function CommitteeEvaluations() {
               <button 
                 type="submit"
                 disabled={submitting}
-                className="px-6 py-3 bg-[#2563eb] hover:bg-blue-700 text-white font-bold text-sm rounded-xl active:scale-95 transition-all disabled:opacity-50 flex items-center gap-2 shadow-sm"
+                className="px-6 py-3 bg-[#2563eb] hover:bg-black text-white font-bold text-sm rounded-xl active:scale-95 transition-all disabled:opacity-50 flex items-center gap-2 shadow-sm"
               >
                 {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Lock className="w-4 h-4" />}
                 Submit Locked Scorecard
@@ -297,9 +297,9 @@ export default function CommitteeEvaluations() {
 
       {/* Toast Notification */}
       {toast.show && (
-        <div className="fixed bottom-8 right-8 z-50 animate-in fade-in slide-in-from-bottom-4 slide-in-from-right-4 duration-300">
-          <div className="flex items-center gap-3 px-6 py-4 rounded-xl shadow-xl text-sm font-bold bg-[#1c1917] text-white border border-gray-800">
-            <CheckCircle className="w-5 h-5 text-emerald-400 shrink-0" />
+        <div className="fixed bottom-8 right-8 z-50 animate-in fade-in slide-in- slide-in- duration-300">
+          <div className="flex items-center gap-3 px-6 py-4 rounded-xl shadow-xl text-sm font-bold bg-[#1c1917] text-white border border-black">
+            <CheckCircle className="w-5 h-5 text-black shrink-0" />
             <span>{toast.message}</span>
           </div>
         </div>

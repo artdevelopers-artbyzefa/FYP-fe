@@ -133,7 +133,7 @@ export default function HeadManagement() {
     return (
       <div className="flex items-center justify-center py-20">
         <Loader2 className="w-6 h-6 text-[#2563eb] animate-spin" />
-        <span className="ml-2 text-sm text-gray-500 font-medium">Loading head management data...</span>
+        <span className="ml-2 text-sm text-black font-medium">Loading head management data...</span>
       </div>
     );
   }
@@ -145,11 +145,11 @@ export default function HeadManagement() {
         <div className="space-y-2">
           <div className="flex items-center gap-2.5">
             <Crown className="w-6 h-6 text-[#F59E0B]" />
-            <h1 className="text-xl md:text-2xl font-extrabold text-gray-900 tracking-tight">
+            <h1 className="text-xl md:text-2xl font-extrabold text-black tracking-tight">
               Committee Head Management (PEC-1)
             </h1>
           </div>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-black">
             Consolidate member evaluations, publish final committee consensus scores, and request head reassignment
           </p>
         </div>
@@ -166,12 +166,12 @@ export default function HeadManagement() {
       </div>
 
       {/* Roster Card Container */}
-      <div className="bg-white rounded-2xl border border-amber-100 shadow-sm p-6 mx-auto w-full animate-in fade-in slide-in-from-bottom-2 duration-300">
+      <div className="bg-white rounded-2xl border border-black shadow-sm p-6 mx-auto w-full animate-in fade-in slide-in- duration-300">
         
         {/* Card Header Row */}
-        <div className="flex items-center justify-between flex-wrap gap-4 pb-6 border-b border-gray-50">
-          <h2 className="text-sm font-black text-gray-900 tracking-tight">Defense Consensus Consolidation</h2>
-          <span className="px-3 py-1 bg-amber-50 text-amber-700 rounded-full text-[10px] font-black shrink-0 border border-amber-200/50 uppercase tracking-wide">
+        <div className="flex items-center justify-between flex-wrap gap-4 pb-6 border-b border-black">
+          <h2 className="text-sm font-black text-black tracking-tight">Defense Consensus Consolidation</h2>
+          <span className="px-3 py-1 bg-white text-black rounded-full text-[10px] font-black shrink-0 border border-black/50 uppercase tracking-wide">
             {groups[0]?.panel}
           </span>
         </div>
@@ -180,48 +180,48 @@ export default function HeadManagement() {
         <div className="overflow-x-auto mt-4">
           <table className="w-full text-left border-collapse min-w-[800px]">
             <thead>
-              <tr className="bg-gray-50/50">
-                <th className="px-6 py-4 text-slate-400 text-xs tracking-wider uppercase font-semibold w-[32%]">STUDENT GROUP</th>
-                <th className="px-6 py-4 text-slate-400 text-xs tracking-wider uppercase font-semibold text-center w-[12%]">MEMBER 1 SCORE</th>
-                <th className="px-6 py-4 text-slate-400 text-xs tracking-wider uppercase font-semibold text-center w-[12%]">MEMBER 2 SCORE</th>
-                <th className="px-6 py-4 text-slate-400 text-xs tracking-wider uppercase font-semibold text-center w-[12%]">MEMBER 3 SCORE</th>
-                <th className="px-6 py-4 text-slate-400 text-xs tracking-wider uppercase font-semibold text-center w-[16%]">CONSENSUS AVG</th>
-                <th className="px-6 py-4 text-slate-400 text-xs tracking-wider uppercase font-semibold text-center w-[16%]">HEAD ACTION</th>
+              <tr className="bg-white/50">
+                <th className="px-6 py-4 text-black text-xs tracking-wider uppercase font-semibold w-[32%]">STUDENT GROUP</th>
+                <th className="px-6 py-4 text-black text-xs tracking-wider uppercase font-semibold text-center w-[12%]">MEMBER 1 SCORE</th>
+                <th className="px-6 py-4 text-black text-xs tracking-wider uppercase font-semibold text-center w-[12%]">MEMBER 2 SCORE</th>
+                <th className="px-6 py-4 text-black text-xs tracking-wider uppercase font-semibold text-center w-[12%]">MEMBER 3 SCORE</th>
+                <th className="px-6 py-4 text-black text-xs tracking-wider uppercase font-semibold text-center w-[16%]">CONSENSUS AVG</th>
+                <th className="px-6 py-4 text-black text-xs tracking-wider uppercase font-semibold text-center w-[16%]">HEAD ACTION</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-50/50">
+            <tbody className="divide-y divide-black/50">
               {groups.map((group) => {
                 const { avg, grade } = calculateConsensusAvg(group.scores);
                 return (
-                  <tr key={group.id} className="hover:bg-blue-50/30 transition-colors">
+                  <tr key={group.id} className="hover:bg-white/30 transition-colors">
                     {/* Group */}
                     <td className="px-6 py-5">
-                      <span className="text-slate-900 font-bold text-sm">
+                      <span className="text-black font-bold text-sm">
                         {group.id}: {group.title}
                       </span>
                     </td>
 
                     {/* Member 1 */}
                     <td className="px-6 py-5 text-center">
-                      <span className="text-xs font-bold text-gray-800">{group.scores.member1}</span>
-                      <span className="text-xs font-semibold text-gray-400"> / 100</span>
+                      <span className="text-xs font-bold text-black">{group.scores.member1}</span>
+                      <span className="text-xs font-semibold text-black"> / 100</span>
                     </td>
 
                     {/* Member 2 */}
                     <td className="px-6 py-5 text-center">
-                      <span className="text-xs font-bold text-gray-800">{group.scores.member2}</span>
-                      <span className="text-xs font-semibold text-gray-400"> / 100</span>
+                      <span className="text-xs font-bold text-black">{group.scores.member2}</span>
+                      <span className="text-xs font-semibold text-black"> / 100</span>
                     </td>
 
                     {/* Member 3 */}
                     <td className="px-6 py-5 text-center">
-                      <span className="text-xs font-bold text-gray-800">{group.scores.member3}</span>
-                      <span className="text-xs font-semibold text-gray-400"> / 100</span>
+                      <span className="text-xs font-bold text-black">{group.scores.member3}</span>
+                      <span className="text-xs font-semibold text-black"> / 100</span>
                     </td>
 
                     {/* Avg */}
                     <td className="px-6 py-5 text-center">
-                      <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-100">
+                      <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold bg-white text-black border border-black">
                         {avg.toFixed(1)} ({grade})
                       </span>
                     </td>
@@ -231,7 +231,7 @@ export default function HeadManagement() {
                       {group.isPublished ? (
                         <button 
                           disabled
-                          className="flex items-center justify-center gap-1.5 px-4 py-2 bg-gray-50 text-gray-400 text-xs font-bold rounded-xl border border-gray-100 cursor-not-allowed mx-auto"
+                          className="flex items-center justify-center gap-1.5 px-4 py-2 bg-white text-black text-xs font-bold rounded-xl border border-black cursor-not-allowed mx-auto"
                         >
                           <Check className="w-3.5 h-3.5" />
                           Published
@@ -261,9 +261,9 @@ export default function HeadManagement() {
 
       {/* Toast Notification */}
       {toast.show && (
-        <div className="fixed bottom-8 right-8 z-50 animate-in fade-in slide-in-from-bottom-4 slide-in-from-right-4 duration-300">
-          <div className="flex items-center gap-3 px-6 py-4 rounded-xl shadow-xl text-sm font-bold bg-[#1c1917] text-white border border-gray-800">
-            <CheckCircle className="w-5 h-5 text-emerald-400 shrink-0" />
+        <div className="fixed bottom-8 right-8 z-50 animate-in fade-in slide-in- slide-in- duration-300">
+          <div className="flex items-center gap-3 px-6 py-4 rounded-xl shadow-xl text-sm font-bold bg-[#1c1917] text-white border border-black">
+            <CheckCircle className="w-5 h-5 text-black shrink-0" />
             <span>{toast.message}</span>
           </div>
         </div>

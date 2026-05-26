@@ -105,7 +105,7 @@ export default function SupervisedGroups() {
     return (
       <div className="flex items-center justify-center py-20">
         <Loader2 className="w-6 h-6 text-[#2563eb] animate-spin" />
-        <span className="ml-2 text-sm text-gray-500 font-medium">Loading groups...</span>
+        <span className="ml-2 text-sm text-black font-medium">Loading groups...</span>
       </div>
     );
   }
@@ -114,41 +114,41 @@ export default function SupervisedGroups() {
     <div className="space-y-8 pb-10">
       {/* Page Header */}
       <div className="space-y-1.5">
-        <h1 className="text-xl md:text-2xl font-extrabold text-gray-900 tracking-tight">
+        <h1 className="text-xl md:text-2xl font-extrabold text-black tracking-tight">
           Supervised Groups & Weekly Log Management
         </h1>
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-black">
           Track weekly log submissions, review draft chapters, and approve or reject weekly meeting records
         </p>
       </div>
 
       {/* Main Table Card */}
-      <div className="bg-white rounded-[2rem] shadow-sm border border-gray-100 overflow-hidden animate-in fade-in slide-in-from-bottom-2 duration-300">
-        <div className="px-6 py-6 border-b border-gray-50/50">
-          <h2 className="text-lg font-black text-gray-900 tracking-tight">Active Supervision Roster</h2>
+      <div className="bg-white rounded-[2rem] shadow-sm border border-black overflow-hidden animate-in fade-in slide-in- duration-300">
+        <div className="px-6 py-6 border-b border-black/50">
+          <h2 className="text-lg font-black text-black tracking-tight">Active Supervision Roster</h2>
         </div>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-gray-50/50">
-                <th className="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-wider w-[28%]">Group ID & Title</th>
-                <th className="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-wider w-[18%]">Group Leader</th>
-                <th className="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-wider w-[20%]">Weekly Log Status</th>
-                <th className="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-wider w-[18%]">Draft Submission</th>
-                <th className="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-wider w-[16%]">Supervision Actions</th>
+              <tr className="bg-white/50">
+                <th className="px-6 py-4 text-[10px] font-black text-black uppercase tracking-wider w-[28%]">Group ID & Title</th>
+                <th className="px-6 py-4 text-[10px] font-black text-black uppercase tracking-wider w-[18%]">Group Leader</th>
+                <th className="px-6 py-4 text-[10px] font-black text-black uppercase tracking-wider w-[20%]">Weekly Log Status</th>
+                <th className="px-6 py-4 text-[10px] font-black text-black uppercase tracking-wider w-[18%]">Draft Submission</th>
+                <th className="px-6 py-4 text-[10px] font-black text-black uppercase tracking-wider w-[16%]">Supervision Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-50/50">
+            <tbody className="divide-y divide-black/50">
               {groups.map((group) => (
-                <tr key={group.id} className="hover:bg-blue-50/30 transition-colors">
+                <tr key={group.id} className="hover:bg-white/30 transition-colors">
                   {/* Group Info */}
                   <td className="px-6 py-5 align-top">
                     <div className="space-y-1">
-                      <Link to={`/groups/${group.id}`} className="text-sm font-black text-gray-900 hover:text-blue-600 transition-colors">
+                      <Link to={`/groups/${group.id}`} className="text-sm font-black text-black hover:text-black transition-colors">
                         {group.id}: {group.title}
                       </Link>
-                      <p className="text-[11px] text-gray-400 font-medium">
+                      <p className="text-[11px] text-black font-medium">
                         {group.membersCount} Members
                       </p>
                     </div>
@@ -156,17 +156,17 @@ export default function SupervisedGroups() {
 
                   {/* Leader */}
                   <td className="px-6 py-5 align-top">
-                    <span className="text-sm font-bold text-gray-900">{group.leaderName}</span>
+                    <span className="text-sm font-bold text-black">{group.leaderName}</span>
                   </td>
 
                   {/* Status */}
                   <td className="px-6 py-5 align-top">
                     {group.pendingLogId ? (
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-600 border border-amber-200/60">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-white text-black border border-black/60">
                         {group.logStatus}
                       </span>
                     ) : (
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-600 border border-emerald-200/60">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-white text-black border border-black/60">
                         {group.logStatus}
                       </span>
                     )}
@@ -182,7 +182,7 @@ export default function SupervisedGroups() {
                         </a>
                       </div>
                     ) : (
-                      <span className="text-xs text-gray-400 italic">No new drafts</span>
+                      <span className="text-xs text-black italic">No new drafts</span>
                     )}
                   </td>
 
@@ -200,7 +200,7 @@ export default function SupervisedGroups() {
                     ) : (
                       <button 
                         disabled
-                        className="flex items-center justify-center w-full gap-1.5 px-3 py-2 bg-gray-50 text-gray-400 text-xs font-bold rounded-xl border border-gray-100 cursor-not-allowed"
+                        className="flex items-center justify-center w-full gap-1.5 px-3 py-2 bg-white text-black text-xs font-bold rounded-xl border border-black cursor-not-allowed"
                       >
                         <Check className="w-4 h-4 opacity-50" />
                         Approve Log
@@ -216,9 +216,9 @@ export default function SupervisedGroups() {
 
       {/* Toast Notification */}
       {toast.show && (
-        <div className="fixed bottom-8 right-8 z-50 animate-in fade-in slide-in-from-bottom-4 slide-in-from-right-4 duration-300">
-          <div className="flex items-center gap-3 px-6 py-4 rounded-xl shadow-xl text-sm font-bold bg-[#1c1917] text-white border border-gray-800">
-            <CheckCircle className="w-5 h-5 text-emerald-400 shrink-0" />
+        <div className="fixed bottom-8 right-8 z-50 animate-in fade-in slide-in- slide-in- duration-300">
+          <div className="flex items-center gap-3 px-6 py-4 rounded-xl shadow-xl text-sm font-bold bg-[#1c1917] text-white border border-black">
+            <CheckCircle className="w-5 h-5 text-black shrink-0" />
             <span>{toast.message}</span>
           </div>
         </div>

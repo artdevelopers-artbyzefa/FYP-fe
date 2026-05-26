@@ -19,7 +19,7 @@ const Accordion = ({ items }) => {
         >
           <button
             onClick={() => toggleItem(index)}
-            className="w-full flex items-center justify-between p-5 lg:p-6 text-left hover:bg-gray-50 transition-colors"
+            className="w-full flex items-center justify-between p-5 lg:p-6 text-left hover:bg-white transition-colors"
           >
             <h3 className={`font-bold text-base lg:text-lg pr-4 ${openIndex === index ? 'text-blue-bright' : 'text-navy'}`}>
               {item.question}
@@ -35,8 +35,8 @@ const Accordion = ({ items }) => {
               openIndex === index ? 'max-h-96' : 'max-h-0'
             }`}
           >
-            <div className="p-5 lg:p-6 pt-0 border-t border-gray-100">
-              <p className="text-gray-600 leading-relaxed">{item.answer}</p>
+            <div className="p-5 lg:p-6 pt-0 border-t border-black">
+              <p className="text-black leading-relaxed">{item.answer}</p>
             </div>
           </div>
         </div>

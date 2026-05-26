@@ -142,7 +142,7 @@ export default function StudentMessaging() {
     return (
       <div className="flex items-center justify-center py-20">
         <Loader2 className="w-6 h-6 text-[#2563eb] animate-spin" />
-        <span className="ml-2 text-sm text-gray-500 font-medium">Loading messaging interface...</span>
+        <span className="ml-2 text-sm text-black font-medium">Loading messaging interface...</span>
       </div>
     );
   }
@@ -153,10 +153,10 @@ export default function StudentMessaging() {
     <div className="space-y-8 pb-10 h-full flex flex-col relative">
       {/* Page Header */}
       <div className="space-y-1.5 shrink-0">
-        <h1 className="text-xl md:text-2xl font-extrabold text-gray-900 tracking-tight">
+        <h1 className="text-xl md:text-2xl font-extrabold text-black tracking-tight">
           Student Group Messaging & Announcements
         </h1>
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-black">
           Direct communication interface with supervised groups. Send announcements, share files/links, and maintain consultation logs.
         </p>
       </div>
@@ -165,9 +165,9 @@ export default function StudentMessaging() {
       <div className="flex flex-col lg:flex-row gap-6 h-[600px] lg:h-[calc(100vh-220px)] min-h-[500px]">
         
         {/* Left Panel: Groups List */}
-        <div className="w-full lg:w-80 bg-white rounded-[2rem] border border-gray-100 shadow-sm flex flex-col overflow-hidden shrink-0">
-          <div className="px-6 py-5 border-b border-gray-50/50 shrink-0">
-            <h2 className="text-sm font-black text-gray-900 tracking-tight">Supervised Groups</h2>
+        <div className="w-full lg:w-80 bg-white rounded-[2rem] border border-black shadow-sm flex flex-col overflow-hidden shrink-0">
+          <div className="px-6 py-5 border-b border-black/50 shrink-0">
+            <h2 className="text-sm font-black text-black tracking-tight">Supervised Groups</h2>
           </div>
           
           <div className="flex-1 overflow-y-auto">
@@ -192,10 +192,10 @@ export default function StudentMessaging() {
                     </p>
                   </div>
                   {group.hasUnread && !isActive && (
-                    <div className="w-2 h-2 rounded-full bg-blue-600 shrink-0 absolute right-6" />
+                    <div className="w-2 h-2 rounded-full bg-black shrink-0 absolute right-6" />
                   )}
                   {isActive && (
-                    <div className="w-1.5 h-1.5 rounded-full bg-blue-600 shrink-0" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-black shrink-0" />
                   )}
                 </div>
               );
@@ -204,20 +204,20 @@ export default function StudentMessaging() {
         </div>
 
         {/* Right Panel: Conversation */}
-        <div className="flex-1 bg-white rounded-[2rem] border border-gray-100 shadow-sm flex flex-col overflow-hidden relative">
+        <div className="flex-1 bg-white rounded-[2rem] border border-black shadow-sm flex flex-col overflow-hidden relative">
           
           {/* Conversation Header */}
-          <div className="px-6 py-4 border-b border-gray-50/50 shrink-0 flex items-center justify-between bg-white z-10">
-            <h2 className="text-sm font-black text-gray-900 tracking-tight">
+          <div className="px-6 py-4 border-b border-black/50 shrink-0 flex items-center justify-between bg-white z-10">
+            <h2 className="text-sm font-black text-black tracking-tight">
               Conversation: {activeGroup?.id} ({activeGroup?.title})
             </h2>
-            <span className="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-xs font-bold shrink-0">
+            <span className="px-3 py-1 bg-white text-black rounded-full text-xs font-bold shrink-0">
               {activeGroup?.members} Students
             </span>
           </div>
 
           {/* Chat Area */}
-          <div className="flex-1 p-6 space-y-6 overflow-y-auto bg-gray-50/30">
+          <div className="flex-1 p-6 space-y-6 overflow-y-auto bg-white/30">
             {messages.map(msg => (
               <div 
                 key={msg.id} 
@@ -249,7 +249,7 @@ export default function StudentMessaging() {
 
                 {/* My Avatar */}
                 {msg.isMe && (
-                  <div className="w-8 h-8 rounded-full bg-blue-100 text-[#2563eb] flex items-center justify-center text-xs font-bold shrink-0 shadow-sm">
+                  <div className="w-8 h-8 rounded-full bg-white text-[#2563eb] flex items-center justify-center text-xs font-bold shrink-0 shadow-sm">
                     {msg.senderAvatar}
                   </div>
                 )}
@@ -259,8 +259,8 @@ export default function StudentMessaging() {
           </div>
 
           {/* Input Area */}
-          <form onSubmit={handleSend} className="p-4 border-t border-gray-100 bg-white flex items-center gap-3 shrink-0">
-            <button type="button" className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-100 border border-gray-100 transition-colors shrink-0">
+          <form onSubmit={handleSend} className="p-4 border-t border-black bg-white flex items-center gap-3 shrink-0">
+            <button type="button" className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-black hover:text-black hover:bg-white border border-black transition-colors shrink-0">
               <Paperclip className="w-4 h-4" />
             </button>
             <input
@@ -268,12 +268,12 @@ export default function StudentMessaging() {
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               placeholder={`Type your message or announcement to Group ${activeGroup?.id}...`}
-              className="flex-1 h-10 px-4 bg-gray-50/50 border border-gray-100 rounded-xl text-sm font-medium text-gray-700 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#2563eb]/20 focus:border-[#2563eb]/30 transition-all"
+              className="flex-1 h-10 px-4 bg-white/50 border border-black rounded-xl text-sm font-medium text-black placeholder:text-black focus:outline-none focus:ring-2 focus:ring-[#2563eb]/20 focus:border-[#2563eb]/30 transition-all"
             />
             <button 
               type="submit"
               disabled={sending || !inputValue.trim()}
-              className="px-5 h-10 bg-[#2563eb] text-white font-bold text-sm rounded-xl hover:bg-blue-700 transition-colors flex items-center gap-2 disabled:opacity-50 shrink-0 shadow-sm"
+              className="px-5 h-10 bg-[#2563eb] text-white font-bold text-sm rounded-xl hover:bg-black transition-colors flex items-center gap-2 disabled:opacity-50 shrink-0 shadow-sm"
             >
               {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
               <span className="hidden sm:inline">Send</span>
@@ -285,9 +285,9 @@ export default function StudentMessaging() {
 
       {/* Toast Notification */}
       {toast.show && (
-        <div className="fixed bottom-8 right-8 z-50 animate-in fade-in slide-in-from-bottom-4 slide-in-from-right-4 duration-300">
-          <div className="flex items-center gap-3 px-6 py-4 rounded-xl shadow-xl text-sm font-bold bg-[#1c1917] text-white border border-gray-800">
-            <CheckCircle className="w-5 h-5 text-emerald-400 shrink-0" />
+        <div className="fixed bottom-8 right-8 z-50 animate-in fade-in slide-in- slide-in- duration-300">
+          <div className="flex items-center gap-3 px-6 py-4 rounded-xl shadow-xl text-sm font-bold bg-[#1c1917] text-white border border-black">
+            <CheckCircle className="w-5 h-5 text-black shrink-0" />
             <span>{toast.message}</span>
           </div>
         </div>

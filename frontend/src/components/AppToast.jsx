@@ -76,7 +76,7 @@ export const showToast = {
 export const showAlert = {
     success: (title, text) => MySwal.fire({
         icon: 'success',
-        title: <span className="text-secondary">{title}</span>,
+        title: <span className="text-black">{title}</span>,
         text: text,
         confirmButtonColor: '#1E3A8A', // primary color
         customClass: {
@@ -86,7 +86,7 @@ export const showAlert = {
     }),
     error: (title, text) => MySwal.fire({
         icon: 'error',
-        title: <span className="text-danger">{title}</span>,
+        title: <span className="text-black">{title}</span>,
         html: `<p class="text-gray-500">${text}</p>`,
         confirmButtonColor: '#1E3A8A',
         customClass: {

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { searchPartners, sendPartnerRequest } from '../../services/student.service';
 import { showToast as toast } from '../../components/AppToast';
+import { Check, Send } from 'lucide-react';
 
 export default function NewRequest() {
   const [query, setQuery] = useState('');
@@ -34,10 +35,10 @@ export default function NewRequest() {
   };
 
   return (
-    <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 max-w-2xl mx-auto">
-        <h2 className="text-xl font-bold text-gray-800 mb-2">Find FYP Partners</h2>
-        <p className="text-sm text-gray-500 mb-6">Search for students by Registration Number or Email to send a group request.</p>
+    <div className="animate-in fade-in slide-in- duration-300">
+      <div className="bg-white rounded-2xl border border-black shadow-sm p-6 max-w-2xl mx-auto">
+        <h2 className="text-xl font-bold text-black mb-2">Find FYP Partners</h2>
+        <p className="text-sm text-black mb-6">Search for students by Registration Number or Email to send a group request.</p>
         
         <div className="flex gap-2">
           <input 
@@ -45,11 +46,11 @@ export default function NewRequest() {
             value={query}
             onChange={e => setQuery(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && handleSearch()}
-            className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-secondary" 
+            className="flex-1 bg-white border border-black rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-black" 
             placeholder="e.g. SP21-BCS-005" 
           />
           <button 
-            className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm transition-colors" 
+            className="bg-black hover:bg-black text-white px-5 py-2.5 rounded-xl font-bold text-sm transition-colors" 
             onClick={handleSearch}
             disabled={loading}
           >
@@ -60,22 +61,22 @@ export default function NewRequest() {
         {results.length > 0 && (
           <div className="mt-8 space-y-3">
             {results.map(student => (
-              <div key={student.id} className="flex items-center justify-between p-4 border border-gray-100 rounded-xl bg-white hover:border-secondary transition-colors">
+              <div key={student.id} className="flex items-center justify-between p-4 border border-black rounded-xl bg-white hover:border-black transition-colors">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center font-black text-lg">
+                  <div className="w-12 h-12 bg-white text-black rounded-full flex items-center justify-center font-black text-lg">
                     {student.name.substring(0,2).toUpperCase()}
                   </div>
                   <div>
-                    <div className="font-bold text-gray-800">{student.name}</div>
-                    <div className="text-xs text-gray-500 mt-0.5">{student.regNo} • CGPA: {student.cgpa}</div>
+                    <div className="font-bold text-black">{student.name}</div>
+                    <div className="text-xs text-black mt-0.5">{student.regNo} • CGPA: {student.cgpa}</div>
                   </div>
                 </div>
                 <button 
                   disabled={sending[student.id]}
-                  className="border border-gray-200 hover:border-secondary hover:text-secondary px-4 py-2 rounded-lg text-sm font-bold transition-all disabled:bg-emerald-500 disabled:text-white disabled:border-emerald-500" 
+                  className="border border-black hover:border-black hover:text-black px-4 py-2 rounded-lg text-sm font-bold transition-all disabled:bg-white disabled:text-white disabled:border-black" 
                   onClick={() => handleSend(student.id)}
                 >
-                  {sending[student.id] ? <><i className="fas fa-check mr-1.5"></i> Sent</> : <><i className="fas fa-paper-plane mr-1.5"></i> Send</>}
+                  {sending[student.id] ? <><Check className="w-4 h-4 mr-1.5" /> Sent</> : <><Send className="w-4 h-4 mr-1.5" /> Send</>}
                 </button>
               </div>
             ))}

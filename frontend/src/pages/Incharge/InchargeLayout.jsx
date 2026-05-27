@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Outlet, useNavigate, useLocation, Link } from 'react-router-dom';
 import { getUserInfo, logout } from '../../utils/app.utils';
-import { BarChart3, Bell, Calendar, ClipboardList, GraduationCap, History, Home, Landmark, LogOut, Menu, Scale, User, UserPlus, Users, X } from 'lucide-react';
+import { BarChart3, Bell, Calendar, ChevronLeft, ChevronRight, ClipboardList, GraduationCap, History, Home, Landmark, LogOut, Menu, Scale, User, UserPlus, Users, X } from 'lucide-react';
 
 export default function InchargeLayout() {
   const navigate = useNavigate();
@@ -116,7 +116,7 @@ export default function InchargeLayout() {
             </button>
             
             <button onClick={() => setSidebarCollapsed(!sidebarCollapsed)} className="hidden lg:flex w-9 h-9 rounded-xl bg-white items-center justify-center text-black hover:bg-white hover:text-blue-600 transition-all border-0 flex-shrink-0 cursor-pointer">
-              <i className={`fas ${sidebarCollapsed ? 'fa-chevron-right' : 'fa-chevron-left'} text-sm`}></i>
+              {sidebarCollapsed  ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
             </button>
 
             <div className="min-w-0">

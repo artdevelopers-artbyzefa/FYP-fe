@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getInchargeGrievances } from '../../services/office-incharge.service';
 import { showToast, showAlert } from '../../components/AppToast';
-import { ArrowUpToLine, RefreshCw, X } from 'lucide-react';
+import { AlertCircle, ArrowUpToLine, Clock, RefreshCw, X } from 'lucide-react';
 
 const InchargeGrievances = () => {
   const [grievances, setGrievances] = useState([]);
@@ -35,7 +35,7 @@ const InchargeGrievances = () => {
                 <div className="flex items-center gap-3 mb-1">
                   <span className="font-black text-black text-base">{g.student}</span>
                   <span className={`font-bold text-xs px-2.5 py-1 rounded-lg border ${g.sla.includes('Breach') ? 'bg-white' : 'bg-white'}`}>
-                    <i className={`fas ${g.sla.includes('Breach') ? 'fa-exclamation-circle' : 'fa-clock'} mr-1`}></i> {g.sla}
+                    {g.sla.includes('Breach')  ? <AlertCircle className="w-4 h-4" /> : <Clock className="w-4 h-4" />} {g.sla}
                   </span>
                 </div>
                 <p className="text-xs text-black font-bold">Category: {g.category} · Filed: {g.date}</p>

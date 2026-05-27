@@ -1,30 +1,30 @@
 import React from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { ArrowRight, Check, ClipboardCheck, Mail } from 'lucide-react';
+import { ArrowRight, BarChart, BookOpen, Check, CheckCircle, ClipboardCheck, ListChecks, Mail, Users } from 'lucide-react';
 
 const Eligibility = () => {
   const criteria = [
     {
-      icon: "fa-book-open",
+      icon: BookOpen,
       title: "Completed Credit Hours",
       desc: "Students should have completed the minimum credit hour threshold required by the department before enrolling in FYP.",
       badge: "Academic Progress",
     },
     {
-      icon: "fa-list-check",
+      icon: ListChecks,
       title: "Required Courses",
       desc: "Core software engineering, database, programming, and research-related courses should be completed or approved as per department policy.",
       badge: "Prerequisites",
     },
     {
-      icon: "fa-chart-simple",
+      icon: BarChart,
       title: "CGPA Standing",
       desc: "Students must satisfy the minimum CGPA condition defined by the academic office and remain in good academic standing.",
       badge: "Performance",
     },
     {
-      icon: "fa-users",
+      icon: Users,
       title: "Approved Group Formation",
       desc: "Project groups should be formed according to the allowed group size and registration rules announced by the FYP coordinator.",
       badge: "Registration",
@@ -56,7 +56,7 @@ const Eligibility = () => {
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
                     <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-black shrink-0">
-                      <i className="fas fa-circle-check"></i>
+                      <CheckCircle className="w-4 h-4 " />
                     </div>
                     <div>
                       <h3 className="font-bold text-black mb-1">Check First</h3>

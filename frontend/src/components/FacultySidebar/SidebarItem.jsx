@@ -14,9 +14,9 @@ const SidebarItem = ({ to, icon: Icon, label, onClick }) => {
 
         if (isActive) {
           if (isHeadManagement) {
-            colorClass = 'bg-[#2563eb] text-yellow-400 shadow-lg shadow-[#2563eb]/20';
+            colorClass = 'bg-[#2563eb] text-black shadow-lg shadow-blue-600/20';
           } else {
-            colorClass = 'bg-[#2563eb] text-white shadow-lg shadow-[#2563eb]/20';
+            colorClass = 'bg-[#2563eb] text-white shadow-lg shadow-blue-600/20';
           }
         } else {
           if (isHeadManagement) {

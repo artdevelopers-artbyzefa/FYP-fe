@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getAdminUsers, createAdminUser, resetUserPassword, toggleUserStatus } from '../../services/admin.service';
 import { showToast as toast } from '../../components/AppToast';
-import { Plus, Search } from 'lucide-react';
+import { Plus, Search, X } from 'lucide-react';
 
 export default function AdminUsers() {
   const [users, setUsers] = useState([]);
@@ -105,7 +105,7 @@ export default function AdminUsers() {
           <div className="bg-white rounded-[2rem] w-full max-w-lg p-6 sm:p-8 shadow-2xl animate-in zoom-in-95 duration-200 border border-black">
             <div className="flex justify-between items-center mb-6 pb-3 border-b border-black">
               <h3 className="text-lg font-black text-black">Create New User Account</h3>
-              <i className="fas fa-times text-black hover:text-blue-600 cursor-pointer text-lg" onClick={() => setCreateUserOpen(false)}></i>
+              <X className="w-4 h-4 cursor-pointer cursor-pointer text-lg" onClick={() => setCreateUserOpen(false)} />
             </div>
             <form onSubmit={handleCreateUserSubmit} className="space-y-5">
               <div>

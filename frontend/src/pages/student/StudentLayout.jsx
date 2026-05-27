@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Outlet, useNavigate, useLocation, Link } from 'react-router-dom';
 import { getUserInfo, logout } from '../../utils/app.utils';
-import { Bell, ChevronDown, Circle, ClipboardList, GraduationCap, Home, Lightbulb, Lock, LogOut, Menu, User, UserCircle, Users, X } from 'lucide-react';
+import { Bell, ChevronDown, ChevronLeft, ChevronRight, Circle, ClipboardList, GraduationCap, Home, Lightbulb, Lock, LogOut, Menu, User, UserCircle, Users, X } from 'lucide-react';
 
 export default function DashboardLayout() {
   const navigate = useNavigate();
@@ -61,7 +61,7 @@ export default function DashboardLayout() {
   else if (path.includes('/task-manager')) pageTitle = 'Task Manager';
 
   return (
-    <div className={`flex h-screen overflow-hidden relative bg-lightbg selection:bg-blue-600/20 ${isLocked ? 'profile-locked' : ''}`} style={{ fontFamily: "'Poppins', sans-serif", backgroundColor: '#EFF6FF' }}>
+    <div className={`flex h-screen overflow-hidden relative bg-white selection:bg-blue-600/20 ${isLocked ? 'profile-locked' : ''}`} style={{ fontFamily: "'Poppins', sans-serif", backgroundColor: '#EFF6FF' }}>
       
       {/* ═══════════════ SIDEBAR ═══════════════ */}
       <div 
@@ -169,7 +169,7 @@ export default function DashboardLayout() {
             </button>
             
             <button onClick={() => setSidebarCollapsed(!sidebarCollapsed)} className="hidden lg:flex w-9 h-9 rounded-xl bg-white items-center justify-center text-black hover:bg-white hover:text-blue-600 transition-all border-0 flex-shrink-0">
-              <i className={`fas ${sidebarCollapsed ? 'fa-chevron-right' : 'fa-chevron-left'} text-sm`}></i>
+              {sidebarCollapsed  ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
             </button>
 
             <div className="min-w-0">

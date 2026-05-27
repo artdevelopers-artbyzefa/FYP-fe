@@ -5,13 +5,13 @@ import { ArrowRight, Clock, Shield, Layers, Mail, Phone, MapPin } from 'lucide-r
 const Hero = ({ title, subtitle, badge, ctaText, ctaLink, secondaryCta, features }) => {
   const getIcon = (iconName) => {
     switch(iconName) {
-      case 'clock': return <Clock className="w-5 h-5 text-blue" />;
-      case 'shield': return <Shield className="w-5 h-5 text-blue" />;
-      case 'layers': return <Layers className="w-5 h-5 text-blue" />;
-      case 'mail': return <Mail className="w-5 h-5 text-blue" />;
-      case 'phone': return <Phone className="w-5 h-5 text-blue" />;
-      case 'map': return <MapPin className="w-5 h-5 text-blue" />;
-      default: return <Layers className="w-5 h-5 text-blue" />;
+      case 'clock': return <Clock className="w-5 h-5 text-blue-600" />;
+      case 'shield': return <Shield className="w-5 h-5 text-blue-600" />;
+      case 'layers': return <Layers className="w-5 h-5 text-blue-600" />;
+      case 'mail': return <Mail className="w-5 h-5 text-blue-600" />;
+      case 'phone': return <Phone className="w-5 h-5 text-blue-600" />;
+      case 'map': return <MapPin className="w-5 h-5 text-blue-600" />;
+      default: return <Layers className="w-5 h-5 text-blue-600" />;
     }
   };
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getOfficeFaculty } from '../../services/office-assistant.service';
 import { showToast } from '../../components/AppToast';
-import { Calendar } from 'lucide-react';
+import { Calendar, X } from 'lucide-react';
 
 const AssistantFaculty = () => {
   const [faculty, setFaculty] = useState([]);
@@ -55,7 +55,7 @@ const AssistantFaculty = () => {
           <div className="bg-white rounded-[2rem] w-full max-w-md p-6 sm:p-8 shadow-2xl border border-black">
             <div className="flex justify-between items-center mb-6 pb-3 border-b border-black">
               <h3 className="text-lg font-black text-black">Weekly Availability Schedule</h3>
-              <i className="fas fa-times text-black hover:text-blue-600 cursor-pointer text-lg" onClick={() => setSelectedSchedule(null)}></i>
+              <X className="w-4 h-4 cursor-pointer cursor-pointer text-lg" onClick={() => setSelectedSchedule(null)} />
             </div>
             <div className="space-y-3 text-sm">
               <div className="text-xs font-bold text-black mb-2">Schedule for {selectedSchedule.name}</div>

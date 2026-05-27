@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { searchPartners, sendPartnerRequest } from '../../services/student.service';
 import { showToast as toast } from '../../components/AppToast';
-import { Check, Send } from 'lucide-react';
+import { Check, Loader, Search, Send } from 'lucide-react';
 
 export default function NewRequest() {
   const [query, setQuery] = useState('');
@@ -54,7 +54,7 @@ export default function NewRequest() {
             onClick={handleSearch}
             disabled={loading}
           >
-            <i className={`fas ${loading ? 'fa-spinner fa-spin' : 'fa-search'} mr-2`}></i> {loading ? 'Searching...' : 'Search'}
+            {loading ? <Loader className="w-4 h-4 animate-spin mr-2" /> : <Search className="w-4 h-4 mr-2" />} {loading ? 'Searching...' : 'Search'}
           </button>
         </div>
         

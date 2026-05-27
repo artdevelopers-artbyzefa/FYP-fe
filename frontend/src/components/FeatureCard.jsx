@@ -4,7 +4,7 @@ const FeatureCard = ({ icon: Icon, title, description, badge }) => {
   return (
     <div className="card p-6 hover:border-blue-600 transition-all">
       <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center mb-4">
-        <Icon className="w-6 h-6 text-blue" />
+        <Icon className="w-6 h-6 text-blue-600" />
       </div>
       <h3 className="font-bold text-lg text-black mb-2">{title}</h3>
       <p className="text-black text-sm mb-4 leading-relaxed">{description}</p>

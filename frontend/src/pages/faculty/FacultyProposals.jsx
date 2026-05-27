@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getFacultyProposals } from '../../services/faculty.service';
 import { showToast, showAlert } from '../../components/AppToast';
+import { X } from 'lucide-react';
 
 const FacultyProposals = () => {
   const [proposals, setProposals] = useState([]);
@@ -93,7 +94,7 @@ const FacultyProposals = () => {
           <div className="bg-white rounded-[2rem] w-full max-w-lg p-6 sm:p-8 shadow-2xl border border-black">
             <div className="flex justify-between items-center mb-6 pb-3 border-b border-black">
               <h3 className="text-lg font-black text-black">Request Mandatory Revisions</h3>
-              <i className="fas fa-times text-black hover:text-blue-600 cursor-pointer text-lg" onClick={() => setIsRevisionOpen(false)}></i>
+              <X className="w-4 h-4 cursor-pointer cursor-pointer text-lg" onClick={() => setIsRevisionOpen(false)} />
             </div>
             <form onSubmit={handleRevisionSubmit} className="space-y-5">
               <div>
@@ -114,7 +115,7 @@ const FacultyProposals = () => {
           <div className="bg-white rounded-[2rem] w-full max-w-lg p-6 sm:p-8 shadow-2xl border border-black">
             <div className="flex justify-between items-center mb-6 pb-3 border-b border-black">
               <h3 className="text-lg font-black text-black">Reject Proposal</h3>
-              <i className="fas fa-times text-black hover:text-blue-600 cursor-pointer text-lg" onClick={() => setIsRejectOpen(false)}></i>
+              <X className="w-4 h-4 cursor-pointer cursor-pointer text-lg" onClick={() => setIsRejectOpen(false)} />
             </div>
             <form onSubmit={handleRejectSubmit} className="space-y-5">
               <div>

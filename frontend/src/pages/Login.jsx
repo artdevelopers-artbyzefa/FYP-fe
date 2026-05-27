@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { loginUser } from '../services/auth.service';
 import { showToast as AppToast } from '../components/AppToast';
-import { ArrowLeft, ChevronDown, Lock, Mail, UserCircle } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ChevronDown, Eye, EyeOff, Loader, Lock, Mail, UserCircle } from 'lucide-react';
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -138,7 +138,7 @@ const Login = () => {
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-4 top-1/2 -translate-y-1/2 text-black hover:text-blue-600 text-sm p-1 transition-colors z-10 focus:outline-none"
               >
-                <i className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'} text-sm`}></i>
+                {showPassword  ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
             </div>
             {errors.password && <p className="text-black text-[10px] font-bold mt-1 ml-1">{errors.password.message}</p>}
@@ -160,7 +160,7 @@ const Login = () => {
             className="w-full p-3.5 text-base font-bold rounded-xl bg-blue-600 text-white flex items-center justify-center gap-2 transition-all hover:bg-blue-600 hover:-translate-y-[1px] hover:shadow-lg active:translate-y-0 disabled:opacity-80 disabled:cursor-not-allowed"
           >
             <span>{isLoading ? 'Signing In...' : 'Sign In'}</span>
-            <i className={`fas ${isLoading ? 'fa-spinner fa-spin' : 'fa-arrow-right'}`}></i>
+            {isLoading ? <Loader className="w-4 h-4 animate-spin" /> : <ArrowRight className="w-4 h-4" />}
           </button>
 
           {/* Quick Demo Logins */}
@@ -172,28 +172,28 @@ const Login = () => {
               <button
                 type="button"
                 onClick={() => handleQuickLogin('Student', 'student@cuiatd.edu.pk', 'Megamix@123')}
-                className="py-2 px-3 text-xs font-bold rounded-lg border border-black text-black bg-white hover:bg-white hover:text-white hover:border-blue-600 transition-all text-center focus:outline-none"
+                className="py-2 px-3 text-xs font-bold rounded-lg border border-black text-black bg-white hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all text-center focus:outline-none"
               >
                 Student
               </button>
               <button
                 type="button"
                 onClick={() => handleQuickLogin('HOD', 'hod@cuiatd.edu.pk', 'Megamix@123')}
-                className="py-2 px-3 text-xs font-bold rounded-lg border border-black text-black bg-white hover:bg-white hover:text-white hover:border-blue-600 transition-all text-center focus:outline-none"
+                className="py-2 px-3 text-xs font-bold rounded-lg border border-black text-black bg-white hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all text-center focus:outline-none"
               >
                 HOD
               </button>
               <button
                 type="button"
                 onClick={() => handleQuickLogin('FYP Office In-charge', 'fypincharge@cuiatd.edu.pk', 'Megamix@123')}
-                className="py-2 px-3 text-xs font-bold rounded-lg border border-black text-black bg-white hover:bg-white hover:text-white hover:border-blue-600 transition-all text-center focus:outline-none"
+                className="py-2 px-3 text-xs font-bold rounded-lg border border-black text-black bg-white hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all text-center focus:outline-none"
               >
                 FYP Incharge
               </button>
               <button
                 type="button"
                 onClick={() => handleQuickLogin('Faculty Supervisor', 'faculty@cuiatd.edu.pk', 'Megamix@123')}
-                className="py-2 px-3 text-xs font-bold rounded-lg border border-black text-black bg-white hover:bg-white hover:text-white hover:border-blue-600 transition-all text-center focus:outline-none"
+                className="py-2 px-3 text-xs font-bold rounded-lg border border-black text-black bg-white hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all text-center focus:outline-none"
               >
                 Faculty
               </button>
@@ -202,7 +202,7 @@ const Login = () => {
               <button
                 type="button"
                 onClick={() => handleQuickLogin('FYP Office Assistant', 'office@cuiatd.edu.pk', 'Megamix@123')}
-                className="w-full py-2 px-3 text-xs font-bold rounded-lg border border-black text-black bg-white hover:bg-white hover:text-white hover:border-blue-600 transition-all text-center focus:outline-none"
+                className="w-full py-2 px-3 text-xs font-bold rounded-lg border border-black text-black bg-white hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all text-center focus:outline-none"
               >
                 Office Assistant
               </button>

@@ -7,7 +7,7 @@ import {
   createAdminUser, resetUserPassword, toggleUserStatus
 } from '../../services/admin.service';
 import { showToast as toast } from '../../components/AppToast';
-import { ArrowRight, Bell, Broom, CloudDownload, Database, FileUp, History, Landmark, LogOut, Menu, Plus, RefreshCw, Search, Server, Shield, UserCog, UserPlus, Users, Wrench, X } from 'lucide-react';
+import { ArrowRight, Bell, Broom, ChevronLeft, ChevronRight, CloudDownload, Database, FileUp, History, Landmark, LogOut, Menu, Plus, RefreshCw, Search, Server, Shield, UserCog, UserPlus, Users, Wrench, X } from 'lucide-react';
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
@@ -153,7 +153,7 @@ export default function AdminDashboard() {
         </nav>
 
         <div className="p-3 border-t border-white/10 bg-blue-600/10 flex-shrink-0">
-          <button onClick={handleLogout} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-white/80 hover:bg-red-500/20 hover:text-red-400 transition-all duration-200 font-bold ${sidebarCollapsed ? 'justify-center' : ''}`}>
+          <button onClick={handleLogout} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-white/80 hover:bg-blue-600/20 hover:text-blue-600 transition-all duration-200 font-bold ${sidebarCollapsed ? 'justify-center' : ''}`}>
             <LogOut className="text-sm w-5 text-center flex-shrink-0" />
             {!sidebarCollapsed && <span className="text-sm">Logout</span>}
           </button>
@@ -173,7 +173,7 @@ export default function AdminDashboard() {
               <Menu className="text-sm" />
             </button>
             <button onClick={() => setSidebarCollapsed(p => !p)} className="hidden lg:flex w-9 h-9 rounded-xl bg-white items-center justify-center text-black hover:bg-white transition-all border-0 flex-shrink-0 cursor-pointer">
-              <i className={`fas ${sidebarCollapsed ? 'fa-chevron-right' : 'fa-chevron-left'} text-sm`}></i>
+              {sidebarCollapsed  ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
             </button>
             <div className="min-w-0">
               <h2 className="text-base font-black leading-tight truncate" style={{ color: '#2B3990' }}>{pageTitle}</h2>
@@ -203,9 +203,9 @@ export default function AdminDashboard() {
                     {notifications.length === 0 ? (
                       <p className="p-8 text-center text-xs text-black font-bold">No new notifications</p>
                     ) : notifications.map(n => (
-                      <div key={n.id} className={`p-4 hover:bg-rose-50/50 transition-colors flex gap-3 items-start border-l-4 ${n.read ? 'border-transparent' : 'border-black'}`}>
+                      <div key={n.id} className={`p-4 hover:bg-blue-50/50 transition-colors flex gap-3 items-start border-l-4 ${n.read ? 'border-transparent' : 'border-black'}`}>
                         <div className={`w-8 h-8 rounded-xl bg-${n.color}-100 text-${n.color}-700 flex items-center justify-center text-xs flex-shrink-0 mt-0.5`}>
-                          <i className={`fas fa-${n.icon}`}></i>
+                          <Bell className="w-4 h-4 text-black" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="text-xs font-bold text-black">{n.title}</div>
@@ -538,7 +538,7 @@ export default function AdminDashboard() {
           <div className="bg-white rounded-[2rem] w-full max-w-lg p-6 sm:p-8 shadow-2xl animate-in zoom-in-95 duration-200 border border-black">
             <div className="flex justify-between items-center mb-6 pb-3 border-b border-black">
               <h3 className="text-lg font-black text-black">Create New User Account</h3>
-              <i className="fas fa-times text-black hover:text-blue-600 cursor-pointer text-lg" onClick={() => setCreateUserOpen(false)}></i>
+              <X className="w-4 h-4 cursor-pointer cursor-pointer text-lg" onClick={() => setCreateUserOpen(false)} />
             </div>
             <form onSubmit={handleCreateUserSubmit} className="space-y-5">
               <div>

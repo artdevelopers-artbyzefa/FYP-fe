@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getOfficeUsers } from '../../services/office-assistant.service';
 import { showToast, showAlert } from '../../components/AppToast';
-import { Search, UserPlus } from 'lucide-react';
+import { Search, UserPlus, X } from 'lucide-react';
 
 const AssistantUsers = () => {
   const [users, setUsers] = useState([]);
@@ -98,7 +98,7 @@ const AssistantUsers = () => {
           <div className="bg-white rounded-[2rem] w-full max-w-lg p-6 sm:p-8 shadow-2xl border border-black">
             <div className="flex justify-between items-center mb-6 pb-3 border-b border-black">
               <h3 className="text-lg font-black text-black">Create New System User</h3>
-              <i className="fas fa-times text-black hover:text-blue-600 cursor-pointer text-lg" onClick={() => setIsCreateOpen(false)}></i>
+              <X className="w-4 h-4 cursor-pointer cursor-pointer text-lg" onClick={() => setIsCreateOpen(false)} />
             </div>
             <form onSubmit={handleCreate} className="space-y-5">
               <div>

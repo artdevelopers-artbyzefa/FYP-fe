@@ -1,43 +1,43 @@
 import React from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { Clock, MessageSquare, Route } from 'lucide-react';
+import { Award, CheckCircle, Clock, Code, FileEdit, Lightbulb, MessageSquare, Route, User } from 'lucide-react';
 
 const Process = () => {
   const steps = [
     {
       step: "Step 01",
-      icon: "fa-lightbulb",
+      icon: Lightbulb,
       title: "Topic Selection",
       desc: "Students explore ideas, identify a problem, form a group, and prepare an initial project direction.",
     },
     {
       step: "Step 02",
-      icon: "fa-file-pen",
+      icon: FileEdit,
       title: "Idea Submission",
       desc: "The group submits title, abstract, objectives, tools, and expected outcomes for initial review.",
     },
     {
       step: "Step 03",
-      icon: "fa-user-tie",
+      icon: User,
       title: "Supervisor Allocation",
       desc: "The coordinator assigns or confirms a supervisor according to domain fit and faculty availability.",
     },
     {
       step: "Step 04",
-      icon: "fa-circle-check",
+      icon: CheckCircle,
       title: "Proposal Approval",
       desc: "The proposal is reviewed, revised if needed, and approved before full implementation begins.",
     },
     {
       step: "Step 05",
-      icon: "fa-code",
+      icon: Code,
       title: "Development Phase",
       desc: "Students build, test, document, and submit progress updates through milestones and logs.",
     },
     {
       step: "Step 06",
-      icon: "fa-award",
+      icon: Award,
       title: "Final Defense",
       desc: "The group presents the completed work, submits the final report, and receives evaluation panel feedback.",
     },

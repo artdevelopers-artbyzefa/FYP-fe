@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getEscalations } from '../../services/hod.service';
 import { showAlert, showToast } from '../../components/AppToast';
-import { AlertTriangle, CheckCircle, FileText, Gavel, Paperclip, Shield, UserPen, XCircle } from 'lucide-react';
+import { AlertTriangle, CheckCircle, FileText, Gavel, Paperclip, Shield, UserPen, X, XCircle } from 'lucide-react';
 
 const HodEscalations = () => {
   const [escalations, setEscalations] = useState([]);
@@ -107,7 +107,7 @@ const HodEscalations = () => {
           <div className="bg-white rounded-[2rem] w-full max-w-lg p-6 sm:p-8 shadow-2xl animate-in zoom-in-95 duration-200 border border-black">
             <div className="flex justify-between items-center mb-6 pb-3 border-b border-black">
               <h3 className="text-lg font-black text-black">Dismiss Escalated Grievance</h3>
-              <i className="fas fa-times text-black hover:text-blue-600 cursor-pointer text-lg" onClick={() => setIsModalOpen(false)}></i>
+              <X className="w-4 h-4 cursor-pointer cursor-pointer text-lg" onClick={() => setIsModalOpen(false)} />
             </div>
             <form onSubmit={handleDismissSubmit} className="space-y-5">
               <div>

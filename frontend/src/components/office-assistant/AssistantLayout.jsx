@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { showToast as toast } from '../AppToast';
 import { logoutUser, getCurrentUser } from '../../services/auth.service';
-import { Award, Bell, File, GitBranch, GraduationCap, Home, Layers, Megaphone, Menu, Presentation, Shield, User, UserCog, Users, X } from 'lucide-react';
+import { Award, Bell, ChevronLeft, ChevronRight, File, GitBranch, GraduationCap, Home, Layers, Megaphone, Menu, Presentation, Shield, User, UserCog, Users, X } from 'lucide-react';
 
 const AssistantLayout = () => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -81,7 +81,7 @@ const AssistantLayout = () => {
         </nav>
 
         <div className="p-3 border-t border-white/10 bg-blue-600/10">
-          <div onClick={handleLogout} className={`flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-white/80 hover:bg-red-500/20 hover:text-red-400 transition-all duration-200 font-bold ${isCollapsed ? 'justify-center w-[44px] h-[44px] mx-auto p-[10px]' : ''}`} title="Logout">
+          <div onClick={handleLogout} className={`flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-white/80 hover:bg-blue-600/20 hover:text-blue-600 transition-all duration-200 font-bold ${isCollapsed ? 'justify-center w-[44px] h-[44px] mx-auto p-[10px]' : ''}`} title="Logout">
             <LogOut className="w-4 h-4" />
             {!isCollapsed && <span className="text-sm">Logout</span>}
           </div>
@@ -103,7 +103,7 @@ const AssistantLayout = () => {
               <Menu className="text-sm" />
             </button>
             <button onClick={() => setIsCollapsed(!isCollapsed)} className="hidden lg:flex w-9 h-9 rounded-xl bg-white items-center justify-center text-black hover:bg-white hover:text-blue-600 transition-all border-0 flex-shrink-0 cursor-pointer">
-              <i className={`fas ${isCollapsed ? 'fa-chevron-right' : 'fa-chevron-left'} text-sm`}></i>
+              {isCollapsed  ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
             </button>
             <div className="min-w-0">
               <h2 className="text-base font-black text-black leading-tight truncate">FYP Office Portal</h2>

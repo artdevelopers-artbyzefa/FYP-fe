@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getOfficeContent } from '../../services/office-assistant.service';
 import { showToast } from '../../components/AppToast';
-import { ChevronDown, CloudUpload, Download, Trash2 } from 'lucide-react';
+import { ChevronDown, CloudUpload, Download, FileText, Presentation, Trash2, X } from 'lucide-react';
 
 const AssistantContent = () => {
   const [content, setContent] = useState([]);
@@ -35,7 +35,7 @@ const AssistantContent = () => {
             <div>
               <div className="flex items-center gap-4 mb-4 pb-4 border-b border-black">
                 <div className={`w-12 h-12 rounded-xl text-2xl font-black flex items-center justify-center ${c.id === 'PT' ? 'bg-white' : c.id === 'TT' ? 'bg-blue-50 text-black' : 'bg-white'}`}>
-                  <i className={`fas ${c.id === 'PT' ? 'fa-file-powerpoint' : c.id === 'TT' ? 'fa-file-word' : 'fa-file-pdf'}`}></i>
+                  {c.id === 'PT' ? <Presentation className="w-4 h-4" /> : <FileText className="w-4 h-4" />}
                 </div>
                 <div>
                   <h3 className="font-black text-black text-base">{c.title}</h3>
@@ -79,7 +79,7 @@ const AssistantContent = () => {
           <div className="bg-white rounded-[2rem] w-full max-w-lg p-6 sm:p-8 shadow-2xl border border-black">
             <div className="flex justify-between items-center mb-6 pb-3 border-b border-black">
               <h3 className="text-lg font-black text-black">Upload Official Template</h3>
-              <i className="fas fa-times text-black hover:text-blue-600 cursor-pointer text-lg" onClick={() => setIsUploadOpen(false)}></i>
+              <X className="w-4 h-4 cursor-pointer cursor-pointer text-lg" onClick={() => setIsUploadOpen(false)} />
             </div>
             <form onSubmit={handleUpload} className="space-y-5">
               <div>

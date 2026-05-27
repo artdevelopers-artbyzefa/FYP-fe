@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getFacultyProfile } from '../../services/faculty.service';
 import { showToast } from '../../components/AppToast';
+import { X } from 'lucide-react';
 
 const FacultyProfile = () => {
   const [tags, setTags] = useState([]);
@@ -35,7 +36,7 @@ const FacultyProfile = () => {
           <div className="flex flex-wrap gap-2" id="tagContainer">
             {tags.map((tag, index) => (
               <span key={index} className="bg-blue-600 text-white px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-2 shadow-sm">
-                {tag} <i className="fas fa-times cursor-pointer hover:text-blue-600" onClick={() => handleRemoveTag(index)}></i>
+                {tag} <X className="w-4 h-4 cursor-pointer cursor-pointer" onClick={() => handleRemoveTag(index)} />
               </span>
             ))}
           </div>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getOfficeStudents } from '../../services/office-assistant.service';
 import { showToast } from '../../components/AppToast';
-import { Search, Send } from 'lucide-react';
+import { Search, Send, X } from 'lucide-react';
 
 const AssistantStudents = () => {
   const [students, setStudents] = useState([]);
@@ -84,7 +84,7 @@ const AssistantStudents = () => {
           <div className="bg-white rounded-[2rem] w-full max-w-lg p-6 sm:p-8 shadow-2xl border border-black">
             <div className="flex justify-between items-center mb-6 pb-3 border-b border-black">
               <h3 className="text-lg font-black text-black">Compose Bulk Message</h3>
-              <i className="fas fa-times text-black hover:text-blue-600 cursor-pointer text-lg" onClick={() => setIsBulkOpen(false)}></i>
+              <X className="w-4 h-4 cursor-pointer cursor-pointer text-lg" onClick={() => setIsBulkOpen(false)} />
             </div>
             <form onSubmit={handleBulkSubmit} className="space-y-5">
               <div>

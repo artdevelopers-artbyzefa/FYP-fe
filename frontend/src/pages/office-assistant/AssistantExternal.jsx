@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getOfficeExternal } from '../../services/office-assistant.service';
 import { showToast } from '../../components/AppToast';
-import { UserPlus } from 'lucide-react';
+import { UserPlus, X } from 'lucide-react';
 
 const AssistantExternal = () => {
   const [evaluators, setEvaluators] = useState([]);
@@ -80,7 +80,7 @@ const AssistantExternal = () => {
           <div className="bg-white rounded-[2rem] w-full max-w-lg p-6 sm:p-8 shadow-2xl border border-black">
             <div className="flex justify-between items-center mb-6 pb-3 border-b border-black">
               <h3 className="text-lg font-black text-black">Create Temporary Evaluator Account</h3>
-              <i className="fas fa-times text-black hover:text-blue-600 cursor-pointer text-lg" onClick={() => setIsCreateOpen(false)}></i>
+              <X className="w-4 h-4 cursor-pointer cursor-pointer text-lg" onClick={() => setIsCreateOpen(false)} />
             </div>
             <form onSubmit={handleCreate} className="space-y-5">
               <div>
@@ -115,7 +115,7 @@ const AssistantExternal = () => {
           <div className="bg-white rounded-[2rem] w-full max-w-lg p-6 sm:p-8 shadow-2xl border border-black">
             <div className="flex justify-between items-center mb-6 pb-3 border-b border-black">
               <h3 className="text-lg font-black text-black">Allocate Project to Evaluator</h3>
-              <i className="fas fa-times text-black hover:text-blue-600 cursor-pointer text-lg" onClick={() => setIsAssignOpen(false)}></i>
+              <X className="w-4 h-4 cursor-pointer cursor-pointer text-lg" onClick={() => setIsAssignOpen(false)} />
             </div>
             <form onSubmit={handleAssign} className="space-y-5">
               <div>

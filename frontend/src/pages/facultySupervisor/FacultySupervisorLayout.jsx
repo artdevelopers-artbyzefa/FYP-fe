@@ -29,7 +29,7 @@ export default function FacultySupervisorLayout() {
   const pageTitle = pageTitles[path] || 'Dashboard';
 
   return (
-    <div className={`flex h-screen overflow-hidden relative bg-lightbg selection:bg-blue-600/20`} style={{ fontFamily: "'Poppins', sans-serif", backgroundColor: '#EFF6FF' }}>
+    <div className={`flex h-screen overflow-hidden relative bg-white selection:bg-blue-600/20`} style={{ fontFamily: "'Poppins', sans-serif", backgroundColor: '#EFF6FF' }}>
       
       <FacultySidebar isOpen={mobileSidebarOpen} onClose={() => setMobileSidebarOpen(false)} />
 

@@ -3,7 +3,7 @@ import { useOutletContext, useNavigate } from 'react-router-dom';
 import { setUserInfo } from '../../utils/app.utils';
 import { updateStudentProfile } from '../../services/student.service';
 import { showToast as toast } from '../../components/AppToast';
-import { AlertTriangle, Cake, Camera, Phone, User, UserPlus, Users } from 'lucide-react';
+import { AlertTriangle, Cake, Camera, Loader, Phone, Save, User, UserPlus, Users } from 'lucide-react';
 
 export default function Profile() {
   const { user } = useOutletContext();
@@ -130,7 +130,7 @@ export default function Profile() {
 
           <div className="flex items-center justify-end gap-3 pt-4 border-t border-black">
             <button type="submit" disabled={loading} className="bg-blue-600 hover:bg-blue-600 text-white px-5 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2 shadow-lg">
-              <i className={`fas ${loading ? 'fa-spinner fa-spin' : 'fa-save'}`}></i> {loading ? 'Saving...' : 'Save Profile'}
+              {loading ? <Loader className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />} {loading ? 'Saving...' : 'Save Profile'}
             </button>
           </div>
         </form>

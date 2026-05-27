@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { showToast } from '../../components/AppToast';
-import { Info } from 'lucide-react';
+import { Info, Lock } from 'lucide-react';
 
 const AssistantEvalCommittees = () => {
   const [activeBoard, setActiveBoard] = useState('fyp1');
@@ -82,7 +82,7 @@ const AssistantEvalCommittees = () => {
             <div>
               <div className="font-black text-black text-sm mb-0.5 flex items-center gap-2">
                 <span>FEC-FYP1-A</span>
-                <i className="fas fa-lock text-black text-xs" title="Locked after evaluations began"></i>
+                <Lock className="w-4 h-4 text-xs" title="Locked after evaluations began" />
               </div>
               <div className="text-xs text-black font-medium">Head: Dr. Ali Hassan</div>
             </div>
@@ -93,7 +93,7 @@ const AssistantEvalCommittees = () => {
             <div>
               <div className="font-black text-black text-sm mb-0.5 flex items-center gap-2">
                 <span>FEC-FYP2-B</span>
-                <i className="fas fa-lock-open text-black text-xs" title="Unlocked. Evaluations have not reached the 10% threshold."></i>
+                <Lock className="w-4 h-4 -open  text-xs" title="Unlocked. Evaluations have not reached the 10% threshold." />
               </div>
               <div className="text-xs text-black font-medium">Head: Dr. Sara Malik</div>
             </div>

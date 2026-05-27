@@ -27,7 +27,7 @@ export default function SupervisorSelection() {
     }
   };
 
-  if (loading) return <div className="p-8 text-center"><Loader className="fa-spin text-black text-2xl" /></div>;
+  if (loading) return <div className="p-8 text-center"><Loader className="animate-spin text-black text-2xl" /></div>;
 
   return (
     <div className="animate-in fade-in slide-in- duration-300">

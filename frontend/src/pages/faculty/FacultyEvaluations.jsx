@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getFacultyEvaluations } from '../../services/faculty.service';
 import { showToast } from '../../components/AppToast';
-import { AlertTriangle, Lock } from 'lucide-react';
+import { AlertTriangle, Lock, X } from 'lucide-react';
 
 const FacultyEvaluations = () => {
   const [evaluations, setEvaluations] = useState([]);
@@ -77,7 +77,7 @@ const FacultyEvaluations = () => {
                 <h3 className="text-lg font-black text-black">Scorecard Entry</h3>
                 <p className="text-xs text-black font-medium mt-0.5">{selectedEval?.student} - {selectedEval?.type}</p>
               </div>
-              <i className="fas fa-times text-black hover:text-blue-600 cursor-pointer text-lg" onClick={() => setIsScoreOpen(false)}></i>
+              <X className="w-4 h-4 cursor-pointer cursor-pointer text-lg" onClick={() => setIsScoreOpen(false)} />
             </div>
             <form onSubmit={handleScoreSubmit} className="space-y-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">

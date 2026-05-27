@@ -38,7 +38,7 @@ const Sidebar = ({ isOpen, onClose }) => {
   const menuClass = ({ isActive }) => 
     `flex items-center gap-3.5 px-4 py-3 rounded-[16px] transition-all duration-200 group font-poppins font-semibold text-[15px] ${
       isActive 
-        ? 'bg-[#2563eb] text-white shadow-lg shadow-[#2563eb]/20' 
+        ? 'bg-[#2563eb] text-white shadow-lg shadow-blue-600/20' 
         : 'text-blue-100/70 hover:bg-white/5 hover:text-white'
     }`;
 

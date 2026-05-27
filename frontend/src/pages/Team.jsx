@@ -1,7 +1,7 @@
 import React from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { Layers, Shield, Users } from 'lucide-react';
+import { Globe, Layers, Shield, Users } from 'lucide-react';
 
 const Team = () => {
   const categories = [
@@ -170,10 +170,10 @@ const Team = () => {
                     </p>
                     <div className="flex gap-4 mt-auto">
                       <a href="#" className="w-10 h-10 bg-white text-black rounded-xl flex items-center justify-center transition-all hover:bg-blue-600 hover:text-white">
-                        <i className="fab fa-github"></i>
+                        <Globe className="w-4 h-4" />
                       </a>
                       <a href="#" className="w-10 h-10 bg-white text-black rounded-xl flex items-center justify-center transition-all hover:bg-blue-600 hover:text-white">
-                        <i className="fab fa-linkedin-in"></i>
+                        <Globe className="w-4 h-4" />
                       </a>
                     </div>
                   </article>

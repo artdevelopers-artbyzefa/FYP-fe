@@ -11,7 +11,7 @@ export default function Dashboard() {
     getStudentProfile().then(setProfile);
   }, []);
 
-  if (!profile) return <div className="p-8 text-center"><Loader className="fa-spin text-black text-2xl" /></div>;
+  if (!profile) return <div className="p-8 text-center"><Loader className="animate-spin text-black text-2xl" /></div>;
 
   if (!user.profileCompleted) {
     return <Navigate to="/profile" replace />;

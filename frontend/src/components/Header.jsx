@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Menu, X } from 'lucide-react';
 
 export default function Header() {
     const [scrolled, setScrolled] = useState(false);
@@ -74,7 +74,7 @@ export default function Header() {
                         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                         className="lg:hidden w-[40px] h-[40px] rounded-lg bg-white border-[1.5px] border-black text-black flex items-center justify-center cursor-pointer text-base transition-all hover:bg-white"
                     >
-                        <i className={mobileMenuOpen ? "fas fa-times" : "fas fa-bars"}></i>
+                        {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
                     </button>
                 </div>
             </div>

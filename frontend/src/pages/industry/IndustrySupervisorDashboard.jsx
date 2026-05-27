@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { getUserInfo, logout } from '../../utils/app.utils';
 import { getAssignedProjects, submitScorecard, getIndustryNotifications } from '../../services/industry.service';
 import { showToast as toast } from '../../components/AppToast';
-import { Bell, CheckCheck, CheckCircle, FileText, GitBranch, Landmark, Lock, LogOut, Menu, Pencil, StarHalf, User, X } from 'lucide-react';
+import { Bell, CheckCheck, CheckCircle, ChevronLeft, ChevronRight, FileText, GitBranch, Landmark, Lock, LogOut, Menu, Pencil, StarHalf, User, X } from 'lucide-react';
 
 /* ─── Color palette from Figma ────────────────────────────────────────────────
    primary  : #2B3990   (sidebar bg)
@@ -141,7 +141,7 @@ export default function IndustrySupervisorDashboard() {
         <div className="p-3 border-t border-white/10 bg-blue-600/10 flex-shrink-0">
           <button
             onClick={handleLogout}
-            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-white/80 hover:bg-red-500/20 hover:text-red-400 transition-all duration-200 font-bold ${sidebarCollapsed ? 'justify-center' : ''}`}
+            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-white/80 hover:bg-blue-600/20 hover:text-blue-600 transition-all duration-200 font-bold ${sidebarCollapsed ? 'justify-center' : ''}`}
           >
             <LogOut className="text-sm w-5 text-center flex-shrink-0" />
             {!sidebarCollapsed && <span className="text-sm">Logout</span>}
@@ -167,7 +167,7 @@ export default function IndustrySupervisorDashboard() {
               onClick={() => setSidebarCollapsed(p => !p)}
               className="hidden lg:flex w-9 h-9 rounded-xl bg-white items-center justify-center text-black hover:bg-white transition-all border-0 flex-shrink-0 cursor-pointer"
             >
-              <i className={`fas ${sidebarCollapsed ? 'fa-chevron-right' : 'fa-chevron-left'} text-sm`}></i>
+              {sidebarCollapsed  ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
             </button>
             <div className="min-w-0">
               <h2 className="text-base font-black leading-tight truncate" style={{ color: '#2B3990' }}>{pageTitle}</h2>
@@ -200,7 +200,7 @@ export default function IndustrySupervisorDashboard() {
                     ) : notifications.map(n => (
                       <div key={n.id} className={`p-4 hover:bg-blue-50/50 transition-colors flex gap-3 items-start border-l-4 ${n.read ? 'border-transparent' : 'border-blue-500 bg-blue-50/20'}`}>
                         <div className="w-8 h-8 rounded-xl bg-white text-black flex items-center justify-center text-xs flex-shrink-0 mt-0.5">
-                          <i className={`fas fa-${n.icon}`}></i>
+                          <Bell className="w-4 h-4 text-black" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="text-xs font-bold text-black">{n.title}</div>

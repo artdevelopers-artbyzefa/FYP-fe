@@ -93,7 +93,7 @@ const HodEscalations = () => {
               
               <div className="flex flex-wrap gap-4">
                 <button onClick={handleMandate} className="px-6 py-3 bg-white hover:bg-white text-white rounded-xl font-bold transition-all cursor-pointer shadow-lg flex items-center gap-2 text-sm"><CheckCircle className="w-4 h-4" /> Mandate Re-evaluation</button>
-                <button onClick={handleReassign} className="px-6 py-3 bg-white hover:bg-black text-white rounded-xl font-bold transition-all cursor-pointer shadow-lg flex items-center gap-2 text-sm"><UserPen className="w-4 h-4" /> Re-assign Supervisor</button>
+                <button onClick={handleReassign} className="px-6 py-3 bg-white hover:bg-blue-600 text-white rounded-xl font-bold transition-all cursor-pointer shadow-lg flex items-center gap-2 text-sm"><UserPen className="w-4 h-4" /> Re-assign Supervisor</button>
                 <button onClick={() => setIsModalOpen(true)} className="px-6 py-3 bg-white hover:bg-white text-black rounded-xl font-bold transition-all cursor-pointer flex items-center gap-2 text-sm"><XCircle className="w-4 h-4" /> Dismiss Grievance</button>
               </div>
             </div>
@@ -103,11 +103,11 @@ const HodEscalations = () => {
 
       {/* Dismiss Grievance Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[150] flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-blue-600/50 backdrop-blur-sm z-[150] flex items-center justify-center p-4">
           <div className="bg-white rounded-[2rem] w-full max-w-lg p-6 sm:p-8 shadow-2xl animate-in zoom-in-95 duration-200 border border-black">
             <div className="flex justify-between items-center mb-6 pb-3 border-b border-black">
               <h3 className="text-lg font-black text-black">Dismiss Escalated Grievance</h3>
-              <i className="fas fa-times text-black hover:text-black cursor-pointer text-lg" onClick={() => setIsModalOpen(false)}></i>
+              <i className="fas fa-times text-black hover:text-blue-600 cursor-pointer text-lg" onClick={() => setIsModalOpen(false)}></i>
             </div>
             <form onSubmit={handleDismissSubmit} className="space-y-5">
               <div>

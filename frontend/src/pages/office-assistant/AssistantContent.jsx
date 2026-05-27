@@ -24,7 +24,7 @@ const AssistantContent = () => {
           <h2 className="text-xl font-black text-black">FYP Content & Template Management</h2>
           <p className="text-xs text-black mt-0.5 font-medium">Manage official documentation templates, track version history, and upload new releases</p>
         </div>
-        <button onClick={() => setIsUploadOpen(true)} className="bg-white hover:bg-black text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg transition-all flex items-center gap-2 cursor-pointer">
+        <button onClick={() => setIsUploadOpen(true)} className="bg-white hover:bg-blue-600 text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg transition-all flex items-center gap-2 cursor-pointer">
           <CloudUpload className="w-4 h-4" /> Upload New Version
         </button>
       </div>
@@ -52,7 +52,7 @@ const AssistantContent = () => {
                   <span>Version History</span>
                   <ChevronDown className="text-black" />
                 </button>
-                <div className="p-3 bg-white divide-y divide-black text-xs">
+                <div className="p-3 bg-white divide-y divide-blue-600 text-xs">
                   {c.history.map((h, i) => (
                     <div key={i} className="py-2 flex justify-between items-center">
                       <span className="font-bold text-black">{h.version} ({h.date})</span>
@@ -63,7 +63,7 @@ const AssistantContent = () => {
               </div>
             </div>
             <div className="flex gap-2">
-              <button onClick={() => showToast.success('Downloading current template...')} className="flex-1 py-2.5 bg-white hover:bg-black text-white rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2 shadow-md">
+              <button onClick={() => showToast.success('Downloading current template...')} className="flex-1 py-2.5 bg-white hover:bg-blue-600 text-white rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2 shadow-md">
                 <Download className="w-4 h-4" /> Download
               </button>
               <button onClick={() => showToast.warning('Template deleted!')} className="px-4 py-2.5 bg-white hover:bg-white text-black rounded-xl text-xs font-bold transition-all cursor-pointer">
@@ -75,11 +75,11 @@ const AssistantContent = () => {
       </div>
 
       {isUploadOpen && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[150] flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-blue-600/50 backdrop-blur-sm z-[150] flex items-center justify-center p-4">
           <div className="bg-white rounded-[2rem] w-full max-w-lg p-6 sm:p-8 shadow-2xl border border-black">
             <div className="flex justify-between items-center mb-6 pb-3 border-b border-black">
               <h3 className="text-lg font-black text-black">Upload Official Template</h3>
-              <i className="fas fa-times text-black hover:text-black cursor-pointer text-lg" onClick={() => setIsUploadOpen(false)}></i>
+              <i className="fas fa-times text-black hover:text-blue-600 cursor-pointer text-lg" onClick={() => setIsUploadOpen(false)}></i>
             </div>
             <form onSubmit={handleUpload} className="space-y-5">
               <div>
@@ -100,7 +100,7 @@ const AssistantContent = () => {
               </div>
               <div className="flex justify-end gap-3 pt-4 border-t border-black">
                 <button type="button" onClick={() => setIsUploadOpen(false)} className="px-5 py-2.5 rounded-xl text-xs font-bold text-black hover:bg-white transition-colors cursor-pointer">Cancel</button>
-                <button type="submit" className="bg-white hover:bg-black text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow-lg transition-all cursor-pointer">Upload Release</button>
+                <button type="submit" className="bg-white hover:bg-blue-600 text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow-lg transition-all cursor-pointer">Upload Release</button>
               </div>
             </form>
           </div>

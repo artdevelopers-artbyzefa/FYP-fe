@@ -20,7 +20,7 @@ const AssistantFaculty = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {faculty.map(f => (
-          <div key={f.id} className="bg-white rounded-2xl border border-black shadow-sm p-6 flex flex-col justify-between hover:border-black transition-all">
+          <div key={f.id} className="bg-white rounded-2xl border border-black shadow-sm p-6 flex flex-col justify-between hover:border-blue-600 transition-all">
             <div>
               <div className="flex items-center gap-4 mb-4">
                 <div className="w-14 h-14 rounded-2xl bg-white text-black flex items-center justify-center text-xl font-black flex-shrink-0 border border-black">{f.id}</div>
@@ -43,7 +43,7 @@ const AssistantFaculty = () => {
                 </div>
               </div>
             </div>
-            <button onClick={() => setSelectedSchedule({ name: f.name, schedule: f.schedule })} className="w-full py-2.5 bg-white hover:bg-white hover:text-black border border-black rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2">
+            <button onClick={() => setSelectedSchedule({ name: f.name, schedule: f.schedule })} className="w-full py-2.5 bg-white hover:bg-white hover:text-blue-600 border border-black rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2">
               <Calendar className="w-4 h-4" /> View Weekly Schedule
             </button>
           </div>
@@ -51,11 +51,11 @@ const AssistantFaculty = () => {
       </div>
 
       {selectedSchedule && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[150] flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-blue-600/50 backdrop-blur-sm z-[150] flex items-center justify-center p-4">
           <div className="bg-white rounded-[2rem] w-full max-w-md p-6 sm:p-8 shadow-2xl border border-black">
             <div className="flex justify-between items-center mb-6 pb-3 border-b border-black">
               <h3 className="text-lg font-black text-black">Weekly Availability Schedule</h3>
-              <i className="fas fa-times text-black hover:text-black cursor-pointer text-lg" onClick={() => setSelectedSchedule(null)}></i>
+              <i className="fas fa-times text-black hover:text-blue-600 cursor-pointer text-lg" onClick={() => setSelectedSchedule(null)}></i>
             </div>
             <div className="space-y-3 text-sm">
               <div className="text-xs font-bold text-black mb-2">Schedule for {selectedSchedule.name}</div>

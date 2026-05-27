@@ -48,7 +48,7 @@ const FacultyAvailability = () => {
           <h2 className="text-xl font-black text-black">Weekly Availability Schedule</h2>
           <p className="text-xs text-black mt-0.5 font-medium">Click on time slots to toggle your availability for student consultations and defense scheduling</p>
         </div>
-        <button onClick={handleSave} className="bg-white hover:bg-black text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg transition-all flex items-center gap-2 cursor-pointer">
+        <button onClick={handleSave} className="bg-white hover:bg-blue-600 text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg transition-all flex items-center gap-2 cursor-pointer">
           <Save className="w-4 h-4" /> Save Schedule
         </button>
       </div>
@@ -62,7 +62,7 @@ const FacultyAvailability = () => {
                 {days.map(d => <th key={d} className="py-4 px-4 border-r border-black">{d}</th>)}
               </tr>
             </thead>
-            <tbody className="divide-y divide-black">
+            <tbody className="divide-y divide-blue-600">
               {timeslots.map(slot => (
                 <tr key={slot} className="hover:bg-white/50 transition-colors">
                   <td className="py-4 px-4 text-left text-black border-r border-black whitespace-nowrap">{slot}</td>

@@ -102,7 +102,7 @@ const TaskCard = ({ task, onDelete, onEdit }) => {
   }[task.priority];
 
   return (
-    <div className="bg-white rounded-[16px] p-5 shadow-sm border border-black/80 hover:shadow-md hover:border-black transition-all cursor-pointer">
+    <div className="bg-white rounded-[16px] p-5 shadow-sm border border-black/80 hover:shadow-md hover:border-blue-600 transition-all cursor-pointer">
       <div className="flex flex-wrap items-center gap-2 mb-3">
         {task.categories.map((cat, i) => (
           <span key={i} className="bg-[#eff6ff] text-[#2563eb] font-bold text-[11px] px-2.5 py-1 rounded-full uppercase">
@@ -454,7 +454,7 @@ const TaskManager = () => {
                   {notifications.filter(n => n.unread).length > 0 && (
                     <button
                       onClick={handleMarkAllNotificationsRead}
-                      className="text-[11px] font-bold text-black hover:text-black transition-colors cursor-pointer"
+                      className="text-[11px] font-bold text-black hover:text-blue-600 transition-colors cursor-pointer"
                     >
                       Mark all as read
                     </button>
@@ -467,7 +467,7 @@ const TaskManager = () => {
                       className={`px-4 py-3 hover:bg-slate-50 transition-colors border-b border-slate-50 last:border-0 relative ${n.unread ? 'bg-blue-50/20' : ''}`}
                     >
                       {n.unread && (
-                        <span className="absolute left-1.5 top-4 w-1.5 h-1.5 bg-black rounded-full"></span>
+                        <span className="absolute left-1.5 top-4 w-1.5 h-1.5 bg-blue-600 rounded-full"></span>
                       )}
                       <p className="text-[12px] text-black font-medium leading-normal pl-1.5">
                         <span className="font-bold text-black">{n.sender}</span> {n.action} <span className="font-semibold text-black">{n.target}</span>
@@ -1123,7 +1123,7 @@ const TaskManager = () => {
               <button
                 type="button"
                 onClick={() => setShowAddTaskModal(false)}
-                className="w-8 h-8 rounded-full hover:bg-white flex items-center justify-center text-black hover:text-black transition-colors cursor-pointer"
+                className="w-8 h-8 rounded-full hover:bg-white flex items-center justify-center text-black hover:text-blue-600 transition-colors cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -1239,7 +1239,7 @@ const TaskManager = () => {
               </button>
               <button
                 type="submit"
-                className="flex-1 py-3 bg-[#2563eb] text-white rounded-xl font-bold text-xs hover:bg-black transition-colors shadow-lg cursor-pointer"
+                className="flex-1 py-3 bg-[#2563eb] text-white rounded-xl font-bold text-xs hover:bg-blue-600 transition-colors shadow-lg cursor-pointer"
               >
                 Create Task
               </button>
@@ -1262,7 +1262,7 @@ const TaskManager = () => {
               <button
                 type="button"
                 onClick={() => setShowEditTaskModal(false)}
-                className="w-8 h-8 rounded-full hover:bg-white flex items-center justify-center text-black hover:text-black transition-colors cursor-pointer"
+                className="w-8 h-8 rounded-full hover:bg-white flex items-center justify-center text-black hover:text-blue-600 transition-colors cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -1397,7 +1397,7 @@ const TaskManager = () => {
               </button>
               <button
                 type="submit"
-                className="flex-1 py-3 bg-[#2563eb] text-white rounded-xl font-bold text-xs hover:bg-black transition-colors shadow-lg cursor-pointer"
+                className="flex-1 py-3 bg-[#2563eb] text-white rounded-xl font-bold text-xs hover:bg-blue-600 transition-colors shadow-lg cursor-pointer"
               >
                 Save Changes
               </button>

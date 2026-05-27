@@ -20,7 +20,7 @@ const InchargeStudentReports = () => {
         <div key={idx} className="bg-white rounded-[2rem] border border-black shadow-sm p-6 sm:p-8 space-y-8 mb-6">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-black gap-4">
             <div className="flex items-center gap-5">
-              <div className="w-16 h-16 rounded-2xl bg-black text-white flex items-center justify-center text-2xl font-black flex-shrink-0">
+              <div className="w-16 h-16 rounded-2xl bg-blue-600 text-white flex items-center justify-center text-2xl font-black flex-shrink-0">
                 {s.name.split(' ').map(n => n[0]).join('')}
               </div>
               <div>

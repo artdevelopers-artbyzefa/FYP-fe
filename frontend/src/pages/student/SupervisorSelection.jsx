@@ -35,7 +35,7 @@ export default function SupervisorSelection() {
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {supervisors.map(sup => (
-          <div key={sup.id} className="bg-white border border-black rounded-2xl p-5 hover:-translate-y-1 hover:shadow-lg hover:border-black transition-all flex flex-col">
+          <div key={sup.id} className="bg-white border border-black rounded-2xl p-5 hover:-translate-y-1 hover:shadow-lg hover:border-blue-600 transition-all flex flex-col">
             <div className="flex gap-4 mb-4 items-center">
               <div className="w-16 h-16 bg-white text-black rounded-xl flex items-center justify-center font-black text-2xl">
                 {sup.avatar}
@@ -51,7 +51,7 @@ export default function SupervisorSelection() {
             <button 
               onClick={() => handleRequest(sup.id)}
               disabled={requesting[sup.id]}
-              className="w-full bg-black hover:bg-black text-white py-2.5 rounded-xl font-bold text-sm transition-colors disabled:opacity-50"
+              className="w-full bg-blue-600 hover:bg-blue-600 text-white py-2.5 rounded-xl font-bold text-sm transition-colors disabled:opacity-50"
             >
               {requesting[sup.id] ? 'Requesting...' : 'Request Supervisor'}
             </button>

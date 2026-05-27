@@ -18,10 +18,10 @@ const AssistantResults = () => {
           <p className="text-xs text-black mt-0.5 font-medium">Review milestone scorecards, print formatted official transcripts, and export PDF summaries</p>
         </div>
         <div className="flex gap-3">
-          <button onClick={() => window.print()} className="bg-white border border-black hover:border-black text-black hover:text-black px-5 py-2.5 rounded-xl font-bold text-sm shadow-sm transition-all flex items-center gap-2 cursor-pointer">
+          <button onClick={() => window.print()} className="bg-white border border-black hover:border-blue-600 text-black hover:text-blue-600 px-5 py-2.5 rounded-xl font-bold text-sm shadow-sm transition-all flex items-center gap-2 cursor-pointer">
             <Printer className="text-black" /> Print Report
           </button>
-          <button onClick={() => showToast.success('Exporting official PDF report...')} className="bg-white hover:bg-black text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg transition-all flex items-center gap-2 cursor-pointer">
+          <button onClick={() => showToast.success('Exporting official PDF report...')} className="bg-white hover:bg-blue-600 text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg transition-all flex items-center gap-2 cursor-pointer">
             <FileText className="w-4 h-4" /> Export as PDF
           </button>
         </div>
@@ -46,7 +46,7 @@ const AssistantResults = () => {
                 <th className="py-3.5 px-6 text-center font-black text-black">Final Score</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-black text-sm font-medium text-black">
+            <tbody className="divide-y divide-blue-600 text-sm font-medium text-black">
               {results.map(r => (
                 <tr key={r.id} className="hover:bg-white/50 transition-colors">
                   <td className="py-4 px-6 font-bold text-black">{r.name}</td>

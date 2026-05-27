@@ -39,7 +39,7 @@ export default function AuditLogs() {
                 <th className="py-3.5 px-6">IP Address</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-black text-xs font-medium text-black font-mono">
+            <tbody className="divide-y divide-blue-600 text-xs font-medium text-black font-mono">
               <tr className="hover:bg-white/50 transition-colors">
                 <td className="py-4 px-6 text-black">2026-05-17 14:32:10</td>
                 <td className="py-4 px-6 font-bold text-black">incharge@cuiatd.edu.pk</td>

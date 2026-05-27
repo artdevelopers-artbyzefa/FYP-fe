@@ -45,7 +45,7 @@ export default function ApprovedIdeas() {
             <button 
               onClick={() => handleSelect(idea.id)}
               disabled={selecting[idea.id]}
-              className="border-2 border-black text-black hover:border-black hover:text-black px-5 py-2 rounded-xl text-sm font-bold transition-colors disabled:opacity-50"
+              className="border-2 border-black text-black hover:border-blue-600 hover:text-blue-600 px-5 py-2 rounded-xl text-sm font-bold transition-colors disabled:opacity-50"
             >
               {selecting[idea.id] ? 'Selecting...' : 'Select Idea'}
             </button>

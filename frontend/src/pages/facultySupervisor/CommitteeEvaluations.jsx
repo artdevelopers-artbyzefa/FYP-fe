@@ -284,7 +284,7 @@ export default function CommitteeEvaluations() {
               <button 
                 type="submit"
                 disabled={submitting}
-                className="px-6 py-3 bg-[#2563eb] hover:bg-black text-white font-bold text-sm rounded-xl active:scale-95 transition-all disabled:opacity-50 flex items-center gap-2 shadow-sm"
+                className="px-6 py-3 bg-[#2563eb] hover:bg-blue-600 text-white font-bold text-sm rounded-xl active:scale-95 transition-all disabled:opacity-50 flex items-center gap-2 shadow-sm"
               >
                 {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Lock className="w-4 h-4" />}
                 Submit Locked Scorecard

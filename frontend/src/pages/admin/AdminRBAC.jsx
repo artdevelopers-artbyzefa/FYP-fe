@@ -26,7 +26,7 @@ export default function AdminRBAC() {
                 <th className="py-3.5 px-6 text-right">RBAC Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-black text-xs font-medium text-black">
+            <tbody className="divide-y divide-blue-600 text-xs font-medium text-black">
               {rbac.map(r => (
                 <tr key={r.role} className="hover:bg-white/50 transition-colors">
                   <td className="py-4 px-6 font-bold text-black">{r.role}</td>

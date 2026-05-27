@@ -43,7 +43,7 @@ const FacultyEvaluations = () => {
                 <th className="py-3.5 px-6 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-black text-sm font-medium text-black">
+            <tbody className="divide-y divide-blue-600 text-sm font-medium text-black">
               {evaluations.map(e => (
                 <tr key={e.id} className="hover:bg-white/50 transition-colors">
                   <td className="py-4 px-6 text-black font-mono text-xs font-bold">{e.id}</td>
@@ -57,7 +57,7 @@ const FacultyEvaluations = () => {
                   </td>
                   <td className="py-4 px-6 text-right">
                     {e.status === 'Pending' ? (
-                      <button onClick={() => openScoreModal(e)} className="px-3 py-1.5 rounded-lg bg-white text-white font-bold text-xs transition-all cursor-pointer shadow-sm hover:bg-black">Input Scores</button>
+                      <button onClick={() => openScoreModal(e)} className="px-3 py-1.5 rounded-lg bg-white text-white font-bold text-xs transition-all cursor-pointer shadow-sm hover:bg-blue-600">Input Scores</button>
                     ) : (
                       <span className="text-xs text-black font-bold italic"><Lock className="w-4 h-4 mr-1" /> Locked</span>
                     )}
@@ -70,14 +70,14 @@ const FacultyEvaluations = () => {
       </div>
 
       {isScoreOpen && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[150] flex items-center justify-center p-4 overflow-y-auto">
+        <div className="fixed inset-0 bg-blue-600/50 backdrop-blur-sm z-[150] flex items-center justify-center p-4 overflow-y-auto">
           <div className="bg-white rounded-[2rem] w-full max-w-2xl p-6 sm:p-8 shadow-2xl border border-black my-8">
             <div className="flex justify-between items-center mb-6 pb-3 border-b border-black">
               <div>
                 <h3 className="text-lg font-black text-black">Scorecard Entry</h3>
                 <p className="text-xs text-black font-medium mt-0.5">{selectedEval?.student} - {selectedEval?.type}</p>
               </div>
-              <i className="fas fa-times text-black hover:text-black cursor-pointer text-lg" onClick={() => setIsScoreOpen(false)}></i>
+              <i className="fas fa-times text-black hover:text-blue-600 cursor-pointer text-lg" onClick={() => setIsScoreOpen(false)}></i>
             </div>
             <form onSubmit={handleScoreSubmit} className="space-y-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -123,7 +123,7 @@ const FacultyEvaluations = () => {
 
               <div className="flex justify-end gap-3 pt-4 border-t border-black">
                 <button type="button" onClick={() => setIsScoreOpen(false)} className="px-5 py-2.5 rounded-xl text-xs font-bold text-black hover:bg-white transition-colors cursor-pointer">Cancel</button>
-                <button type="submit" className="bg-white hover:bg-black text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow-lg transition-all cursor-pointer">Submit & Lock Scores</button>
+                <button type="submit" className="bg-white hover:bg-blue-600 text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow-lg transition-all cursor-pointer">Submit & Lock Scores</button>
               </div>
             </form>
           </div>

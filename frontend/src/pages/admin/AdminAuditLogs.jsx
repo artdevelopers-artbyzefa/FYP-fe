@@ -56,7 +56,7 @@ export default function AdminAuditLogs() {
                 <th className="py-3.5 px-6">IP Address</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-black text-xs font-medium text-black font-mono">
+            <tbody className="divide-y divide-blue-600 text-xs font-medium text-black font-mono">
               {filteredAudit.map((a, i) => (
                 <tr key={i} className="hover:bg-white/50 transition-colors">
                   <td className="py-4 px-6 text-black">{a.timestamp}</td>

@@ -57,7 +57,7 @@ const FacultyProposals = () => {
                 <th className="py-3.5 px-6 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-black text-sm font-medium text-black">
+            <tbody className="divide-y divide-blue-600 text-sm font-medium text-black">
               {proposals.map(p => (
                 <tr key={p.id} className="hover:bg-white/50 transition-colors">
                   <td className="py-4 px-6 text-black font-mono text-xs font-bold">{p.id}</td>
@@ -89,11 +89,11 @@ const FacultyProposals = () => {
       </div>
 
       {isRevisionOpen && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[150] flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-blue-600/50 backdrop-blur-sm z-[150] flex items-center justify-center p-4">
           <div className="bg-white rounded-[2rem] w-full max-w-lg p-6 sm:p-8 shadow-2xl border border-black">
             <div className="flex justify-between items-center mb-6 pb-3 border-b border-black">
               <h3 className="text-lg font-black text-black">Request Mandatory Revisions</h3>
-              <i className="fas fa-times text-black hover:text-black cursor-pointer text-lg" onClick={() => setIsRevisionOpen(false)}></i>
+              <i className="fas fa-times text-black hover:text-blue-600 cursor-pointer text-lg" onClick={() => setIsRevisionOpen(false)}></i>
             </div>
             <form onSubmit={handleRevisionSubmit} className="space-y-5">
               <div>
@@ -110,11 +110,11 @@ const FacultyProposals = () => {
       )}
 
       {isRejectOpen && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[150] flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-blue-600/50 backdrop-blur-sm z-[150] flex items-center justify-center p-4">
           <div className="bg-white rounded-[2rem] w-full max-w-lg p-6 sm:p-8 shadow-2xl border border-black">
             <div className="flex justify-between items-center mb-6 pb-3 border-b border-black">
               <h3 className="text-lg font-black text-black">Reject Proposal</h3>
-              <i className="fas fa-times text-black hover:text-black cursor-pointer text-lg" onClick={() => setIsRejectOpen(false)}></i>
+              <i className="fas fa-times text-black hover:text-blue-600 cursor-pointer text-lg" onClick={() => setIsRejectOpen(false)}></i>
             </div>
             <form onSubmit={handleRejectSubmit} className="space-y-5">
               <div>

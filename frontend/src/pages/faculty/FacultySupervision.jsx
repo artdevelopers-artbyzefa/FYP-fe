@@ -32,7 +32,7 @@ const FacultySupervision = () => {
                 <th className="py-3.5 px-6 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-black text-sm font-medium text-black">
+            <tbody className="divide-y divide-blue-600 text-sm font-medium text-black">
               {groups.map(g => (
                 <tr key={g.groupId} className="hover:bg-white/50 transition-colors">
                   <td className="py-4 px-6">
@@ -56,7 +56,7 @@ const FacultySupervision = () => {
                   <td className="py-4 px-6 text-right space-x-1">
                     {g.logStatus === 'Pending Review' ? (
                       <>
-                        <button className="px-2.5 py-1.5 rounded-lg bg-white hover:bg-white text-black hover:text-black border border-black text-xs font-bold transition-all cursor-pointer">View</button>
+                        <button className="px-2.5 py-1.5 rounded-lg bg-white hover:bg-white text-black hover:text-blue-600 border border-black text-xs font-bold transition-all cursor-pointer">View</button>
                         <button onClick={handleApproveLog} className="px-2.5 py-1.5 rounded-lg bg-white hover:bg-white text-black border border-black text-xs font-bold transition-all cursor-pointer">Approve</button>
                       </>
                     ) : (

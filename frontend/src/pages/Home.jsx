@@ -33,10 +33,10 @@ export default function Home() {
               Management System. Streamlining academic oversight, supervisor coordination, and evaluation workflows.
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
-              <Link to="/login" className="inline-flex items-center justify-center gap-2 py-4 px-8 rounded-3xl font-poppins text-[1.125rem] font-bold bg-black text-white shadow-[0_8px_24px_rgba(30,58,138,0.18)] hover:bg-black hover:shadow-[0_16px_48px_rgba(30,58,138,0.22)] hover:-translate-y-px transition-all text-center">
+              <Link to="/login" className="inline-flex items-center justify-center gap-2 py-4 px-8 rounded-3xl font-poppins text-[1.125rem] font-bold bg-blue-600 text-white shadow-[0_8px_24px_rgba(30,58,138,0.18)] hover:bg-blue-600 hover:shadow-[0_16px_48px_rgba(30,58,138,0.22)] hover:-translate-y-px transition-all text-center">
                 Access Portal <ArrowRight className="w-4 h-4" />
               </Link>
-              <a href="#about" className="inline-flex items-center justify-center gap-2 py-4 px-8 rounded-3xl font-poppins text-[1.125rem] font-bold bg-transparent text-black border-[1.5px] border-black hover:bg-white hover:border-black hover:text-black transition-all text-center">
+              <a href="#about" className="inline-flex items-center justify-center gap-2 py-4 px-8 rounded-3xl font-poppins text-[1.125rem] font-bold bg-transparent text-black border-[1.5px] border-black hover:bg-white hover:border-blue-600 hover:text-blue-600 transition-all text-center">
                 Learn More About Program
               </a>
             </div>
@@ -79,7 +79,7 @@ export default function Home() {
                 <div className="flex flex-col gap-8">
                   <div className="flex items-start gap-5">
                     <div className="w-[44px] h-[44px] bg-white rounded-xl flex items-center justify-center shrink-0">
-                      <div className="w-2 h-2 rounded-full bg-black animate-[pulseDot_2s_infinite]"></div>
+                      <div className="w-2 h-2 rounded-full bg-blue-600 animate-[pulseDot_2s_infinite]"></div>
                     </div>
                     <div>
                       <h4 className="text-[15px] font-bold text-black mb-1">Research Excellence</h4>
@@ -88,7 +88,7 @@ export default function Home() {
                   </div>
                   <div className="flex items-start gap-5">
                     <div className="w-[44px] h-[44px] bg-white rounded-xl flex items-center justify-center shrink-0">
-                      <div className="w-2 h-2 rounded-full bg-black animate-[pulseDot_2s_infinite]"></div>
+                      <div className="w-2 h-2 rounded-full bg-blue-600 animate-[pulseDot_2s_infinite]"></div>
                     </div>
                     <div>
                       <h4 className="text-[15px] font-bold text-black mb-1">Expert Supervision</h4>
@@ -97,7 +97,7 @@ export default function Home() {
                   </div>
                   <div className="flex items-start gap-5">
                     <div className="w-[44px] h-[44px] bg-white rounded-xl flex items-center justify-center shrink-0">
-                      <div className="w-2 h-2 rounded-full bg-black animate-[pulseDot_2s_infinite]"></div>
+                      <div className="w-2 h-2 rounded-full bg-blue-600 animate-[pulseDot_2s_infinite]"></div>
                     </div>
                     <div>
                       <h4 className="text-[15px] font-bold text-black mb-1">Structured Evaluation</h4>
@@ -108,8 +108,8 @@ export default function Home() {
               </div>
               
               <div className="bg-white rounded-[2.5rem] p-8 relative overflow-hidden">
-                <div className="absolute w-[96px] h-[96px] bg-black/10 blur-[24px] rounded-full -top-4 -right-4 pointer-events-none"></div>
-                <div className="absolute w-[128px] h-[128px] bg-black/10 blur-[32px] rounded-full -bottom-4 -left-4 pointer-events-none"></div>
+                <div className="absolute w-[96px] h-[96px] bg-blue-600/10 blur-[24px] rounded-full -top-4 -right-4 pointer-events-none"></div>
+                <div className="absolute w-[128px] h-[128px] bg-blue-600/10 blur-[32px] rounded-full -bottom-4 -left-4 pointer-events-none"></div>
                 
                 <div className="grid grid-cols-2 gap-4 relative z-10">
                   <div className="bg-white p-8 rounded-[2rem] border border-black flex flex-col justify-center min-h-[170px] transition-all duration-200 hover:-translate-y-2 hover:shadow-[0_8px_32px_rgba(0,0,0,0.1)]">
@@ -152,10 +152,10 @@ export default function Home() {
                 { step: '03', icon: LineChart, title: 'Progress Tracking', desc: 'Regular progress updates, milestone submissions, and supervisor feedback cycles throughout the year.' },
                 { step: '04', icon: GraduationCap, title: 'Final Evaluation', desc: 'Comprehensive evaluation panel review, viva voce, and final grading by faculty committee.' }
               ].map((item, i) => (
-                <div key={i} className="group bg-white border-[1.5px] border-black rounded-[2.5rem] p-8 sm:p-10 relative overflow-hidden transition-all duration-200 hover:border-black hover:shadow-[0_8px_32px_rgba(0,0,0,0.1)]">
+                <div key={i} className="group bg-white border-[1.5px] border-black rounded-[2.5rem] p-8 sm:p-10 relative overflow-hidden transition-all duration-200 hover:border-blue-600 hover:shadow-[0_8px_32px_rgba(0,0,0,0.1)]">
                   <div className="absolute -top-10 -right-10 w-[120px] h-[120px] bg-black/5 rounded-full transition-transform duration-500 group-hover:scale-[1.8]"></div>
-                  <div className="text-6xl font-black text-black/[0.07] leading-none mb-5 tracking-[-0.04em] transition-colors duration-200 group-hover:text-black/[0.12]">{item.step}</div>
-                  <div className="w-[44px] h-[44px] bg-black/5 text-black rounded-xl flex items-center justify-center text-[1.1rem] mb-6 transition-all duration-200 group-hover:bg-black group-hover:text-white">
+                  <div className="text-6xl font-black text-black/[0.07] leading-none mb-5 tracking-[-0.04em] transition-colors duration-200 group-hover:text-blue-600/[0.12]">{item.step}</div>
+                  <div className="w-[44px] h-[44px] bg-black/5 text-black rounded-xl flex items-center justify-center text-[1.1rem] mb-6 transition-all duration-200 group-hover:bg-blue-600 group-hover:text-white">
                     {React.createElement(item.icon, { className: "w-4 h-4" })}
                   </div>
                   <h3 className="text-[1.125rem] font-extrabold text-black mb-3">{item.title}</h3>
@@ -203,7 +203,7 @@ export default function Home() {
         {/* CONTACT SECTION */}
         <section id="contact" className="py-16 md:py-24 bg-white">
           <div className="max-w-[1280px] mx-auto px-4 sm:px-6">
-            <div className="bg-black rounded-[2.5rem] overflow-hidden flex flex-col lg:flex-row">
+            <div className="bg-blue-600 rounded-[2.5rem] overflow-hidden flex flex-col lg:flex-row">
               <div className="p-8 sm:p-10 lg:p-16 flex-[3]">
                 <p className="text-[0.7rem] font-extrabold text-black uppercase tracking-[0.24em] mb-3">Contact Us</p>
                 <h2 className="text-[clamp(1.6rem,3vw,3rem)] font-black text-white leading-[1.2] mb-12">Need Assistance?<br />We're here to help.</h2>
@@ -235,7 +235,7 @@ export default function Home() {
                 <div className="bg-white rounded-[2rem] p-10 w-full max-w-[360px] shadow-[0_20px_40px_rgba(0,0,0,0.12)] text-center">
                   <h3 className="text-xl font-black text-black mb-2">FYP Office</h3>
                   <p className="text-[13px] text-black italic font-medium mb-6">Monday – Friday: 08:30 AM – 04:30 PM</p>
-                  <a href="mailto:csfyp@cuiatd.edu.pk" className="block w-full py-3 px-5 rounded-xl font-bold bg-black text-white shadow-[0_8px_24px_rgba(30,58,138,0.18)] hover:bg-black transition-all text-[13px] text-center flex items-center justify-center gap-2">
+                  <a href="mailto:csfyp@cuiatd.edu.pk" className="block w-full py-3 px-5 rounded-xl font-bold bg-blue-600 text-white shadow-[0_8px_24px_rgba(30,58,138,0.18)] hover:bg-blue-600 transition-all text-[13px] text-center flex items-center justify-center gap-2">
                     Submit Query <ArrowRight className="w-4 h-4" />
                   </a>
                   <a href="https://www.cuiatd.edu.pk/" target="_blank" rel="noopener noreferrer" className="block w-full mt-2 py-3 px-5 rounded-xl font-bold bg-transparent border-[1.5px] border-black text-black hover:bg-white transition-all text-[13px] text-center">

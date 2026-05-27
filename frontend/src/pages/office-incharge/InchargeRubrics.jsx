@@ -28,7 +28,7 @@ const InchargeRubrics = () => {
           <div className="flex justify-between items-center mb-6 pb-3 border-b border-black">
             <h3 className="text-base font-black text-black">Design Rubric Schema</h3>
             <div className="flex gap-2">
-              <button className="px-4 py-1.5 rounded-xl bg-black text-white text-xs font-bold transition-all cursor-pointer shadow-md">Proposal Rubric</button>
+              <button className="px-4 py-1.5 rounded-xl bg-blue-600 text-white text-xs font-bold transition-all cursor-pointer shadow-md">Proposal Rubric</button>
               <button className="px-4 py-1.5 rounded-xl bg-white text-black text-xs font-bold transition-all cursor-pointer hover:bg-white">FYP Evaluation Rubric</button>
             </div>
           </div>
@@ -74,7 +74,7 @@ const InchargeRubrics = () => {
             </div>
 
             <div className="pt-4 border-t border-black flex justify-end">
-              <button type="submit" className="bg-white hover:bg-black text-white px-6 py-2.5 rounded-xl font-bold text-sm shadow-lg transition-all cursor-pointer">
+              <button type="submit" className="bg-white hover:bg-blue-600 text-white px-6 py-2.5 rounded-xl font-bold text-sm shadow-lg transition-all cursor-pointer">
                 Publish Rubric Schema
               </button>
             </div>

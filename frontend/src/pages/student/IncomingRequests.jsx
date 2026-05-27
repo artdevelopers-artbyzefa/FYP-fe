@@ -37,7 +37,7 @@ export default function IncomingRequests() {
       ) : (
         <div className="space-y-3 max-w-3xl">
           {requests.map(req => (
-            <div key={req.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 border border-black rounded-xl bg-white hover:border-black transition-colors gap-4">
+            <div key={req.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 border border-black rounded-xl bg-white hover:border-blue-600 transition-colors gap-4">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-white text-black rounded-full flex items-center justify-center font-black text-lg">
                   {req.name.substring(0,2).toUpperCase()}

@@ -46,7 +46,7 @@ const InchargeCommitteeOversight = () => {
                 <th className="py-3.5 px-6 text-right">Governance Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-black text-sm font-medium text-black">
+            <tbody className="divide-y divide-blue-600 text-sm font-medium text-black">
               {data.boards.map((b, idx) => (
                 <tr key={idx} className="hover:bg-white/50 transition-colors">
                   <td className="py-4 px-6 font-bold text-black">{b.name}</td>

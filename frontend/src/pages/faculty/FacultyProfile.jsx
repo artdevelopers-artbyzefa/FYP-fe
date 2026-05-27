@@ -34,8 +34,8 @@ const FacultyProfile = () => {
           <label className="block text-sm font-bold text-black mb-2">Current Active Tags</label>
           <div className="flex flex-wrap gap-2" id="tagContainer">
             {tags.map((tag, index) => (
-              <span key={index} className="bg-black text-white px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-2 shadow-sm">
-                {tag} <i className="fas fa-times cursor-pointer hover:text-black" onClick={() => handleRemoveTag(index)}></i>
+              <span key={index} className="bg-blue-600 text-white px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-2 shadow-sm">
+                {tag} <i className="fas fa-times cursor-pointer hover:text-blue-600" onClick={() => handleRemoveTag(index)}></i>
               </span>
             ))}
           </div>
@@ -51,7 +51,7 @@ const FacultyProfile = () => {
               placeholder="e.g. Distributed Systems" 
               className="flex-1 bg-white border border-black rounded-xl px-4 py-2 text-sm outline-none focus:border-black focus:bg-white transition-all" 
             />
-            <button onClick={handleAddTag} className="bg-white hover:bg-black text-white px-5 py-2 rounded-xl text-xs font-bold transition-all shadow-sm">Add Tag</button>
+            <button onClick={handleAddTag} className="bg-white hover:bg-blue-600 text-white px-5 py-2 rounded-xl text-xs font-bold transition-all shadow-sm">Add Tag</button>
           </div>
         </div>
       </div>

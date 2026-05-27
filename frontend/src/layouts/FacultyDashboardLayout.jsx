@@ -57,7 +57,7 @@ export default function FacultyDashboardLayout() {
             {/* Back Button */}
             <button 
               onClick={() => navigate(-1)} 
-              className="w-9 h-9 rounded-full bg-white flex items-center justify-center text-black hover:bg-white hover:text-black transition-all border border-black"
+              className="w-9 h-9 rounded-full bg-white flex items-center justify-center text-black hover:bg-white hover:text-blue-600 transition-all border border-black"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
@@ -140,7 +140,7 @@ export default function FacultyDashboardLayout() {
             </div>
 
             {/* User Profile Card */}
-            <Link to="/faculty/dashboard" className="flex items-center gap-2.5 p-1 px-2 py-1 bg-white rounded-xl cursor-pointer border border-black hover:bg-white hover:border-black transition-all">
+            <Link to="/faculty/dashboard" className="flex items-center gap-2.5 p-1 px-2 py-1 bg-white rounded-xl cursor-pointer border border-black hover:bg-white hover:border-blue-600 transition-all">
               <div className="w-8 h-8 bg-white/60 rounded-lg flex items-center justify-center text-[#2563eb] text-xs font-black shadow-sm flex-shrink-0">
                 {user.avatar || 'FS'}
               </div>

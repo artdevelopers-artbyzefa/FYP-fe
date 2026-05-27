@@ -42,7 +42,7 @@ export default function NewIdea() {
             <label className="block text-sm font-bold text-black mb-1.5">Proposal (PDF)</label>
             <input type="file" accept="application/pdf" className="w-full bg-white border border-black rounded-xl px-4 py-2 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-white file:text-black hover:file:bg-white"/>
           </div>
-          <button disabled={loading} className="w-full bg-black hover:bg-black text-white py-3 rounded-xl font-bold transition-colors mt-2">
+          <button disabled={loading} className="w-full bg-blue-600 hover:bg-blue-600 text-white py-3 rounded-xl font-bold transition-colors mt-2">
             {loading ? <Loader className="w-4 h-4 fa-spin mr-1.5" /> : ''} {loading ? 'Submitting...' : 'Submit Idea'}
           </button>
         </form>

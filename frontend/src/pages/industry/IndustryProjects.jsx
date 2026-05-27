@@ -56,7 +56,7 @@ export default function IndustryProjects() {
                 <th className="py-3.5 px-6 text-right">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-black text-sm font-medium text-black">
+            <tbody className="divide-y divide-blue-600 text-sm font-medium text-black">
               {projects.map(p => (
                 <tr key={p.groupId} className="hover:bg-white/50 transition-colors">
                   <td className="py-4 px-6">
@@ -80,7 +80,7 @@ export default function IndustryProjects() {
                     {p.evaluationStatus === 'pending' ? (
                       <button
                         onClick={() => navigate(`/industry-dashboard/scoring?groupId=${p.groupId}`)}
-                        className="px-3 py-1.5 rounded-lg text-white hover:bg-black text-xs font-bold transition-all cursor-pointer shadow-sm"
+                        className="px-3 py-1.5 rounded-lg text-white hover:bg-blue-600 text-xs font-bold transition-all cursor-pointer shadow-sm"
                         style={{ backgroundColor: '#2563EB' }}
                       >
                         <Pencil className="w-4 h-4 mr-1" />Input Score

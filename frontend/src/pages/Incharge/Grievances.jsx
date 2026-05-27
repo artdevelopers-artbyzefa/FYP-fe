@@ -35,7 +35,7 @@ export default function Grievances() {
             <div className="flex items-center gap-2"><Paperclip className="text-black" /><span className="font-bold text-black">Attached Evidence:</span><span className="text-black hover:underline font-bold cursor-pointer">rubric_scorecard_error.pdf (1.2 MB)</span></div>
             
             <div className="flex flex-wrap gap-2 pt-4 border-t border-black justify-end">
-              <button onClick={() => confirmAction('request formal committee re-evaluation')} className="px-4 py-2.5 bg-black hover:bg-black text-white rounded-xl font-bold transition-all cursor-pointer shadow-sm flex items-center gap-2 border-0"><RefreshCw className="w-4 h-4" /> Request Re-evaluation</button>
+              <button onClick={() => confirmAction('request formal committee re-evaluation')} className="px-4 py-2.5 bg-blue-600 hover:bg-blue-600 text-white rounded-xl font-bold transition-all cursor-pointer shadow-sm flex items-center gap-2 border-0"><RefreshCw className="w-4 h-4" /> Request Re-evaluation</button>
               <button onClick={() => confirmAction('escalate grievance to HOD')} className="px-4 py-2.5 bg-white hover:bg-white text-white rounded-xl font-bold transition-all cursor-pointer shadow-sm flex items-center gap-2 border-0"><ArrowUpToLine className="w-4 h-4" /> Escalate to HOD</button>
               <button onClick={() => confirmAction('dismiss grievance')} className="px-4 py-2.5 bg-white hover:bg-white text-black rounded-xl font-bold transition-all cursor-pointer flex items-center gap-2 border-0"><X className="w-4 h-4" /> Dismiss</button>
             </div>
@@ -60,7 +60,7 @@ export default function Grievances() {
             <div className="bg-white p-4 rounded-2xl border border-black"><span className="font-bold text-black block mb-1">Grievance Description:</span><p className="text-black leading-relaxed">"Our assigned supervisor has not responded to our weekly meeting logs or draft submissions for the past 3 consecutive weeks."</p></div>
             
             <div className="flex flex-wrap gap-2 pt-4 border-t border-black justify-end">
-              <button onClick={() => confirmAction('request formal supervisor review')} className="px-4 py-2.5 bg-black hover:bg-black text-white rounded-xl font-bold transition-all cursor-pointer shadow-sm flex items-center gap-2 border-0"><Mail className="w-4 h-4" /> Inquire Supervisor</button>
+              <button onClick={() => confirmAction('request formal supervisor review')} className="px-4 py-2.5 bg-blue-600 hover:bg-blue-600 text-white rounded-xl font-bold transition-all cursor-pointer shadow-sm flex items-center gap-2 border-0"><Mail className="w-4 h-4" /> Inquire Supervisor</button>
               <button onClick={() => confirmAction('escalate grievance to HOD')} className="px-4 py-2.5 bg-white hover:bg-white text-white rounded-xl font-bold transition-all cursor-pointer shadow-sm flex items-center gap-2 border-0"><ArrowUpToLine className="w-4 h-4" /> Escalate to HOD</button>
               <button onClick={() => confirmAction('dismiss grievance')} className="px-4 py-2.5 bg-white hover:bg-white text-black rounded-xl font-bold transition-all cursor-pointer flex items-center gap-2 border-0"><X className="w-4 h-4" /> Dismiss</button>
             </div>

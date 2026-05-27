@@ -16,7 +16,7 @@ const HodFacultyOversight = () => {
           <h2 className="text-xl font-black text-black">Faculty Workload & Performance Oversight</h2>
           <p className="text-xs text-black mt-0.5 font-medium">Monitor faculty supervision caps, research alignment tags, and weekly meeting log compliance</p>
         </div>
-        <button className="px-4 py-2 bg-white text-white hover:bg-black rounded-xl text-xs font-bold shadow-sm transition-all flex items-center gap-2 cursor-pointer">
+        <button className="px-4 py-2 bg-white text-white hover:bg-blue-600 rounded-xl text-xs font-bold shadow-sm transition-all flex items-center gap-2 cursor-pointer">
           <ExternalLink className="w-4 h-4" /> View Full Faculty Reports Table
         </button>
       </div>
@@ -37,7 +37,7 @@ const HodFacultyOversight = () => {
                 <th className="py-3.5 px-6 text-center">Meeting Compliance</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-black text-sm font-medium text-black">
+            <tbody className="divide-y divide-blue-600 text-sm font-medium text-black">
               {faculty.map((f) => (
                 <tr key={f.id} className="hover:bg-white/50 transition-colors">
                   <td className="py-4 px-6 font-bold text-black">{f.name}</td>

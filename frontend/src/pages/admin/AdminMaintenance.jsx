@@ -47,7 +47,7 @@ export default function AdminMaintenance() {
             </div>
             <div>
               <div className="flex justify-between font-bold text-black mb-1"><span>Memory Allocation (RAM)</span><span>{health.ramUsed} GB / {health.ramTotal} GB</span></div>
-              <div className="w-full bg-white h-2.5 rounded-full overflow-hidden"><div className="bg-black h-full rounded-full" style={{ width: `${(health.ramUsed/health.ramTotal)*100}%` }}></div></div>
+              <div className="w-full bg-white h-2.5 rounded-full overflow-hidden"><div className="bg-blue-600 h-full rounded-full" style={{ width: `${(health.ramUsed/health.ramTotal)*100}%` }}></div></div>
             </div>
             <div>
               <div className="flex justify-between font-bold text-black mb-1"><span>Database Storage Capacity</span><span>{health.dbUsed} GB / {health.dbTotal} GB</span></div>

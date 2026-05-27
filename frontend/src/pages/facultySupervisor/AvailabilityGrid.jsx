@@ -101,7 +101,7 @@ export default function AvailabilityGrid() {
 
     if (isAvailable) {
       bg = 'bg-white';
-      text = 'text-black';
+      text = 'text-blue-600';
       if (isFriday) {
         border = 'border-r-[3px] border-r-emerald-400';
       }

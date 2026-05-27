@@ -31,7 +31,7 @@ const AssistantExternal = () => {
           <h2 className="text-xl font-black text-black">External & Industry Supervisor Management</h2>
           <p className="text-xs text-black mt-0.5 font-medium">Create temporary evaluator accounts, set evaluation windows, and allocate project assignments</p>
         </div>
-        <button onClick={() => setIsCreateOpen(true)} className="bg-white hover:bg-black text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg transition-all flex items-center gap-2 cursor-pointer">
+        <button onClick={() => setIsCreateOpen(true)} className="bg-white hover:bg-blue-600 text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg transition-all flex items-center gap-2 cursor-pointer">
           <UserPlus className="w-4 h-4" /> Create Temporary Evaluator
         </button>
       </div>
@@ -49,7 +49,7 @@ const AssistantExternal = () => {
                 <th className="py-3.5 px-6 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-black text-sm font-medium text-black">
+            <tbody className="divide-y divide-blue-600 text-sm font-medium text-black">
               {evaluators.map(ev => (
                 <tr key={ev.id} className="hover:bg-white/50 transition-colors">
                   <td className="py-4 px-6 font-bold text-black">{ev.name}</td>
@@ -63,9 +63,9 @@ const AssistantExternal = () => {
                   </td>
                   <td className="py-4 px-6 text-right">
                     {ev.status === 'Allocated' ? (
-                      <button onClick={() => showToast.success('Notification email dispatched!')} className="px-3 py-1.5 rounded-lg bg-white hover:bg-white hover:text-black border border-black text-xs font-bold transition-all cursor-pointer">Notify</button>
+                      <button onClick={() => showToast.success('Notification email dispatched!')} className="px-3 py-1.5 rounded-lg bg-white hover:bg-white hover:text-blue-600 border border-black text-xs font-bold transition-all cursor-pointer">Notify</button>
                     ) : (
-                      <button onClick={() => setIsAssignOpen(true)} className="px-3 py-1.5 rounded-lg bg-white text-white font-bold text-xs transition-all cursor-pointer shadow-sm hover:bg-black">Assign Project</button>
+                      <button onClick={() => setIsAssignOpen(true)} className="px-3 py-1.5 rounded-lg bg-white text-white font-bold text-xs transition-all cursor-pointer shadow-sm hover:bg-blue-600">Assign Project</button>
                     )}
                   </td>
                 </tr>
@@ -76,11 +76,11 @@ const AssistantExternal = () => {
       </div>
 
       {isCreateOpen && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[150] flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-blue-600/50 backdrop-blur-sm z-[150] flex items-center justify-center p-4">
           <div className="bg-white rounded-[2rem] w-full max-w-lg p-6 sm:p-8 shadow-2xl border border-black">
             <div className="flex justify-between items-center mb-6 pb-3 border-b border-black">
               <h3 className="text-lg font-black text-black">Create Temporary Evaluator Account</h3>
-              <i className="fas fa-times text-black hover:text-black cursor-pointer text-lg" onClick={() => setIsCreateOpen(false)}></i>
+              <i className="fas fa-times text-black hover:text-blue-600 cursor-pointer text-lg" onClick={() => setIsCreateOpen(false)}></i>
             </div>
             <form onSubmit={handleCreate} className="space-y-5">
               <div>
@@ -103,7 +103,7 @@ const AssistantExternal = () => {
               </div>
               <div className="flex justify-end gap-3 pt-4 border-t border-black">
                 <button type="button" onClick={() => setIsCreateOpen(false)} className="px-5 py-2.5 rounded-xl text-xs font-bold text-black hover:bg-white transition-colors cursor-pointer">Cancel</button>
-                <button type="submit" className="bg-white hover:bg-black text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow-lg transition-all cursor-pointer">Create Account</button>
+                <button type="submit" className="bg-white hover:bg-blue-600 text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow-lg transition-all cursor-pointer">Create Account</button>
               </div>
             </form>
           </div>
@@ -111,11 +111,11 @@ const AssistantExternal = () => {
       )}
 
       {isAssignOpen && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[150] flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-blue-600/50 backdrop-blur-sm z-[150] flex items-center justify-center p-4">
           <div className="bg-white rounded-[2rem] w-full max-w-lg p-6 sm:p-8 shadow-2xl border border-black">
             <div className="flex justify-between items-center mb-6 pb-3 border-b border-black">
               <h3 className="text-lg font-black text-black">Allocate Project to Evaluator</h3>
-              <i className="fas fa-times text-black hover:text-black cursor-pointer text-lg" onClick={() => setIsAssignOpen(false)}></i>
+              <i className="fas fa-times text-black hover:text-blue-600 cursor-pointer text-lg" onClick={() => setIsAssignOpen(false)}></i>
             </div>
             <form onSubmit={handleAssign} className="space-y-5">
               <div>
@@ -127,7 +127,7 @@ const AssistantExternal = () => {
               </div>
               <div className="flex justify-end gap-3 pt-4 border-t border-black">
                 <button type="button" onClick={() => setIsAssignOpen(false)} className="px-5 py-2.5 rounded-xl text-xs font-bold text-black hover:bg-white transition-colors cursor-pointer">Cancel</button>
-                <button type="submit" className="bg-white hover:bg-black text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow-lg transition-all cursor-pointer">Confirm Allocation</button>
+                <button type="submit" className="bg-white hover:bg-blue-600 text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow-lg transition-all cursor-pointer">Confirm Allocation</button>
               </div>
             </form>
           </div>

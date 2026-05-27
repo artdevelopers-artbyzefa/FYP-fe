@@ -27,11 +27,11 @@ const HodLayout = () => {
   ];
 
   return (
-    <div className="flex h-screen overflow-hidden relative bg-white font-poppins selection:bg-black selection:text-white">
+    <div className="flex h-screen overflow-hidden relative bg-white font-poppins selection:bg-blue-600 selection:text-white">
       
       {/* SIDEBAR */}
       <div 
-        className={`bg-black flex flex-col flex-shrink-0 transition-all duration-300 overflow-hidden fixed lg:relative z-[50] h-full ${isMobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} ${isCollapsed ? 'lg:w-[68px] sidebar-collapsed' : 'w-64 lg:w-64'} border-r border-white/10 shadow-2xl lg:shadow-none`}
+        className={`bg-blue-600 flex flex-col flex-shrink-0 transition-all duration-300 overflow-hidden fixed lg:relative z-[50] h-full ${isMobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} ${isCollapsed ? 'lg:w-[68px] sidebar-collapsed' : 'w-64 lg:w-64'} border-r border-white/10 shadow-2xl lg:shadow-none`}
       >
         <div className="flex items-center gap-3 px-4 py-5 border-b border-white/10 relative">
           <div className="w-9 h-9 bg-white/15 rounded-xl flex items-center justify-center flex-shrink-0 shadow-inner">
@@ -61,7 +61,7 @@ const HodLayout = () => {
                 <NavLink 
                   to={link.to} 
                   onClick={() => setIsMobileOpen(false)}
-                  className={({ isActive }) => `flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-200 ${isActive ? 'bg-black text-white shadow-lg font-bold' : 'text-white/80 hover:bg-white/10 hover:text-white'} ${isCollapsed ? 'justify-center w-[44px] h-[44px] mx-auto p-[10px]' : ''}`}
+                  className={({ isActive }) => `flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-200 ${isActive ? 'bg-blue-600 text-white shadow-lg font-bold' : 'text-white/80 hover:bg-white/10 hover:text-white'} ${isCollapsed ? 'justify-center w-[44px] h-[44px] mx-auto p-[10px]' : ''}`}
                 >
                   {React.createElement(link.icon, { className: "w-4 h-4" })}
                   {!isCollapsed && <span className="text-sm font-medium whitespace-nowrap flex-1">{link.label}</span>}
@@ -71,8 +71,8 @@ const HodLayout = () => {
           })}
         </nav>
 
-        <div className="p-3 border-t border-white/10 bg-black/10">
-          <div onClick={handleLogout} className={`flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-white/80 hover:bg-black/10 transition-all duration-200 font-bold ${isCollapsed ? 'justify-center w-[44px] h-[44px] mx-auto p-[10px]' : ''}`} title="Logout">
+        <div className="p-3 border-t border-white/10 bg-blue-600/10">
+          <div onClick={handleLogout} className={`flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-white/80 hover:bg-blue-600/10 transition-all duration-200 font-bold ${isCollapsed ? 'justify-center w-[44px] h-[44px] mx-auto p-[10px]' : ''}`} title="Logout">
             <LogOut className="w-4 h-4" />
             {!isCollapsed && <span className="text-sm">Logout</span>}
           </div>
@@ -81,7 +81,7 @@ const HodLayout = () => {
 
       {/* Mobile Overlay */}
       {isMobileOpen && (
-        <div onClick={() => setIsMobileOpen(false)} className="fixed inset-0 bg-black/50 z-[40] lg:hidden backdrop-blur-sm"></div>
+        <div onClick={() => setIsMobileOpen(false)} className="fixed inset-0 bg-blue-600/50 z-[40] lg:hidden backdrop-blur-sm"></div>
       )}
 
       {/* MAIN CONTENT WRAPPER */}
@@ -90,10 +90,10 @@ const HodLayout = () => {
         {/* TOPBAR */}
         <div className="bg-white border-b border-black px-4 md:px-6 h-16 flex items-center justify-between shadow-sm flex-shrink-0 z-[30] gap-3">
           <div className="flex items-center gap-3 min-w-0">
-            <button onClick={() => setIsMobileOpen(true)} className="w-9 h-9 rounded-xl bg-white flex items-center justify-center text-black hover:bg-white hover:text-black transition-all border-0 lg:hidden flex-shrink-0">
+            <button onClick={() => setIsMobileOpen(true)} className="w-9 h-9 rounded-xl bg-white flex items-center justify-center text-black hover:bg-white hover:text-blue-600 transition-all border-0 lg:hidden flex-shrink-0">
               <Menu className="text-sm" />
             </button>
-            <button onClick={() => setIsCollapsed(!isCollapsed)} className="hidden lg:flex w-9 h-9 rounded-xl bg-white items-center justify-center text-black hover:bg-white hover:text-black transition-all border-0 flex-shrink-0 cursor-pointer">
+            <button onClick={() => setIsCollapsed(!isCollapsed)} className="hidden lg:flex w-9 h-9 rounded-xl bg-white items-center justify-center text-black hover:bg-white hover:text-blue-600 transition-all border-0 flex-shrink-0 cursor-pointer">
                             {isCollapsed ? <ChevronRight className="text-sm" /> : <ChevronLeft className="text-sm" />}
             </button>
             <div className="min-w-0">
@@ -110,7 +110,7 @@ const HodLayout = () => {
 
             {/* Notification Center */}
             <div className="relative">
-              <button onClick={() => setShowNotif(!showNotif)} className="w-9 h-9 rounded-xl bg-white border border-black flex items-center justify-center text-black hover:bg-white hover:text-black transition-all cursor-pointer relative">
+              <button onClick={() => setShowNotif(!showNotif)} className="w-9 h-9 rounded-xl bg-white border border-black flex items-center justify-center text-black hover:bg-white hover:text-blue-600 transition-all cursor-pointer relative">
                 <Bell className="text-sm" />
                 <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-white rounded-full border-2 border-white animate-pulse"></span>
               </button>
@@ -121,7 +121,7 @@ const HodLayout = () => {
                     <span className="text-sm font-black text-black">HOD Notifications</span>
                     <button onClick={() => {toast.success('All notifications marked as read'); setShowNotif(false);}} className="text-xs font-bold text-black hover:underline cursor-pointer">Mark all as read</button>
                   </div>
-                  <div className="max-h-80 overflow-y-auto divide-y divide-black">
+                  <div className="max-h-80 overflow-y-auto divide-y divide-blue-600">
                     <div className="p-4 hover:bg-white/50 transition-colors flex gap-3 items-start border-l-4 border-black bg-white/20">
                       <div className="w-8 h-8 rounded-xl bg-white text-black flex items-center justify-center text-xs flex-shrink-0 mt-0.5"><Gavel className="w-4 h-4" /></div>
                       <div className="flex-1 min-w-0">
@@ -132,7 +132,7 @@ const HodLayout = () => {
                     </div>
                   </div>
                   <div className="p-3 bg-white border-t border-black text-center">
-                    <button onClick={() => navigate('/hod/escalations')} className="text-xs font-bold text-black hover:text-black transition-colors cursor-pointer">View All</button>
+                    <button onClick={() => navigate('/hod/escalations')} className="text-xs font-bold text-black hover:text-blue-600 transition-colors cursor-pointer">View All</button>
                   </div>
                 </div>
               )}
@@ -140,7 +140,7 @@ const HodLayout = () => {
 
             {/* User Menu */}
             <div className="relative">
-              <button className="flex items-center gap-2 p-1 md:px-2.5 md:py-1.5 bg-white rounded-xl cursor-pointer border border-black hover:bg-white hover:border-black transition-all">
+              <button className="flex items-center gap-2 p-1 md:px-2.5 md:py-1.5 bg-white rounded-xl cursor-pointer border border-black hover:bg-white hover:border-blue-600 transition-all">
                 <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center text-black text-xs font-bold shadow-sm flex-shrink-0">
                   <span>{user.avatar || 'ZA'}</span>
                 </div>

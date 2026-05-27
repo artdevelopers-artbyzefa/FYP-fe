@@ -22,8 +22,8 @@ const AssistantEvalCommittees = () => {
           <div className="flex justify-between items-center mb-6 pb-3 border-b border-black">
             <h3 className="text-base font-black text-black">Configure Evaluation Board</h3>
             <div className="flex gap-2">
-              <button onClick={() => setActiveBoard('fyp1')} className={`px-4 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${activeBoard === 'fyp1' ? 'bg-black text-white shadow-md' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>FYP-1 Board</button>
-              <button onClick={() => setActiveBoard('fyp2')} className={`px-4 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${activeBoard === 'fyp2' ? 'bg-black text-white shadow-md' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>FYP-2 Board</button>
+              <button onClick={() => setActiveBoard('fyp1')} className={`px-4 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${activeBoard === 'fyp1' ? 'bg-blue-600 text-white shadow-md' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>FYP-1 Board</button>
+              <button onClick={() => setActiveBoard('fyp2')} className={`px-4 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${activeBoard === 'fyp2' ? 'bg-blue-600 text-white shadow-md' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>FYP-2 Board</button>
             </div>
           </div>
 
@@ -68,7 +68,7 @@ const AssistantEvalCommittees = () => {
             </div>
 
             <div className="pt-4 border-t border-black flex justify-end">
-              <button type="submit" className="bg-white hover:bg-black text-white px-6 py-2.5 rounded-xl font-bold text-sm shadow-lg transition-all cursor-pointer">
+              <button type="submit" className="bg-white hover:bg-blue-600 text-white px-6 py-2.5 rounded-xl font-bold text-sm shadow-lg transition-all cursor-pointer">
                 Save Committee Configuration
               </button>
             </div>

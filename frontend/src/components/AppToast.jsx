@@ -59,7 +59,7 @@ const triggerToast = (msg, themeKey) => {
         title: msg,
         customClass: {
             popup: 'rounded-2xl border border-shadow-sm shadow-xl font-medium text-[13px] px-5 py-3 relative',
-            timerProgressBar: 'bg-black/10',
+            timerProgressBar: 'bg-blue-600/10',
             closeButton: 'toast-close-btn'
         }
     });

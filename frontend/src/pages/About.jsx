@@ -26,7 +26,7 @@ const About = () => {
                   The Final Year Project program helps students apply research, engineering, design, and teamwork skills to meaningful computing problems under faculty supervision.
                 </p>
                 <div className="flex flex-wrap gap-4">
-                  <Link to="/eligibility" className="inline-flex items-center justify-center gap-2 py-3.5 px-7 rounded-full font-bold bg-black text-white shadow-lg hover:bg-black hover:-translate-y-px transition-all text-sm">
+                  <Link to="/eligibility" className="inline-flex items-center justify-center gap-2 py-3.5 px-7 rounded-full font-bold bg-blue-600 text-white shadow-lg hover:bg-blue-600 hover:-translate-y-px transition-all text-sm">
                     Check Eligibility <ArrowRight className="w-4 h-4" />
                   </Link>
                   <Link to="/process" className="inline-flex items-center justify-center gap-2 py-3.5 px-7 rounded-full font-bold bg-transparent text-black border-[1.5px] border-black hover:bg-white transition-all text-sm">
@@ -75,21 +75,21 @@ const About = () => {
               <h2 className="text-[clamp(1.6rem,3vw,2.5rem)] font-black text-black leading-tight">What the FYP program builds</h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="bg-white border-[1.5px] border-black rounded-[2rem] p-8 hover:border-black transition-all text-center flex flex-col items-center">
+              <div className="bg-white border-[1.5px] border-black rounded-[2rem] p-8 hover:border-blue-600 transition-all text-center flex flex-col items-center">
                 <div className="w-12 h-12 bg-white text-black rounded-xl flex items-center justify-center text-xl mb-6">
                   <Search className="w-4 h-4" />
                 </div>
                 <h3 className="text-lg font-black text-black mb-4">Research Discipline</h3>
                 <p className="text-sm text-black leading-relaxed font-medium">Encourage students to identify problems, review related work, define scope, and use an appropriate methodology.</p>
               </div>
-              <div className="bg-white border-[1.5px] border-black rounded-[2rem] p-8 hover:border-black transition-all text-center flex flex-col items-center">
+              <div className="bg-white border-[1.5px] border-black rounded-[2rem] p-8 hover:border-blue-600 transition-all text-center flex flex-col items-center">
                 <div className="w-12 h-12 bg-white text-black rounded-xl flex items-center justify-center text-xl mb-6">
                   <Code className="w-4 h-4" />
                 </div>
                 <h3 className="text-lg font-black text-black mb-4">Practical Engineering</h3>
                 <p className="text-sm text-black leading-relaxed font-medium">Translate computing concepts into working software, systems, experiments, or prototypes that can be demonstrated.</p>
               </div>
-              <div className="bg-white border-[1.5px] border-black rounded-[2rem] p-8 hover:border-black transition-all text-center flex flex-col items-center">
+              <div className="bg-white border-[1.5px] border-black rounded-[2rem] p-8 hover:border-blue-600 transition-all text-center flex flex-col items-center">
                 <div className="w-12 h-12 bg-white text-black rounded-xl flex items-center justify-center text-xl mb-6">
                   <Users className="w-4 h-4" />
                 </div>

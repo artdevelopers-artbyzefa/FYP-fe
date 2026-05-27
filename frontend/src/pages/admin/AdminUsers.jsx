@@ -49,7 +49,7 @@ export default function AdminUsers() {
           <h2 className="text-xl font-black text-black">User Account Management & Credentials</h2>
           <p className="text-xs text-black mt-0.5 font-medium">Create new user accounts, assign roles, and trigger password resets</p>
         </div>
-        <button onClick={() => setCreateUserOpen(true)} className="px-5 py-2.5 bg-black text-white hover:bg-black rounded-xl text-xs font-bold shadow-lg transition-all flex items-center gap-2 cursor-pointer">
+        <button onClick={() => setCreateUserOpen(true)} className="px-5 py-2.5 bg-blue-600 text-white hover:bg-blue-600 rounded-xl text-xs font-bold shadow-lg transition-all flex items-center gap-2 cursor-pointer">
           <Plus className="w-4 h-4" /> Create New User
         </button>
       </div>
@@ -82,7 +82,7 @@ export default function AdminUsers() {
                 <th className="py-3.5 px-6 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-black text-xs font-medium text-black">
+            <tbody className="divide-y divide-blue-600 text-xs font-medium text-black">
               {filteredUsers.map(u => (
                 <tr key={u.id} className="hover:bg-white/50 transition-colors">
                   <td className="py-4 px-6 font-bold text-black">{u.name}</td>
@@ -101,11 +101,11 @@ export default function AdminUsers() {
       </div>
 
       {createUserOpen && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[150] flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-blue-600/50 backdrop-blur-sm z-[150] flex items-center justify-center p-4">
           <div className="bg-white rounded-[2rem] w-full max-w-lg p-6 sm:p-8 shadow-2xl animate-in zoom-in-95 duration-200 border border-black">
             <div className="flex justify-between items-center mb-6 pb-3 border-b border-black">
               <h3 className="text-lg font-black text-black">Create New User Account</h3>
-              <i className="fas fa-times text-black hover:text-black cursor-pointer text-lg" onClick={() => setCreateUserOpen(false)}></i>
+              <i className="fas fa-times text-black hover:text-blue-600 cursor-pointer text-lg" onClick={() => setCreateUserOpen(false)}></i>
             </div>
             <form onSubmit={handleCreateUserSubmit} className="space-y-5">
               <div>
@@ -129,7 +129,7 @@ export default function AdminUsers() {
               </div>
               <div className="flex justify-end gap-3 pt-4 border-t border-black">
                 <button type="button" onClick={() => setCreateUserOpen(false)} className="px-5 py-2.5 rounded-xl text-xs font-bold text-black hover:bg-white transition-colors cursor-pointer">Cancel</button>
-                <button type="submit" className="bg-black hover:bg-black text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow-lg transition-all cursor-pointer">Create Account</button>
+                <button type="submit" className="bg-blue-600 hover:bg-blue-600 text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow-lg transition-all cursor-pointer">Create Account</button>
               </div>
             </form>
           </div>

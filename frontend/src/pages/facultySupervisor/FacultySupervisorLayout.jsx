@@ -29,7 +29,7 @@ export default function FacultySupervisorLayout() {
   const pageTitle = pageTitles[path] || 'Dashboard';
 
   return (
-    <div className={`flex h-screen overflow-hidden relative bg-lightbg selection:bg-black/20`} style={{ fontFamily: "'Poppins', sans-serif", backgroundColor: '#EFF6FF' }}>
+    <div className={`flex h-screen overflow-hidden relative bg-lightbg selection:bg-blue-600/20`} style={{ fontFamily: "'Poppins', sans-serif", backgroundColor: '#EFF6FF' }}>
       
       <FacultySidebar isOpen={mobileSidebarOpen} onClose={() => setMobileSidebarOpen(false)} />
 
@@ -55,7 +55,7 @@ export default function FacultySupervisorLayout() {
               </button>
             </div>
 
-            <Link to="/faculty/dashboard" className="flex items-center gap-2 p-1 md:px-2.5 md:py-1.5 bg-white rounded-xl cursor-pointer border border-black hover:bg-white hover:border-black transition-all">
+            <Link to="/faculty/dashboard" className="flex items-center gap-2 p-1 md:px-2.5 md:py-1.5 bg-white rounded-xl cursor-pointer border border-black hover:bg-white hover:border-blue-600 transition-all">
               <div className="w-8 h-8 bg-white/50 rounded-lg flex items-center justify-center text-[#1e3a8a] text-xs font-bold shadow-sm flex-shrink-0">
                 {user.avatar || 'FS'}
               </div>

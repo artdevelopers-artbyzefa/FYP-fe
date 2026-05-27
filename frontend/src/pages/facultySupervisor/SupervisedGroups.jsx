@@ -139,13 +139,13 @@ export default function SupervisedGroups() {
                 <th className="px-6 py-4 text-[10px] font-black text-black uppercase tracking-wider w-[16%]">Supervision Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-black/50">
+            <tbody className="divide-y divide-blue-600/50">
               {groups.map((group) => (
                 <tr key={group.id} className="hover:bg-white/30 transition-colors">
                   {/* Group Info */}
                   <td className="px-6 py-5 align-top">
                     <div className="space-y-1">
-                      <Link to={`/groups/${group.id}`} className="text-sm font-black text-black hover:text-black transition-colors">
+                      <Link to={`/groups/${group.id}`} className="text-sm font-black text-black hover:text-blue-600 transition-colors">
                         {group.id}: {group.title}
                       </Link>
                       <p className="text-[11px] text-black font-medium">

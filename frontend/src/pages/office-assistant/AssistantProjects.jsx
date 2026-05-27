@@ -36,7 +36,7 @@ const AssistantProjects = () => {
                 <th className="py-3.5 px-6 text-right">Details</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-black text-sm font-medium text-black">
+            <tbody className="divide-y divide-blue-600 text-sm font-medium text-black">
               {projects.map(p => (
                 <tr key={p.id} className="hover:bg-white/50 transition-colors">
                   <td className="py-4 px-6 font-bold text-black max-w-md truncate">{p.title}</td>
@@ -48,7 +48,7 @@ const AssistantProjects = () => {
                     </span>
                   </td>
                   <td className="py-4 px-6 text-right">
-                    <button onClick={() => setSelectedProject(p)} className="px-3 py-1.5 rounded-lg bg-white hover:bg-white hover:text-black border border-black text-xs font-bold transition-all cursor-pointer">View Detail</button>
+                    <button onClick={() => setSelectedProject(p)} className="px-3 py-1.5 rounded-lg bg-white hover:bg-white hover:text-blue-600 border border-black text-xs font-bold transition-all cursor-pointer">View Detail</button>
                   </td>
                 </tr>
               ))}
@@ -58,11 +58,11 @@ const AssistantProjects = () => {
       </div>
 
       {selectedProject && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[150] flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-blue-600/50 backdrop-blur-sm z-[150] flex items-center justify-center p-4">
           <div className="bg-white rounded-[2rem] w-full max-w-2xl p-6 sm:p-8 shadow-2xl border border-black max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-6 pb-3 border-b border-black">
               <h3 className="text-lg font-black text-black">Project Detail View</h3>
-              <i className="fas fa-times text-black hover:text-black cursor-pointer text-lg" onClick={() => setSelectedProject(null)}></i>
+              <i className="fas fa-times text-black hover:text-blue-600 cursor-pointer text-lg" onClick={() => setSelectedProject(null)}></i>
             </div>
             <div className="space-y-5">
               <div>

@@ -50,7 +50,7 @@ export default function NewRequest() {
             placeholder="e.g. SP21-BCS-005" 
           />
           <button 
-            className="bg-black hover:bg-black text-white px-5 py-2.5 rounded-xl font-bold text-sm transition-colors" 
+            className="bg-blue-600 hover:bg-blue-600 text-white px-5 py-2.5 rounded-xl font-bold text-sm transition-colors" 
             onClick={handleSearch}
             disabled={loading}
           >
@@ -61,7 +61,7 @@ export default function NewRequest() {
         {results.length > 0 && (
           <div className="mt-8 space-y-3">
             {results.map(student => (
-              <div key={student.id} className="flex items-center justify-between p-4 border border-black rounded-xl bg-white hover:border-black transition-colors">
+              <div key={student.id} className="flex items-center justify-between p-4 border border-black rounded-xl bg-white hover:border-blue-600 transition-colors">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 bg-white text-black rounded-full flex items-center justify-center font-black text-lg">
                     {student.name.substring(0,2).toUpperCase()}
@@ -73,7 +73,7 @@ export default function NewRequest() {
                 </div>
                 <button 
                   disabled={sending[student.id]}
-                  className="border border-black hover:border-black hover:text-black px-4 py-2 rounded-lg text-sm font-bold transition-all disabled:bg-white disabled:text-white disabled:border-black" 
+                  className="border border-black hover:border-blue-600 hover:text-blue-600 px-4 py-2 rounded-lg text-sm font-bold transition-all disabled:bg-white disabled:text-white disabled:border-black" 
                   onClick={() => handleSend(student.id)}
                 >
                   {sending[student.id] ? <><Check className="w-4 h-4 mr-1.5" /> Sent</> : <><Send className="w-4 h-4 mr-1.5" /> Send</>}

@@ -35,7 +35,7 @@ const FacultyMessaging = () => {
         {/* Contacts Sidebar */}
         <div className="w-full lg:w-80 bg-white rounded-2xl border border-black shadow-sm flex flex-col overflow-hidden flex-shrink-0">
           <div className="p-4 border-b border-black bg-white font-bold text-sm text-black">Your Groups</div>
-          <div className="flex-1 overflow-y-auto divide-y divide-black">
+          <div className="flex-1 overflow-y-auto divide-y divide-blue-600">
             <div className="p-4 hover:bg-white/50 cursor-pointer transition-colors bg-white/30 border-l-4 border-black">
               <div className="flex justify-between items-baseline mb-1">
                 <span className="font-bold text-black text-sm">Group G-042</span>
@@ -60,7 +60,7 @@ const FacultyMessaging = () => {
               <div className="font-bold text-black text-sm">Group G-042</div>
               <div className="text-[11px] text-black">Ahmed Farooq, Sana Mehmood</div>
             </div>
-            <button className="text-black hover:text-black transition-colors"><MoreVertical className="w-4 h-4" /></button>
+            <button className="text-black hover:text-blue-600 transition-colors"><MoreVertical className="w-4 h-4" /></button>
           </div>
           
           <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 bg-white/50 flex flex-col" id="chatMessages">
@@ -73,7 +73,7 @@ const FacultyMessaging = () => {
                   <div className={`w-8 h-8 rounded-xl flex items-center justify-center font-bold text-xs flex-shrink-0 ${isYou ? 'bg-blue-100 text-black' : 'bg-gray-200 text-gray-600'}`}>
                     {isYou ? 'AH' : 'G'}
                   </div>
-                  <div className={`p-4 rounded-2xl max-w-md shadow-sm ${isYou ? 'bg-black text-white' : 'bg-white border border-gray-100 text-gray-700'}`}>
+                  <div className={`p-4 rounded-2xl max-w-md shadow-sm ${isYou ? 'bg-blue-600 text-white' : 'bg-white border border-gray-100 text-gray-700'}`}>
                     <span className={`font-bold text-xs block mb-1 ${isYou ? 'text-white' : 'text-gray-800'}`}>{msg.sender}</span>
                     <p className={`text-xs leading-relaxed ${isYou ? 'text-white/90' : 'text-gray-600'}`}>{msg.text}</p>
                     <span className={`text-[10px] mt-2 block font-bold ${isYou ? 'text-white/60 text-right' : 'text-gray-400 text-right'}`}>{msg.time}</span>
@@ -92,7 +92,7 @@ const FacultyMessaging = () => {
                 placeholder="Type your message here..." 
                 className="flex-1 bg-white border border-black rounded-xl px-4 py-3 text-sm outline-none focus:border-black transition-all"
               />
-              <button type="submit" className="bg-white hover:bg-black text-white w-12 h-12 rounded-xl flex items-center justify-center transition-all shadow-sm cursor-pointer">
+              <button type="submit" className="bg-white hover:bg-blue-600 text-white w-12 h-12 rounded-xl flex items-center justify-center transition-all shadow-sm cursor-pointer">
                 <Send className="w-4 h-4" />
               </button>
             </form>

@@ -101,7 +101,7 @@ const Process = () => {
                     <div className="relative z-10 w-11 md:w-14 h-11 md:h-14 bg-white border-[1.5px] border-black text-black rounded-full flex items-center justify-center text-lg md:text-xl shadow-sm shrink-0">
                       {React.createElement(item.icon, { className: "w-4 h-4" })}
                     </div>
-                    <div className="bg-white border-[1.5px] border-black rounded-[2rem] p-8 md:p-10 shadow-sm flex-grow transition-all hover:border-black hover:shadow-md">
+                    <div className="bg-white border-[1.5px] border-black rounded-[2rem] p-8 md:p-10 shadow-sm flex-grow transition-all hover:border-blue-600 hover:shadow-md">
                       <div className="text-[12px] font-black text-black uppercase tracking-[0.15em] mb-3">
                         {item.step}
                       </div>

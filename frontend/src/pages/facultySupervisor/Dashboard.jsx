@@ -46,7 +46,7 @@ export default function Dashboard() {
       {/* Welcome Banner Section */}
       <div className="bg-[#1e3a8a] text-white rounded-3xl p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 shadow-xl relative overflow-hidden">
         {/* Soft background glow decoration */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-black/10 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none" />
+        <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/10 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none" />
         
         {/* Left Welcome Info */}
         <div className="max-w-xl space-y-3 z-10">
@@ -187,7 +187,7 @@ export default function Dashboard() {
             <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-black border border-black/30">
               <ProposalsIcon className="w-5 h-5" />
             </div>
-            <span className="text-black group-hover:text-black transition-colors text-xl font-light">→</span>
+            <span className="text-black group-hover:text-blue-600 transition-colors text-xl font-light">→</span>
           </div>
           <div className="space-y-1.5">
             <h3 className="text-base font-bold text-[#1e3a8a] group-hover:text-[#2563eb] transition-colors">
@@ -208,7 +208,7 @@ export default function Dashboard() {
             <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-[#2563eb] border border-black/30">
               <GroupsIcon className="w-5 h-5" />
             </div>
-            <span className="text-black group-hover:text-black transition-colors text-xl font-light">→</span>
+            <span className="text-black group-hover:text-blue-600 transition-colors text-xl font-light">→</span>
           </div>
           <div className="space-y-1.5">
             <h3 className="text-base font-bold text-[#1e3a8a] group-hover:text-[#2563eb] transition-colors">
@@ -229,7 +229,7 @@ export default function Dashboard() {
             <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-black border border-black/30">
               <EvaluationsIcon className="w-5 h-5" />
             </div>
-            <span className="text-black group-hover:text-black transition-colors text-xl font-light">→</span>
+            <span className="text-black group-hover:text-blue-600 transition-colors text-xl font-light">→</span>
           </div>
           <div className="space-y-1.5">
             <h3 className="text-base font-bold text-[#1e3a8a] group-hover:text-[#2563eb] transition-colors">
@@ -250,7 +250,7 @@ export default function Dashboard() {
             <div className="w-10 h-10 bg-white/60 rounded-xl flex items-center justify-center text-black border border-black/40">
               <HeadManagementIcon className="w-5 h-5" />
             </div>
-            <span className="text-black group-hover:text-black transition-colors text-xl font-light">→</span>
+            <span className="text-black group-hover:text-blue-600 transition-colors text-xl font-light">→</span>
           </div>
           <div className="space-y-1.5">
             <h3 className="text-base font-bold text-[#1e3a8a] group-hover:text-[#2563eb] transition-colors">

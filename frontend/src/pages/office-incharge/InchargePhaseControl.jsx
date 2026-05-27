@@ -176,7 +176,7 @@ const InchargePhaseControl = () => {
               {/* Stepper connector line (hidden on mobile, visible on desktop) */}
               <div className="absolute top-7 left-8 right-8 h-1 bg-white -z-0 hidden md:block rounded-full">
                 <div 
-                  className="h-full bg-black rounded-full transition-all duration-500"
+                  className="h-full bg-blue-600 rounded-full transition-all duration-500"
                   style={{
                     width: `${((phases.findIndex(p => p.isActive)) / (phases.length - 1)) * 100}%`
                   }}
@@ -211,7 +211,7 @@ const InchargePhaseControl = () => {
 
                     {/* Step Meta text */}
                     <div className="text-left md:text-center min-w-0">
-                      <div className={`text-xs font-black truncate max-w-[200px] md:max-w-none ${isActive ? 'text-blue-600' : isPassed ? 'text-black' : 'text-gray-500'}`}>
+                      <div className={`text-xs font-black truncate max-w-[200px] md:max-w-none ${isActive ? 'text-blue-600' : isPassed ? 'text-blue-600' : 'text-gray-500'}`}>
                         {phase.name}
                       </div>
                       <span className="text-[10px] font-bold text-black uppercase tracking-wider">
@@ -244,8 +244,8 @@ const InchargePhaseControl = () => {
               >
                 {/* Visual side highlights */}
                 {phase.isActive && (
-                  <div className="absolute top-0 right-0 w-24 h-24 bg-black/10 rounded-full translate-x-8 -translate-y-8 flex items-center justify-center">
-                    <div className="w-12 h-12 bg-black/20 rounded-full"></div>
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-blue-600/10 rounded-full translate-x-8 -translate-y-8 flex items-center justify-center">
+                    <div className="w-12 h-12 bg-blue-600/20 rounded-full"></div>
                   </div>
                 )}
 
@@ -292,7 +292,7 @@ const InchargePhaseControl = () => {
                   ) : (
                     <button 
                       onClick={() => handleActivatePhase(phase)}
-                      className="px-4 py-2 bg-white hover:bg-black text-black hover:text-white border border-black hover:border-black rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm hover:shadow cursor-pointer"
+                      className="px-4 py-2 bg-white hover:bg-blue-600 text-black hover:text-white border border-black hover:border-blue-600 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm hover:shadow cursor-pointer"
                     >
                       <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />

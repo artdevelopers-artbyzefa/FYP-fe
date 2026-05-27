@@ -26,7 +26,7 @@ const HodDashboard = () => {
       label: 'Total FYP Groups',
       value: stats?.totalGroups,
       badge: '100% Assigned',
-      badgeColor: 'text-black',
+      badgeColor: 'text-blue-600',
       icon: Users,
       color: '',
       bgLight: 'bg-white',
@@ -35,7 +35,7 @@ const HodDashboard = () => {
       label: 'Escalated Grievances',
       value: stats?.escalatedGrievances,
       badge: 'Requires Action',
-      badgeColor: 'text-black',
+      badgeColor: 'text-blue-600',
       icon: Gavel,
       color: '',
       bgLight: 'bg-white',
@@ -44,7 +44,7 @@ const HodDashboard = () => {
       label: 'Active Faculty',
       value: stats?.activeFaculty,
       badge: 'Optimal Load',
-      badgeColor: 'text-black',
+      badgeColor: 'text-blue-600',
       icon: Presentation,
       color: '',
       bgLight: 'bg-white',
@@ -53,7 +53,7 @@ const HodDashboard = () => {
       label: 'CLO Attainment Avg',
       value: stats?.cloAttainmentAvg,
       badge: 'Satisfactory',
-      badgeColor: 'text-black',
+      badgeColor: 'text-blue-600',
       icon: CheckCircle,
       color: '',
       bgLight: 'bg-white',
@@ -65,7 +65,7 @@ const HodDashboard = () => {
       <div className="relative overflow-hidden bg-white rounded-3xl border border-black shadow-lg mb-8">
         <div className="absolute inset-0"  />
         <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-black/10 rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-600/10 rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl" />
         <div className="relative p-6 sm:p-8">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
             <div className="text-white">
@@ -100,7 +100,7 @@ const HodDashboard = () => {
         {statCards.map((card, i) => (
           <div
             key={card.label}
-            className="group bg-white rounded-2xl border border-black p-6 shadow-sm hover:shadow-lg hover:border-black transition-all duration-300"
+            className="group bg-white rounded-2xl border border-black p-6 shadow-sm hover:shadow-lg hover:border-blue-600 transition-all duration-300"
           >
             <div className="flex items-start justify-between mb-4">
               <div className={`w-12 h-12 rounded-2xl ${card.bgLight} flex items-center justify-center text-xl group-hover:scale-110 transition-transform duration-300`}>
@@ -130,8 +130,8 @@ const HodDashboard = () => {
           <div className="space-y-3">
             {[
               { icon: Shield, color: 'text-blue-600', bg: 'bg-white', title: 'Academic Integrity Lock Status', desc: 'All 4 evaluation committees have active padlock protection on their rubric schemas. No unauthorized modifications detected.' },
-              { icon: ClipboardList, color: 'text-black', bg: 'bg-white', title: 'Milestone Defense Completion', desc: 'The 10% project specification defense completed across all panels. Student attendance and deliverable compliance at 98%.' },
-              { icon: LineChart, color: 'text-black', bg: 'bg-white', title: 'Phase Progress Overview', desc: 'All groups have successfully passed the proposal phase. Mid-progress review scheduled for next week across 4 evaluation panels.' },
+              { icon: ClipboardList, color: 'text-blue-600', bg: 'bg-white', title: 'Milestone Defense Completion', desc: 'The 10% project specification defense completed across all panels. Student attendance and deliverable compliance at 98%.' },
+              { icon: LineChart, color: 'text-blue-600', bg: 'bg-white', title: 'Phase Progress Overview', desc: 'All groups have successfully passed the proposal phase. Mid-progress review scheduled for next week across 4 evaluation panels.' },
             ].map((item) => (
               <div key={item.title} className="flex items-start gap-4 p-4 rounded-xl bg-white/50 border border-black hover:bg-white transition-colors">
                 <div className={`w-10 h-10 rounded-xl ${item.bg} flex items-center justify-center flex-shrink-0 mt-0.5`}>
@@ -151,15 +151,15 @@ const HodDashboard = () => {
           <h3 className="text-base font-black text-black mb-6">Executive Portals</h3>
           <div className="space-y-2 flex-1">
             {[
-              { label: 'Escalated Grievances', icon: Gavel, color: 'text-black', hover: 'hover:text-black hover:bg-white hover:border-black', chevron: 'text-black', path: '/hod/escalations' },
-              { label: 'Faculty Workload Oversight', icon: Presentation, color: 'text-black', hover: 'hover:text-black hover:bg-white hover:border-black', chevron: 'text-black', path: '/hod/faculty-oversight' },
-              { label: 'Committee Governance', icon: Landmark, color: 'text-blue-600', hover: 'hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700', chevron: 'text-blue-600', path: '/hod/governance' },
-              { label: 'Analytics & Reports', icon: PieChart, color: 'text-black', hover: 'hover:text-black hover:bg-white hover:border-black', chevron: 'text-black', path: '/hod/analytics' },
+              { label: 'Escalated Grievances', icon: Gavel, color: 'text-blue-600', hover: 'hover:text-blue-600 hover:bg-white hover:border-blue-600', chevron: 'text-blue-600', path: '/hod/escalations' },
+              { label: 'Faculty Workload Oversight', icon: Presentation, color: 'text-blue-600', hover: 'hover:text-blue-600 hover:bg-white hover:border-blue-600', chevron: 'text-blue-600', path: '/hod/faculty-oversight' },
+              { label: 'Committee Governance', icon: Landmark, color: 'text-blue-600', hover: 'hover:text-blue-600 hover:bg-white hover:border-blue-600', chevron: 'text-blue-600', path: '/hod/governance' },
+              { label: 'Analytics & Reports', icon: PieChart, color: 'text-blue-600', hover: 'hover:text-blue-600 hover:bg-white hover:border-blue-600', chevron: 'text-blue-600', path: '/hod/analytics' },
             ].map((link) => (
               <div
                 key={link.label}
                 onClick={() => navigate(link.path)}
-                className={`flex items-center justify-between p-3.5 rounded-xl border border-gray-100 bg-white cursor-pointer transition-all duration-200 group ${link.hover}`}
+                className={`flex items-center justify-between p-3.5 rounded-xl border border-black bg-white cursor-pointer transition-all duration-200 group ${link.hover}`}
               >
                 <div className="flex items-center gap-3">
                   {React.createElement(link.icon, { className: "w-4 h-4" })}

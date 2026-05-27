@@ -93,7 +93,7 @@ const Contact = () => {
                       required 
                     ></textarea>
                   </div>
-                  <button type="submit" className="inline-flex items-center justify-center gap-2 py-4 px-8 rounded-full font-bold bg-black text-white shadow-lg hover:bg-black hover:-translate-y-px transition-all">
+                  <button type="submit" className="inline-flex items-center justify-center gap-2 py-4 px-8 rounded-full font-bold bg-blue-600 text-white shadow-lg hover:bg-blue-600 hover:-translate-y-px transition-all">
                     Submit Query <ArrowRight className="w-4 h-4" />
                   </button>
                 </form>

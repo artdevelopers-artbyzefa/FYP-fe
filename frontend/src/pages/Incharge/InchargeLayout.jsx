@@ -46,11 +46,11 @@ export default function InchargeLayout() {
   else if (path.includes('/audit-logs')) pageTitle = 'System Audit Logs';
 
   return (
-    <div className="flex h-screen overflow-hidden relative bg-white selection:bg-black selection:text-white" style={{ fontFamily: "'Poppins', sans-serif", backgroundColor: '#EFF6FF' }}>
+    <div className="flex h-screen overflow-hidden relative bg-white selection:bg-blue-600 selection:text-white" style={{ fontFamily: "'Poppins', sans-serif", backgroundColor: '#EFF6FF' }}>
       
       {/* ═══════════════ SIDEBAR ═══════════════ */}
       <div 
-        className={`bg-black flex flex-col flex-shrink-0 transition-all duration-300 overflow-hidden fixed lg:relative z-[50] h-full ${mobileSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} border-r border-white/10 shadow-2xl lg:shadow-none`}
+        className={`bg-blue-600 flex flex-col flex-shrink-0 transition-all duration-300 overflow-hidden fixed lg:relative z-[50] h-full ${mobileSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} border-r border-white/10 shadow-2xl lg:shadow-none`}
         style={{ width: sidebarCollapsed ? 68 : 256, minWidth: sidebarCollapsed ? 68 : 256, backgroundColor: '#2B3990' }}
       >
         <div className="flex items-center gap-3 px-4 py-5 border-b border-white/10 relative">
@@ -82,7 +82,7 @@ export default function InchargeLayout() {
                   <div 
                     key={item.id}
                     onClick={() => { navigate(item.id); setMobileSidebarOpen(false); }}
-                    className={`flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-200 ${isActive ? 'bg-black text-white shadow-lg shadow-blue-600/30 font-bold' : 'text-white/80 hover:bg-white/10 hover:text-white'} ${sidebarCollapsed ? 'justify-center' : ''}`}
+                    className={`flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-200 ${isActive ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30 font-bold' : 'text-white/80 hover:bg-white/10 hover:text-white'} ${sidebarCollapsed ? 'justify-center' : ''}`}
                     title={item.label}
                   >
                     {React.createElement(item.icon, { className: "w-4 h-4" })}
@@ -94,8 +94,8 @@ export default function InchargeLayout() {
           ))}
         </nav>
 
-        <div className="p-3 border-t border-white/10 bg-black/10">
-          <div onClick={() => logout()} className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-white/80 hover:bg-white/20 hover:text-black transition-all duration-200 font-bold" title="Logout">
+        <div className="p-3 border-t border-white/10 bg-blue-600/10">
+          <div onClick={() => logout()} className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-white/80 hover:bg-white/20 hover:text-blue-600 transition-all duration-200 font-bold" title="Logout">
             <LogOut className="text-sm w-5 text-center flex-shrink-0" />
             {!sidebarCollapsed && <span className="text-sm">Logout</span>}
           </div>
@@ -103,7 +103,7 @@ export default function InchargeLayout() {
       </div>
 
       {/* Mobile Overlay */}
-      {mobileSidebarOpen && <div onClick={() => setMobileSidebarOpen(false)} className="fixed inset-0 bg-black/50 z-[40] lg:hidden backdrop-blur-sm" />}
+      {mobileSidebarOpen && <div onClick={() => setMobileSidebarOpen(false)} className="fixed inset-0 bg-blue-600/50 z-[40] lg:hidden backdrop-blur-sm" />}
 
       {/* ═══════════════ MAIN CONTENT WRAPPER ═══════════════ */}
       <div className="flex-1 flex flex-col overflow-hidden w-full transition-all duration-300 ease-in-out">
@@ -111,11 +111,11 @@ export default function InchargeLayout() {
         {/* TOPBAR */}
         <div className="bg-white border-b border-black px-4 md:px-6 h-16 flex items-center justify-between shadow-sm flex-shrink-0 z-[30] gap-3">
           <div className="flex items-center gap-3 min-w-0">
-            <button onClick={() => setMobileSidebarOpen(true)} className="w-9 h-9 rounded-xl bg-white flex items-center justify-center text-black hover:bg-white hover:text-black transition-all border-0 lg:hidden flex-shrink-0">
+            <button onClick={() => setMobileSidebarOpen(true)} className="w-9 h-9 rounded-xl bg-white flex items-center justify-center text-black hover:bg-white hover:text-blue-600 transition-all border-0 lg:hidden flex-shrink-0">
               <Menu className="text-sm" />
             </button>
             
-            <button onClick={() => setSidebarCollapsed(!sidebarCollapsed)} className="hidden lg:flex w-9 h-9 rounded-xl bg-white items-center justify-center text-black hover:bg-white hover:text-black transition-all border-0 flex-shrink-0 cursor-pointer">
+            <button onClick={() => setSidebarCollapsed(!sidebarCollapsed)} className="hidden lg:flex w-9 h-9 rounded-xl bg-white items-center justify-center text-black hover:bg-white hover:text-blue-600 transition-all border-0 flex-shrink-0 cursor-pointer">
               <i className={`fas ${sidebarCollapsed ? 'fa-chevron-right' : 'fa-chevron-left'} text-sm`}></i>
             </button>
 
@@ -132,14 +132,14 @@ export default function InchargeLayout() {
             </div>
 
             <div className="relative">
-              <button onClick={() => setNotifOpen(!notifOpen)} className="w-9 h-9 rounded-xl bg-white border border-black flex items-center justify-center text-black hover:bg-white hover:text-black transition-all cursor-pointer relative">
+              <button onClick={() => setNotifOpen(!notifOpen)} className="w-9 h-9 rounded-xl bg-white border border-black flex items-center justify-center text-black hover:bg-white hover:text-blue-600 transition-all cursor-pointer relative">
                 <Bell className="text-sm" />
                 <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-white rounded-full border-2 border-white animate-pulse"></span>
               </button>
             </div>
 
             <div className="relative">
-              <div className="flex items-center gap-2 p-1 md:px-2.5 md:py-1.5 bg-white rounded-xl cursor-pointer border border-black hover:bg-white hover:border-black transition-all">
+              <div className="flex items-center gap-2 p-1 md:px-2.5 md:py-1.5 bg-white rounded-xl cursor-pointer border border-black hover:bg-white hover:border-blue-600 transition-all">
                 <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center text-black text-xs font-bold shadow-sm flex-shrink-0">
                   {user.avatar || 'SM'}
                 </div>

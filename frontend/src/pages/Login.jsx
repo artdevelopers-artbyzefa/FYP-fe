@@ -56,7 +56,7 @@ const Login = () => {
   };
 
   return (
-    <div className="bg-black min-h-screen flex items-center justify-center p-6 font-poppins selection:bg-black selection:text-white">
+    <div className="bg-blue-600 min-h-screen flex items-center justify-center p-6 font-poppins selection:bg-blue-600 selection:text-white">
 
       {/* Login Card */}
       <div className="bg-white rounded-2xl p-6 sm:p-8 w-full max-w-[440px] relative shadow-2xl animate-fade-in">
@@ -136,7 +136,7 @@ const Login = () => {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-black hover:text-black text-sm p-1 transition-colors z-10 focus:outline-none"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-black hover:text-blue-600 text-sm p-1 transition-colors z-10 focus:outline-none"
               >
                 <i className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'} text-sm`}></i>
               </button>
@@ -157,7 +157,7 @@ const Login = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full p-3.5 text-base font-bold rounded-xl bg-black text-white flex items-center justify-center gap-2 transition-all hover:bg-black hover:-translate-y-[1px] hover:shadow-lg active:translate-y-0 disabled:opacity-80 disabled:cursor-not-allowed"
+            className="w-full p-3.5 text-base font-bold rounded-xl bg-blue-600 text-white flex items-center justify-center gap-2 transition-all hover:bg-blue-600 hover:-translate-y-[1px] hover:shadow-lg active:translate-y-0 disabled:opacity-80 disabled:cursor-not-allowed"
           >
             <span>{isLoading ? 'Signing In...' : 'Sign In'}</span>
             <i className={`fas ${isLoading ? 'fa-spinner fa-spin' : 'fa-arrow-right'}`}></i>
@@ -172,28 +172,28 @@ const Login = () => {
               <button
                 type="button"
                 onClick={() => handleQuickLogin('Student', 'student@cuiatd.edu.pk', 'Megamix@123')}
-                className="py-2 px-3 text-xs font-bold rounded-lg border border-black text-black bg-white hover:bg-white hover:text-white hover:border-black transition-all text-center focus:outline-none"
+                className="py-2 px-3 text-xs font-bold rounded-lg border border-black text-black bg-white hover:bg-white hover:text-white hover:border-blue-600 transition-all text-center focus:outline-none"
               >
                 Student
               </button>
               <button
                 type="button"
                 onClick={() => handleQuickLogin('HOD', 'hod@cuiatd.edu.pk', 'Megamix@123')}
-                className="py-2 px-3 text-xs font-bold rounded-lg border border-black text-black bg-white hover:bg-white hover:text-white hover:border-black transition-all text-center focus:outline-none"
+                className="py-2 px-3 text-xs font-bold rounded-lg border border-black text-black bg-white hover:bg-white hover:text-white hover:border-blue-600 transition-all text-center focus:outline-none"
               >
                 HOD
               </button>
               <button
                 type="button"
                 onClick={() => handleQuickLogin('FYP Office In-charge', 'fypincharge@cuiatd.edu.pk', 'Megamix@123')}
-                className="py-2 px-3 text-xs font-bold rounded-lg border border-black text-black bg-white hover:bg-white hover:text-white hover:border-black transition-all text-center focus:outline-none"
+                className="py-2 px-3 text-xs font-bold rounded-lg border border-black text-black bg-white hover:bg-white hover:text-white hover:border-blue-600 transition-all text-center focus:outline-none"
               >
                 FYP Incharge
               </button>
               <button
                 type="button"
                 onClick={() => handleQuickLogin('Faculty Supervisor', 'faculty@cuiatd.edu.pk', 'Megamix@123')}
-                className="py-2 px-3 text-xs font-bold rounded-lg border border-black text-black bg-white hover:bg-white hover:text-white hover:border-black transition-all text-center focus:outline-none"
+                className="py-2 px-3 text-xs font-bold rounded-lg border border-black text-black bg-white hover:bg-white hover:text-white hover:border-blue-600 transition-all text-center focus:outline-none"
               >
                 Faculty
               </button>
@@ -202,7 +202,7 @@ const Login = () => {
               <button
                 type="button"
                 onClick={() => handleQuickLogin('FYP Office Assistant', 'office@cuiatd.edu.pk', 'Megamix@123')}
-                className="w-full py-2 px-3 text-xs font-bold rounded-lg border border-black text-black bg-white hover:bg-white hover:text-white hover:border-black transition-all text-center focus:outline-none"
+                className="w-full py-2 px-3 text-xs font-bold rounded-lg border border-black text-black bg-white hover:bg-white hover:text-white hover:border-blue-600 transition-all text-center focus:outline-none"
               >
                 Office Assistant
               </button>

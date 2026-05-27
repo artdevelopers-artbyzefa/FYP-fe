@@ -32,7 +32,7 @@ const InchargeDashboard = () => {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
-        <div className="bg-white rounded-2xl border border-black p-6 shadow-sm flex items-center gap-5 hover:border-black transition-all">
+        <div className="bg-white rounded-2xl border border-black p-6 shadow-sm flex items-center gap-5 hover:border-blue-600 transition-all">
           <div className="w-14 h-14 rounded-2xl bg-white text-black flex items-center justify-center text-2xl flex-shrink-0 shadow-inner"><ClipboardList className="w-4 h-4" /></div>
           <div className="min-w-0 flex-1">
             <div className="text-xs font-bold text-black uppercase tracking-wider mb-1 truncate">Active Rubrics</div>
@@ -42,7 +42,7 @@ const InchargeDashboard = () => {
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-2xl border border-black p-6 shadow-sm flex items-center gap-5 hover:border-black transition-all">
+        <div className="bg-white rounded-2xl border border-black p-6 shadow-sm flex items-center gap-5 hover:border-blue-600 transition-all">
           <div className="w-14 h-14 rounded-2xl bg-white text-black flex items-center justify-center text-2xl flex-shrink-0 shadow-inner"><UserPlus className="w-4 h-4" /></div>
           <div className="min-w-0 flex-1">
             <div className="text-xs font-bold text-black uppercase tracking-wider mb-1 truncate">Supervision Req</div>
@@ -52,7 +52,7 @@ const InchargeDashboard = () => {
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-2xl border border-black p-6 shadow-sm flex items-center gap-5 hover:border-black transition-all">
+        <div className="bg-white rounded-2xl border border-black p-6 shadow-sm flex items-center gap-5 hover:border-blue-600 transition-all">
           <div className="w-14 h-14 rounded-2xl bg-white text-black flex items-center justify-center text-2xl flex-shrink-0 shadow-inner"><Scale className="w-4 h-4" /></div>
           <div className="min-w-0 flex-1">
             <div className="text-xs font-bold text-black uppercase tracking-wider mb-1 truncate">Open Grievances</div>
@@ -62,7 +62,7 @@ const InchargeDashboard = () => {
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-2xl border border-black p-6 shadow-sm flex items-center gap-5 hover:border-black transition-all">
+        <div className="bg-white rounded-2xl border border-black p-6 shadow-sm flex items-center gap-5 hover:border-blue-600 transition-all">
           <div className="w-14 h-14 rounded-2xl bg-white text-black flex items-center justify-center text-2xl flex-shrink-0 shadow-inner"><CalendarCheck className="w-4 h-4" /></div>
           <div className="min-w-0 flex-1">
             <div className="text-xs font-bold text-black uppercase tracking-wider mb-1 truncate">Active Session</div>
@@ -76,31 +76,31 @@ const InchargeDashboard = () => {
 
       {/* Quick Access Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <div onClick={() => navigate('/office-incharge/rubrics')} className="bg-white p-6 rounded-2xl border border-black shadow-sm hover:border-black hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between">
+        <div onClick={() => navigate('/office-incharge/rubrics')} className="bg-white p-6 rounded-2xl border border-black shadow-sm hover:border-blue-600 hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between">
           <div className="flex justify-between items-center mb-4">
             <div className="w-10 h-10 rounded-xl bg-white text-black flex items-center justify-center font-bold"><ClipboardList className="text-base" /></div>
-            <ArrowRight className="text-black group-hover:text-black group-hover:translate-x-1 transition-all" />
+            <ArrowRight className="text-black group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
           </div>
           <div><h3 className="font-bold text-black text-base mb-1">Rubric Builder</h3><p className="text-xs text-black font-medium">Design proposal & CLO evaluation rubrics with 100% weight validation.</p></div>
         </div>
-        <div onClick={() => navigate('/office-incharge/sessions')} className="bg-white p-6 rounded-2xl border border-black shadow-sm hover:border-black hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between">
+        <div onClick={() => navigate('/office-incharge/sessions')} className="bg-white p-6 rounded-2xl border border-black shadow-sm hover:border-blue-600 hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between">
           <div className="flex justify-between items-center mb-4">
             <div className="w-10 h-10 rounded-xl bg-white text-black flex items-center justify-center font-bold"><Calendar className="text-base" /></div>
-            <ArrowRight className="text-black group-hover:text-black group-hover:translate-x-1 transition-all" />
+            <ArrowRight className="text-black group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
           </div>
           <div><h3 className="font-bold text-black text-base mb-1">Academic Sessions</h3><p className="text-xs text-black font-medium">Configure milestone deadlines and handle FYP-1 repeat registrations.</p></div>
         </div>
-        <div onClick={() => navigate('/office-incharge/committee-oversight')} className="bg-white p-6 rounded-2xl border border-black shadow-sm hover:border-black hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between">
+        <div onClick={() => navigate('/office-incharge/committee-oversight')} className="bg-white p-6 rounded-2xl border border-black shadow-sm hover:border-blue-600 hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between">
           <div className="flex justify-between items-center mb-4">
             <div className="w-10 h-10 rounded-xl bg-white text-black flex items-center justify-center font-bold"><Users className="text-base" /></div>
-            <ArrowRight className="text-black group-hover:text-black group-hover:translate-x-1 transition-all" />
+            <ArrowRight className="text-black group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
           </div>
           <div><h3 className="font-bold text-black text-base mb-1">Committee Oversight</h3><p className="text-xs text-black font-medium">Monitor active boards, manage head change requests, and trigger re-evaluations.</p></div>
         </div>
-        <div onClick={() => navigate('/office-incharge/grievances')} className="bg-white p-6 rounded-2xl border border-black shadow-sm hover:border-black hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between">
+        <div onClick={() => navigate('/office-incharge/grievances')} className="bg-white p-6 rounded-2xl border border-black shadow-sm hover:border-blue-600 hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between">
           <div className="flex justify-between items-center mb-4">
             <div className="w-10 h-10 rounded-xl bg-white text-black flex items-center justify-center font-bold"><Scale className="text-base" /></div>
-            <ArrowRight className="text-black group-hover:text-black group-hover:translate-x-1 transition-all" />
+            <ArrowRight className="text-black group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
           </div>
           <div><h3 className="font-bold text-black text-base mb-1">Grievance & SLAs</h3><p className="text-xs text-black font-medium">Resolve student disputes, monitor SLA windows, and escalate critical issues.</p></div>
         </div>

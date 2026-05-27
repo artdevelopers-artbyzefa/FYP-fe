@@ -65,7 +65,7 @@ export default function FacultyReports() {
                 <th className="py-4 px-6 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-black text-sm font-medium text-black">
+            <tbody className="divide-y divide-blue-600 text-sm font-medium text-black">
               <tr className="hover:bg-white/50 transition-colors">
                 <td className="py-4 px-6">
                   <div className="flex items-center gap-3">

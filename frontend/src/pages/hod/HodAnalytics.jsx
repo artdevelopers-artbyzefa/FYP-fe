@@ -47,7 +47,7 @@ const HodAnalytics = () => {
             <p className="text-xs text-black mb-6 font-medium">Final defense grading breakdown for Spring 2026</p>
             <div className="space-y-4 my-4">
               {data && data.grades.map((g, idx) => {
-                const colors = ['bg-black', 'bg-black', 'bg-warning'];
+                const colors = ['bg-blue-600', 'bg-blue-600', 'bg-warning'];
                 return (
                   <div key={idx}>
                     <div className="flex justify-between text-xs font-bold text-black mb-1">

@@ -54,7 +54,7 @@ const AssistantProposalCommittees = () => {
               </div>
             </div>
             <div className="pt-4 border-t border-black flex justify-end">
-              <button type="submit" className="bg-white hover:bg-black text-white px-6 py-2.5 rounded-xl font-bold text-sm shadow-lg transition-all cursor-pointer">
+              <button type="submit" className="bg-white hover:bg-blue-600 text-white px-6 py-2.5 rounded-xl font-bold text-sm shadow-lg transition-all cursor-pointer">
                 Create Committee
               </button>
             </div>
@@ -80,7 +80,7 @@ const AssistantProposalCommittees = () => {
                 </div>
               </div>
               <div className="flex gap-3 justify-end pt-2">
-                <button onClick={handleAssign} className="bg-black hover:bg-black text-white px-5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer">Assign Proposal</button>
+                <button onClick={handleAssign} className="bg-blue-600 hover:bg-blue-600 text-white px-5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer">Assign Proposal</button>
                 <button onClick={handlePublish} className="bg-white hover:bg-white text-white px-5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-2"><CalendarCheck className="w-4 h-4" /> Publish Schedule</button>
               </div>
             </div>
@@ -94,7 +94,7 @@ const AssistantProposalCommittees = () => {
           </div>
           <p className="text-xs text-black mb-6 font-medium leading-relaxed">The system automatically analyzes faculty research interests and teaching schedules to recommend optimal committee placements.</p>
           
-          <div className="space-y-4 divide-y divide-black">
+          <div className="space-y-4 divide-y divide-blue-600">
             <div className="pt-2">
               <div className="flex justify-between items-baseline mb-1">
                 <span className="font-black text-black text-xs">Dr. Ali Hassan</span>

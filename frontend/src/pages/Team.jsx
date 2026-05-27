@@ -155,7 +155,7 @@ const Team = () => {
 
               <div className={`grid grid-cols-1 sm:grid-cols-2 ${category.members.length === 3 ? 'lg:grid-cols-3' : 'lg:grid-cols-2 max-w-[900px] mx-auto'} gap-8`}>
                 {category.members.map((member, index) => (
-                  <article key={index} className="bg-white border-[1.5px] border-black rounded-[2.5rem] p-10 text-center flex flex-col items-center group hover:border-black hover:shadow-xl transition-all duration-300">
+                  <article key={index} className="bg-white border-[1.5px] border-black rounded-[2.5rem] p-10 text-center flex flex-col items-center group hover:border-blue-600 hover:shadow-xl transition-all duration-300">
                     <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mb-6 border-[3px] border-white ring-1 ring-blue-100 overflow-hidden shadow-sm">
                       <img 
                         src={member.image || "/cuilogo.png"} 
@@ -169,10 +169,10 @@ const Team = () => {
                       {member.desc}
                     </p>
                     <div className="flex gap-4 mt-auto">
-                      <a href="#" className="w-10 h-10 bg-white text-black rounded-xl flex items-center justify-center transition-all hover:bg-black hover:text-white">
+                      <a href="#" className="w-10 h-10 bg-white text-black rounded-xl flex items-center justify-center transition-all hover:bg-blue-600 hover:text-white">
                         <i className="fab fa-github"></i>
                       </a>
-                      <a href="#" className="w-10 h-10 bg-white text-black rounded-xl flex items-center justify-center transition-all hover:bg-black hover:text-white">
+                      <a href="#" className="w-10 h-10 bg-white text-black rounded-xl flex items-center justify-center transition-all hover:bg-blue-600 hover:text-white">
                         <i className="fab fa-linkedin-in"></i>
                       </a>
                     </div>

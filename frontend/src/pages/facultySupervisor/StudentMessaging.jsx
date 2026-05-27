@@ -192,10 +192,10 @@ export default function StudentMessaging() {
                     </p>
                   </div>
                   {group.hasUnread && !isActive && (
-                    <div className="w-2 h-2 rounded-full bg-black shrink-0 absolute right-6" />
+                    <div className="w-2 h-2 rounded-full bg-blue-600 shrink-0 absolute right-6" />
                   )}
                   {isActive && (
-                    <div className="w-1.5 h-1.5 rounded-full bg-black shrink-0" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-blue-600 shrink-0" />
                   )}
                 </div>
               );
@@ -260,7 +260,7 @@ export default function StudentMessaging() {
 
           {/* Input Area */}
           <form onSubmit={handleSend} className="p-4 border-t border-black bg-white flex items-center gap-3 shrink-0">
-            <button type="button" className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-black hover:text-black hover:bg-white border border-black transition-colors shrink-0">
+            <button type="button" className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-black hover:text-blue-600 hover:bg-white border border-black transition-colors shrink-0">
               <Paperclip className="w-4 h-4" />
             </button>
             <input
@@ -273,7 +273,7 @@ export default function StudentMessaging() {
             <button 
               type="submit"
               disabled={sending || !inputValue.trim()}
-              className="px-5 h-10 bg-[#2563eb] text-white font-bold text-sm rounded-xl hover:bg-black transition-colors flex items-center gap-2 disabled:opacity-50 shrink-0 shadow-sm"
+              className="px-5 h-10 bg-[#2563eb] text-white font-bold text-sm rounded-xl hover:bg-blue-600 transition-colors flex items-center gap-2 disabled:opacity-50 shrink-0 shadow-sm"
             >
               {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
               <span className="hidden sm:inline">Send</span>

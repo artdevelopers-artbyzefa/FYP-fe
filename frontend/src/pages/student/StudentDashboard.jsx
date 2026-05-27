@@ -41,7 +41,7 @@ export default function Dashboard() {
             </div>
           </div>
 
-          <div className="bg-white/50 rounded-2xl border border-black overflow-hidden grid grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0 divide-black">
+          <div className="bg-white/50 rounded-2xl border border-black overflow-hidden grid grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0 divide-blue-600">
             <div className="p-3 md:p-4 flex flex-col items-center md:items-start transition-colors hover:bg-white">
               <p className="text-[8px] md:text-[9px] font-black text-black uppercase tracking-widest mb-1 md:mb-1.5">Father's Name</p>
               <p className="text-[10px] md:text-xs font-bold text-black truncate w-full text-center md:text-left">{profile.fatherName}</p>
@@ -70,8 +70,8 @@ export default function Dashboard() {
           <div className="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-5 border-b border-black pb-4">
             <div className="flex gap-6 w-full md:w-auto overflow-x-auto">
               <button className="text-sm font-bold text-black border-b-2 border-black pb-2 whitespace-nowrap"><Users className="w-4 h-4 mr-1.5" /> Group Members</button>
-              <Link to="/partners/requests" className="text-sm font-bold text-black hover:text-black pb-2 whitespace-nowrap transition-colors"><Inbox className="w-4 h-4 mr-1.5" /> Requests</Link>
-              <Link to="/project/approved" className="text-sm font-bold text-black hover:text-black pb-2 whitespace-nowrap transition-colors"><Lightbulb className="w-4 h-4 mr-1.5" /> Ideas</Link>
+              <Link to="/partners/requests" className="text-sm font-bold text-black hover:text-blue-600 pb-2 whitespace-nowrap transition-colors"><Inbox className="w-4 h-4 mr-1.5" /> Requests</Link>
+              <Link to="/project/approved" className="text-sm font-bold text-black hover:text-blue-600 pb-2 whitespace-nowrap transition-colors"><Lightbulb className="w-4 h-4 mr-1.5" /> Ideas</Link>
             </div>
           </div>
           <div className="text-center py-16 text-sm text-black flex flex-col items-center">

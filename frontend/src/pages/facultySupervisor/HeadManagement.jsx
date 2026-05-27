@@ -189,7 +189,7 @@ export default function HeadManagement() {
                 <th className="px-6 py-4 text-black text-xs tracking-wider uppercase font-semibold text-center w-[16%]">HEAD ACTION</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-black/50">
+            <tbody className="divide-y divide-blue-600/50">
               {groups.map((group) => {
                 const { avg, grade } = calculateConsensusAvg(group.scores);
                 return (

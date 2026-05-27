@@ -62,7 +62,7 @@ export default function AcademicSessions() {
             </div>
 
             <div className="pt-4 border-t border-black flex justify-end">
-              <button type="submit" className="bg-white hover:bg-black text-white px-6 py-2.5 rounded-xl font-bold text-sm shadow-lg transition-all cursor-pointer">Save Session Configuration</button>
+              <button type="submit" className="bg-white hover:bg-blue-600 text-white px-6 py-2.5 rounded-xl font-bold text-sm shadow-lg transition-all cursor-pointer">Save Session Configuration</button>
             </div>
           </form>
 
@@ -79,7 +79,7 @@ export default function AcademicSessions() {
                     <th className="py-3 px-4 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-black text-xs font-bold text-black">
+                <tbody className="divide-y divide-blue-600 text-xs font-bold text-black">
                   <tr className="hover:bg-white/50">
                     <td className="py-3 px-4 font-black text-black">Faizan Ali</td>
                     <td className="py-3 px-4 text-black font-mono">SP21-BCS-031</td>

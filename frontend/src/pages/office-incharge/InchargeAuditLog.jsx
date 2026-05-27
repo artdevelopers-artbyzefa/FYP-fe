@@ -74,7 +74,7 @@ const InchargeAuditLog = () => {
                 <th className="py-3.5 px-6">IP Address</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-black text-xs font-medium text-black font-mono">
+            <tbody className="divide-y divide-blue-600 text-xs font-medium text-black font-mono">
               {filtered.map((log, idx) => (
                 <tr key={idx} className="hover:bg-white/50 transition-colors">
                   <td className="py-4 px-6 text-black">{log.time}</td>

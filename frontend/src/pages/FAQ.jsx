@@ -97,7 +97,7 @@ const FAQ = () => {
                     onClick={() => toggleFAQ(index)}
                     className="w-full text-left px-6 py-5 flex items-center justify-between gap-4 group"
                   >
-                    <span className={`text-[15px] font-bold transition-colors ${openIndex === index ? 'text-black' : 'text-gray-900 group-hover:text-black'}`}>
+                    <span className={`text-[15px] font-bold transition-colors ${openIndex === index ? 'text-blue-600' : 'text-gray-900 group-hover:text-blue-600'}`}>
                       {faq.question}
                     </span>
                     <ChevronDown className="w-4 h-4" />

@@ -61,11 +61,11 @@ export default function DashboardLayout() {
   else if (path.includes('/task-manager')) pageTitle = 'Task Manager';
 
   return (
-    <div className={`flex h-screen overflow-hidden relative bg-lightbg selection:bg-black/20 ${isLocked ? 'profile-locked' : ''}`} style={{ fontFamily: "'Poppins', sans-serif", backgroundColor: '#EFF6FF' }}>
+    <div className={`flex h-screen overflow-hidden relative bg-lightbg selection:bg-blue-600/20 ${isLocked ? 'profile-locked' : ''}`} style={{ fontFamily: "'Poppins', sans-serif", backgroundColor: '#EFF6FF' }}>
       
       {/* ═══════════════ SIDEBAR ═══════════════ */}
       <div 
-        className={`bg-black flex flex-col flex-shrink-0 transition-all duration-300 overflow-hidden fixed lg:relative z-[50] h-full ${mobileSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}
+        className={`bg-blue-600 flex flex-col flex-shrink-0 transition-all duration-300 overflow-hidden fixed lg:relative z-[50] h-full ${mobileSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}
         style={{ width: sidebarCollapsed ? 68 : 256, minWidth: sidebarCollapsed ? 68 : 256, backgroundColor: '#1E3A8A' }}
       >
         <div className="flex items-center gap-3 px-4 py-5 border-b border-white/10 relative">
@@ -103,7 +103,7 @@ export default function DashboardLayout() {
                     <div key={item.id} className="mb-1">
                       <div 
                         onClick={() => { if(!isNavLocked) setOpen(!isOpen); }}
-                        className={`flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-200 ${isNavLocked ? 'opacity-40 cursor-not-allowed pointer-events-none' : ''} ${isActive && !isOpen ? 'bg-black text-white shadow-lg shadow-blue-600/30 font-bold' : 'text-white/90 hover:bg-white/15 hover:text-white'} ${sidebarCollapsed ? 'justify-center' : ''}`}
+                        className={`flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-200 ${isNavLocked ? 'opacity-40 cursor-not-allowed pointer-events-none' : ''} ${isActive && !isOpen ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30 font-bold' : 'text-white/90 hover:bg-white/15 hover:text-white'} ${sidebarCollapsed ? 'justify-center' : ''}`}
                         title={item.label}
                       >
                         {React.createElement(item.icon, { className: "w-4 h-4" })}
@@ -134,7 +134,7 @@ export default function DashboardLayout() {
                   <div 
                     key={item.id}
                     onClick={() => { if(!isNavLocked) { navigate(item.id); setMobileSidebarOpen(false); } }}
-                    className={`flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-200 ${isNavLocked ? 'opacity-40 cursor-not-allowed pointer-events-none' : ''} ${isActive ? 'bg-black text-white shadow-lg shadow-blue-600/30 font-bold' : 'text-white/90 hover:bg-white/15 hover:text-white'} ${sidebarCollapsed ? 'justify-center' : ''}`}
+                    className={`flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-200 ${isNavLocked ? 'opacity-40 cursor-not-allowed pointer-events-none' : ''} ${isActive ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30 font-bold' : 'text-white/90 hover:bg-white/15 hover:text-white'} ${sidebarCollapsed ? 'justify-center' : ''}`}
                     title={item.label}
                   >
                     {React.createElement(item.icon, { className: "w-4 h-4" })}
@@ -148,7 +148,7 @@ export default function DashboardLayout() {
         </nav>
 
         <div className="p-2 border-t border-white/10">
-          <div onClick={() => logout()} className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-white/90 hover:bg-white/20 hover:text-black transition-all duration-200" title="Logout">
+          <div onClick={() => logout()} className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-white/90 hover:bg-white/20 hover:text-blue-600 transition-all duration-200" title="Logout">
             <LogOut className="text-sm w-5 text-center flex-shrink-0" />
             {!sidebarCollapsed && <span className="text-sm font-medium transition-all duration-200">Logout</span>}
           </div>
@@ -156,7 +156,7 @@ export default function DashboardLayout() {
       </div>
 
       {/* Mobile Overlay */}
-      {mobileSidebarOpen && <div onClick={() => setMobileSidebarOpen(false)} className="fixed inset-0 bg-black/50 z-[40] lg:hidden backdrop-blur-sm" />}
+      {mobileSidebarOpen && <div onClick={() => setMobileSidebarOpen(false)} className="fixed inset-0 bg-blue-600/50 z-[40] lg:hidden backdrop-blur-sm" />}
 
       {/* ═══════════════ MAIN CONTENT WRAPPER ═══════════════ */}
       <div className="flex-1 flex flex-col overflow-hidden w-full transition-all duration-300 ease-in-out">
@@ -164,11 +164,11 @@ export default function DashboardLayout() {
         {/* TOPBAR */}
         <div className="bg-white border-b border-black px-3 md:px-6 h-14 md:h-16 flex items-center justify-between shadow-sm flex-shrink-0 z-[30] gap-3">
           <div className="flex items-center gap-2 md:gap-3 min-w-0">
-            <button onClick={() => setMobileSidebarOpen(true)} className="w-9 h-9 rounded-xl bg-white flex items-center justify-center text-black hover:bg-white hover:text-black transition-all border-0 lg:hidden flex-shrink-0">
+            <button onClick={() => setMobileSidebarOpen(true)} className="w-9 h-9 rounded-xl bg-white flex items-center justify-center text-black hover:bg-white hover:text-blue-600 transition-all border-0 lg:hidden flex-shrink-0">
               <Menu className="text-sm" />
             </button>
             
-            <button onClick={() => setSidebarCollapsed(!sidebarCollapsed)} className="hidden lg:flex w-9 h-9 rounded-xl bg-white items-center justify-center text-black hover:bg-white hover:text-black transition-all border-0 flex-shrink-0">
+            <button onClick={() => setSidebarCollapsed(!sidebarCollapsed)} className="hidden lg:flex w-9 h-9 rounded-xl bg-white items-center justify-center text-black hover:bg-white hover:text-blue-600 transition-all border-0 flex-shrink-0">
               <i className={`fas ${sidebarCollapsed ? 'fa-chevron-right' : 'fa-chevron-left'} text-sm`}></i>
             </button>
 
@@ -188,13 +188,13 @@ export default function DashboardLayout() {
             </div>
 
             <div className="relative">
-              <button className="w-9 h-9 rounded-xl bg-white flex items-center justify-center text-black hover:bg-white hover:text-black transition-all">
+              <button className="w-9 h-9 rounded-xl bg-white flex items-center justify-center text-black hover:bg-white hover:text-blue-600 transition-all">
                 <Bell className="text-sm" />
                 <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-white rounded-full border-2 border-white"></span>
               </button>
             </div>
 
-            <Link to="/profile" className="flex items-center gap-2 p-1 md:px-2.5 md:py-1.5 bg-white rounded-xl cursor-pointer border border-black hover:bg-white hover:border-black transition-all">
+            <Link to="/profile" className="flex items-center gap-2 p-1 md:px-2.5 md:py-1.5 bg-white rounded-xl cursor-pointer border border-black hover:bg-white hover:border-blue-600 transition-all">
               <div className="w-8 h-8 bg-white/50 rounded-lg flex items-center justify-center text-black text-xs font-bold shadow-sm flex-shrink-0">
                 {user.avatar || 'ST'}
               </div>

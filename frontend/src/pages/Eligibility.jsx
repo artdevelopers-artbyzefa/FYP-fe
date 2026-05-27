@@ -83,7 +83,7 @@ const Eligibility = () => {
           <div className="container max-w-[1280px] mx-auto px-4 sm:px-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {criteria.map((item, index) => (
-                <div key={index} className="bg-white border-[1.5px] border-black rounded-[2rem] p-8 transition-all hover:border-black hover:shadow-lg">
+                <div key={index} className="bg-white border-[1.5px] border-black rounded-[2rem] p-8 transition-all hover:border-blue-600 hover:shadow-lg">
                   <div className="w-11 h-11 bg-white text-black rounded-xl flex items-center justify-center text-lg mb-6">
                     {React.createElement(item.icon, { className: "w-4 h-4" })}
                   </div>
@@ -101,7 +101,7 @@ const Eligibility = () => {
         {/* Info Band */}
         <section className="py-16 md:py-24 bg-white">
           <div className="container max-w-[1280px] mx-auto px-4 sm:px-6">
-            <div className="bg-black rounded-[2rem] p-10 md:p-16 flex flex-col md:flex-row items-center justify-between gap-8 text-white relative overflow-hidden shadow-2xl">
+            <div className="bg-blue-600 rounded-[2rem] p-10 md:p-16 flex flex-col md:flex-row items-center justify-between gap-8 text-white relative overflow-hidden shadow-2xl">
               <div className="absolute top-0 right-0 w-1/2 h-full bg-white/5 blur-[100px] rounded-full pointer-events-none"></div>
               <div className="relative z-10 text-center md:text-left">
                 <h2 className="text-2xl md:text-3xl font-black mb-4">Do not meet a requirement yet?</h2>

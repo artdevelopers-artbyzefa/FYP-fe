@@ -129,7 +129,7 @@ export default function Profile() {
           </div>
 
           <div className="flex items-center justify-end gap-3 pt-4 border-t border-black">
-            <button type="submit" disabled={loading} className="bg-black hover:bg-black text-white px-5 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2 shadow-lg">
+            <button type="submit" disabled={loading} className="bg-blue-600 hover:bg-blue-600 text-white px-5 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2 shadow-lg">
               <i className={`fas ${loading ? 'fa-spinner fa-spin' : 'fa-save'}`}></i> {loading ? 'Saving...' : 'Save Profile'}
             </button>
           </div>

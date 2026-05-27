@@ -24,7 +24,7 @@ const AssistantDashboard = () => {
           <button onClick={() => navigate('/office-assistant/users')} className="bg-white text-black hover:bg-white px-5 py-3 rounded-xl font-bold text-sm shadow-lg transition-all flex items-center gap-2 cursor-pointer">
             <UserPlus className="w-4 h-4" /> Add User
           </button>
-          <button onClick={() => navigate('/office-assistant/students')} className="bg-white hover:bg-black text-white px-5 py-3 rounded-xl font-bold text-sm shadow-lg transition-all flex items-center gap-2 cursor-pointer">
+          <button onClick={() => navigate('/office-assistant/students')} className="bg-white hover:bg-blue-600 text-white px-5 py-3 rounded-xl font-bold text-sm shadow-lg transition-all flex items-center gap-2 cursor-pointer">
             <GraduationCap className="w-4 h-4" /> View Students
           </button>
         </div>
@@ -32,7 +32,7 @@ const AssistantDashboard = () => {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
-        <div className="bg-white rounded-2xl border border-black p-6 shadow-sm flex items-center gap-5 hover:border-black transition-all">
+        <div className="bg-white rounded-2xl border border-black p-6 shadow-sm flex items-center gap-5 hover:border-blue-600 transition-all">
           <div className="w-14 h-14 rounded-2xl bg-white text-black flex items-center justify-center text-2xl flex-shrink-0 shadow-inner"><Users className="w-4 h-4" /></div>
           <div className="min-w-0 flex-1">
             <div className="text-xs font-bold text-black uppercase tracking-wider mb-1 truncate">Total Users</div>
@@ -42,7 +42,7 @@ const AssistantDashboard = () => {
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-2xl border border-black p-6 shadow-sm flex items-center gap-5 hover:border-black transition-all">
+        <div className="bg-white rounded-2xl border border-black p-6 shadow-sm flex items-center gap-5 hover:border-blue-600 transition-all">
           <div className="w-14 h-14 rounded-2xl bg-white text-black flex items-center justify-center text-2xl flex-shrink-0 shadow-inner"><GraduationCap className="w-4 h-4" /></div>
           <div className="min-w-0 flex-1">
             <div className="text-xs font-bold text-black uppercase tracking-wider mb-1 truncate">FYP Students</div>
@@ -52,7 +52,7 @@ const AssistantDashboard = () => {
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-2xl border border-black p-6 shadow-sm flex items-center gap-5 hover:border-black transition-all">
+        <div className="bg-white rounded-2xl border border-black p-6 shadow-sm flex items-center gap-5 hover:border-blue-600 transition-all">
           <div className="w-14 h-14 rounded-2xl bg-white text-black flex items-center justify-center text-2xl flex-shrink-0 shadow-inner"><GitBranch className="w-4 h-4" /></div>
           <div className="min-w-0 flex-1">
             <div className="text-xs font-bold text-black uppercase tracking-wider mb-1 truncate">Active Projects</div>
@@ -62,7 +62,7 @@ const AssistantDashboard = () => {
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-2xl border border-black p-6 shadow-sm flex items-center gap-5 hover:border-black transition-all">
+        <div className="bg-white rounded-2xl border border-black p-6 shadow-sm flex items-center gap-5 hover:border-blue-600 transition-all">
           <div className="w-14 h-14 rounded-2xl bg-white text-black flex items-center justify-center text-2xl flex-shrink-0 shadow-inner"><Users className="w-4 h-4" /></div>
           <div className="min-w-0 flex-1">
             <div className="text-xs font-bold text-black uppercase tracking-wider mb-1 truncate">Committees</div>
@@ -84,40 +84,40 @@ const AssistantDashboard = () => {
             </div>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div onClick={() => navigate('/office-assistant/users')} className="p-5 rounded-2xl bg-white border border-black hover:border-black hover:bg-white/30 transition-all cursor-pointer flex flex-col justify-between group">
+            <div onClick={() => navigate('/office-assistant/users')} className="p-5 rounded-2xl bg-white border border-black hover:border-blue-600 hover:bg-white/30 transition-all cursor-pointer flex flex-col justify-between group">
               <div className="flex justify-between items-center mb-4">
                 <div className="w-10 h-10 rounded-xl bg-white text-black flex items-center justify-center font-bold"><Users className="w-4 h-4" /></div>
-                <ArrowRight className="text-black group-hover:text-black group-hover:translate-x-1 transition-all" />
+                <ArrowRight className="text-black group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
               </div>
               <div>
                 <h4 className="font-bold text-black text-base mb-1">User Account Management</h4>
                 <p className="text-xs text-black font-medium">Assign roles, manage account locks, and register new administrative or academic users.</p>
               </div>
             </div>
-            <div onClick={() => navigate('/office-assistant/students')} className="p-5 rounded-2xl bg-white border border-black hover:border-black hover:bg-white/30 transition-all cursor-pointer flex flex-col justify-between group">
+            <div onClick={() => navigate('/office-assistant/students')} className="p-5 rounded-2xl bg-white border border-black hover:border-blue-600 hover:bg-white/30 transition-all cursor-pointer flex flex-col justify-between group">
               <div className="flex justify-between items-center mb-4">
                 <div className="w-10 h-10 rounded-xl bg-white text-black flex items-center justify-center font-bold"><GraduationCap className="w-4 h-4" /></div>
-                <ArrowRight className="text-black group-hover:text-black group-hover:translate-x-1 transition-all" />
+                <ArrowRight className="text-black group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
               </div>
               <div>
                 <h4 className="font-bold text-black text-base mb-1">Student Records & Bulk Messaging</h4>
                 <p className="text-xs text-black font-medium">Search registration numbers, view read-only profiles, and dispatch milestone alerts.</p>
               </div>
             </div>
-            <div onClick={() => navigate('/office-assistant/proposal-committee')} className="p-5 rounded-2xl bg-white border border-black hover:border-black hover:bg-white/30 transition-all cursor-pointer flex flex-col justify-between group">
+            <div onClick={() => navigate('/office-assistant/proposal-committee')} className="p-5 rounded-2xl bg-white border border-black hover:border-blue-600 hover:bg-white/30 transition-all cursor-pointer flex flex-col justify-between group">
               <div className="flex justify-between items-center mb-4">
                 <div className="w-10 h-10 rounded-xl bg-white text-black flex items-center justify-center font-bold"><Users className="w-4 h-4" /></div>
-                <ArrowRight className="text-black group-hover:text-black group-hover:translate-x-1 transition-all" />
+                <ArrowRight className="text-black group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
               </div>
               <div>
                 <h4 className="font-bold text-black text-base mb-1">Proposal Committees</h4>
                 <p className="text-xs text-black font-medium">Configure evaluation boards with AI-assisted faculty interest and availability suggestions.</p>
               </div>
             </div>
-            <div onClick={() => navigate('/office-assistant/eval-committee')} className="p-5 rounded-2xl bg-white border border-black hover:border-black hover:bg-white/30 transition-all cursor-pointer flex flex-col justify-between group">
+            <div onClick={() => navigate('/office-assistant/eval-committee')} className="p-5 rounded-2xl bg-white border border-black hover:border-blue-600 hover:bg-white/30 transition-all cursor-pointer flex flex-col justify-between group">
               <div className="flex justify-between items-center mb-4">
                 <div className="w-10 h-10 rounded-xl bg-white text-black flex items-center justify-center font-bold"><Layers className="w-4 h-4" /></div>
-                <ArrowRight className="text-black group-hover:text-black group-hover:translate-x-1 transition-all" />
+                <ArrowRight className="text-black group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
               </div>
               <div>
                 <h4 className="font-bold text-black text-base mb-1">FYP Evaluation Boards</h4>

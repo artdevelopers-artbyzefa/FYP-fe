@@ -17,7 +17,7 @@ export default function SupervisionRequests() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Request Card 1 */}
-        <div className="bg-white rounded-2xl border border-black shadow-sm p-6 flex flex-col justify-between hover:border-black transition-all">
+        <div className="bg-white rounded-2xl border border-black shadow-sm p-6 flex flex-col justify-between hover:border-blue-600 transition-all">
           <div>
             <div className="flex justify-between items-start mb-4 pb-4 border-b border-black">
               <div className="flex items-center gap-4">
@@ -39,7 +39,7 @@ export default function SupervisionRequests() {
         </div>
 
         {/* Request Card 2 */}
-        <div className="bg-white rounded-2xl border border-black shadow-sm p-6 flex flex-col justify-between hover:border-black transition-all">
+        <div className="bg-white rounded-2xl border border-black shadow-sm p-6 flex flex-col justify-between hover:border-blue-600 transition-all">
           <div>
             <div className="flex justify-between items-start mb-4 pb-4 border-b border-black">
               <div className="flex items-center gap-4">

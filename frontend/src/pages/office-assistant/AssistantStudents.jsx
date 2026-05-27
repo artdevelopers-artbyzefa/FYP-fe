@@ -24,7 +24,7 @@ const AssistantStudents = () => {
           <h2 className="text-xl font-black text-black">Student Management</h2>
           <p className="text-xs text-black mt-0.5 font-medium">Search registration numbers, filter by FYP status, and dispatch bulk milestone messages</p>
         </div>
-        <button onClick={() => setIsBulkOpen(true)} className="bg-white hover:bg-black text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg transition-all flex items-center gap-2 cursor-pointer">
+        <button onClick={() => setIsBulkOpen(true)} className="bg-white hover:bg-blue-600 text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg transition-all flex items-center gap-2 cursor-pointer">
           <Send className="w-4 h-4" /> Bulk Message
         </button>
       </div>
@@ -59,7 +59,7 @@ const AssistantStudents = () => {
                 <th className="py-3.5 px-6 text-right">Profile</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-black text-sm font-medium text-black">
+            <tbody className="divide-y divide-blue-600 text-sm font-medium text-black">
               {students.map(s => (
                 <tr key={s.id} className="hover:bg-white/50 transition-colors">
                   <td className="py-4 px-6"><input type="checkbox" className="accent-primary cursor-pointer" /></td>
@@ -71,7 +71,7 @@ const AssistantStudents = () => {
                     </span>
                   </td>
                   <td className="py-4 px-6 text-black truncate max-w-xs">{s.project}</td>
-                  <td className="py-4 px-6 text-right"><button className="px-3 py-1.5 rounded-lg bg-white hover:bg-white hover:text-black border border-black text-xs font-bold transition-all cursor-pointer">View Profile</button></td>
+                  <td className="py-4 px-6 text-right"><button className="px-3 py-1.5 rounded-lg bg-white hover:bg-white hover:text-blue-600 border border-black text-xs font-bold transition-all cursor-pointer">View Profile</button></td>
                 </tr>
               ))}
             </tbody>
@@ -80,11 +80,11 @@ const AssistantStudents = () => {
       </div>
 
       {isBulkOpen && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[150] flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-blue-600/50 backdrop-blur-sm z-[150] flex items-center justify-center p-4">
           <div className="bg-white rounded-[2rem] w-full max-w-lg p-6 sm:p-8 shadow-2xl border border-black">
             <div className="flex justify-between items-center mb-6 pb-3 border-b border-black">
               <h3 className="text-lg font-black text-black">Compose Bulk Message</h3>
-              <i className="fas fa-times text-black hover:text-black cursor-pointer text-lg" onClick={() => setIsBulkOpen(false)}></i>
+              <i className="fas fa-times text-black hover:text-blue-600 cursor-pointer text-lg" onClick={() => setIsBulkOpen(false)}></i>
             </div>
             <form onSubmit={handleBulkSubmit} className="space-y-5">
               <div>
@@ -101,7 +101,7 @@ const AssistantStudents = () => {
               </div>
               <div className="flex justify-end gap-3 pt-4 border-t border-black">
                 <button type="button" onClick={() => setIsBulkOpen(false)} className="px-5 py-2.5 rounded-xl text-xs font-bold text-black hover:bg-white transition-colors cursor-pointer">Cancel</button>
-                <button type="submit" className="bg-white hover:bg-black text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow-lg transition-all cursor-pointer flex items-center gap-2"><Send className="w-4 h-4" /> Send Broadcast</button>
+                <button type="submit" className="bg-white hover:bg-blue-600 text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow-lg transition-all cursor-pointer flex items-center gap-2"><Send className="w-4 h-4" /> Send Broadcast</button>
               </div>
             </form>
           </div>

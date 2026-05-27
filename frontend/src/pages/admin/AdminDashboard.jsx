@@ -152,7 +152,7 @@ export default function AdminDashboard() {
           ))}
         </nav>
 
-        <div className="p-3 border-t border-white/10 bg-black/10 flex-shrink-0">
+        <div className="p-3 border-t border-white/10 bg-blue-600/10 flex-shrink-0">
           <button onClick={handleLogout} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-white/80 hover:bg-red-500/20 hover:text-red-400 transition-all duration-200 font-bold ${sidebarCollapsed ? 'justify-center' : ''}`}>
             <LogOut className="text-sm w-5 text-center flex-shrink-0" />
             {!sidebarCollapsed && <span className="text-sm">Logout</span>}
@@ -161,7 +161,7 @@ export default function AdminDashboard() {
       </aside>
 
       {/* Mobile overlay */}
-      {mobileSidebarOpen && <div onClick={() => setMobileSidebarOpen(false)} className="fixed inset-0 bg-black/50 z-40 lg:hidden backdrop-blur-sm" />}
+      {mobileSidebarOpen && <div onClick={() => setMobileSidebarOpen(false)} className="fixed inset-0 bg-blue-600/50 z-40 lg:hidden backdrop-blur-sm" />}
 
       {/* ═══════════════ MAIN ═══════════════ */}
       <div className="flex-1 flex flex-col overflow-hidden w-full">
@@ -199,7 +199,7 @@ export default function AdminDashboard() {
                     <span className="text-sm font-black text-black">System Notifications</span>
                     <button onClick={() => { setNotifications(prev => prev.map(n => ({ ...n, read: true }))); toast.success('All notifications marked as read'); }} className="text-xs font-bold text-black hover:underline cursor-pointer">Mark all as read</button>
                   </div>
-                  <div className="max-h-72 overflow-y-auto divide-y divide-black">
+                  <div className="max-h-72 overflow-y-auto divide-y divide-blue-600">
                     {notifications.length === 0 ? (
                       <p className="p-8 text-center text-xs text-black font-bold">No new notifications</p>
                     ) : notifications.map(n => (
@@ -216,14 +216,14 @@ export default function AdminDashboard() {
                     ))}
                   </div>
                   <div className="p-3 bg-white border-t border-black text-center">
-                    <button className="text-xs font-bold text-black hover:text-black transition-colors cursor-pointer">View All Notifications</button>
+                    <button className="text-xs font-bold text-black hover:text-blue-600 transition-colors cursor-pointer">View All Notifications</button>
                   </div>
                 </div>
               )}
             </div>
 
             {/* User menu */}
-            <div className="flex items-center gap-2 p-1 md:px-2.5 md:py-1.5 bg-white rounded-xl cursor-pointer border border-black hover:bg-white hover:border-black transition-all">
+            <div className="flex items-center gap-2 p-1 md:px-2.5 md:py-1.5 bg-white rounded-xl cursor-pointer border border-black hover:bg-white hover:border-blue-600 transition-all">
               <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center text-black text-xs font-bold shadow-sm flex-shrink-0">
                 {user.avatar || 'SA'}
               </div>
@@ -258,28 +258,28 @@ export default function AdminDashboard() {
 
                 {/* Stats */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
-                  <div className="bg-white rounded-2xl border border-black p-6 shadow-sm flex items-center gap-5 hover:border-black transition-all">
+                  <div className="bg-white rounded-2xl border border-black p-6 shadow-sm flex items-center gap-5 hover:border-blue-600 transition-all">
                     <div className="w-14 h-14 rounded-2xl bg-white text-black flex items-center justify-center text-2xl flex-shrink-0 shadow-inner"><Users className="w-4 h-4" /></div>
                     <div className="min-w-0 flex-1">
                       <div className="text-xs font-bold text-black uppercase tracking-wider mb-1 truncate">Registered Users</div>
                       <div className="flex items-baseline justify-between"><span className="text-3xl font-black text-black">{stats.totalUsers}</span><span className="text-xs font-bold text-black bg-white px-2 py-0.5 rounded-lg">Active</span></div>
                     </div>
                   </div>
-                  <div className="bg-white rounded-2xl border border-black p-6 shadow-sm flex items-center gap-5 hover:border-black transition-all">
+                  <div className="bg-white rounded-2xl border border-black p-6 shadow-sm flex items-center gap-5 hover:border-blue-600 transition-all">
                     <div className="w-14 h-14 rounded-2xl bg-white text-black flex items-center justify-center text-2xl flex-shrink-0 shadow-inner"><Shield className="w-4 h-4" /></div>
                     <div className="min-w-0 flex-1">
                       <div className="text-xs font-bold text-black uppercase tracking-wider mb-1 truncate">Active Roles</div>
                       <div className="flex items-baseline justify-between"><span className="text-3xl font-black text-black">{stats.activeRoles}</span><span className="text-xs font-bold text-black bg-white px-2 py-0.5 rounded-lg">RBAC</span></div>
                     </div>
                   </div>
-                  <div className="bg-white rounded-2xl border border-black p-6 shadow-sm flex items-center gap-5 hover:border-black transition-all">
+                  <div className="bg-white rounded-2xl border border-black p-6 shadow-sm flex items-center gap-5 hover:border-blue-600 transition-all">
                     <div className="w-14 h-14 rounded-2xl bg-white text-black flex items-center justify-center text-2xl flex-shrink-0 shadow-inner"><History className="w-4 h-4" /></div>
                     <div className="min-w-0 flex-1">
                       <div className="text-xs font-bold text-black uppercase tracking-wider mb-1 truncate">Audit Entries</div>
                       <div className="flex items-baseline justify-between"><span className="text-3xl font-black text-black">{stats.auditLogEntries}</span><span className="text-xs font-bold text-black bg-white px-2 py-0.5 rounded-lg">Indexed</span></div>
                     </div>
                   </div>
-                  <div className="bg-white rounded-2xl border border-black p-6 shadow-sm flex items-center gap-5 hover:border-black transition-all">
+                  <div className="bg-white rounded-2xl border border-black p-6 shadow-sm flex items-center gap-5 hover:border-blue-600 transition-all">
                     <div className="w-14 h-14 rounded-2xl bg-white text-black flex items-center justify-center text-2xl flex-shrink-0 shadow-inner"><Server className="w-4 h-4" /></div>
                     <div className="min-w-0 flex-1">
                       <div className="text-xs font-bold text-black uppercase tracking-wider mb-1 truncate">System Health</div>
@@ -290,31 +290,31 @@ export default function AdminDashboard() {
 
                 {/* Quick Access */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-                  <div onClick={() => goTo('users')} className="bg-white p-6 rounded-2xl border border-black shadow-sm hover:border-black hover:shadow-md transition-all cursor-pointer group">
+                  <div onClick={() => goTo('users')} className="bg-white p-6 rounded-2xl border border-black shadow-sm hover:border-blue-600 hover:shadow-md transition-all cursor-pointer group">
                     <div className="flex justify-between items-center mb-4">
                       <div className="w-10 h-10 rounded-xl bg-white text-black flex items-center justify-center font-bold"><UserCog className="w-4 h-4" /></div>
-                      <ArrowRight className="text-black group-hover:text-black transition-all" />
+                      <ArrowRight className="text-black group-hover:text-blue-600 transition-all" />
                     </div>
                     <h3 className="font-bold text-black text-base mb-1">User Accounts</h3><p className="text-xs text-black font-medium">Create credentials, manage profiles, trigger resets.</p>
                   </div>
-                  <div onClick={() => goTo('rbac')} className="bg-white p-6 rounded-2xl border border-black shadow-sm hover:border-black hover:shadow-md transition-all cursor-pointer group">
+                  <div onClick={() => goTo('rbac')} className="bg-white p-6 rounded-2xl border border-black shadow-sm hover:border-blue-600 hover:shadow-md transition-all cursor-pointer group">
                     <div className="flex justify-between items-center mb-4">
                       <div className="w-10 h-10 rounded-xl bg-white text-black flex items-center justify-center font-bold"><Shield className="w-4 h-4" /></div>
-                      <ArrowRight className="text-black group-hover:text-black transition-all" />
+                      <ArrowRight className="text-black group-hover:text-blue-600 transition-all" />
                     </div>
                     <h3 className="font-bold text-black text-base mb-1">Role Checklists</h3><p className="text-xs text-black font-medium">Configure RBAC permissions.</p>
                   </div>
-                  <div onClick={() => goTo('audit')} className="bg-white p-6 rounded-2xl border border-black shadow-sm hover:border-black hover:shadow-md transition-all cursor-pointer group">
+                  <div onClick={() => goTo('audit')} className="bg-white p-6 rounded-2xl border border-black shadow-sm hover:border-blue-600 hover:shadow-md transition-all cursor-pointer group">
                     <div className="flex justify-between items-center mb-4">
                       <div className="w-10 h-10 rounded-xl bg-white text-black flex items-center justify-center font-bold"><History className="w-4 h-4" /></div>
-                      <ArrowRight className="text-black group-hover:text-black transition-all" />
+                      <ArrowRight className="text-black group-hover:text-blue-600 transition-all" />
                     </div>
                     <h3 className="font-bold text-black text-base mb-1">Audit Logs</h3><p className="text-xs text-black font-medium">System-wide event logging.</p>
                   </div>
-                  <div onClick={() => goTo('maintenance')} className="bg-white p-6 rounded-2xl border border-black shadow-sm hover:border-black hover:shadow-md transition-all cursor-pointer group">
+                  <div onClick={() => goTo('maintenance')} className="bg-white p-6 rounded-2xl border border-black shadow-sm hover:border-blue-600 hover:shadow-md transition-all cursor-pointer group">
                     <div className="flex justify-between items-center mb-4">
                       <div className="w-10 h-10 rounded-xl bg-white text-black flex items-center justify-center font-bold"><Wrench className="w-4 h-4" /></div>
-                      <ArrowRight className="text-black group-hover:text-black transition-all" />
+                      <ArrowRight className="text-black group-hover:text-blue-600 transition-all" />
                     </div>
                     <h3 className="font-bold text-black text-base mb-1">Maintenance</h3><p className="text-xs text-black font-medium">Database backups, cache clearing.</p>
                   </div>
@@ -330,7 +330,7 @@ export default function AdminDashboard() {
                     <h2 className="text-xl font-black text-black">User Account Management &amp; Credentials</h2>
                     <p className="text-xs text-black mt-0.5 font-medium">Create new user accounts, assign roles, and trigger password resets</p>
                   </div>
-                  <button onClick={() => setCreateUserOpen(true)} className="px-5 py-2.5 bg-black text-white hover:bg-black rounded-xl text-xs font-bold shadow-lg transition-all flex items-center gap-2 cursor-pointer">
+                  <button onClick={() => setCreateUserOpen(true)} className="px-5 py-2.5 bg-blue-600 text-white hover:bg-blue-600 rounded-xl text-xs font-bold shadow-lg transition-all flex items-center gap-2 cursor-pointer">
                     <Plus className="w-4 h-4" /> Create New User
                   </button>
                 </div>
@@ -363,7 +363,7 @@ export default function AdminDashboard() {
                           <th className="py-3.5 px-6 text-right">Actions</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-black text-xs font-medium text-black">
+                      <tbody className="divide-y divide-blue-600 text-xs font-medium text-black">
                         {filteredUsers.map(u => (
                           <tr key={u.id} className="hover:bg-white/50 transition-colors">
                             <td className="py-4 px-6 font-bold text-black">{u.name}</td>
@@ -402,7 +402,7 @@ export default function AdminDashboard() {
                           <th className="py-3.5 px-6 text-right">RBAC Status</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-black text-xs font-medium text-black">
+                      <tbody className="divide-y divide-blue-600 text-xs font-medium text-black">
                         {rbac.map(r => (
                           <tr key={r.role} className="hover:bg-white/50 transition-colors">
                             <td className="py-4 px-6 font-bold text-black">{r.role}</td>
@@ -458,7 +458,7 @@ export default function AdminDashboard() {
                           <th className="py-3.5 px-6">IP Address</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-black text-xs font-medium text-black font-mono">
+                      <tbody className="divide-y divide-blue-600 text-xs font-medium text-black font-mono">
                         {filteredAudit.map((a, i) => (
                           <tr key={i} className="hover:bg-white/50 transition-colors">
                             <td className="py-4 px-6 text-black">{a.timestamp}</td>
@@ -513,7 +513,7 @@ export default function AdminDashboard() {
                       </div>
                       <div>
                         <div className="flex justify-between font-bold text-black mb-1"><span>Memory Allocation (RAM)</span><span>{health.ramUsed} GB / {health.ramTotal} GB</span></div>
-                        <div className="w-full bg-white h-2.5 rounded-full overflow-hidden"><div className="bg-black h-full rounded-full" style={{ width: `${(health.ramUsed/health.ramTotal)*100}%` }}></div></div>
+                        <div className="w-full bg-white h-2.5 rounded-full overflow-hidden"><div className="bg-blue-600 h-full rounded-full" style={{ width: `${(health.ramUsed/health.ramTotal)*100}%` }}></div></div>
                       </div>
                       <div>
                         <div className="flex justify-between font-bold text-black mb-1"><span>Database Storage Capacity</span><span>{health.dbUsed} GB / {health.dbTotal} GB</span></div>
@@ -534,11 +534,11 @@ export default function AdminDashboard() {
 
       {/* CREATE USER MODAL */}
       {createUserOpen && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[150] flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-blue-600/50 backdrop-blur-sm z-[150] flex items-center justify-center p-4">
           <div className="bg-white rounded-[2rem] w-full max-w-lg p-6 sm:p-8 shadow-2xl animate-in zoom-in-95 duration-200 border border-black">
             <div className="flex justify-between items-center mb-6 pb-3 border-b border-black">
               <h3 className="text-lg font-black text-black">Create New User Account</h3>
-              <i className="fas fa-times text-black hover:text-black cursor-pointer text-lg" onClick={() => setCreateUserOpen(false)}></i>
+              <i className="fas fa-times text-black hover:text-blue-600 cursor-pointer text-lg" onClick={() => setCreateUserOpen(false)}></i>
             </div>
             <form onSubmit={handleCreateUserSubmit} className="space-y-5">
               <div>
@@ -562,7 +562,7 @@ export default function AdminDashboard() {
               </div>
               <div className="flex justify-end gap-3 pt-4 border-t border-black">
                 <button type="button" onClick={() => setCreateUserOpen(false)} className="px-5 py-2.5 rounded-xl text-xs font-bold text-black hover:bg-white transition-colors cursor-pointer">Cancel</button>
-                <button type="submit" className="bg-black hover:bg-black text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow-lg transition-all cursor-pointer">Create Account</button>
+                <button type="submit" className="bg-blue-600 hover:bg-blue-600 text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow-lg transition-all cursor-pointer">Create Account</button>
               </div>
             </form>
           </div>

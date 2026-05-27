@@ -78,7 +78,7 @@ export default function IndustryLayout() {
           ))}
         </nav>
 
-        <div className="p-3 border-t border-white/10 bg-black/10 flex-shrink-0">
+        <div className="p-3 border-t border-white/10 bg-blue-600/10 flex-shrink-0">
           <button onClick={() => logout()} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-white/80 hover:bg-red-500/20 hover:text-red-400 transition-all duration-200 font-bold ${sidebarCollapsed ? 'justify-center' : ''}`}>
             <LogOut className="text-sm w-5 text-center flex-shrink-0" />
             {!sidebarCollapsed && <span className="text-sm">Logout</span>}
@@ -86,7 +86,7 @@ export default function IndustryLayout() {
         </div>
       </aside>
 
-      {mobileSidebarOpen && <div onClick={() => setMobileSidebarOpen(false)} className="fixed inset-0 bg-black/50 z-40 lg:hidden backdrop-blur-sm" />}
+      {mobileSidebarOpen && <div onClick={() => setMobileSidebarOpen(false)} className="fixed inset-0 bg-blue-600/50 z-40 lg:hidden backdrop-blur-sm" />}
 
       {/* ═══════════════ MAIN ═══════════════ */}
       <div className="flex-1 flex flex-col overflow-hidden w-full">
@@ -121,7 +121,7 @@ export default function IndustryLayout() {
                     <span className="text-sm font-black text-black">Notifications</span>
                     <button onClick={() => { setNotifications(prev => prev.map(n => ({ ...n, read: true }))); toast.success('All notifications marked as read'); }} className="text-xs font-bold text-black hover:underline cursor-pointer">Mark all as read</button>
                   </div>
-                  <div className="max-h-72 overflow-y-auto divide-y divide-black">
+                  <div className="max-h-72 overflow-y-auto divide-y divide-blue-600">
                     {notifications.length === 0 ? (
                       <p className="p-8 text-center text-xs text-black font-bold">No notifications</p>
                     ) : notifications.map(n => (
@@ -141,7 +141,7 @@ export default function IndustryLayout() {
               )}
             </div>
 
-            <div className="flex items-center gap-2 p-1 md:px-2.5 md:py-1.5 bg-white rounded-xl cursor-pointer border border-black hover:bg-white hover:border-black transition-all">
+            <div className="flex items-center gap-2 p-1 md:px-2.5 md:py-1.5 bg-white rounded-xl cursor-pointer border border-black hover:bg-white hover:border-blue-600 transition-all">
               <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center text-black text-xs font-bold shadow-sm flex-shrink-0">
                 {user.avatar || 'KS'}
               </div>

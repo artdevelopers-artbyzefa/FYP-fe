@@ -13,22 +13,23 @@ export default function Home() {
         {/* HERO SECTION */}
         <section className="relative pt-[130px] pb-[80px] min-h-[88vh] flex items-center overflow-hidden">
           <div className="absolute inset-0 z-0">
-            <div className="absolute inset-0 bg-gradient- /95 /80 /90"></div>
-            <div className="absolute w-[600px] h-[600px] rounded-full blur-[80px] pointer-events-none bg-[radial-gradient(circle,rgba(37,99,235,0.12)_0%,transparent_70%)] -top-[200px] -right-[100px]"></div>
-            <div className="absolute w-[400px] h-[400px] rounded-full blur-[80px] pointer-events-none bg-[radial-gradient(circle,rgba(30,58,138,0.08)_0%,transparent_70%)] -bottom-[50px] -left-[50px]"></div>
+            <div className="absolute inset-0 overflow-hidden">
+              <img src="/cuimage.webp" alt="CUI Campus" className="w-full h-full object-cover blur-sm scale-105" />
+              <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]"></div>
+            </div>
           </div>
           
           <div className="max-w-[1280px] mx-auto px-4 sm:px-6 relative z-10 text-center">
-            <div className="inline-flex items-center gap-2 py-1.5 px-4 bg-black/5 border border-black/10 rounded-full text-black text-[0.7rem] font-extrabold uppercase tracking-[0.18em] mb-8 animate-[bounceSlow_3s_infinite]">
+            <div className="inline-flex items-center gap-2 py-1.5 px-4 bg-white/10 border border-white/20 rounded-full text-white text-[0.7rem] font-extrabold uppercase tracking-[0.18em] mb-8 animate-[bounceSlow_3s_infinite]">
               <span className="w-1.5 h-1.5 bg-white rounded-full animate-[pulseDot_1.5s_infinite]"></span>
               <GraduationCap className="w-4 h-4" />
               Empowering Research & Innovation
             </div>
-            <h1 className="text-[clamp(2.2rem,6vw,4.5rem)] font-black text-black leading-[1.08] tracking-[-0.02em] mb-6">
+            <h1 className="text-[clamp(2.2rem,6vw,4.5rem)] font-black text-white leading-[1.08] tracking-[-0.02em] mb-6">
               Professionalizing Your<br />
-              <span className="text-black italic">FYP Experience</span>
+              <span className="text-navy italic">FYP Experience</span>
             </h1>
-            <p className="max-w-[640px] mx-auto mb-10 text-[clamp(0.9rem,1.5vw,1.1rem)] text-black leading-[1.8]">
+            <p className="max-w-[640px] mx-auto mb-10 text-[clamp(0.9rem,1.5vw,1.1rem)] text-white/80 leading-[1.8]">
               Welcome to COMSATS University Islamabad, Abbottabad Campus's Digital Final Year Project
               Management System. Streamlining academic oversight, supervisor coordination, and evaluation workflows.
             </p>
@@ -36,7 +37,7 @@ export default function Home() {
               <Link to="/login" className="inline-flex items-center justify-center gap-2 py-4 px-8 rounded-3xl font-poppins text-[1.125rem] font-bold bg-blue-600 text-white shadow-[0_8px_24px_rgba(30,58,138,0.18)] hover:bg-blue-600 hover:shadow-[0_16px_48px_rgba(30,58,138,0.22)] hover:-translate-y-px transition-all text-center">
                 Access Portal <ArrowRight className="w-4 h-4" />
               </Link>
-              <a href="#about" className="inline-flex items-center justify-center gap-2 py-4 px-8 rounded-3xl font-poppins text-[1.125rem] font-bold bg-transparent text-black border-[1.5px] border-black hover:bg-white hover:border-blue-600 hover:text-blue-600 transition-all text-center">
+              <a href="#about" className="inline-flex items-center justify-center gap-2 py-4 px-8 rounded-3xl font-poppins text-[1.125rem] font-bold bg-white/10 text-white border-[1.5px] border-white/30 hover:bg-white hover:border-blue-600 hover:text-blue-600 transition-all text-center">
                 Learn More About Program
               </a>
             </div>
@@ -167,15 +168,15 @@ export default function Home() {
         </section>
 
         {/* ANNOUNCEMENTS SECTION */}
-        <section id="announcements" className="py-16 md:py-24 bg-white text-white relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-1/2 h-full bg-black/5 blur-[100px] rounded-full pointer-events-none"></div>
+        <section id="announcements" className="py-16 md:py-24 bg-navy text-white relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-1/2 h-full bg-white/5 blur-[100px] rounded-full pointer-events-none"></div>
           <div className="max-w-[1280px] mx-auto px-4 sm:px-6 relative z-10">
             <div className="flex flex-wrap justify-between items-end gap-6 mb-14">
               <div>
-                <p className="text-[0.7rem] font-extrabold text-black uppercase tracking-[0.24em] mb-3">Latest Updates</p>
+                <p className="text-[0.7rem] font-extrabold text-blue-300 uppercase tracking-[0.24em] mb-3">Latest Updates</p>
                 <h2 className="text-[clamp(1.6rem,3vw,2.5rem)] font-black text-white leading-[1.18]">FYP Announcements<br />&amp; News</h2>
               </div>
-              <button className="bg-white/10 text-white border-[1.5px] border-white/20 px-5 py-2.5 rounded-full font-bold text-[13px] hover:bg-white/20 transition-colors flex items-center gap-2">
+              <button className="bg-white/10 text-white border-[1.5px] border-white/20 px-5 py-2.5 rounded-full font-bold text-[13px] hover:bg-white/30 transition-colors flex items-center gap-2">
                 View All <ExternalLink className="w-4 h-4" />
               </button>
             </div>
@@ -185,13 +186,13 @@ export default function Home() {
                 { date: 'APRIL 15, 2026', title: 'Mid-Term Progress Review Schedule Released', desc: 'The schedule for mid-term FYP progress reviews has been published. Students must submit progress reports by April 30.' },
                 { date: 'APRIL 10, 2026', title: 'Final Year Project Exhibition — Registration Open', desc: 'Registration for the Annual FYP Exhibition 2026 is now open. All groups completing their FYP must register before April 28.' }
               ].map((item, i) => (
-                <div key={i} className="bg-white/5 border border-white/10 rounded-[2rem] p-8 flex flex-col gap-4 transition-colors hover:bg-white/10">
-                  <div className="flex items-center gap-2 text-[0.6rem] font-extrabold text-black uppercase tracking-[0.15em]">
+                <div key={i} className="bg-white/10 border border-white/20 rounded-[2rem] p-8 flex flex-col gap-4 transition-colors hover:bg-white/20">
+                  <div className="flex items-center gap-2 text-[0.6rem] font-extrabold text-blue-300 uppercase tracking-[0.15em]">
                     <Bell className="w-4 h-4" /> {item.date}
                   </div>
                   <h3 className="text-lg font-bold text-white leading-[1.4]">{item.title}</h3>
-                  <p className="text-[13px] text-black leading-[1.7] flex-1">{item.desc}</p>
-                  <button className="inline-flex items-center gap-2 text-[13px] font-bold text-white mt-auto group transition-all">
+                  <p className="text-[13px] text-white/70 leading-[1.7] flex-1">{item.desc}</p>
+                  <button className="inline-flex items-center gap-2 text-[13px] font-bold text-white/80 mt-auto group transition-all hover:text-white">
                     Read Full Notice <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                   </button>
                 </div>

@@ -6,14 +6,18 @@ import { FolderOpen, IdCard, Inbox, Lightbulb, Loader, Mail, User, Users } from 
 export default function Dashboard() {
   const { user } = useOutletContext();
   const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getStudentProfile().then(setProfile);
+    getStudentProfile().then(data => {
+      setProfile(data);
+      setLoading(false);
+    });
   }, []);
 
-  if (!profile) return <div className="p-8 text-center"><Loader className="animate-spin text-black text-2xl" /></div>;
+  if (loading) return <div className="p-8 text-center"><Loader className="animate-spin text-black text-2xl" /></div>;
 
-  if (!user.profileCompleted) {
+  if (!profile?.profileCompleted) {
     return <Navigate to="/profile" replace />;
   }
 

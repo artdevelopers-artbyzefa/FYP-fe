@@ -3,13 +3,42 @@ import { getOfficeUsers } from '../../services/office-assistant.service';
 import { showToast, showAlert } from '../../components/AppToast';
 import { Search, UserPlus, X, Eye, EyeOff } from 'lucide-react';
 
+const getInitials = (name) => {
+  if (!name) return '?';
+  return name.split(' ').filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase();
+};
+
+const getUserKey = (u) => u._id || u.id || u.email || Math.random();
+
+const STATUS_KEYS = {
+  active: 'Active',
+  locked: 'Locked',
+  deactivated: 'Deactivated',
+  inactive: 'Deactivated',
+  pending: 'Locked',
+};
+
+const normalizeStatus = (raw) => {
+  if (!raw) return 'Active';
+  const lower = raw.toLowerCase();
+  for (const [key, val] of Object.entries(STATUS_KEYS)) {
+    if (lower === key || lower.startsWith(key)) return val;
+  }
+  if (raw === true || raw === 'true') return 'Active';
+  if (raw === false || raw === 'false') return 'Deactivated';
+  return 'Active';
+};
+
 const AssistantUsers = () => {
   const [users, setUsers] = useState([]);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [showPassword, setShowPassword] = useState({});
 
   useEffect(() => {
-    getOfficeUsers().then(res => setUsers(res.data)).catch(console.error);
+    getOfficeUsers().then(res => {
+      const data = Array.isArray(res.data) ? res.data : Array.isArray(res) ? res : [];
+      setUsers(data);
+    }).catch(console.error);
   }, []);
 
   const handleCreate = (e) => {
@@ -23,9 +52,45 @@ const AssistantUsers = () => {
       .then((res) => { if (res.isConfirmed) showToast.warning(`${name} deactivated.`); });
   };
 
+  const renderActions = (u) => {
+    const status = normalizeStatus(u.status);
+    return (
+      <div className="flex flex-wrap gap-1.5 justify-end">
+        {status === 'Locked' && (
+          <button onClick={() => showToast.success('Account unlocked!')} className="px-3 py-1.5 rounded-lg bg-primary/5 text-primary border border-primary/10 text-xs font-bold transition-all hover:bg-primary/10 cursor-pointer whitespace-nowrap">
+            Unlock
+          </button>
+        )}
+        {status === 'Deactivated' && (
+          <button onClick={() => showToast.success('Account reactivated!')} className="px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold transition-all hover:bg-emerald-100 cursor-pointer whitespace-nowrap">
+            Reactivate
+          </button>
+        )}
+        {status === 'Active' && (
+          <button onClick={() => handleDeactivate(u.name)} className="px-3 py-1.5 rounded-lg bg-rose-50 text-rose-600 border border-rose-200 text-xs font-bold transition-all hover:bg-rose-100 cursor-pointer whitespace-nowrap">
+            Deactivate
+          </button>
+        )}
+        <button onClick={() => showToast.info('Edit feature coming soon.')} className="px-3 py-1.5 rounded-lg bg-gray-50 text-gray-500 border border-gray-200 text-xs font-bold transition-all hover:bg-gray-100 cursor-pointer whitespace-nowrap">
+          Edit
+        </button>
+      </div>
+    );
+  };
+
+  const renderRoles = (roles) => {
+    if (!roles || !roles.length) return <span className="text-xs text-gray-300">No roles</span>;
+    return (
+      <div className="flex flex-wrap gap-1">
+        {roles.map((r, i) => (
+          <span key={i} className="bg-secondary/5 text-secondary font-bold text-[10px] px-2 py-0.5 rounded-lg border border-secondary/10 whitespace-nowrap">{r}</span>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <>
-      {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4 border-b border-gray-100 pb-4">
         <div>
           <h2 className="text-xl font-black text-gray-800 tracking-tight">User Account Management</h2>
@@ -36,7 +101,6 @@ const AssistantUsers = () => {
         </button>
       </div>
 
-      {/* Search and Filter */}
       <div className="bg-white rounded-2xl border border-gray-100 p-4 mb-6 shadow-sm flex flex-col sm:flex-row gap-4 items-center justify-between">
         <div className="relative w-full sm:w-80">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -53,8 +117,36 @@ const AssistantUsers = () => {
         </div>
       </div>
 
-      {/* Users Table */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+      {/* Mobile Card View */}
+      <div className="grid grid-cols-1 gap-3 md:hidden">
+        {users.map(u => {
+          const status = normalizeStatus(u.status);
+          return (
+            <div key={getUserKey(u)} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-10 h-10 rounded-xl bg-primary/5 text-primary flex items-center justify-center font-bold flex-shrink-0 text-xs">
+                  {getInitials(u.name)}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="font-bold text-gray-800 text-sm truncate">{u.name || 'Unknown'}</div>
+                  <div className="text-[11px] text-gray-400 truncate">{u.email || ''}</div>
+                </div>
+                <span className={`font-bold text-[10px] px-2 py-0.5 rounded-lg border shrink-0 ${
+                  status === 'Active' ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                    : status === 'Locked' ? 'bg-amber-50 text-amber-700 border-amber-200'
+                      : 'bg-gray-50 text-gray-500 border-gray-200'
+                }`}>{status}</span>
+              </div>
+              <div className="text-xs text-gray-400 mb-2 truncate">{u.roleDetail || ''}</div>
+              <div className="mb-3">{renderRoles(u.roles)}</div>
+              <div className="pt-3 border-t border-gray-50">{renderActions(u)}</div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Desktop Table */}
+      <div className="hidden md:block bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
@@ -67,63 +159,39 @@ const AssistantUsers = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50 text-sm font-medium text-gray-700">
-              {users.map(u => (
-                <tr key={u.id} className="hover:bg-gray-50/50 transition-colors">
-                  <td className="py-4 px-6">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-primary/5 text-primary flex items-center justify-center font-bold flex-shrink-0 text-xs">{u.id}</div>
-                      <div>
-                        <div className="font-bold text-gray-800">{u.name}</div>
-                        <div className="text-xs text-gray-400">{u.roleDetail}</div>
+              {users.map(u => {
+                const status = normalizeStatus(u.status);
+                return (
+                  <tr key={getUserKey(u)} className="hover:bg-gray-50/50 transition-colors">
+                    <td className="py-4 px-6">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="w-10 h-10 rounded-xl bg-primary/5 text-primary flex items-center justify-center font-bold flex-shrink-0 text-xs">
+                          {getInitials(u.name)}
+                        </div>
+                        <div className="min-w-0">
+                          <div className="font-bold text-gray-800 truncate">{u.name || 'Unknown'}</div>
+                          <div className="text-xs text-gray-400 truncate">{u.roleDetail || ''}</div>
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                  <td className="py-4 px-6 text-gray-600">{u.email}</td>
-                  <td className="py-4 px-6">
-                    <div className="flex flex-wrap gap-1">
-                      {u.roles.map((r, i) => (
-                        <span key={i} className="bg-secondary/5 text-secondary font-bold text-xs px-2.5 py-1 rounded-lg border border-secondary/10">
-                          {r}
-                        </span>
-                      ))}
-                    </div>
-                  </td>
-                  <td className="py-4 px-6">
-                    <span className={`font-bold text-xs px-2.5 py-1 rounded-lg border ${
-                      u.status === 'Active'
-                        ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                        : u.status === 'Locked'
-                          ? 'bg-amber-50 text-amber-700 border-amber-200'
-                          : 'bg-gray-50 text-gray-500 border-gray-200'
-                    }`}>
-                      {u.status}
-                    </span>
-                  </td>
-                  <td className="py-4 px-6 text-right">
-                    {u.status === 'Locked' && (
-                      <button onClick={() => showToast.success('Account unlocked!')} className="px-3 py-1.5 rounded-lg bg-primary/5 text-primary border border-primary/10 text-xs font-bold transition-all hover:bg-primary/10 cursor-pointer">
-                        Unlock
-                      </button>
-                    )}
-                    {u.status === 'Deactivated' && (
-                      <button onClick={() => showToast.success('Account reactivated!')} className="px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold transition-all hover:bg-emerald-100 cursor-pointer">
-                        Reactivate
-                      </button>
-                    )}
-                    {u.status === 'Active' && (
-                      <button onClick={() => handleDeactivate(u.name)} className="px-3 py-1.5 rounded-lg bg-rose-50 text-rose-600 border border-rose-200 text-xs font-bold transition-all hover:bg-rose-100 cursor-pointer">
-                        Deactivate
-                      </button>
-                    )}
-                  </td>
-                </tr>
-              ))}
+                    </td>
+                    <td className="py-4 px-6 text-gray-600 truncate max-w-[200px]" title={u.email}>{u.email || '-'}</td>
+                    <td className="py-4 px-6">{renderRoles(u.roles)}</td>
+                    <td className="py-4 px-6">
+                      <span className={`font-bold text-xs px-2.5 py-1 rounded-lg border whitespace-nowrap ${
+                        status === 'Active' ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                          : status === 'Locked' ? 'bg-amber-50 text-amber-700 border-amber-200'
+                            : 'bg-gray-50 text-gray-500 border-gray-200'
+                      }`}>{status}</span>
+                    </td>
+                    <td className="py-4 px-6">{renderActions(u)}</td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
       </div>
 
-      {/* Create User Modal */}
       {isCreateOpen && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[150] flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl w-full max-w-lg p-6 sm:p-8 shadow-2xl border border-gray-100">

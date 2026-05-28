@@ -26,14 +26,10 @@ const connectDB = require('./config/db');
 const PORT = process.env.PORT || 5000;
 
 /**
- * Start the server.
- * Connects to MongoDB first, then starts listening.
+ * Start the server immediately, connect to DB in background.
+ * If DB is down, server stays up and returns 503 on DB-dependent routes.
  */
 const startServer = async () => {
-  // Connect to MongoDB
-  await connectDB();
-
-  // Start Express server
   const server = app.listen(PORT, () => {
     console.log('═══════════════════════════════════════════════');
     console.log(`  FYP Portal API Server`);
@@ -42,6 +38,9 @@ const startServer = async () => {
     console.log(`  URL         : http://localhost:${PORT}/api/health`);
     console.log('═══════════════════════════════════════════════');
   });
+
+  // Connect to MongoDB asynchronously (doesn't block server start)
+  connectDB();
 
   // Graceful shutdown
   const gracefulShutdown = (signal) => {

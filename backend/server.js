@@ -48,8 +48,16 @@ const server = app.listen(PORT, () => {
 });
 
 // Connect to DB in background (never blocks startup)
+// MUST catch the promise — Node 15+ exits on unhandled rejections
 setTimeout(() => {
-  try { require('./config/db')(); } catch (e) { /* db not available */ }
+  try {
+    const dbPromise = require('./config/db')();
+    if (dbPromise && typeof dbPromise.catch === 'function') {
+      dbPromise.catch((err) => console.error('[DB] Connection failed:', err?.message));
+    }
+  } catch (e) {
+    console.error('[DB] Failed to initiate connection:', e.message);
+  }
 }, 100);
 
 // Graceful shutdown

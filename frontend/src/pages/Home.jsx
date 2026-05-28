@@ -6,132 +6,104 @@ import { ArrowRight, Award, Bell, BookOpen, ClipboardList, ExternalLink, FileTex
 
 export default function Home() {
   return (
-    <div className="font-poppins bg-white text-black min-h-screen overflow-x-hidden">
+    <div className="font-poppins bg-white text-slate-700 min-h-screen overflow-x-hidden">
       <Header />
 
       <main>
         {/* HERO SECTION */}
-        <section className="relative pt-[130px] pb-[80px] min-h-[88vh] flex items-center overflow-hidden">
+        <section className="relative pt-[130px] pb-[160px] min-h-[88vh] flex items-center overflow-hidden">
           <div className="absolute inset-0 z-0">
             <div className="absolute inset-0 overflow-hidden">
-              <img src="/cuimage.webp" alt="CUI Campus" className="w-full h-full object-cover blur-sm scale-105" />
-              <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]"></div>
+              <img src="/cuimage.webp" alt="CUI Campus" className="w-full h-full object-cover opacity-20 scale-105" />
+              <div className="absolute inset-0 bg-gradient-to-b from-primary via-primary/80 to-white"></div>
             </div>
           </div>
           
           <div className="max-w-[1280px] mx-auto px-4 sm:px-6 relative z-10 text-center">
-            <div className="inline-flex items-center gap-2 py-1.5 px-4 bg-white/10 border border-white/20 rounded-full text-white text-[0.7rem] font-extrabold uppercase tracking-[0.18em] mb-8 animate-[bounceSlow_3s_infinite]">
-              <span className="w-1.5 h-1.5 bg-white rounded-full animate-[pulseDot_1.5s_infinite]"></span>
-              <GraduationCap className="w-4 h-4" />
-              Empowering Research & Innovation
-            </div>
-            <h1 className="text-[clamp(2.2rem,6vw,4.5rem)] font-black text-white leading-[1.08] tracking-[-0.02em] mb-6">
+<h1 className="text-[clamp(2.2rem,6vw,4.5rem)] font-bold text-white leading-[1.08] tracking-[-0.02em] mb-6">
               Professionalizing Your<br />
-              <span className="text-navy italic">FYP Experience</span>
+              <span className="text-blue-300 italic">FYP Experience</span>
             </h1>
             <p className="max-w-[640px] mx-auto mb-10 text-[clamp(0.9rem,1.5vw,1.1rem)] text-white/80 leading-[1.8]">
               Welcome to COMSATS University Islamabad, Abbottabad Campus's Digital Final Year Project
               Management System. Streamlining academic oversight, supervisor coordination, and evaluation workflows.
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
-              <Link to="/login" className="inline-flex items-center justify-center gap-2 py-4 px-8 rounded-3xl font-poppins text-[1.125rem] font-bold bg-blue-600 text-white shadow-[0_8px_24px_rgba(30,58,138,0.18)] hover:bg-blue-600 hover:shadow-[0_16px_48px_rgba(30,58,138,0.22)] hover:-translate-y-px transition-all text-center">
+              <Link to="/login" className="inline-flex items-center justify-center gap-2 py-4 px-8 rounded-3xl font-poppins text-[1.125rem] font-bold bg-primary text-white shadow-lg shadow-primary/25 hover:bg-blue-800 hover:shadow-xl hover:-translate-y-px transition-all text-center">
                 Access Portal <ArrowRight className="w-4 h-4" />
               </Link>
-              <a href="#about" className="inline-flex items-center justify-center gap-2 py-4 px-8 rounded-3xl font-poppins text-[1.125rem] font-bold bg-white/10 text-white border-[1.5px] border-white/30 hover:bg-white hover:border-blue-600 hover:text-blue-600 transition-all text-center">
+              <a href="#about" className="inline-flex items-center justify-center gap-2 py-4 px-8 rounded-3xl font-poppins text-[1.125rem] font-bold bg-white/10 text-white border-[1.5px] border-white/30 hover:bg-white hover:border-primary hover:text-primary transition-all text-center">
                 Learn More About Program
               </a>
             </div>
           </div>
         </section>
 
-        {/* STATS BAR */}
-        <div className="bg-white border-y border-black py-6">
-          <div className="max-w-[1280px] mx-auto px-4 sm:px-6 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
-            <div className="flex items-center gap-4 justify-center">
-              <div className="w-[44px] h-[44px] rounded-2xl flex items-center justify-center text-[1.1rem] shrink-0 bg-white text-black"><BookOpen className="w-4 h-4" /></div>
-              <div><div className="text-[1.5rem] font-black leading-none text-black">300+</div><div className="text-[0.65rem] font-bold text-black uppercase tracking-[0.08em] mt-[2px]">Active Projects</div></div>
-            </div>
-            <div className="flex items-center gap-4 justify-center">
-              <div className="w-[44px] h-[44px] rounded-2xl flex items-center justify-center text-[1.1rem] shrink-0 bg-white text-black"><Users className="w-4 h-4" /></div>
-              <div><div className="text-[1.5rem] font-black leading-none text-black">80+</div><div className="text-[0.65rem] font-bold text-black uppercase tracking-[0.08em] mt-[2px]">Supervisors</div></div>
-            </div>
-            <div className="flex items-center gap-4 justify-center">
-              <div className="w-[44px] h-[44px] rounded-2xl flex items-center justify-center text-[1.1rem] shrink-0 bg-white text-black"><FileText className="w-4 h-4" /></div>
-              <div><div className="text-[1.5rem] font-black leading-none text-black">100%</div><div className="text-[0.65rem] font-bold text-black uppercase tracking-[0.08em] mt-[2px]">Digital Reports</div></div>
-            </div>
-            <div className="flex items-center gap-4 justify-center">
-              <div className="w-[44px] h-[44px] rounded-2xl flex items-center justify-center text-[1.1rem] shrink-0 bg-white text-black"><Award className="w-4 h-4" /></div>
-              <div><div className="text-[1.5rem] font-black leading-none text-black">Top</div><div className="text-[0.65rem] font-bold text-black uppercase tracking-[0.08em] mt-[2px]">Accreditations</div></div>
-            </div>
-          </div>
-        </div>
-
         {/* ABOUT SECTION */}
-        <section id="about" className="py-16 md:py-24 bg-white border-b border-black">
+        <section id="about" className="py-16 md:py-24 bg-white">
           <div className="max-w-[1280px] mx-auto px-4 sm:px-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
               <div>
-                <p className="text-[0.7rem] font-extrabold text-black uppercase tracking-[0.24em] mb-3">The Program Purpose</p>
-                <h2 className="text-[clamp(1.6rem,3vw,2.5rem)] font-black text-black leading-[1.18] mb-5">Empowering Students Through Applied Research</h2>
-                <p className="text-[15px] text-black leading-[1.75] mb-8">
+                <h2 className="text-[clamp(1.6rem,3vw,2.5rem)] font-bold text-slate-900 leading-[1.18] mb-5">Empowering Students Through Applied Research</h2>
+                <p className="text-[15px] text-slate-600 leading-[1.75] mb-8">
                   The Final Year Project program is the cornerstone of our CS curriculum, providing students with
                   the opportunity to apply theoretical knowledge to real-world problems, guided by experienced faculty supervisors.
                 </p>
                 <div className="flex flex-col gap-8">
                   <div className="flex items-start gap-5">
-                    <div className="w-[44px] h-[44px] bg-white rounded-xl flex items-center justify-center shrink-0">
-                      <div className="w-2 h-2 rounded-full bg-blue-600 animate-[pulseDot_2s_infinite]"></div>
+                    <div className="w-[44px] h-[44px] bg-blue-50 rounded-xl flex items-center justify-center shrink-0">
+                      <div className="w-2 h-2 rounded-full bg-primary animate-[pulseDot_2s_infinite]"></div>
                     </div>
                     <div>
-                      <h4 className="text-[15px] font-bold text-black mb-1">Research Excellence</h4>
-                      <p className="text-[13px] text-black font-medium leading-[1.7]">Fostering innovation through structured research methodologies and academic rigor.</p>
+                      <h4 className="text-[15px] font-bold text-slate-900 mb-1">Research Excellence</h4>
+                      <p className="text-[13px] text-slate-600 font-medium leading-[1.7]">Fostering innovation through structured research methodologies and academic rigor.</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-5">
-                    <div className="w-[44px] h-[44px] bg-white rounded-xl flex items-center justify-center shrink-0">
-                      <div className="w-2 h-2 rounded-full bg-blue-600 animate-[pulseDot_2s_infinite]"></div>
+                    <div className="w-[44px] h-[44px] bg-blue-50 rounded-xl flex items-center justify-center shrink-0">
+                      <div className="w-2 h-2 rounded-full bg-primary animate-[pulseDot_2s_infinite]"></div>
                     </div>
                     <div>
-                      <h4 className="text-[15px] font-bold text-black mb-1">Expert Supervision</h4>
-                      <p className="text-[13px] text-black font-medium leading-[1.7]">Dedicated faculty mentorship bridging theoretical knowledge and practical implementation.</p>
+                      <h4 className="text-[15px] font-bold text-slate-900 mb-1">Expert Supervision</h4>
+                      <p className="text-[13px] text-slate-600 font-medium leading-[1.7]">Dedicated faculty mentorship bridging theoretical knowledge and practical implementation.</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-5">
-                    <div className="w-[44px] h-[44px] bg-white rounded-xl flex items-center justify-center shrink-0">
-                      <div className="w-2 h-2 rounded-full bg-blue-600 animate-[pulseDot_2s_infinite]"></div>
+                    <div className="w-[44px] h-[44px] bg-blue-50 rounded-xl flex items-center justify-center shrink-0">
+                      <div className="w-2 h-2 rounded-full bg-primary animate-[pulseDot_2s_infinite]"></div>
                     </div>
                     <div>
-                      <h4 className="text-[15px] font-bold text-black mb-1">Structured Evaluation</h4>
-                      <p className="text-[13px] text-black font-medium leading-[1.7]">Comprehensive multi-stage evaluation ensuring academic integrity and project quality.</p>
+                      <h4 className="text-[15px] font-bold text-slate-900 mb-1">Structured Evaluation</h4>
+                      <p className="text-[13px] text-slate-600 font-medium leading-[1.7]">Comprehensive multi-stage evaluation ensuring academic integrity and project quality.</p>
                     </div>
                   </div>
                 </div>
               </div>
               
-              <div className="bg-white rounded-[2.5rem] p-8 relative overflow-hidden">
-                <div className="absolute w-[96px] h-[96px] bg-blue-600/10 blur-[24px] rounded-full -top-4 -right-4 pointer-events-none"></div>
-                <div className="absolute w-[128px] h-[128px] bg-blue-600/10 blur-[32px] rounded-full -bottom-4 -left-4 pointer-events-none"></div>
+              <div className="bg-lightbg rounded-[2.5rem] p-8 relative overflow-hidden">
+                <div className="absolute w-[96px] h-[96px] bg-primary/10 blur-[24px] rounded-full -top-4 -right-4 pointer-events-none"></div>
+                <div className="absolute w-[128px] h-[128px] bg-primary/10 blur-[32px] rounded-full -bottom-4 -left-4 pointer-events-none"></div>
                 
                 <div className="grid grid-cols-2 gap-4 relative z-10">
-                  <div className="bg-white p-8 rounded-[2rem] border border-black flex flex-col justify-center min-h-[170px] transition-all duration-200 hover:-translate-y-2 hover:shadow-[0_8px_32px_rgba(0,0,0,0.1)]">
-                    <BookOpen className="text-2xl mb-5 text-black" />
-                    <div className="text-[1.75rem] font-black leading-none mb-1 text-black">300+</div>
-                    <div className="text-[0.6rem] font-bold text-black uppercase tracking-[0.1em]">Active Projects</div>
+                  <div className="bg-white p-8 rounded-[2rem] border border-blue-50 flex flex-col justify-center min-h-[170px] transition-all duration-200 hover:-translate-y-2 hover:shadow-premium-shadow">
+                    <BookOpen className="text-2xl mb-5 text-primary" />
+                    <div className="text-[1.75rem] font-bold leading-none mb-1 text-slate-900">300+</div>
+                    <div className="text-[0.6rem] font-bold text-slate-500 uppercase tracking-[0.1em]">Active Projects</div>
                   </div>
-                  <div className="bg-white p-8 rounded-[2rem] border border-black flex flex-col justify-center min-h-[170px] mt-8 transition-all duration-200 hover:-translate-y-2 hover:shadow-[0_8px_32px_rgba(0,0,0,0.1)]">
-                    <Users className="text-2xl mb-5 text-black" />
-                    <div className="text-[1.75rem] font-black leading-none mb-1 text-black">80+</div>
-                    <div className="text-[0.6rem] font-bold text-black uppercase tracking-[0.1em]">Supervisors</div>
+                  <div className="bg-white p-8 rounded-[2rem] border border-blue-50 flex flex-col justify-center min-h-[170px] mt-8 transition-all duration-200 hover:-translate-y-2 hover:shadow-premium-shadow">
+                    <Users className="text-2xl mb-5 text-primary" />
+                    <div className="text-[1.75rem] font-bold leading-none mb-1 text-slate-900">80+</div>
+                    <div className="text-[0.6rem] font-bold text-slate-500 uppercase tracking-[0.1em]">Supervisors</div>
                   </div>
-                  <div className="bg-white p-8 rounded-[2rem] border border-black flex flex-col justify-center min-h-[170px] transition-all duration-200 hover:-translate-y-2 hover:shadow-[0_8px_32px_rgba(0,0,0,0.1)]">
-                    <ClipboardList className="text-2xl mb-5 text-black" />
-                    <div className="text-[1.75rem] font-black leading-none mb-1 text-black">100%</div>
-                    <div className="text-[0.6rem] font-bold text-black uppercase tracking-[0.1em]">Digital Tracking</div>
+                  <div className="bg-white p-8 rounded-[2rem] border border-blue-50 flex flex-col justify-center min-h-[170px] transition-all duration-200 hover:-translate-y-2 hover:shadow-premium-shadow">
+                    <ClipboardList className="text-2xl mb-5 text-primary" />
+                    <div className="text-[1.75rem] font-bold leading-none mb-1 text-slate-900">100%</div>
+                    <div className="text-[0.6rem] font-bold text-slate-500 uppercase tracking-[0.1em]">Digital Tracking</div>
                   </div>
-                  <div className="bg-white p-8 rounded-[2rem] border border-black flex flex-col justify-center min-h-[170px] mt-8 transition-all duration-200 hover:-translate-y-2 hover:shadow-[0_8px_32px_rgba(0,0,0,0.1)]">
-                    <Star className="text-2xl mb-5 text-black" />
-                    <div className="text-[1.75rem] font-black leading-none mb-1 text-black">Top</div>
-                    <div className="text-[0.6rem] font-bold text-black uppercase tracking-[0.1em]">Accreditations</div>
+                  <div className="bg-white p-8 rounded-[2rem] border border-blue-50 flex flex-col justify-center min-h-[170px] mt-8 transition-all duration-200 hover:-translate-y-2 hover:shadow-premium-shadow">
+                    <Star className="text-2xl mb-5 text-primary" />
+                    <div className="text-[1.75rem] font-bold leading-none mb-1 text-slate-900">Top</div>
+                    <div className="text-[0.6rem] font-bold text-slate-500 uppercase tracking-[0.1em]">Accreditations</div>
                   </div>
                 </div>
               </div>
@@ -143,8 +115,7 @@ export default function Home() {
         <section id="process" className="py-16 md:py-24">
           <div className="max-w-[1280px] mx-auto px-4 sm:px-6">
             <div className="text-center mb-16">
-              <p className="text-[0.7rem] font-extrabold text-black uppercase tracking-[0.24em] mb-3">FYP Lifecycle</p>
-              <h2 className="text-[clamp(1.6rem,3vw,2.5rem)] font-black text-black leading-[1.18] mb-5">Understanding the FYP Process</h2>
+              <h2 className="text-[clamp(1.6rem,3vw,2.5rem)] font-bold text-slate-900 leading-[1.18] mb-5">Understanding the FYP Process</h2>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
@@ -153,14 +124,14 @@ export default function Home() {
                 { step: '03', icon: LineChart, title: 'Progress Tracking', desc: 'Regular progress updates, milestone submissions, and supervisor feedback cycles throughout the year.' },
                 { step: '04', icon: GraduationCap, title: 'Final Evaluation', desc: 'Comprehensive evaluation panel review, viva voce, and final grading by faculty committee.' }
               ].map((item, i) => (
-                <div key={i} className="group bg-white border-[1.5px] border-black rounded-[2.5rem] p-8 sm:p-10 relative overflow-hidden transition-all duration-200 hover:border-blue-600 hover:shadow-[0_8px_32px_rgba(0,0,0,0.1)]">
-                  <div className="absolute -top-10 -right-10 w-[120px] h-[120px] bg-black/5 rounded-full transition-transform duration-500 group-hover:scale-[1.8]"></div>
-                  <div className="text-6xl font-black text-black/[0.07] leading-none mb-5 tracking-[-0.04em] transition-colors duration-200 group-hover:text-blue-600/[0.12]">{item.step}</div>
-                  <div className="w-[44px] h-[44px] bg-black/5 text-black rounded-xl flex items-center justify-center text-[1.1rem] mb-6 transition-all duration-200 group-hover:bg-blue-600 group-hover:text-white">
+                <div key={i} className="group bg-white border-[1.5px] border-blue-100 rounded-[2.5rem] p-8 sm:p-10 relative overflow-hidden transition-all duration-200 hover:border-primary hover:shadow-premium-shadow">
+                  <div className="absolute -top-10 -right-10 w-[120px] h-[120px] bg-primary/5 rounded-full transition-transform duration-500 group-hover:scale-[1.8]"></div>
+                  <div className="text-6xl font-bold text-primary/[0.07] leading-none mb-5 tracking-[-0.04em] transition-colors duration-200 group-hover:text-primary/[0.12]">{item.step}</div>
+                  <div className="w-[44px] h-[44px] bg-primary/5 text-primary rounded-xl flex items-center justify-center text-[1.1rem] mb-6 transition-all duration-200 group-hover:bg-primary group-hover:text-white">
                     {React.createElement(item.icon, { className: "w-4 h-4" })}
                   </div>
-                  <h3 className="text-[1.125rem] font-extrabold text-black mb-3">{item.title}</h3>
-                  <p className="text-[13px] text-black font-medium leading-[1.7]">{item.desc}</p>
+                  <h3 className="text-[1.125rem] font-extrabold text-slate-900 mb-3">{item.title}</h3>
+                  <p className="text-[13px] text-slate-600 font-medium leading-[1.7]">{item.desc}</p>
                 </div>
               ))}
             </div>
@@ -168,15 +139,14 @@ export default function Home() {
         </section>
 
         {/* ANNOUNCEMENTS SECTION */}
-        <section id="announcements" className="py-16 md:py-24 bg-navy text-white relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-1/2 h-full bg-white/5 blur-[100px] rounded-full pointer-events-none"></div>
+        <section id="announcements" className="py-16 md:py-24 bg-slate-900 text-white relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-1/2 h-full bg-primary/10 blur-[100px] rounded-full pointer-events-none"></div>
           <div className="max-w-[1280px] mx-auto px-4 sm:px-6 relative z-10">
             <div className="flex flex-wrap justify-between items-end gap-6 mb-14">
               <div>
-                <p className="text-[0.7rem] font-extrabold text-blue-300 uppercase tracking-[0.24em] mb-3">Latest Updates</p>
-                <h2 className="text-[clamp(1.6rem,3vw,2.5rem)] font-black text-white leading-[1.18]">FYP Announcements<br />&amp; News</h2>
+<h2 className="text-[clamp(1.6rem,3vw,2.5rem)] font-bold text-white leading-[1.18]">FYP Announcements<br />&amp; News</h2>
               </div>
-              <button className="bg-white/10 text-white border-[1.5px] border-white/20 px-5 py-2.5 rounded-full font-bold text-[13px] hover:bg-white/30 transition-colors flex items-center gap-2">
+              <button className="bg-white/10 text-white border-[1.5px] border-white/20 px-5 py-2.5 rounded-full font-bold text-[13px] hover:bg-white/20 transition-colors flex items-center gap-2">
                 View All <ExternalLink className="w-4 h-4" />
               </button>
             </div>
@@ -186,8 +156,8 @@ export default function Home() {
                 { date: 'APRIL 15, 2026', title: 'Mid-Term Progress Review Schedule Released', desc: 'The schedule for mid-term FYP progress reviews has been published. Students must submit progress reports by April 30.' },
                 { date: 'APRIL 10, 2026', title: 'Final Year Project Exhibition — Registration Open', desc: 'Registration for the Annual FYP Exhibition 2026 is now open. All groups completing their FYP must register before April 28.' }
               ].map((item, i) => (
-                <div key={i} className="bg-white/10 border border-white/20 rounded-[2rem] p-8 flex flex-col gap-4 transition-colors hover:bg-white/20">
-                  <div className="flex items-center gap-2 text-[0.6rem] font-extrabold text-blue-300 uppercase tracking-[0.15em]">
+                <div key={i} className="bg-white/5 border border-white/10 rounded-[2rem] p-8 flex flex-col gap-4 transition-colors hover:bg-white/10">
+                  <div className="flex items-center gap-2 text-[0.6rem] font-extrabold text-blue-400 uppercase tracking-[0.15em]">
                     <Bell className="w-4 h-4" /> {item.date}
                   </div>
                   <h3 className="text-lg font-bold text-white leading-[1.4]">{item.title}</h3>
@@ -204,42 +174,41 @@ export default function Home() {
         {/* CONTACT SECTION */}
         <section id="contact" className="py-16 md:py-24 bg-white">
           <div className="max-w-[1280px] mx-auto px-4 sm:px-6">
-            <div className="bg-blue-600 rounded-[2.5rem] overflow-hidden flex flex-col lg:flex-row">
+            <div className="bg-primary rounded-[2.5rem] overflow-hidden flex flex-col lg:flex-row">
               <div className="p-8 sm:p-10 lg:p-16 flex-[3]">
-                <p className="text-[0.7rem] font-extrabold text-black uppercase tracking-[0.24em] mb-3">Contact Us</p>
-                <h2 className="text-[clamp(1.6rem,3vw,3rem)] font-black text-white leading-[1.2] mb-12">Need Assistance?<br />We're here to help.</h2>
+<h2 className="text-[clamp(1.6rem,3vw,3rem)] font-bold text-white leading-[1.2] mb-12">Need Assistance?<br />We're here to help.</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="flex items-start gap-4">
                     <div className="w-[44px] h-[44px] bg-white/10 rounded-xl flex items-center justify-center text-white shrink-0"><Mail className="w-4 h-4" /></div>
                     <div>
                       <h4 className="text-[13px] font-bold text-white mb-1">Email Us</h4>
-                      <p className="text-[13px] text-black leading-[1.6]">csfyp@cuiatd.edu.pk</p>
+                      <p className="text-[13px] text-blue-200 leading-[1.6]">csfyp@cuiatd.edu.pk</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
                     <div className="w-[44px] h-[44px] bg-white/10 rounded-xl flex items-center justify-center text-white shrink-0"><Phone className="w-4 h-4" /></div>
                     <div>
                       <h4 className="text-[13px] font-bold text-white mb-1">Call Us</h4>
-                      <p className="text-[13px] text-black leading-[1.6]">+92-992-383591 Ext. 240</p>
+                      <p className="text-[13px] text-blue-200 leading-[1.6]">+92-992-383591 Ext. 240</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4 md:col-span-2">
                     <div className="w-[44px] h-[44px] bg-white/10 rounded-xl flex items-center justify-center text-white shrink-0"><MapPin className="w-4 h-4" /></div>
                     <div>
                       <h4 className="text-[13px] font-bold text-white mb-1">Our Location</h4>
-                      <p className="text-[13px] text-black leading-[1.6]">FYP Office, CS Department, COMSATS University Islamabad, Abbottabad Campus</p>
+                      <p className="text-[13px] text-blue-200 leading-[1.6]">FYP Office, CS Department, COMSATS University Islamabad, Abbottabad Campus</p>
                     </div>
                   </div>
                 </div>
               </div>
-              <div className="bg-black/30 backdrop-blur-[12px] p-6 sm:p-10 flex-[2] flex items-center justify-center">
-                <div className="bg-white rounded-[2rem] p-10 w-full max-w-[360px] shadow-[0_20px_40px_rgba(0,0,0,0.12)] text-center">
-                  <h3 className="text-xl font-black text-black mb-2">FYP Office</h3>
-                  <p className="text-[13px] text-black italic font-medium mb-6">Monday – Friday: 08:30 AM – 04:30 PM</p>
-                  <a href="mailto:csfyp@cuiatd.edu.pk" className="block w-full py-3 px-5 rounded-xl font-bold bg-blue-600 text-white shadow-[0_8px_24px_rgba(30,58,138,0.18)] hover:bg-blue-600 transition-all text-[13px] text-center flex items-center justify-center gap-2">
+              <div className="bg-primary/30 backdrop-blur-[12px] p-6 sm:p-10 flex-[2] flex items-center justify-center">
+                <div className="bg-white rounded-[2rem] p-10 w-full max-w-[360px] shadow-2xl text-center">
+                  <h3 className="text-xl font-bold text-slate-900 mb-2">FYP Office</h3>
+                  <p className="text-[13px] text-slate-500 italic font-medium mb-6">Monday – Friday: 08:30 AM – 04:30 PM</p>
+                  <a href="mailto:csfyp@cuiatd.edu.pk" className="block w-full py-3 px-5 rounded-xl font-bold bg-primary text-white shadow-lg shadow-primary/25 hover:bg-blue-800 transition-all text-[13px] text-center flex items-center justify-center gap-2">
                     Submit Query <ArrowRight className="w-4 h-4" />
                   </a>
-                  <a href="https://www.cuiatd.edu.pk/" target="_blank" rel="noopener noreferrer" className="block w-full mt-2 py-3 px-5 rounded-xl font-bold bg-transparent border-[1.5px] border-black text-black hover:bg-white transition-all text-[13px] text-center">
+                  <a href="https://www.cuiatd.edu.pk/" target="_blank" rel="noopener noreferrer" className="block w-full mt-2 py-3 px-5 rounded-xl font-bold bg-transparent border-[1.5px] border-slate-200 text-slate-700 hover:bg-slate-50 transition-all text-[13px] text-center">
                     Official Website
                   </a>
                 </div>

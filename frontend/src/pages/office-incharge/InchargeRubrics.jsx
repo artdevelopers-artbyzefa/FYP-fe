@@ -41,7 +41,7 @@ const InchargeRubrics = () => {
 
             <div className="space-y-4">
               <div className="flex justify-between items-center">
-                <span className="text-xs font-bold text-black uppercase tracking-wider">Evaluation Criteria & Weights</span>
+                <span className="text-xs font-bold text-black tracking-wider">Evaluation Criteria & Weights</span>
                 <button type="button" className="text-xs font-bold text-black hover:underline cursor-pointer"><Plus className="w-4 h-4 mr-1" /> Add Criterion</button>
               </div>
               

@@ -38,7 +38,7 @@ const Sidebar = ({ isOpen, onClose }) => {
   const menuClass = ({ isActive }) => 
     `flex items-center gap-3.5 px-4 py-3 rounded-[16px] transition-all duration-200 group font-poppins font-semibold text-[15px] ${
       isActive 
-        ? 'bg-[#2563eb] text-white shadow-lg shadow-blue-600/20' 
+        ? 'bg-secondary text-white shadow-lg shadow-blue-600/20' 
         : 'text-blue-100/70 hover:bg-white/5 hover:text-white'
     }`;
 
@@ -94,7 +94,7 @@ const Sidebar = ({ isOpen, onClose }) => {
           </div>
           <div className="flex flex-col">
             <span className="font-extrabold text-[17px] tracking-tight leading-none text-white font-poppins">CUI DFYP</span>
-            <span className="text-[11px] font-bold text-black/60 uppercase tracking-[0.1em] mt-1 font-poppins">Student Portal</span>
+            <span className="text-[11px] font-bold text-white/60 uppercase tracking-[0.1em] mt-1 font-poppins">Student Portal</span>
           </div>
         </div>
 
@@ -130,7 +130,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                   <Users className="w-5 h-5 shrink-0" />
                   <span>FYP Partners</span>
                 </div>
-                {openMenus.partners ? <ChevronUp className="w-4 h-4 text-black/60" /> : <ChevronDown className="w-4 h-4 text-black/60" />}
+                {openMenus.partners ? <ChevronUp className="w-4 h-4 text-white/60" /> : <ChevronDown className="w-4 h-4 text-white/60" />}
               </button>
               
               <div className={`transition-all duration-300 ease-in-out overflow-hidden ${
@@ -142,7 +142,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                     New Request
                   </NavLink>
                   <NavLink to="/partners/requests" onClick={handleLinkClick} className={subMenuClass}>
-                    <span className="w-1.5 h-1.5 rounded-full bg-transparent border border-black shrink-0"></span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-transparent border border-white/30 shrink-0"></span>
                     Incoming Requests
                   </NavLink>
                 </div>
@@ -167,7 +167,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                   <Lightbulb className="w-5 h-5 shrink-0" />
                   <span>Project Idea</span>
                 </div>
-                {openMenus.project ? <ChevronUp className="w-4 h-4 text-black/60" /> : <ChevronDown className="w-4 h-4 text-black/60" />}
+                {openMenus.project ? <ChevronUp className="w-4 h-4 text-white/60" /> : <ChevronDown className="w-4 h-4 text-white/60" />}
               </button>
               
               <div className={`transition-all duration-300 ease-in-out overflow-hidden ${
@@ -194,7 +194,7 @@ const Sidebar = ({ isOpen, onClose }) => {
               handleLinkClick();
               handleLogout();
             }}
-            className="w-full flex items-center gap-3.5 px-4 py-3 rounded-[16px] text-black/70 hover:bg-white/5 hover:text-white transition-all duration-200 font-poppins font-semibold text-[15px]"
+            className="w-full flex items-center gap-3.5 px-4 py-3 rounded-[16px] text-blue-100/70 hover:bg-white/5 hover:text-white transition-all duration-200 font-poppins font-semibold text-[15px]"
           >
             <LogOut className="w-5 h-5 shrink-0" />
             <span className="font-semibold">Logout</span>

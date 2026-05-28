@@ -28,7 +28,7 @@ const AssistantProjects = () => {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-white/75 border-b border-black text-[11px] font-black text-black uppercase tracking-wider">
+              <tr className="bg-white/75 border-b border-black text-[11px] font-black text-black tracking-wider">
                 <th className="py-3.5 px-6">Project Title</th>
                 <th className="py-3.5 px-6">Group Leader</th>
                 <th className="py-3.5 px-6">Supervisor Name</th>
@@ -70,15 +70,15 @@ const AssistantProjects = () => {
                 <div className="flex gap-2 mt-2"><span className="bg-white text-black font-bold text-xs px-2.5 py-0.5 rounded-lg border border-black/20">{selectedProject.status}</span></div>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-white p-4 rounded-2xl border border-black text-xs">
-                <div><span className="text-black font-bold uppercase tracking-wider block mb-1">Group Leader</span><span className="font-bold text-black text-sm">{selectedProject.leader}</span></div>
-                <div><span className="text-black font-bold uppercase tracking-wider block mb-1">Assigned Supervisor</span><span className="font-bold text-black text-sm">{selectedProject.supervisor}</span></div>
+                <div><span className="text-black font-bold tracking-wider block mb-1">Group Leader</span><span className="font-bold text-black text-sm">{selectedProject.leader}</span></div>
+                <div><span className="text-black font-bold tracking-wider block mb-1">Assigned Supervisor</span><span className="font-bold text-black text-sm">{selectedProject.supervisor}</span></div>
               </div>
               <div>
-                <h5 className="text-xs font-bold text-black uppercase tracking-wider mb-2">Technology Stack</h5>
+                <h5 className="text-xs font-bold text-black tracking-wider mb-2">Technology Stack</h5>
                 <p className="text-xs font-bold text-black bg-white p-3 rounded-xl">{selectedProject.stack}</p>
               </div>
               <div>
-                <h5 className="text-xs font-bold text-black uppercase tracking-wider mb-2">Project Abstract</h5>
+                <h5 className="text-xs font-bold text-black tracking-wider mb-2">Project Abstract</h5>
                 <p className="text-xs text-black leading-relaxed bg-white p-4 rounded-2xl border border-black">{selectedProject.desc}</p>
               </div>
             </div>

@@ -267,7 +267,7 @@ export default function IndustrySupervisorDashboard() {
                   <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse">
                       <thead>
-                        <tr className="bg-white/75 border-b border-black text-[11px] font-black text-black uppercase tracking-wider">
+                        <tr className="bg-white/75 border-b border-black text-[11px] font-black text-black tracking-wider">
                           <th className="py-3.5 px-6">Project Title &amp; Group ID</th>
                           <th className="py-3.5 px-6">Internal Supervisor</th>
                           <th className="py-3.5 px-6">Thesis Document</th>
@@ -351,7 +351,7 @@ export default function IndustrySupervisorDashboard() {
                   ) : (
                     <form onSubmit={handleScorecardSubmit} className="space-y-6">
                       <div className="space-y-4">
-                        <span className="text-xs font-bold text-black uppercase tracking-wider block mb-2">External Criteria Scorecard Input</span>
+                        <span className="text-xs font-bold text-black tracking-wider block mb-2">External Criteria Scorecard Input</span>
 
                         {[
                           { key: 'relevance',     label: 'Industrial Relevance & Practicality', max: 35 },

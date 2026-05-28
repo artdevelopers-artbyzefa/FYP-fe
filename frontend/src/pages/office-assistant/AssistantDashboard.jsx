@@ -35,7 +35,7 @@ const AssistantDashboard = () => {
         <div className="bg-white rounded-2xl border border-black p-6 shadow-sm flex items-center gap-5 hover:border-blue-600 transition-all">
           <div className="w-14 h-14 rounded-2xl bg-white text-black flex items-center justify-center text-2xl flex-shrink-0 shadow-inner"><Users className="w-4 h-4" /></div>
           <div className="min-w-0 flex-1">
-            <div className="text-xs font-bold text-black uppercase tracking-wider mb-1 truncate">Total Users</div>
+            <div className="text-xs font-bold text-black tracking-wider mb-1 truncate">Total Users</div>
             <div className="flex items-baseline justify-between">
               <span className="text-3xl font-black text-black">{stats ? stats.totalUsers : '...'}</span>
               <span className="text-xs font-bold text-black bg-white px-2 py-0.5 rounded-lg">{stats ? stats.activeUsers : ''}</span>
@@ -45,7 +45,7 @@ const AssistantDashboard = () => {
         <div className="bg-white rounded-2xl border border-black p-6 shadow-sm flex items-center gap-5 hover:border-blue-600 transition-all">
           <div className="w-14 h-14 rounded-2xl bg-white text-black flex items-center justify-center text-2xl flex-shrink-0 shadow-inner"><GraduationCap className="w-4 h-4" /></div>
           <div className="min-w-0 flex-1">
-            <div className="text-xs font-bold text-black uppercase tracking-wider mb-1 truncate">FYP Students</div>
+            <div className="text-xs font-bold text-black tracking-wider mb-1 truncate">FYP Students</div>
             <div className="flex items-baseline justify-between">
               <span className="text-3xl font-black text-black">{stats ? stats.fypStudents : '...'}</span>
               <span className="text-xs font-bold text-black bg-white px-2 py-0.5 rounded-lg">{stats ? stats.studentsStatus : ''}</span>
@@ -55,7 +55,7 @@ const AssistantDashboard = () => {
         <div className="bg-white rounded-2xl border border-black p-6 shadow-sm flex items-center gap-5 hover:border-blue-600 transition-all">
           <div className="w-14 h-14 rounded-2xl bg-white text-black flex items-center justify-center text-2xl flex-shrink-0 shadow-inner"><GitBranch className="w-4 h-4" /></div>
           <div className="min-w-0 flex-1">
-            <div className="text-xs font-bold text-black uppercase tracking-wider mb-1 truncate">Active Projects</div>
+            <div className="text-xs font-bold text-black tracking-wider mb-1 truncate">Active Projects</div>
             <div className="flex items-baseline justify-between">
               <span className="text-3xl font-black text-black">{stats ? stats.activeProjects : '...'}</span>
               <span className="text-xs font-bold text-black bg-white px-2 py-0.5 rounded-lg">{stats ? stats.projectsStatus : ''}</span>
@@ -65,7 +65,7 @@ const AssistantDashboard = () => {
         <div className="bg-white rounded-2xl border border-black p-6 shadow-sm flex items-center gap-5 hover:border-blue-600 transition-all">
           <div className="w-14 h-14 rounded-2xl bg-white text-black flex items-center justify-center text-2xl flex-shrink-0 shadow-inner"><Users className="w-4 h-4" /></div>
           <div className="min-w-0 flex-1">
-            <div className="text-xs font-bold text-black uppercase tracking-wider mb-1 truncate">Committees</div>
+            <div className="text-xs font-bold text-black tracking-wider mb-1 truncate">Committees</div>
             <div className="flex items-baseline justify-between">
               <span className="text-3xl font-black text-black">{stats ? stats.committees : '...'}</span>
               <span className="text-xs font-bold text-black bg-white px-2 py-0.5 rounded-lg">{stats ? stats.committeesStatus : ''}</span>

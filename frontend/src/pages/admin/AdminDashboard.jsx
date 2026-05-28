@@ -261,28 +261,28 @@ export default function AdminDashboard() {
                   <div className="bg-white rounded-2xl border border-black p-6 shadow-sm flex items-center gap-5 hover:border-blue-600 transition-all">
                     <div className="w-14 h-14 rounded-2xl bg-white text-black flex items-center justify-center text-2xl flex-shrink-0 shadow-inner"><Users className="w-4 h-4" /></div>
                     <div className="min-w-0 flex-1">
-                      <div className="text-xs font-bold text-black uppercase tracking-wider mb-1 truncate">Registered Users</div>
+                      <div className="text-xs font-bold text-black tracking-wider mb-1 truncate">Registered Users</div>
                       <div className="flex items-baseline justify-between"><span className="text-3xl font-black text-black">{stats.totalUsers}</span><span className="text-xs font-bold text-black bg-white px-2 py-0.5 rounded-lg">Active</span></div>
                     </div>
                   </div>
                   <div className="bg-white rounded-2xl border border-black p-6 shadow-sm flex items-center gap-5 hover:border-blue-600 transition-all">
                     <div className="w-14 h-14 rounded-2xl bg-white text-black flex items-center justify-center text-2xl flex-shrink-0 shadow-inner"><Shield className="w-4 h-4" /></div>
                     <div className="min-w-0 flex-1">
-                      <div className="text-xs font-bold text-black uppercase tracking-wider mb-1 truncate">Active Roles</div>
+                      <div className="text-xs font-bold text-black tracking-wider mb-1 truncate">Active Roles</div>
                       <div className="flex items-baseline justify-between"><span className="text-3xl font-black text-black">{stats.activeRoles}</span><span className="text-xs font-bold text-black bg-white px-2 py-0.5 rounded-lg">RBAC</span></div>
                     </div>
                   </div>
                   <div className="bg-white rounded-2xl border border-black p-6 shadow-sm flex items-center gap-5 hover:border-blue-600 transition-all">
                     <div className="w-14 h-14 rounded-2xl bg-white text-black flex items-center justify-center text-2xl flex-shrink-0 shadow-inner"><History className="w-4 h-4" /></div>
                     <div className="min-w-0 flex-1">
-                      <div className="text-xs font-bold text-black uppercase tracking-wider mb-1 truncate">Audit Entries</div>
+                      <div className="text-xs font-bold text-black tracking-wider mb-1 truncate">Audit Entries</div>
                       <div className="flex items-baseline justify-between"><span className="text-3xl font-black text-black">{stats.auditLogEntries}</span><span className="text-xs font-bold text-black bg-white px-2 py-0.5 rounded-lg">Indexed</span></div>
                     </div>
                   </div>
                   <div className="bg-white rounded-2xl border border-black p-6 shadow-sm flex items-center gap-5 hover:border-blue-600 transition-all">
                     <div className="w-14 h-14 rounded-2xl bg-white text-black flex items-center justify-center text-2xl flex-shrink-0 shadow-inner"><Server className="w-4 h-4" /></div>
                     <div className="min-w-0 flex-1">
-                      <div className="text-xs font-bold text-black uppercase tracking-wider mb-1 truncate">System Health</div>
+                      <div className="text-xs font-bold text-black tracking-wider mb-1 truncate">System Health</div>
                       <div className="flex items-baseline justify-between"><span className="text-3xl font-black text-black">{stats.systemHealth}</span><span className="text-xs font-bold text-black bg-white px-2 py-0.5 rounded-lg">Optimal</span></div>
                     </div>
                   </div>
@@ -355,7 +355,7 @@ export default function AdminDashboard() {
                   <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse">
                       <thead>
-                        <tr className="bg-white border-b border-black text-[11px] font-black text-black uppercase tracking-wider">
+                        <tr className="bg-white border-b border-black text-[11px] font-black text-black tracking-wider">
                           <th className="py-3.5 px-6">Full Name</th>
                           <th className="py-3.5 px-6">Email Address</th>
                           <th className="py-3.5 px-6">Primary Role</th>
@@ -395,7 +395,7 @@ export default function AdminDashboard() {
                   <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse">
                       <thead>
-                        <tr className="bg-white border-b border-black text-[11px] font-black text-black uppercase tracking-wider">
+                        <tr className="bg-white border-b border-black text-[11px] font-black text-black tracking-wider">
                           <th className="py-3.5 px-6">System Role</th>
                           <th className="py-3.5 px-6">Core Permissions &amp; Scope</th>
                           <th className="py-3.5 px-6 text-center">Users</th>
@@ -450,7 +450,7 @@ export default function AdminDashboard() {
                   <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse">
                       <thead>
-                        <tr className="bg-white border-b border-black text-[11px] font-black text-black uppercase tracking-wider">
+                        <tr className="bg-white border-b border-black text-[11px] font-black text-black tracking-wider">
                           <th className="py-3.5 px-6">Timestamp</th>
                           <th className="py-3.5 px-6">User Email</th>
                           <th className="py-3.5 px-6">Action Type</th>

@@ -64,7 +64,7 @@ const FacultyMessaging = () => {
           </div>
           
           <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 bg-white/50 flex flex-col" id="chatMessages">
-            <div className="text-center text-[10px] font-bold text-black uppercase tracking-widest my-4">Today, May 19</div>
+            <div className="text-center text-[10px] font-bold text-black tracking-widest my-4">Today, May 19</div>
             
             {messages.map((msg, idx) => {
               const isYou = msg.sender.includes('You');

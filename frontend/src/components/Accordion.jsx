@@ -35,8 +35,8 @@ const Accordion = ({ items }) => {
               openIndex === index ? 'max-h-96' : 'max-h-0'
             }`}
           >
-            <div className="p-5 lg:p-6 pt-0 border-t border-black">
-              <p className="text-black leading-relaxed">{item.answer}</p>
+            <div className="p-5 lg:p-6 pt-0 border-t border-blue-100">
+              <p className="text-slate-600 leading-relaxed">{item.answer}</p>
             </div>
           </div>
         </div>

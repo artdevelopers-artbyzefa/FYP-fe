@@ -143,7 +143,7 @@ export const showAlert = {
             html: `
                 <div class="space-y-4 text-left p-2">
                     <div class="mb-4">
-                        <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Internship Duration</label>
+                        <label class="block text-[10px] font-black text-gray-400 tracking-widest mb-2">Internship Duration</label>
                         <select id="swal-duration" class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm font-bold text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
                             <option value="4 Weeks" ${currentData.duration === '4 Weeks' ? 'selected' : ''}>4 Weeks</option>
                             <option value="6 Weeks" ${currentData.duration === '6 Weeks' ? 'selected' : ''}>6 Weeks</option>
@@ -153,11 +153,11 @@ export const showAlert = {
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Start Date</label>
+                            <label class="block text-[10px] font-black text-gray-400 tracking-widest mb-2">Start Date</label>
                             <input type="date" id="swal-start" class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm font-bold text-gray-700" value="${currentData.startDate ? new Date(currentData.startDate).toISOString().split('T')[0] : ''}">
                         </div>
                         <div>
-                            <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">End Date</label>
+                            <label class="block text-[10px] font-black text-gray-400 tracking-widest mb-2">End Date</label>
                             <input type="date" id="swal-end" class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm font-bold text-gray-700" value="${currentData.endDate ? new Date(currentData.endDate).toISOString().split('T')[0] : ''}">
                         </div>
                     </div>

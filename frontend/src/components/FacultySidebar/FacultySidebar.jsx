@@ -97,7 +97,7 @@ const FacultySidebar = ({ isOpen, onClose }) => {
           </div>
           <div className="flex flex-col">
             <span className="font-extrabold text-[16px] tracking-tight leading-none text-white font-poppins uppercase">CUI ABBOTTABAD</span>
-            <span className="text-[13px] font-medium text-black/60 mt-1.5 font-poppins">Faculty Supervisor</span>
+            <span className="text-[13px] font-medium text-white/60 mt-1.5 font-poppins">Faculty Supervisor</span>
           </div>
         </div>
 

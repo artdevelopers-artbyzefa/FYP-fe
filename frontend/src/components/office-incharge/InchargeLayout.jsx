@@ -96,51 +96,51 @@ const InchargeLayout = () => {
       <div className="flex-1 flex flex-col overflow-hidden w-full transition-all duration-300 ease-in-out">
         
         {/* TOPBAR */}
-        <div className="bg-white border-b border-black px-4 md:px-6 h-16 flex items-center justify-between shadow-sm flex-shrink-0 z-[30] gap-3">
+        <div className="bg-white border-b border-blue-100 px-4 md:px-6 h-16 flex items-center justify-between shadow-sm flex-shrink-0 z-[30] gap-3">
           <div className="flex items-center gap-3 min-w-0">
-            <button onClick={() => setIsMobileOpen(true)} className="w-9 h-9 rounded-xl bg-white flex items-center justify-center text-black hover:bg-white hover:text-blue-600 transition-all border-0 lg:hidden flex-shrink-0">
+            <button onClick={() => setIsMobileOpen(true)} className="w-9 h-9 rounded-xl bg-white flex items-center justify-center text-slate-600 hover:bg-blue-50 hover:text-primary transition-all border-0 lg:hidden flex-shrink-0">
               <Menu className="text-sm" />
             </button>
-            <button onClick={() => setIsCollapsed(!isCollapsed)} className="hidden lg:flex w-9 h-9 rounded-xl bg-white items-center justify-center text-black hover:bg-white hover:text-blue-600 transition-all border-0 flex-shrink-0 cursor-pointer">
+            <button onClick={() => setIsCollapsed(!isCollapsed)} className="hidden lg:flex w-9 h-9 rounded-xl bg-white items-center justify-center text-slate-600 hover:bg-blue-50 hover:text-primary transition-all border-0 flex-shrink-0 cursor-pointer">
               {isCollapsed  ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
             </button>
             <div className="min-w-0">
-              <h2 className="text-base font-black text-black leading-tight truncate">Dashboard</h2>
-              <p className="text-[11px] text-black leading-tight hidden sm:block font-medium">COMSATS University Islamabad, Abbottabad Campus</p>
+              <h2 className="text-base font-black text-slate-900 leading-tight truncate">Dashboard</h2>
+              <p className="text-[11px] text-slate-500 leading-tight hidden sm:block font-medium">COMSATS University Islamabad, Abbottabad Campus</p>
             </div>
           </div>
 
           <div className="flex items-center gap-2 flex-shrink-0">
-            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-white border border-black rounded-xl text-xs font-bold text-black whitespace-nowrap shadow-sm">
-              <User className="text-black" />
+            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-white border border-blue-100 rounded-xl text-xs font-bold text-slate-700 whitespace-nowrap shadow-sm">
+              <User className="text-primary" />
               <span>FYP Office In-charge</span>
             </div>
 
             {/* Notification Center */}
             <div className="relative">
-              <button onClick={() => setShowNotif(!showNotif)} className="w-9 h-9 rounded-xl bg-white border border-black flex items-center justify-center text-black hover:bg-white hover:text-blue-600 transition-all cursor-pointer relative">
+              <button onClick={() => setShowNotif(!showNotif)} className="w-9 h-9 rounded-xl bg-white border border-blue-100 flex items-center justify-center text-slate-600 hover:bg-blue-50 hover:text-primary transition-all cursor-pointer relative">
                 <Bell className="text-sm" />
                 <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-white rounded-full border-2 border-white animate-pulse"></span>
               </button>
               
               {showNotif && (
-                <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-2xl shadow-2xl border border-black overflow-hidden z-[100] animate-in fade-in-50 duration-200">
-                  <div className="p-4 bg-white border-b border-black flex items-center justify-between">
-                    <span className="text-sm font-black text-black">Notifications</span>
-                    <button onClick={() => {toast.success('All notifications marked as read'); setShowNotif(false);}} className="text-xs font-bold text-black hover:underline cursor-pointer">Mark all as read</button>
+                <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-2xl shadow-2xl border border-blue-100 overflow-hidden z-[100] animate-in fade-in-50 duration-200">
+                  <div className="p-4 bg-white border-b border-blue-100 flex items-center justify-between">
+                    <span className="text-sm font-black text-slate-900">Notifications</span>
+                    <button onClick={() => {toast.success('All notifications marked as read'); setShowNotif(false);}} className="text-xs font-bold text-primary hover:underline cursor-pointer">Mark all as read</button>
                   </div>
                   <div className="max-h-80 overflow-y-auto divide-y divide-blue-600">
-                    <div className="p-4 hover:bg-white/50 transition-colors flex gap-3 items-start border-l-4 border-black bg-white/20">
+                    <div className="p-4 hover:bg-white/50 transition-colors flex gap-3 items-start border-l-4 border-primary bg-white/10">
                       <div className="w-8 h-8 rounded-xl bg-white text-black flex items-center justify-center text-xs flex-shrink-0 mt-0.5"><AlertCircle className="w-4 h-4" /></div>
                       <div className="flex-1 min-w-0">
-                        <div className="text-xs font-bold text-black">Grievance SLA Breach Warning</div>
-                        <div className="text-[11px] text-black mt-0.5">Grievance #GRV-089 (Evaluation Dispute) has exceeded the 14-day resolution window.</div>
-                        <div className="text-[10px] text-black mt-1 font-bold">1 hour ago</div>
+                        <div className="text-xs font-bold text-slate-900">Grievance SLA Breach Warning</div>
+                        <div className="text-[11px] text-slate-600 mt-0.5">Grievance #GRV-089 (Evaluation Dispute) has exceeded the 14-day resolution window.</div>
+                        <div className="text-[10px] text-slate-500 mt-1 font-bold">1 hour ago</div>
                       </div>
                     </div>
                   </div>
-                  <div className="p-3 bg-white border-t border-black text-center">
-                    <button className="text-xs font-bold text-black hover:text-blue-600 transition-colors cursor-pointer">View All Notifications</button>
+                  <div className="p-3 bg-white border-t border-blue-100 text-center">
+                    <button className="text-xs font-bold text-slate-600 hover:text-primary transition-colors cursor-pointer">View All Notifications</button>
                   </div>
                 </div>
               )}
@@ -148,13 +148,13 @@ const InchargeLayout = () => {
 
             {/* User Menu */}
             <div className="relative">
-              <button className="flex items-center gap-2 p-1 md:px-2.5 md:py-1.5 bg-white rounded-xl cursor-pointer border border-black hover:bg-white hover:border-blue-600 transition-all">
-                <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center text-black text-xs font-bold shadow-sm flex-shrink-0">
+              <button className="flex items-center gap-2 p-1 md:px-2.5 md:py-1.5 bg-white rounded-xl cursor-pointer border border-blue-100 hover:bg-blue-50 hover:border-primary transition-all">
+                <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center text-primary text-xs font-bold shadow-sm flex-shrink-0">
                   <span>{user.avatar || 'SM'}</span>
                 </div>
                 <div className="text-left hidden sm:block">
-                  <div className="text-xs font-bold text-black leading-tight truncate max-w-28">{user.name || 'Dr. Sara Malik'}</div>
-                  <div className="text-[10px] text-black leading-tight font-bold">In-charge</div>
+                  <div className="text-xs font-bold text-slate-900 leading-tight truncate max-w-28">{user.name || 'Dr. Sara Malik'}</div>
+                  <div className="text-[10px] text-slate-500 leading-tight font-bold">In-charge</div>
                 </div>
               </button>
             </div>

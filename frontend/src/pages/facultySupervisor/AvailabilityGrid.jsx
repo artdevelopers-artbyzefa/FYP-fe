@@ -160,13 +160,13 @@ export default function AvailabilityGrid() {
             {/* Table Header */}
             <thead>
               <tr className="border-b border-black">
-                <th className="px-4 py-3.5 text-left text-[10px] font-bold text-black uppercase tracking-widest bg-white/50 w-[110px]">
+                <th className="px-4 py-3.5 text-left text-[10px] font-bold text-black tracking-widest bg-white/50 w-[110px]">
                   Time Slot
                 </th>
                 {days.map((day) => (
                   <th
                     key={day}
-                    className="px-4 py-3.5 text-center text-[10px] font-bold text-black uppercase tracking-widest bg-white/50"
+                    className="px-4 py-3.5 text-center text-[10px] font-bold text-black tracking-widest bg-white/50"
                   >
                     {day}
                   </th>

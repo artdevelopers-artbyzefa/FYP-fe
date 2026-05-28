@@ -2,14 +2,14 @@ import React from 'react';
 
 const FeatureCard = ({ icon: Icon, title, description, badge }) => {
   return (
-    <div className="card p-6 hover:border-blue-600 transition-all">
-      <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center mb-4">
-        <Icon className="w-6 h-6 text-blue-600" />
+    <div className="card p-6 hover:border-primary transition-all">
+      <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center mb-4">
+        <Icon className="w-6 h-6 text-primary" />
       </div>
-      <h3 className="font-bold text-lg text-black mb-2">{title}</h3>
-      <p className="text-black text-sm mb-4 leading-relaxed">{description}</p>
+      <h3 className="font-bold text-lg text-slate-900 mb-2">{title}</h3>
+      <p className="text-slate-600 text-sm mb-4 leading-relaxed">{description}</p>
       {badge && (
-        <span className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-bright bg-white px-3 py-1.5 rounded-full">
+        <span className="inline-flex items-center gap-1.5 text-xs font-bold text-primary bg-blue-50 px-3 py-1.5 rounded-full">
           {badge}
         </span>
       )}

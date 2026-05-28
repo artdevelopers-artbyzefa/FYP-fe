@@ -35,7 +35,7 @@ const InchargeDashboard = () => {
         <div className="bg-white rounded-2xl border border-black p-6 shadow-sm flex items-center gap-5 hover:border-blue-600 transition-all">
           <div className="w-14 h-14 rounded-2xl bg-white text-black flex items-center justify-center text-2xl flex-shrink-0 shadow-inner"><ClipboardList className="w-4 h-4" /></div>
           <div className="min-w-0 flex-1">
-            <div className="text-xs font-bold text-black uppercase tracking-wider mb-1 truncate">Active Rubrics</div>
+            <div className="text-xs font-bold text-black tracking-wider mb-1 truncate">Active Rubrics</div>
             <div className="flex items-baseline justify-between">
               <span className="text-3xl font-black text-black">{stats ? stats.activeRubrics : '...'}</span>
               <span className="text-xs font-bold text-black bg-white px-2 py-0.5 rounded-lg">Validated</span>
@@ -45,7 +45,7 @@ const InchargeDashboard = () => {
         <div className="bg-white rounded-2xl border border-black p-6 shadow-sm flex items-center gap-5 hover:border-blue-600 transition-all">
           <div className="w-14 h-14 rounded-2xl bg-white text-black flex items-center justify-center text-2xl flex-shrink-0 shadow-inner"><UserPlus className="w-4 h-4" /></div>
           <div className="min-w-0 flex-1">
-            <div className="text-xs font-bold text-black uppercase tracking-wider mb-1 truncate">Supervision Req</div>
+            <div className="text-xs font-bold text-black tracking-wider mb-1 truncate">Supervision Req</div>
             <div className="flex items-baseline justify-between">
               <span className="text-3xl font-black text-black">{stats ? stats.pendingSupervisionReqs : '...'}</span>
               <span className="text-xs font-bold text-black bg-white px-2 py-0.5 rounded-lg">Pending</span>
@@ -55,7 +55,7 @@ const InchargeDashboard = () => {
         <div className="bg-white rounded-2xl border border-black p-6 shadow-sm flex items-center gap-5 hover:border-blue-600 transition-all">
           <div className="w-14 h-14 rounded-2xl bg-white text-black flex items-center justify-center text-2xl flex-shrink-0 shadow-inner"><Scale className="w-4 h-4" /></div>
           <div className="min-w-0 flex-1">
-            <div className="text-xs font-bold text-black uppercase tracking-wider mb-1 truncate">Open Grievances</div>
+            <div className="text-xs font-bold text-black tracking-wider mb-1 truncate">Open Grievances</div>
             <div className="flex items-baseline justify-between">
               <span className="text-3xl font-black text-black">{stats ? stats.openGrievances : '...'}</span>
               <span className="text-xs font-bold text-black bg-white px-2 py-0.5 rounded-lg">{stats ? stats.slaBreaches : 0} SLA Breach</span>
@@ -65,7 +65,7 @@ const InchargeDashboard = () => {
         <div className="bg-white rounded-2xl border border-black p-6 shadow-sm flex items-center gap-5 hover:border-blue-600 transition-all">
           <div className="w-14 h-14 rounded-2xl bg-white text-black flex items-center justify-center text-2xl flex-shrink-0 shadow-inner"><CalendarCheck className="w-4 h-4" /></div>
           <div className="min-w-0 flex-1">
-            <div className="text-xs font-bold text-black uppercase tracking-wider mb-1 truncate">Active Session</div>
+            <div className="text-xs font-bold text-black tracking-wider mb-1 truncate">Active Session</div>
             <div className="flex items-baseline justify-between">
               <span className="text-3xl font-black text-black">{stats ? stats.activeSession : '...'}</span>
               <span className="text-xs font-bold text-black bg-white px-2 py-0.5 rounded-lg flex items-center gap-1"><Lock className="text-xs" /> Locked</span>

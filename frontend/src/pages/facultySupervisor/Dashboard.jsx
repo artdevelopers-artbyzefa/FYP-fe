@@ -99,7 +99,7 @@ export default function Dashboard() {
             <GroupsIcon className="w-6 h-6" />
           </div>
           <div className="space-y-1">
-            <span className="text-[10px] font-extrabold text-black uppercase tracking-widest block">
+            <span className="text-[10px] font-extrabold text-black tracking-widest block">
               Supervised Groups
             </span>
             <div className="flex items-baseline gap-2.5">
@@ -119,7 +119,7 @@ export default function Dashboard() {
             <ProposalsIcon className="w-6 h-6" />
           </div>
           <div className="space-y-1">
-            <span className="text-[10px] font-extrabold text-black uppercase tracking-widest block">
+            <span className="text-[10px] font-extrabold text-black tracking-widest block">
               Pending Proposals
             </span>
             <div className="flex items-baseline gap-2.5">
@@ -139,7 +139,7 @@ export default function Dashboard() {
             <CalendarIcon className="w-6 h-6" />
           </div>
           <div className="space-y-1">
-            <span className="text-[10px] font-extrabold text-black uppercase tracking-widest block">
+            <span className="text-[10px] font-extrabold text-black tracking-widest block">
               Weekly Log Approval
             </span>
             <div className="flex items-baseline gap-2.5">
@@ -159,7 +159,7 @@ export default function Dashboard() {
             <HeadManagementIcon className="w-6 h-6" />
           </div>
           <div className="space-y-1">
-            <span className="text-[10px] font-extrabold text-black uppercase tracking-widest block">
+            <span className="text-[10px] font-extrabold text-black tracking-widest block">
               Committee Head Status
             </span>
             <div className="flex items-baseline gap-2.5">

@@ -162,24 +162,24 @@ export default function DashboardLayout() {
       <div className="flex-1 flex flex-col overflow-hidden w-full transition-all duration-300 ease-in-out">
         
         {/* TOPBAR */}
-        <div className="bg-white border-b border-black px-3 md:px-6 h-14 md:h-16 flex items-center justify-between shadow-sm flex-shrink-0 z-[30] gap-3">
+        <div className="bg-white border-b border-blue-100 px-3 md:px-6 h-14 md:h-16 flex items-center justify-between shadow-sm flex-shrink-0 z-[30] gap-3">
           <div className="flex items-center gap-2 md:gap-3 min-w-0">
-            <button onClick={() => setMobileSidebarOpen(true)} className="w-9 h-9 rounded-xl bg-white flex items-center justify-center text-black hover:bg-white hover:text-blue-600 transition-all border-0 lg:hidden flex-shrink-0">
+            <button onClick={() => setMobileSidebarOpen(true)} className="w-9 h-9 rounded-xl bg-white flex items-center justify-center text-slate-500 hover:bg-white hover:text-primary transition-all border-0 lg:hidden flex-shrink-0">
               <Menu className="text-sm" />
             </button>
             
-            <button onClick={() => setSidebarCollapsed(!sidebarCollapsed)} className="hidden lg:flex w-9 h-9 rounded-xl bg-white items-center justify-center text-black hover:bg-white hover:text-blue-600 transition-all border-0 flex-shrink-0">
+            <button onClick={() => setSidebarCollapsed(!sidebarCollapsed)} className="hidden lg:flex w-9 h-9 rounded-xl bg-white items-center justify-center text-slate-500 hover:text-primary hover:bg-blue-50 transition-all border-0 flex-shrink-0">
               {sidebarCollapsed  ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
             </button>
 
             <div className="min-w-0">
-              <h2 className="text-sm md:text-base font-bold text-black leading-tight truncate">{pageTitle}</h2>
-              <p className="text-[10px] text-black leading-tight hidden sm:block">CUI Abbottabad · <span>{currentDate}</span></p>
+              <h2 className="text-sm md:text-base font-bold text-slate-900 leading-tight truncate">{pageTitle}</h2>
+              <p className="text-[10px] text-slate-500 leading-tight hidden sm:block">CUI Abbottabad · <span>{currentDate}</span></p>
             </div>
           </div>
 
           <div className="flex items-center gap-1.5 md:gap-2 flex-shrink-0">
-            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-white border border-black rounded-xl text-xs font-bold text-black whitespace-nowrap">
+            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-white border border-blue-100 rounded-xl text-xs font-bold text-slate-700 whitespace-nowrap">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
@@ -188,21 +188,21 @@ export default function DashboardLayout() {
             </div>
 
             <div className="relative">
-              <button className="w-9 h-9 rounded-xl bg-white flex items-center justify-center text-black hover:bg-white hover:text-blue-600 transition-all">
+              <button className="w-9 h-9 rounded-xl bg-white flex items-center justify-center text-slate-500 hover:bg-white hover:text-primary transition-all">
                 <Bell className="text-sm" />
                 <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-white rounded-full border-2 border-white"></span>
               </button>
             </div>
 
-            <Link to="/profile" className="flex items-center gap-2 p-1 md:px-2.5 md:py-1.5 bg-white rounded-xl cursor-pointer border border-black hover:bg-white hover:border-blue-600 transition-all">
-              <div className="w-8 h-8 bg-white/50 rounded-lg flex items-center justify-center text-black text-xs font-bold shadow-sm flex-shrink-0">
+            <Link to="/profile" className="flex items-center gap-2 p-1 md:px-2.5 md:py-1.5 bg-white rounded-xl cursor-pointer border border-blue-100 hover:bg-white hover:border-blue-600 transition-all">
+              <div className="w-8 h-8 bg-white/50 rounded-lg flex items-center justify-center text-slate-700 text-xs font-bold shadow-sm flex-shrink-0">
                 {user.avatar || 'ST'}
               </div>
               <div className="text-left hidden sm:block">
-                <div className="text-xs font-bold text-black leading-tight truncate max-w-28">{user.name}</div>
-                <div className="text-[10px] text-black leading-tight font-bold">{user.role}</div>
+                <div className="text-xs font-bold text-slate-900 leading-tight truncate max-w-28">{user.name}</div>
+                <div className="text-[10px] text-slate-500 leading-tight font-bold">{user.role}</div>
               </div>
-              <ChevronDown className="text-black ml-0.5 hidden sm:block text-[9px]" />
+              <ChevronDown className="text-slate-500 ml-0.5 hidden sm:block text-[9px]" />
             </Link>
           </div>
         </div>

@@ -1,47 +1,43 @@
 import React from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { AlertTriangle, Book, CalendarCheck, Check, FileText, Info, Scale, Upload } from 'lucide-react';
+import { AlertTriangle, CalendarCheck, Check, FileText, Info, Scale, Upload } from 'lucide-react';
 
 const Guidelines = () => {
   return (
-    <div className="font-poppins bg-white text-black min-h-screen flex flex-col">
+    <div className="font-poppins bg-white text-slate-700 min-h-screen flex flex-col">
       <Header />
       
       <main className="flex-grow pt-20">
         {/* Page Hero */}
-        <section className="bg-gradient- /95 /80 /90 py-16 md:py-24 border-b border-black">
+        <section className="bg-lightbg py-16 md:py-24 border-b border-blue-100">
           <div className="container max-w-[1280px] mx-auto px-4 sm:px-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
               <div>
-                <div className="inline-flex items-center gap-2 py-1.5 px-4 bg-black/5 border border-black/10 rounded-full text-black text-[0.7rem] font-extrabold uppercase tracking-[0.24em] mb-6">
-                  <span className="w-1.5 h-1.5 bg-white rounded-full"></span>
-                  <Book className="w-4 h-4" /> Guidelines
-                </div>
-                <h1 className="text-[clamp(1.8rem,4vw,2.5rem)] font-black text-black leading-tight mb-5">
+<h1 className="text-[clamp(1.8rem,4vw,2.5rem)] font-black text-slate-900 leading-tight mb-5">
                   Rules and best practices for a smooth FYP cycle.
                 </h1>
-                <p className="text-[15px] md:text-[17px] text-black leading-relaxed max-w-[600px]">
+                <p className="text-[15px] md:text-[17px] text-slate-600 leading-relaxed max-w-[600px]">
                   Use these guidelines to prepare submissions, follow documentation standards, meet deadlines, and keep the project academically sound.
                 </p>
               </div>
-              <div className="bg-white rounded-3xl p-8 border border-black shadow-xl space-y-6">
+              <div className="bg-white rounded-3xl p-8 border border-blue-50 shadow-xl space-y-6">
                 <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-black shrink-0 text-lg">
+                  <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center text-primary shrink-0 text-lg">
                     <FileText className="w-4 h-4" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-black mb-1 text-base">Documentation</h3>
-                    <p className="text-sm text-black leading-relaxed">Keep every report, diagram, citation, and appendix complete and consistent.</p>
+                    <h3 className="font-bold text-slate-900 mb-1 text-base">Documentation</h3>
+                    <p className="text-sm text-slate-600 leading-relaxed">Keep every report, diagram, citation, and appendix complete and consistent.</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-black shrink-0 text-lg">
+                  <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center text-primary shrink-0 text-lg">
                     <CalendarCheck className="w-4 h-4" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-black mb-1 text-base">Deadlines</h3>
-                    <p className="text-sm text-black leading-relaxed">Late submissions can affect review scheduling and evaluation readiness.</p>
+                    <h3 className="font-bold text-slate-900 mb-1 text-base">Deadlines</h3>
+                    <p className="text-sm text-slate-600 leading-relaxed">Late submissions can affect review scheduling and evaluation readiness.</p>
                   </div>
                 </div>
               </div>
@@ -50,14 +46,14 @@ const Guidelines = () => {
         </section>
 
         {/* Guideline Layout */}
-        <section className="py-16 md:py-24 bg-white border-b border-black">
+        <section className="py-16 md:py-24 bg-white border-b border-blue-100">
           <div className="container max-w-[1280px] mx-auto px-4 sm:px-6">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
               {/* Main Content */}
               <div className="lg:col-span-2 space-y-12">
                 <section className="space-y-6">
-                  <h2 className="text-2xl font-black text-black flex items-center gap-3">
-                    <FileText className="text-black" /> Documentation Requirements
+                  <h2 className="text-2xl font-black text-slate-900 flex items-center gap-3">
+                    <FileText className="text-primary" /> Documentation Requirements
                   </h2>
                   <ul className="space-y-4">
                     {[
@@ -66,8 +62,8 @@ const Guidelines = () => {
                       "Maintain proper citations and avoid plagiarism in all written submissions.",
                       "Attach relevant diagrams, screenshots, test results, and appendices where required."
                     ].map((item, i) => (
-                      <li key={i} className="flex items-start gap-3 text-[15px] text-black font-medium">
-                        <Check className="text-black mt-1 text-xs" />
+                      <li key={i} className="flex items-start gap-3 text-[15px] text-slate-600 font-medium">
+                        <Check className="text-primary mt-1" />
                         {item}
                       </li>
                     ))}
@@ -75,8 +71,8 @@ const Guidelines = () => {
                 </section>
 
                 <section className="space-y-6">
-                  <h2 className="text-2xl font-black text-black flex items-center gap-3">
-                    <Upload className="text-black" /> Submission Format
+                  <h2 className="text-2xl font-black text-slate-900 flex items-center gap-3">
+                    <Upload className="text-primary" /> Submission Format
                   </h2>
                   <ul className="space-y-4">
                     {[
@@ -85,8 +81,8 @@ const Guidelines = () => {
                       "Upload source code, datasets, or supporting files only in the requested format.",
                       "Verify that all files open correctly before final submission."
                     ].map((item, i) => (
-                      <li key={i} className="flex items-start gap-3 text-[15px] text-black font-medium">
-                        <Check className="text-black mt-1 text-xs" />
+                      <li key={i} className="flex items-start gap-3 text-[15px] text-slate-600 font-medium">
+                        <Check className="text-primary mt-1" />
                         {item}
                       </li>
                     ))}
@@ -94,8 +90,8 @@ const Guidelines = () => {
                 </section>
 
                 <section className="space-y-6">
-                  <h2 className="text-2xl font-black text-black flex items-center gap-3">
-                    <Scale className="text-black" /> Academic Policies
+                  <h2 className="text-2xl font-black text-slate-900 flex items-center gap-3">
+                    <Scale className="text-primary" /> Academic Policies
                   </h2>
                   <ul className="space-y-4">
                     {[
@@ -104,8 +100,8 @@ const Guidelines = () => {
                       "Students must attend scheduled reviews, demos, and final defense sessions.",
                       "Evaluation decisions are based on rubrics, deliverables, presentation, and technical quality."
                     ].map((item, i) => (
-                      <li key={i} className="flex items-start gap-3 text-[15px] text-black font-medium">
-                        <Check className="text-black mt-1 text-xs" />
+                      <li key={i} className="flex items-start gap-3 text-[15px] text-slate-600 font-medium">
+                        <Check className="text-primary mt-1" />
                         {item}
                       </li>
                     ))}
@@ -115,20 +111,20 @@ const Guidelines = () => {
 
               {/* Sidebar Notices */}
               <aside className="space-y-6">
-                <div className="bg-white border-[1.5px] border-black rounded-[2rem] p-8 shadow-sm">
-                  <h3 className="text-lg font-black text-black mb-4 flex items-center gap-3">
-                    <AlertTriangle className="w-4 h-4" /> Important Note
+                <div className="bg-white border-[1.5px] border-blue-100 rounded-[2rem] p-8 shadow-sm">
+                  <h3 className="text-lg font-black text-slate-900 mb-4 flex items-center gap-3">
+                    <AlertTriangle className="w-4 h-4 text-primary" /> Important Note
                   </h3>
-                  <p className="text-[14px] text-black font-medium leading-relaxed">
+                  <p className="text-[14px] text-slate-600 font-medium leading-relaxed">
                     Missing a deadline or submitting incomplete documents can delay supervisor review and may affect eligibility for evaluation.
                   </p>
                 </div>
 
-                <div className="bg-white border-[1.5px] border-black rounded-[2rem] p-8 shadow-sm">
-                  <h3 className="text-lg font-black text-black mb-4 flex items-center gap-3">
-                    <Info className="w-4 h-4" /> Best Practice
+                <div className="bg-white border-[1.5px] border-blue-100 rounded-[2rem] p-8 shadow-sm">
+                  <h3 className="text-lg font-black text-slate-900 mb-4 flex items-center gap-3">
+                    <Info className="w-4 h-4 text-primary" /> Best Practice
                   </h3>
-                  <p className="text-[14px] text-black font-medium leading-relaxed">
+                  <p className="text-[14px] text-slate-600 font-medium leading-relaxed">
                     Meet your supervisor regularly, record feedback, update progress logs, and keep a backup of every submission.
                   </p>
                 </div>

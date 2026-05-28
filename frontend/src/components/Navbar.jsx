@@ -17,19 +17,19 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-black">
+    <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-blue-100">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-[70px]">
           {/* Logo Section */}
           <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-9 h-9 lg:w-10 lg:h-10 bg-navy rounded-full flex items-center justify-center shadow-md group-hover:bg-blue-bright transition-colors">
+            <div className="w-9 h-9 lg:w-10 lg:h-10 bg-primary rounded-full flex items-center justify-center shadow-md group-hover:bg-blue-800 transition-colors">
               <GraduationCap className="w-5 h-5 text-white" />
             </div>
             <div className="flex flex-col">
-              <span className="font-display font-extrabold text-navy text-sm lg:text-base leading-tight">
+              <span className="font-display font-extrabold text-primary text-sm lg:text-base leading-tight">
                 CUI Abbottabad
               </span>
-              <span className="text-[9px] lg:text-[10px] font-bold tracking-wider text-blue-bright uppercase">
+              <span className="text-[9px] lg:text-[10px] font-bold tracking-wider text-secondary uppercase">
                 FYP Portal
               </span>
             </div>
@@ -42,8 +42,8 @@ const Navbar = () => {
                 <NavLink
                   to={link.path}
                   className={({ isActive }) =>
-                    `text-sm font-semibold transition-colors hover:text-blue-bright ${
-                      isActive ? 'text-blue-bright' : 'text-gray-600'
+                    `text-sm font-semibold transition-colors hover:text-secondary ${
+                      isActive ? 'text-secondary' : 'text-gray-600'
                     }`
                   }
                 >
@@ -53,10 +53,10 @@ const Navbar = () => {
             ))}
           </ul>
 
-          {/* Desktop Portal Login Button (Updated Styles) */}
+          {/* Desktop Portal Login Button */}
           <Link 
             to="/login" 
-            className="hidden md:flex items-center gap-2 bg-navy text-white px-7 py-2.5 rounded-full font-bold text-sm hover:bg-blue-bright transition-all shadow-lg shadow-navy/10 active:scale-95"
+            className="hidden md:flex items-center gap-2 bg-primary text-white px-7 py-2.5 rounded-full font-bold text-sm hover:bg-blue-800 transition-all shadow-lg shadow-primary/10 active:scale-95"
           >
             Portal Login
             <ArrowRight className="w-4 h-4" />
@@ -65,15 +65,15 @@ const Navbar = () => {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 rounded-lg hover:bg-white transition-colors"
+            className="md:hidden p-2 rounded-lg hover:bg-blue-50 transition-colors"
           >
-            {isOpen ? <X className="w-6 h-6 text-navy" /> : <Menu className="w-6 h-6 text-navy" />}
+            {isOpen ? <X className="w-6 h-6 text-primary" /> : <Menu className="w-6 h-6 text-primary" />}
           </button>
         </div>
 
         {/* Mobile Navigation Dropdown */}
         {isOpen && (
-          <div className="md:hidden py-4 border-t border-black">
+          <div className="md:hidden py-4 border-t border-blue-100">
             <ul className="flex flex-col gap-3">
               {navLinks.map((link) => (
                 <li key={link.path}>
@@ -82,7 +82,7 @@ const Navbar = () => {
                     onClick={() => setIsOpen(false)}
                     className={({ isActive }) =>
                       `block py-2 text-base font-semibold transition-colors ${
-                        isActive ? 'text-blue-bright' : 'text-gray-700'
+                        isActive ? 'text-secondary' : 'text-gray-700'
                       }`
                     }
                   >
@@ -91,11 +91,10 @@ const Navbar = () => {
                 </li>
               ))}
               <li className="pt-2">
-                {/* Mobile Portal Login Button (Updated Styles) */}
                 <Link
                   to="/login"
                   onClick={() => setIsOpen(false)}
-                  className="flex items-center justify-center gap-2 bg-navy text-white py-3 rounded-full font-bold hover:bg-blue-bright transition-colors"
+                  className="flex items-center justify-center gap-2 bg-primary text-white py-3 rounded-full font-bold hover:bg-blue-800 transition-colors"
                 >
                   Portal Login
                   <ArrowRight className="w-4 h-4" />

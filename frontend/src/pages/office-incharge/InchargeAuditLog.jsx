@@ -66,7 +66,7 @@ const InchargeAuditLog = () => {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-white/75 border-b border-black text-[11px] font-black text-black uppercase tracking-wider">
+              <tr className="bg-white/75 border-b border-black text-[11px] font-black text-black tracking-wider">
                 <th className="py-3.5 px-6">Timestamp</th>
                 <th className="py-3.5 px-6">User Email</th>
                 <th className="py-3.5 px-6">Action Type</th>

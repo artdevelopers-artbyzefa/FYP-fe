@@ -73,7 +73,7 @@ const HodDashboard = () => {
                 <div className="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-sm flex items-center justify-center">
                   <Landmark className="text-lg text-white/90" />
                 </div>
-                <span className="text-xs font-bold text-white/50 uppercase tracking-widest">Executive Dashboard</span>
+                <span className="text-xs font-bold text-white/50 tracking-widest">Executive Dashboard</span>
               </div>
               <h1 className="text-2xl sm:text-3xl font-black mb-2 tracking-tight">Departmental FYP Oversight</h1>
               <p className="text-sm text-white/70 font-medium max-w-2xl leading-relaxed">
@@ -110,7 +110,7 @@ const HodDashboard = () => {
                 {card.badge}
               </span>
             </div>
-            <div className="text-xs font-bold text-black uppercase tracking-wider mb-1">{card.label}</div>
+            <div className="text-xs font-bold text-black tracking-wider mb-1">{card.label}</div>
             <div className="text-3xl font-black text-black tabular-nums">{card.value ?? '...'}</div>
             <div className="mt-3 h-1.5 rounded-full bg-white overflow-hidden">
               <div className={`h-full rounded-full ${card.color} transition-all duration-500`} style={{ width: '70%' }} />

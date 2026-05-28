@@ -155,7 +155,7 @@ const InchargePhaseControl = () => {
               </p>
             </div>
             <div className="bg-white/10 border border-white/20 px-5 py-4 rounded-2xl text-white text-center flex-shrink-0 min-w-[160px]">
-              <div className="text-[10px] font-black text-white/60 uppercase tracking-widest mb-0.5">Phase Sequence</div>
+              <div className="text-[10px] font-black text-white/60 tracking-widest mb-0.5">Phase Sequence</div>
               <div className="text-3xl font-black">
                 {phases.find(p => p.isActive)?.sequence || 1} / {phases.length}
               </div>
@@ -164,7 +164,7 @@ const InchargePhaseControl = () => {
 
           {/* Sequential Stepper */}
           <div className="bg-white rounded-3xl border border-black p-6 sm:p-8 shadow-sm mb-8">
-            <h3 className="text-sm font-black text-black uppercase tracking-wider mb-6 flex items-center gap-2">
+            <h3 className="text-sm font-black text-black tracking-wider mb-6 flex items-center gap-2">
               <svg className="w-5 h-5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
               </svg>
@@ -214,7 +214,7 @@ const InchargePhaseControl = () => {
                       <div className={`text-xs font-black truncate max-w-[200px] md:max-w-none ${isActive ? 'text-blue-600' : isPassed ? 'text-blue-600' : 'text-gray-500'}`}>
                         {phase.name}
                       </div>
-                      <span className="text-[10px] font-bold text-black uppercase tracking-wider">
+                      <span className="text-[10px] font-bold text-black tracking-wider">
                         {isActive ? 'Active Now' : isPassed ? 'Completed' : 'Upcoming'}
                       </span>
                     </div>
@@ -225,7 +225,7 @@ const InchargePhaseControl = () => {
           </div>
 
           {/* Phase Grid Cards */}
-          <h3 className="text-sm font-black text-black uppercase tracking-wider mb-5 flex items-center gap-2">
+          <h3 className="text-sm font-black text-black tracking-wider mb-5 flex items-center gap-2">
             <svg className="w-5 h-5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
             </svg>
@@ -278,7 +278,7 @@ const InchargePhaseControl = () => {
 
                 {/* Footer Action */}
                 <div className="pt-4 border-t border-black flex items-center justify-between">
-                  <span className="text-[10px] font-black text-black uppercase tracking-widest">
+                  <span className="text-[10px] font-black text-black tracking-widest">
                     Sequence: #{phase.sequence}
                   </span>
                   

@@ -47,19 +47,19 @@ export default function Dashboard() {
 
           <div className="bg-white/50 rounded-2xl border border-black overflow-hidden grid grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0 divide-blue-600">
             <div className="p-3 md:p-4 flex flex-col items-center md:items-start transition-colors hover:bg-white">
-              <p className="text-[8px] md:text-[9px] font-black text-black uppercase tracking-widest mb-1 md:mb-1.5">Father's Name</p>
+              <p className="text-[8px] md:text-[9px] font-black text-black tracking-widest mb-1 md:mb-1.5">Father's Name</p>
               <p className="text-[10px] md:text-xs font-bold text-black truncate w-full text-center md:text-left">{profile.fatherName}</p>
             </div>
             <div className="p-3 md:p-4 flex flex-col items-center md:items-start transition-colors hover:bg-white">
-              <p className="text-[8px] md:text-[9px] font-black text-black uppercase tracking-widest mb-1 md:mb-1.5">Classification</p>
+              <p className="text-[8px] md:text-[9px] font-black text-black tracking-widest mb-1 md:mb-1.5">Classification</p>
               <p className="text-[10px] md:text-xs font-bold text-black text-center md:text-left">Sem {profile.semester} / {profile.section}</p>
             </div>
             <div className="p-3 md:p-4 flex flex-col items-center md:items-start transition-colors hover:bg-white">
-              <p className="text-[8px] md:text-[9px] font-black text-black uppercase tracking-widest mb-1 md:mb-1.5">Academic Merit</p>
+              <p className="text-[8px] md:text-[9px] font-black text-black tracking-widest mb-1 md:mb-1.5">Academic Merit</p>
               <p className="text-[10px] md:text-xs font-bold text-black text-center md:text-left">{profile.cgpa} CGPA</p>
             </div>
             <div className="p-3 md:p-4 flex flex-col items-center md:items-start transition-colors hover:bg-white">
-              <p className="text-[8px] md:text-[9px] font-black text-black uppercase tracking-widest mb-1 md:mb-1.5">Course</p>
+              <p className="text-[8px] md:text-[9px] font-black text-black tracking-widest mb-1 md:mb-1.5">Course</p>
               <p className="text-[10px] md:text-xs font-bold text-black truncate w-full text-center md:text-left">FYP-1</p>
             </div>
           </div>
@@ -91,7 +91,7 @@ export default function Dashboard() {
         <div className="bg-white rounded-[2rem] border border-black shadow-sm p-6 min-h-[250px] flex flex-col items-center">
           <div className="w-full text-left mb-6">
             <h3 className="text-base font-black text-black">Task Completion</h3>
-            <p className="text-[10px] font-bold text-black uppercase tracking-widest mt-1">Overall Project Progress</p>
+            <p className="text-[10px] font-bold text-black tracking-widest mt-1">Overall Project Progress</p>
           </div>
           
           <div className="relative flex-1 flex items-center justify-center">

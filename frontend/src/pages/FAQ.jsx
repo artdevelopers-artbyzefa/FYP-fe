@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { Headphones, HelpCircle, Search } from 'lucide-react';
+import { ChevronDown, Headphones, Search } from 'lucide-react';
 
 const FAQ = () => {
   const faqs = [
@@ -38,44 +38,40 @@ const FAQ = () => {
   };
 
   return (
-    <div className="font-poppins bg-white text-black min-h-screen flex flex-col">
+    <div className="font-poppins bg-white text-slate-700 min-h-screen flex flex-col">
       <Header />
       
       <main className="flex-grow pt-20">
         {/* Page Hero */}
-        <section className="bg-gradient- /95 /80 /90 py-16 md:py-24 border-b border-black">
+        <section className="bg-lightbg py-16 md:py-24 border-b border-blue-100">
           <div className="container max-w-[1280px] mx-auto px-4 sm:px-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
               <div>
-                <div className="inline-flex items-center gap-2 py-1.5 px-4 bg-black/5 border border-black/10 rounded-full text-black text-[0.7rem] font-extrabold uppercase tracking-[0.24em] mb-6">
-                  <span className="w-1.5 h-1.5 bg-white rounded-full"></span>
-                  <HelpCircle className="w-4 h-4" /> FAQ
-                </div>
-                <h1 className="text-[clamp(1.8rem,4vw,2.5rem)] font-black text-black leading-tight mb-5">
+<h1 className="text-[clamp(1.8rem,4vw,2.5rem)] font-black text-slate-900 leading-tight mb-5">
                   Quick answers to common FYP questions.
                 </h1>
-                <p className="text-[15px] md:text-[17px] text-black leading-relaxed max-w-[600px]">
+                <p className="text-[15px] md:text-[17px] text-slate-600 leading-relaxed max-w-[600px]">
                   Find guidance on eligibility, submissions, supervisor coordination, deadlines, reviews, and how students should use the portal.
                 </p>
               </div>
-              <div className="bg-white rounded-3xl p-8 border border-black shadow-xl">
+              <div className="bg-white rounded-3xl p-8 border border-blue-50 shadow-xl">
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-black shrink-0">
+                    <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center text-primary shrink-0">
                       <Search className="w-4 h-4" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-black mb-1">Scan Faster</h3>
-                      <p className="text-sm text-black">Expand only the questions you need and keep the rest collapsed.</p>
+                      <h3 className="font-bold text-slate-900 mb-1">Scan Faster</h3>
+                      <p className="text-sm text-slate-600">Expand only the questions you need and keep the rest collapsed.</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-black shrink-0">
+                    <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center text-primary shrink-0">
                       <Headphones className="w-4 h-4" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-black mb-1">Still Unsure?</h3>
-                      <p className="text-sm text-black">Contact the FYP office for department-specific decisions or unusual cases.</p>
+                      <h3 className="font-bold text-slate-900 mb-1">Still Unsure?</h3>
+                      <p className="text-sm text-slate-600">Contact the FYP office for department-specific decisions or unusual cases.</p>
                     </div>
                   </div>
                 </div>
@@ -85,19 +81,19 @@ const FAQ = () => {
         </section>
 
         {/* FAQ List */}
-        <section className="py-16 md:py-24 bg-white border-b border-black">
+        <section className="py-16 md:py-24 bg-white border-b border-blue-100">
           <div className="container max-w-[800px] mx-auto px-4 sm:px-6">
             <div className="space-y-4">
               {faqs.map((faq, index) => (
                 <div 
                   key={index} 
-                  className={`border-[1.5px] rounded-[1.5rem] overflow-hidden transition-all duration-300 ${openIndex === index ? 'border-black shadow-md' : 'border-blue-100 hover:border-blue-200'}`}
+                   className={`border-[1.5px] rounded-[1.5rem] overflow-hidden transition-all duration-300 ${openIndex === index ? 'border-primary shadow-premium-shadow' : 'border-blue-100 hover:border-blue-200'}`}
                 >
                   <button 
                     onClick={() => toggleFAQ(index)}
                     className="w-full text-left px-6 py-5 flex items-center justify-between gap-4 group"
                   >
-                    <span className={`text-[15px] font-bold transition-colors ${openIndex === index ? 'text-blue-600' : 'text-gray-900 group-hover:text-blue-600'}`}>
+                    <span className={`text-[15px] font-bold transition-colors ${openIndex === index ? 'text-blue-600' : 'text-slate-900 group-hover:text-blue-600'}`}>
                       {faq.question}
                     </span>
                     <ChevronDown className="w-4 h-4" />
@@ -105,7 +101,7 @@ const FAQ = () => {
                   <div 
                     className={`px-6 overflow-hidden transition-all duration-300 ${openIndex === index ? 'pb-6 max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}
                   >
-                    <p className="text-[14px] text-black leading-relaxed font-medium">
+                    <p className="text-[14px] text-slate-600 leading-relaxed font-medium">
                       {faq.answer}
                     </p>
                   </div>

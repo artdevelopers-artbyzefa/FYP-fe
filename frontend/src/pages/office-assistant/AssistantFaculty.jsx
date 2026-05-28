@@ -35,7 +35,7 @@ const AssistantFaculty = () => {
                 <div className="flex justify-between"><span className="text-black font-bold">Completed Projects:</span><span className="font-black text-black">{f.completed}</span></div>
               </div>
               <div className="mb-6">
-                <span className="text-xs font-bold text-black uppercase tracking-wider block mb-2">Research Areas</span>
+                <span className="text-xs font-bold text-black tracking-wider block mb-2">Research Areas</span>
                 <div className="flex flex-wrap gap-1.5">
                   {f.research.map((r, i) => (
                     <span key={i} className="bg-white text-black text-[10px] font-bold px-2.5 py-1 rounded-lg">{r}</span>

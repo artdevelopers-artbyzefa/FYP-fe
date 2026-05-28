@@ -50,7 +50,7 @@ const InchargeSessions = () => {
             </div>
 
             <div className="space-y-3 pt-2">
-              <span className="text-xs font-bold text-black uppercase tracking-wider block mb-2">Milestone Deadlines</span>
+              <span className="text-xs font-bold text-black tracking-wider block mb-2">Milestone Deadlines</span>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div><label className="block text-[10px] font-bold text-black mb-1">Proposal Submission</label><input type="date" defaultValue="2026-03-01" className="w-full bg-white border border-black rounded-xl px-3 py-2 text-xs font-bold text-black outline-none focus:border-black cursor-pointer" required /></div>
                 <div><label className="block text-[10px] font-bold text-black mb-1">Mid-Term Defense (30%)</label><input type="date" defaultValue="2026-05-18" className="w-full bg-white border border-black rounded-xl px-3 py-2 text-xs font-bold text-black outline-none focus:border-black cursor-pointer" required /></div>
@@ -69,7 +69,7 @@ const InchargeSessions = () => {
             <div className="overflow-x-auto border border-black rounded-2xl">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="bg-white text-[11px] font-black text-black uppercase tracking-wider border-b border-black">
+                  <tr className="bg-white text-[11px] font-black text-black tracking-wider border-b border-black">
                     <th className="py-3 px-4">Student Name</th>
                     <th className="py-3 px-4">Reg Number</th>
                     <th className="py-3 px-4">Previous Status</th>

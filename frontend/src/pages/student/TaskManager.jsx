@@ -554,7 +554,7 @@ const TaskManager = () => {
 
                     <div className="mt-8 flex items-center gap-6">
                       <div className="flex flex-col">
-                        <span className="text-[11px] font-bold uppercase tracking-wider text-black/80 mb-2">Overall Progress</span>
+                        <span className="text-[11px] font-bold tracking-wider text-black/80 mb-2">Overall Progress</span>
                         <span className="text-[42px] font-black leading-none tracking-tight">25%</span>
                       </div>
 
@@ -666,7 +666,7 @@ const TaskManager = () => {
                         {(task.priority || task.assignee) && (
                           <div className="flex items-center gap-3">
                             {task.priority && (
-                              <span className={`text-[12px] font-bold uppercase tracking-wider ${task.priority === 'high' ? 'text-[#dc2626]' : 'text-[#eab308]'}`}>
+                              <span className={`text-[12px] font-bold tracking-wider ${task.priority === 'high' ? 'text-[#dc2626]' : 'text-[#eab308]'}`}>
                                 {task.priority}
                               </span>
                             )}
@@ -787,15 +787,15 @@ const TaskManager = () => {
                   <div className="grid grid-cols-3 gap-3 my-6">
                     <div className="bg-[#eff6ff] border border-black/50 rounded-xl p-2.5 flex flex-col items-center justify-center">
                       <span className="text-[16px] font-black text-[#1e3a8a] leading-none">{member.assigned}</span>
-                      <span className="text-[9px] font-bold text-black uppercase tracking-wider mt-1.5">Assigned</span>
+                      <span className="text-[9px] font-bold text-black tracking-wider mt-1.5">Assigned</span>
                     </div>
                     <div className="bg-white border border-black rounded-xl p-2.5 flex flex-col items-center justify-center">
                       <span className="text-[16px] font-black text-black leading-none">{member.done}</span>
-                      <span className="text-[9px] font-bold text-black uppercase tracking-wider mt-1.5">Done</span>
+                      <span className="text-[9px] font-bold text-black tracking-wider mt-1.5">Done</span>
                     </div>
                     <div className="bg-white border border-black rounded-xl p-2.5 flex flex-col items-center justify-center">
                       <span className="text-[16px] font-black text-black leading-none">{member.active}</span>
-                      <span className="text-[9px] font-bold text-black uppercase tracking-wider mt-1.5">Active</span>
+                      <span className="text-[9px] font-bold text-black tracking-wider mt-1.5">Active</span>
                     </div>
                   </div>
 
@@ -880,7 +880,7 @@ const TaskManager = () => {
                 {/* Inner label */}
                 <div className="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
                   <span className="text-[26px] font-black text-black leading-none">20</span>
-                  <span className="text-[11px] font-bold text-black uppercase tracking-wider mt-1">Total Tasks</span>
+                  <span className="text-[11px] font-bold text-black tracking-wider mt-1">Total Tasks</span>
                 </div>
               </div>
 
@@ -1027,7 +1027,7 @@ const TaskManager = () => {
                         <span className="text-black font-bold text-sm truncate">
                           {deadline.title}
                         </span>
-                        <span className={`mt-1 self-start inline-flex items-center px-2 py-0.5 rounded-full border text-[10px] font-bold uppercase tracking-wider ${priorityStyles}`}>
+                        <span className={`mt-1 self-start inline-flex items-center px-2 py-0.5 rounded-full border text-[10px] font-bold tracking-wider ${priorityStyles}`}>
                           {deadline.priority}
                         </span>
                       </div>
@@ -1131,7 +1131,7 @@ const TaskManager = () => {
 
             <div className="space-y-4">
               <div className="flex flex-col gap-1.5">
-                <label className="text-[11px] font-bold text-black uppercase tracking-wider">Task Title</label>
+                <label className="text-[11px] font-bold text-black tracking-wider">Task Title</label>
                 <input
                   type="text"
                   required
@@ -1143,7 +1143,7 @@ const TaskManager = () => {
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="text-[11px] font-bold text-black uppercase tracking-wider">Priority</label>
+                <label className="text-[11px] font-bold text-black tracking-wider">Priority</label>
                 <div className="grid grid-cols-3 gap-2.5">
                   {['low', 'medium', 'high'].map((p) => {
                     const colors = {
@@ -1173,7 +1173,7 @@ const TaskManager = () => {
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="text-[11px] font-bold text-black uppercase tracking-wider font-semibold">Categories</label>
+                <label className="text-[11px] font-bold text-black tracking-wider font-semibold">Categories</label>
                 <div className="flex flex-wrap gap-2">
                   {['Frontend', 'Backend', 'Documentation', 'ML', 'Testing', 'Research', 'Design'].map((cat) => {
                     const isActive = newTaskCategories.includes(cat);
@@ -1203,7 +1203,7 @@ const TaskManager = () => {
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[11px] font-bold text-black uppercase tracking-wider font-semibold">Due Date</label>
+                  <label className="text-[11px] font-bold text-black tracking-wider font-semibold">Due Date</label>
                   <input
                     type="text"
                     placeholder="e.g. Feb 22"
@@ -1214,7 +1214,7 @@ const TaskManager = () => {
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[11px] font-bold text-black uppercase tracking-wider font-semibold">Assignee</label>
+                  <label className="text-[11px] font-bold text-black tracking-wider font-semibold">Assignee</label>
                   <select
                     value={newTaskAssignee}
                     onChange={(e) => setNewTaskAssignee(e.target.value)}
@@ -1270,7 +1270,7 @@ const TaskManager = () => {
 
             <div className="space-y-4">
               <div className="flex flex-col gap-1.5">
-                <label className="text-[11px] font-bold text-black uppercase tracking-wider font-semibold">Task Title</label>
+                <label className="text-[11px] font-bold text-black tracking-wider font-semibold">Task Title</label>
                 <input
                   type="text"
                   required
@@ -1282,7 +1282,7 @@ const TaskManager = () => {
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="text-[11px] font-bold text-black uppercase tracking-wider font-semibold">Priority</label>
+                <label className="text-[11px] font-bold text-black tracking-wider font-semibold">Priority</label>
                 <div className="grid grid-cols-3 gap-2.5">
                   {['low', 'medium', 'high'].map((p) => {
                     const colors = {
@@ -1312,7 +1312,7 @@ const TaskManager = () => {
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="text-[11px] font-bold text-black uppercase tracking-wider font-semibold">Categories</label>
+                <label className="text-[11px] font-bold text-black tracking-wider font-semibold">Categories</label>
                 <div className="flex flex-wrap gap-2">
                   {['Frontend', 'Backend', 'Documentation', 'ML', 'Testing', 'Research', 'Design'].map((cat) => {
                     const isActive = selectedTask.categories.includes(cat);
@@ -1348,7 +1348,7 @@ const TaskManager = () => {
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[11px] font-bold text-black uppercase tracking-wider font-semibold">Due Date</label>
+                  <label className="text-[11px] font-bold text-black tracking-wider font-semibold">Due Date</label>
                   <input
                     type="text"
                     value={selectedTask.date}
@@ -1358,7 +1358,7 @@ const TaskManager = () => {
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[11px] font-bold text-black uppercase tracking-wider font-semibold">Assignee</label>
+                  <label className="text-[11px] font-bold text-black tracking-wider font-semibold">Assignee</label>
                   <select
                     value={selectedTask.assignee}
                     onChange={(e) => setSelectedTask({ ...selectedTask, assignee: e.target.value })}
@@ -1374,7 +1374,7 @@ const TaskManager = () => {
 
               {selectedTask.progress !== undefined && (
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[11px] font-bold text-black uppercase tracking-wider font-semibold">Progress ({selectedTask.progress}%)</label>
+                  <label className="text-[11px] font-bold text-black tracking-wider font-semibold">Progress ({selectedTask.progress}%)</label>
                   <input
                     type="range"
                     min="0"

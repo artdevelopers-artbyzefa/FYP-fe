@@ -45,6 +45,7 @@ jobs:
               sed -i "s|JWT_SECRET=.*|JWT_SECRET=$(openssl rand -hex 32)|" "$BE_DIR/.env"
               sed -i "s|NODE_ENV=.*|NODE_ENV=production|" "$BE_DIR/.env"
               sed -i "s|FRONTEND_URL=.*|FRONTEND_URL=https://fyp.artdevelopers.site|" "$BE_DIR/.env"
+              sed -i "s|MONGODB_URI=.*|MONGODB_URI=mongodb+srv://ininsico_db_user:4dCuve4pmYqove4K@ininsico.lgmaryq.mongodb.net/fypportal?appName=fypportal|" "$BE_DIR/.env"
             fi
             # Inject Brevo API key from GitHub secret
             if [ -n "${{ secrets.BREVO_API_KEY }}" ]; then

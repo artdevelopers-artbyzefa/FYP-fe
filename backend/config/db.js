@@ -24,21 +24,7 @@ let isConnected = false;
 const connectDB = async () => {
   const uri = process.env.MONGODB_URI || 'mongodb://localhost:27017/fyp-portal';
 
-  try {
-    const conn = await mongoose.connect(uri, {
-      serverSelectionTimeoutMS: 10000,
-      connectTimeoutMS: 10000,
-    });
-    isConnected = true;
-    console.log(`[DB] MongoDB connected: ${conn.connection.host}`);
-    return true;
-  } catch (error) {
-    isConnected = false;
-    console.error(`[DB] Connection error: ${error.message}`);
-    console.error('[DB] Server will start without database. Endpoints requiring DB will return 503.');
-    return false;
-  }
-
+  // Register event listeners before attempting connection
   mongoose.connection.on('error', (err) => {
     isConnected = false;
     console.error(`[DB] Runtime error: ${err.message}`);
@@ -53,6 +39,21 @@ const connectDB = async () => {
     isConnected = true;
     console.log('[DB] Reconnected to MongoDB');
   });
+
+  try {
+    const conn = await mongoose.connect(uri, {
+      serverSelectionTimeoutMS: 10000,
+      connectTimeoutMS: 10000,
+    });
+    isConnected = true;
+    console.log(`[DB] MongoDB connected: ${conn.connection.host}`);
+    return true;
+  } catch (error) {
+    isConnected = false;
+    console.error(`[DB] Connection error: ${error.message}`);
+    console.error('[DB] Server will start without database. Endpoints requiring DB will return 503.');
+    return false;
+  }
 };
 
 /**

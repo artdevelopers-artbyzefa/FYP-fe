@@ -1,40 +1,48 @@
-name: Deploy Frontend
+name: Frontend Build & Trigger Deploy
 
 on:
   push:
     branches: [main]
+    paths:
+      - 'frontend/**'
   workflow_dispatch:
 
 jobs:
-  deploy:
+  build:
+    name: Build Frontend
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
-          host: 143.110.240.144
-          username: root
-          password: ${{ secrets.SERVER_PASSWORD }}
-          script: |
-            set -e
-            FE_REPO="/var/www/fyp-frontend-repo"
+          path: FYP-fe
 
-            echo "=== Pull FYP-fe ==="
-            if [ -d "$FE_REPO/.git" ]; then
-              cd "$FE_REPO"; git stash --include-untracked 2>/dev/null || true; git pull origin main
-            else
-              rm -rf "$FE_REPO"
-              git clone https://github.com/artdevelopers-artbyzefa/FYP-fe.git "$FE_REPO"
-            fi
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: FYP-fe/frontend/package-lock.json
 
-            echo "=== Build frontend ==="
-            cd "$FE_REPO/frontend"
-            npm install 2>&1 | tail -3
-            npm run build 2>&1
+      - name: Install dependencies
+        working-directory: FYP-fe/frontend
+        run: npm ci
 
-            echo "=== Deploy frontend ==="
-            rm -rf /var/www/fyp-frontend/dist
-            mkdir -p /var/www/fyp-frontend/dist
-            cp -r "$FE_REPO/frontend/dist/"* /var/www/fyp-frontend/dist/
+      - name: Build
+        working-directory: FYP-fe/frontend
+        run: npm run build
 
-            echo "=== Deploy complete ==="
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-build
+          path: FYP-fe/frontend/dist/
+          retention-days: 1
+
+      - name: Trigger backend deploy
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.BE_DEPLOY_TOKEN }}
+          repository: artdevelopers-artbyzefa/FYP-be
+          event-type: frontend-updated
+          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'

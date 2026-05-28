@@ -118,6 +118,11 @@ jobs:
             # ================================================================
             # FINAL: Write diagnostics to web-accessible file
             # ================================================================
+            echo "=== Testing MongoDB connectivity ==="
+            MONGO_HOST="ininsico.lgmaryq.mongodb.net"
+            echo "DNS: $(host "$MONGO_HOST" 2>&1 || nslookup "$MONGO_HOST" 2>&1 | head -5)"
+            echo "Reachability: $(curl -s --connect-timeout 5 "https://$MONGO_HOST:27017" 2>&1 || echo 'Connection test completed')"
+
             echo "=== Writing diagnostics ==="
             {
               echo "TIME: $(date -u)"
@@ -125,22 +130,15 @@ jobs:
               pm2 list 2>&1
               echo "--- PORT 5001 ---"
               ss -tlnp 2>&1 | grep 5001 || echo "NOT LISTENING ON 5001"
-              echo "--- ALL PORTS ---"
-              ss -tlnp 2>&1
-              echo "--- CURL localhost:5001 ---"
+              echo "--- CURL localhost:5001/api/health ---"
               curl -s http://localhost:5001/api/health 2>&1 || echo "FAILED"
-              echo "--- CURL 127.0.0.1:5001 ---"
+              echo "--- CURL 127.0.0.1:5001/api/health ---"
               curl -s http://127.0.0.1:5001/api/health 2>&1 || echo "FAILED"
-              echo "--- NGINX CONFIG ---"
-              ls /etc/nginx/sites-enabled/ 2>/dev/null || echo "no sites-enabled dir"
-              ls /etc/nginx/conf.d/ 2>/dev/null || echo "no conf.d dir"
-              for f in /etc/nginx/sites-enabled/*; do
-                [ -f "$f" ] && echo "=== $f ===" && grep "proxy_pass" "$f" 2>/dev/null
-              done 2>/dev/null
-              for f in /etc/nginx/conf.d/*; do
-                [ -f "$f" ] && echo "=== $f ===" && grep "proxy_pass" "$f" 2>/dev/null
-              done 2>/dev/null
-              nginx -T 2>/dev/null | grep -E "proxy_pass|listen|server_name|location /api" | head -20 || echo "nginx -T failed"
+              echo "--- MONGO TEST ---"
+              host "$MONGO_HOST" 2>&1 || nslookup "$MONGO_HOST" 2>&1 || echo "DNS lookup failed"
+              timeout 5 bash -c "echo > /dev/tcp/$MONGO_HOST/27017" 2>&1 && echo "TCP 27017 OPEN" || echo "TCP 27017 NOT REACHABLE"
+              echo "--- .ENV (URIs only) ---"
+              grep -E "MONGO|PORT|NODE_ENV" /var/www/fyp/.env 2>/dev/null || echo ".env not found"
             } > /var/www/fyp-frontend/dist/diag.txt 2>&1
             echo "✓ Diagnostics at /diag.txt"
 

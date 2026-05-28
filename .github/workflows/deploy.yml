@@ -42,7 +42,7 @@ jobs:
             cp -r "$FE_REPO/backend/"* "$BE_DIR/"
 
             # Create .env with correct production values (using printf to avoid heredoc indentation issues in YAML)
-            printf 'PORT=5000\nNODE_ENV=production\nMONGODB_URI=mongodb+srv://ininsico_db_user:4dCuve4pmYqove4K@ininsico.lgmaryq.mongodb.net/fypportal?appName=fypportal\nJWT_SECRET=%s\nJWT_EXPIRES_IN=7d\nFRONTEND_URL=https://fyp.artdevelopers.site\nSENDER_EMAIL=internshipofficecuiatd@gmail.com\nSENDER_NAME=CUI-ATD\n' "$(openssl rand -hex 32)" > "$BE_DIR/.env"
+            printf 'PORT=5001\nNODE_ENV=production\nMONGODB_URI=mongodb+srv://ininsico_db_user:4dCuve4pmYqove4K@ininsico.lgmaryq.mongodb.net/fypportal?appName=fypportal\nJWT_SECRET=%s\nJWT_EXPIRES_IN=7d\nFRONTEND_URL=https://fyp.artdevelopers.site\nSENDER_EMAIL=internshipofficecuiatd@gmail.com\nSENDER_NAME=CUI-ATD\n' "$(openssl rand -hex 32)" > "$BE_DIR/.env"
 
             # Inject Brevo API key if GitHub secret exists
             if [ -n "${{ secrets.BREVO_API_KEY }}" ]; then
@@ -83,7 +83,7 @@ jobs:
             echo "=== Waiting for server to be ready ==="
             for i in 1 2 3 4 5 6 7 8 9 10; do
               sleep 3
-              STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5000/api/health 2>/dev/null || echo "000")
+              STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5001/api/health 2>/dev/null || echo "000")
               if [ "$STATUS" = "200" ]; then
                 echo "✓ Server is UP (HTTP $STATUS)"
                 break
@@ -104,7 +104,7 @@ jobs:
 
             echo "=== Verifying server stays up ==="
             sleep 5
-            STATUS2=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5000/api/health 2>/dev/null || echo "000")
+            STATUS2=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5001/api/health 2>/dev/null || echo "000")
             if [ "$STATUS2" = "200" ]; then
               echo "✓ Server still UP after 5s"
             else
@@ -118,38 +118,19 @@ jobs:
             # ================================================================
             # FINAL: Write diagnostics to web-accessible file
             # ================================================================
-            # ================================================================
-            # Ensure Nginx proxies /api to port 5000
-            # ================================================================
-            echo "=== Checking Nginx proxy config ==="
-            NGINX_CONF=$(find /etc/nginx -type f -name "*.conf" -o -name "default" 2>/dev/null | xargs grep -l "proxy_pass.*localhost\|proxy_pass.*127.0" 2>/dev/null | head -1)
-            if [ -n "$NGINX_CONF" ]; then
-              CURRENT_PROXY=$(grep "proxy_pass" "$NGINX_CONF" | head -1)
-              echo "Current proxy: $CURRENT_PROXY"
-              if ! echo "$CURRENT_PROXY" | grep -q ":5000"; then
-                echo "Fixing proxy_pass to http://localhost:5000"
-                sed -i "s|proxy_pass.*;|proxy_pass http://localhost:5000;|" "$NGINX_CONF"
-                nginx -t 2>&1 && nginx -s reload 2>&1 && echo "✓ Nginx reloaded" || echo "✗ Nginx reload failed"
-              else
-                echo "✓ Nginx already proxying to port 5000"
-              fi
-            else
-              echo "⚠ No Nginx config with proxy_pass found"
-            fi
-
             echo "=== Writing diagnostics ==="
             {
               echo "TIME: $(date -u)"
               echo "--- PM2 ---"
               pm2 list 2>&1
-              echo "--- PORT 5000 ---"
-              ss -tlnp 2>&1 | grep 5000 || echo "NOT LISTENING ON 5000"
+              echo "--- PORT 5001 ---"
+              ss -tlnp 2>&1 | grep 5001 || echo "NOT LISTENING ON 5001"
               echo "--- ALL PORTS ---"
               ss -tlnp 2>&1
-              echo "--- CURL localhost:5000 ---"
-              curl -s http://localhost:5000/api/health 2>&1 || echo "FAILED"
-              echo "--- CURL 127.0.0.1:5000 ---"
-              curl -s http://127.0.0.1:5000/api/health 2>&1 || echo "FAILED"
+              echo "--- CURL localhost:5001 ---"
+              curl -s http://localhost:5001/api/health 2>&1 || echo "FAILED"
+              echo "--- CURL 127.0.0.1:5001 ---"
+              curl -s http://127.0.0.1:5001/api/health 2>&1 || echo "FAILED"
               echo "--- NGINX CONFIG ---"
               ls /etc/nginx/sites-enabled/ 2>/dev/null || echo "no sites-enabled dir"
               ls /etc/nginx/conf.d/ 2>/dev/null || echo "no conf.d dir"

@@ -5,7 +5,7 @@
 require('dotenv').config();
 const express = require('express');
 const app = express();
-const PORT = process.env.PORT || 5000;
+  const PORT = process.env.PORT || 5001;
 
 app.get('/api/health', (req, res) => {
   res.json({ success: true, status: 'running', uptime: process.uptime(), port: PORT });

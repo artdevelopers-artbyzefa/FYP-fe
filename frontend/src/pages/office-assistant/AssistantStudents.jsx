@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { getOfficeStudents, createOfficeStudent } from '../../services/office-assistant.service';
 import { showToast } from '../../components/AppToast';
+import { sendWelcomeEmail } from '../../services/email.service';
 import { Search, UserPlus, X, Send } from 'lucide-react';
 
 const initialForm = { name: '', reg: '', email: '', semester: '7', fatherName: '', whatsappNumber: '', section: '', cgpa: '' };
@@ -33,12 +34,23 @@ const AssistantStudents = () => {
 
   useEffect(() => { loadStudents(); }, [loadStudents]);
 
-  const handleRegBlur = (e) => {
-    const val = e.target.value.trim().toUpperCase();
-    if (val) {
-      const clean = val.replace(/^CIIT\//, '').replace(/\/ATD$/, '');
-      setForm(f => ({ ...f, reg: `CIIT/${clean}/ATD` }));
+  const normalizeRegNumber = (input) => {
+    let val = input.trim();
+    if (!val) return '';
+    val = val.replace(/^CIIT\//i, '').replace(/\/ATD$/i, '');
+    const match = val.match(/^([a-z]{2}\d{2})-([a-z]{2,4})-(\d{1,3})$/i);
+    if (match) {
+      const session = match[1].toUpperCase();
+      const program = match[2].toUpperCase();
+      const number = match[3].padStart(3, '0');
+      return `CIIT/${session}-${program}-${number}/ATD`;
     }
+    return `CIIT/${val.toUpperCase()}/ATD`;
+  };
+
+  const handleRegBlur = (e) => {
+    const normalized = normalizeRegNumber(e.target.value);
+    if (normalized) setForm(f => ({ ...f, reg: normalized }));
   };
 
   const handleSubmit = async (e) => {
@@ -61,6 +73,17 @@ const AssistantStudents = () => {
         cgpa: form.cgpa || undefined
       });
       showToast.success('Student onboarded successfully!');
+      sendWelcomeEmail({
+        name: form.name.trim(),
+        email: form.email.trim(),
+        regNo: form.reg,
+      }).then(res => {
+        if (res.success) {
+          showToast.success('Welcome email sent to student.');
+        } else {
+          showToast.error('Student created but welcome email failed to send.');
+        }
+      });
       setShowForm(false);
       setForm(initialForm);
       loadStudents();
@@ -148,8 +171,8 @@ const AssistantStudents = () => {
                 <input type="text" value={form.section} onChange={e => setForm(f => ({ ...f, section: e.target.value }))} placeholder="e.g. A" className="w-full bg-white border border-gray-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all" />
               </div>
               <div>
-                <label className="block text-[10px] font-bold text-gray-500 mb-1.5 uppercase tracking-widest">Current CGPA</label>
-                <input type="number" step="0.01" min="0" max="4" value={form.cgpa} onChange={e => setForm(f => ({ ...f, cgpa: e.target.value }))} placeholder="e.g. 3.25" className={`w-full bg-white border ${errors.cgpa ? 'border-rose-300' : 'border-gray-100'} rounded-xl px-4 py-2.5 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all`} />
+                <label className="block text-[10px] font-bold text-gray-500 mb-1.5 tracking-widest">Current CGPA</label>
+                <input type="text" inputMode="decimal" autoCapitalize="none" value={form.cgpa} onChange={e => setForm(f => ({ ...f, cgpa: e.target.value }))} placeholder="e.g. 3.25" className={`w-full bg-white border ${errors.cgpa ? 'border-rose-300' : 'border-gray-100'} rounded-xl px-4 py-2.5 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all`} />
                 {errors.cgpa && <p className="text-[10px] font-bold text-rose-500 mt-1 uppercase tracking-wider">{errors.cgpa}</p>}
               </div>
             </div>

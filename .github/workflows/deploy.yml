@@ -1,4 +1,4 @@
-name: Deploy FYP Portal
+name: Deploy Frontend
 
 on:
   push:
@@ -18,34 +18,23 @@ jobs:
           script: |
             set -e
             FE_REPO="/var/www/fyp-frontend-repo"
-            BE_DIR="/var/www/fyp"
 
             echo "=== Pull FYP-fe ==="
-            if [ -d "$FE_REPO/.git" ]; then cd "$FE_REPO"; git stash --include-untracked 2>/dev/null || true; git pull origin main
-            else rm -rf "$FE_REPO"; git clone https://github.com/artdevelopers-artbyzefa/FYP-fe.git "$FE_REPO"
+            if [ -d "$FE_REPO/.git" ]; then
+              cd "$FE_REPO"; git stash --include-untracked 2>/dev/null || true; git pull origin main
+            else
+              rm -rf "$FE_REPO"
+              git clone https://github.com/artdevelopers-artbyzefa/FYP-fe.git "$FE_REPO"
             fi
 
-            echo "=== Deploy backend ==="
-            rm -rf "$BE_DIR"; mkdir -p "$BE_DIR"; cp -r "$FE_REPO/backend/"* "$BE_DIR/"
-            printf 'PORT=5001\nNODE_ENV=production\nMONGODB_URI=mongodb://ininsico_db_user:4dCuve4pmYqove4K@ac-mqypx9f-shard-00-00.lgmaryq.mongodb.net:27017,ac-mqypx9f-shard-00-01.lgmaryq.mongodb.net:27017,ac-mqypx9f-shard-00-02.lgmaryq.mongodb.net:27017/fypportal?ssl=true&replicaSet=atlas-cqyufl-shard-0&authSource=admin&retryWrites=true&w=majority\nJWT_SECRET=%s\nJWT_EXPIRES_IN=7d\nFRONTEND_URL=https://fyp.artdevelopers.site\nSENDER_NAME=CUI-ATD\n' "$(openssl rand -hex 32)" > "$BE_DIR/.env"
-            cd "$BE_DIR"; npm install 2>&1
-
             echo "=== Build frontend ==="
-            cd "$FE_REPO/frontend"; npm install 2>&1 | tail -3; npm run build 2>&1
-            rm -rf /var/www/fyp-frontend/dist; mkdir -p /var/www/fyp-frontend/dist
+            cd "$FE_REPO/frontend"
+            npm install 2>&1 | tail -3
+            npm run build 2>&1
+
+            echo "=== Deploy frontend ==="
+            rm -rf /var/www/fyp-frontend/dist
+            mkdir -p /var/www/fyp-frontend/dist
             cp -r "$FE_REPO/frontend/dist/"* /var/www/fyp-frontend/dist/
-
-            echo "=== Start backend via PM2 ==="
-            pm2 delete fyp-backend 2>/dev/null || true
-            pm2 start "$BE_DIR/server.js" --name fyp-backend 2>&1
-            pm2 save 2>/dev/null || true
-
-            echo "=== Verify ==="
-            for i in 1 2 3 4 5 6 7 8; do
-              sleep 2
-              STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5001/api/health 2>/dev/null || echo "000")
-              if [ "$STATUS" = "200" ]; then echo "✓ Server UP (attempt $i)"; break; fi
-              [ "$i" = "8" ] && echo "✗ Server failed" && pm2 logs fyp-backend --lines 20 --nostream 2>/dev/null || true
-            done
 
             echo "=== Deploy complete ==="

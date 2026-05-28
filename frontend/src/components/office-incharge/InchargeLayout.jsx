@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { showToast as toast } from '../AppToast';
 import { logoutUser, getCurrentUser } from '../../services/auth.service';
-import { AlertCircle, BarChart3, Bell, Calendar, ChevronLeft, ChevronRight, ClipboardList, GraduationCap, History, Home, Landmark, Menu, Scale, ToggleRight, User, UserPlus, Users, X } from 'lucide-react';
+import { AlertCircle, BarChart3, Bell, Calendar, ChevronLeft, ChevronRight, ClipboardList, GraduationCap, History, Home, Landmark, LogOut, Menu, Scale, ToggleRight, User, UserPlus, Users, X } from 'lucide-react';
 
 const InchargeLayout = () => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);

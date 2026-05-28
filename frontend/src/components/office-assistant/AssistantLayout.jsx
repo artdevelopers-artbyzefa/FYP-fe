@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { showToast as toast } from '../AppToast';
 import { logoutUser, getCurrentUser } from '../../services/auth.service';
-import { Award, Bell, ChevronLeft, ChevronRight, File, GitBranch, GraduationCap, Home, Layers, Megaphone, Menu, Presentation, Shield, User, UserCog, Users, X } from 'lucide-react';
+import { Award, Bell, ChevronLeft, ChevronRight, File, GitBranch, GraduationCap, Home, Layers, LogOut, Megaphone, Menu, Presentation, Shield, User, UserCog, Users, X } from 'lucide-react';
 
 const AssistantLayout = () => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);

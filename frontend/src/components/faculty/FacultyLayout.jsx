@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { showToast as toast } from '../AppToast';
 import { logoutUser, getCurrentUser } from '../../services/auth.service';
-import { Bell, Calendar, ChevronLeft, ChevronRight, Crown, FileSignature, GitBranch, Landmark, Menu, MessageSquare, Presentation, Star, Tags, X } from 'lucide-react';
+import { Bell, Calendar, ChevronLeft, ChevronRight, Crown, FileSignature, GitBranch, Landmark, LogOut, Menu, MessageSquare, Presentation, Star, Tags, X } from 'lucide-react';
 
 const FacultyLayout = () => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);

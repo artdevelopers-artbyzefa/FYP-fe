@@ -7,7 +7,8 @@ import {
   OFFICE_PROJECTS_API_URL,
   OFFICE_CONTENT_API_URL,
   OFFICE_EXTERNAL_API_URL,
-  OFFICE_RESULTS_API_URL
+  OFFICE_RESULTS_API_URL,
+  OFFICE_CREATE_STUDENT_API_URL
 } from '../utils/constants/api-url.constant';
 
 const DEMO_DASHBOARD_STATS = {
@@ -132,5 +133,14 @@ export const getOfficeResults = async () => {
     return res.data;
   } catch (error) {
     return { data: DEMO_RESULTS };
+  }
+};
+
+export const createOfficeStudent = async (payload) => {
+  try {
+    const res = await apiClient.post(OFFICE_CREATE_STUDENT_API_URL, payload);
+    return res.data;
+  } catch (error) {
+    throw error;
   }
 };

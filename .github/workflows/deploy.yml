@@ -41,22 +41,12 @@ jobs:
             mkdir -p "$BE_DIR"
             cp -r "$FE_REPO/backend/"* "$BE_DIR/"
 
-            # Create .env with correct production values
-            cat > "$BE_DIR/.env" << ENVEOF
-PORT=5000
-NODE_ENV=production
-MONGODB_URI=mongodb+srv://ininsico_db_user:4dCuve4pmYqove4K@ininsico.lgmaryq.mongodb.net/fypportal?appName=fypportal
-JWT_SECRET=$(openssl rand -hex 32)
-JWT_EXPIRES_IN=7d
-FRONTEND_URL=https://fyp.artdevelopers.site
-SENDER_EMAIL=internshipofficecuiatd@gmail.com
-SENDER_NAME=CUI-ATD
-ENVEOF
+            # Create .env with correct production values (using printf to avoid heredoc indentation issues in YAML)
+            printf 'PORT=5000\nNODE_ENV=production\nMONGODB_URI=mongodb+srv://ininsico_db_user:4dCuve4pmYqove4K@ininsico.lgmaryq.mongodb.net/fypportal?appName=fypportal\nJWT_SECRET=%s\nJWT_EXPIRES_IN=7d\nFRONTEND_URL=https://fyp.artdevelopers.site\nSENDER_EMAIL=internshipofficecuiatd@gmail.com\nSENDER_NAME=CUI-ATD\n' "$(openssl rand -hex 32)" > "$BE_DIR/.env"
 
             # Inject Brevo API key if GitHub secret exists
             if [ -n "${{ secrets.BREVO_API_KEY }}" ]; then
-              echo "BREVO_API_KEY=${{ secrets.BREVO_API_KEY }}" >> "$BE_DIR/.env"
-              echo "✓ Brevo API key injected"
+              printf 'BREVO_API_KEY=%s\n' "${{ secrets.BREVO_API_KEY }}" >> "$BE_DIR/.env"
             fi
 
             # Install backend dependencies

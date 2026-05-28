@@ -102,4 +102,17 @@ jobs:
               fi
             done
 
+            echo "=== Verifying server stays up ==="
+            sleep 5
+            STATUS2=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5000/api/health 2>/dev/null || echo "000")
+            if [ "$STATUS2" = "200" ]; then
+              echo "✓ Server still UP after 5s"
+            else
+              echo "✗ Server went DOWN! HTTP $STATUS2"
+              echo "=== PM2 log dump ==="
+              pm2 logs fyp-backend --lines 50 --nostream 2>/dev/null || true
+              echo "=== PM2 status ==="
+              pm2 show fyp-backend 2>/dev/null || true
+            fi
+
             echo "=== Deploy complete ==="

@@ -1,0 +1,54 @@
+name: Deploy FYP Portal to Production
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: 143.110.240.144
+          username: root
+          password: ${{ secrets.SERVER_PASSWORD }}
+          script: |
+            set -e
+
+            echo "=== Pulling backend (FYP-be) ==="
+            cd /var/www/fyp
+            git stash --include-untracked 2>/dev/null || true
+            git pull origin main
+
+            echo "=== Cloning / pulling frontend (FYP-fe) ==="
+            FE_REPO="/var/www/fyp-frontend-repo"
+            if [ -d "$FE_REPO/.git" ]; then
+              cd "$FE_REPO"
+              git stash --include-untracked 2>/dev/null || true
+              git pull origin main
+            else
+              rm -rf "$FE_REPO"
+              git clone https://github.com/artdevelopers-artbyzefa/FYP-fe.git "$FE_REPO"
+            fi
+
+            echo "=== Installing backend deps ==="
+            cd /var/www/fyp
+            npm install --production --silent 2>&1 | tail -1
+
+            echo "=== Installing frontend deps & building ==="
+            cd "$FE_REPO/frontend"
+            npm install --silent 2>&1 | tail -1
+            npm run build
+
+            echo "=== Copying frontend build to production path ==="
+            rm -rf /var/www/fyp-frontend/dist
+            mkdir -p /var/www/fyp-frontend/dist
+            cp -r "$FE_REPO/frontend/dist/"* /var/www/fyp-frontend/dist/
+
+            echo "=== Restarting PM2 ==="
+            pm2 restart fyp-backend 2>&1 | tail -5
+
+            echo "=== Deploy complete ==="

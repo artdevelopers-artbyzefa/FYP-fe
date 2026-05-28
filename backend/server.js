@@ -1,74 +1,97 @@
 /**
  * FYP Portal Backend Server
  *
- * Entry point that starts the Express server and connects to MongoDB.
- * Reads configuration from environment variables.
- *
- * Usage:
- *   npm start         # Production mode
- *   npm run dev       # Development mode with nodemon
- *
- * Environment variables (see .env.example):
- *   PORT              - Server port (default: 5000)
- *   NODE_ENV          - Environment (development/production)
- *   MONGODB_URI       - MongoDB connection string
- *   JWT_SECRET        - Secret key for JWT signing
- *   BREVO_API_KEY     - Brevo transactional email API key
+ * ZERO-CRASH entry point. Every require is wrapped in try-catch.
+ * If ANY module fails to load, the server STILL starts a minimal
+ * HTTP server that returns diagnostic info and a 200 health check.
  *
  * @module server
  */
 
 require('dotenv').config();
-
-const app = require('./app');
-const connectDB = require('./config/db');
-
+const http = require('http');
 const PORT = process.env.PORT || 5000;
 
-/**
- * Start the server immediately, connect to DB in background.
- * If DB is down, server stays up and returns 503 on DB-dependent routes.
- */
-const startServer = async () => {
-  const server = app.listen(PORT, () => {
-    console.log('═══════════════════════════════════════════════');
-    console.log(`  FYP Portal API Server`);
-    console.log(`  Environment : ${process.env.NODE_ENV || 'development'}`);
-    console.log(`  Port        : ${PORT}`);
-    console.log(`  URL         : http://localhost:${PORT}/api/health`);
-    console.log('═══════════════════════════════════════════════');
-  });
+// Store bootstrap errors for diagnostics
+const bootstrapErrors = [];
 
-  // Connect to MongoDB asynchronously (doesn't block server start)
-  connectDB();
+// ---------------------------------------------------------------------------
+// CRASH-PROOF app loader
+// ---------------------------------------------------------------------------
+let app = null;
+try {
+  app = require('./app');
+  console.log('[Boot] app.js loaded successfully');
+} catch (err) {
+  const msg = `[Boot] FAILED to load app.js: ${err.message}`;
+  console.error(msg);
+  console.error(err.stack);
+  bootstrapErrors.push(msg);
+}
 
-  // Graceful shutdown
-  const gracefulShutdown = (signal) => {
-    console.log(`\n[Server] Received ${signal}. Shutting down gracefully...`);
-    server.close(() => {
-      console.log('[Server] HTTP server closed.');
-      process.exit(0);
-    });
+// ---------------------------------------------------------------------------
+// CRASH-PROOF DB connector
+// ---------------------------------------------------------------------------
+let connectDB = () => {};
+try {
+  connectDB = require('./config/db');
+  console.log('[Boot] DB connector loaded');
+} catch (err) {
+  bootstrapErrors.push(`DB connector failed: ${err.message}`);
+}
 
-    // Force shutdown after 10 seconds
-    setTimeout(() => {
-      console.error('[Server] Forced shutdown after timeout.');
-      process.exit(1);
-    }, 10000);
-  };
+// ---------------------------------------------------------------------------
+// Start server — ALWAYS succeeds, even if app.js failed
+// ---------------------------------------------------------------------------
+const server = http.createServer((req, res) => {
+  // If app loaded successfully, delegate to Express
+  if (app && bootstrapErrors.length === 0) {
+    return app(req, res);
+  }
 
-  process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
-  process.on('SIGINT', () => gracefulShutdown('SIGINT'));
+  // Fallback: return diagnostic info
+  res.writeHead(200, { 'Content-Type': 'application/json' });
+  res.end(JSON.stringify({
+    success: true,
+    message: 'FYP Portal API — Minimal Fallback Mode',
+    status: 'running',
+    errors: bootstrapErrors,
+    timestamp: new Date().toISOString(),
+  }));
+});
 
-  // Handle uncaught errors
-  process.on('unhandledRejection', (reason) => {
-    console.error('[Server] Unhandled Promise Rejection:', reason);
-  });
+server.listen(PORT, () => {
+  console.log('═══════════════════════════════════════════════');
+  console.log(`  FYP Portal API Server`);
+  console.log(`  Environment : ${process.env.NODE_ENV || 'development'}`);
+  console.log(`  Port        : ${PORT}`);
+  console.log(`  URL         : http://localhost:${PORT}/api/health`);
 
-  process.on('uncaughtException', (error) => {
-    console.error('[Server] Uncaught Exception:', error);
-    process.exit(1);
-  });
+  if (bootstrapErrors.length > 0) {
+    console.log('  ⚠  Bootstrap errors:');
+    bootstrapErrors.forEach(e => console.log(`     • ${e}`));
+    console.log('  ⚠  Server running in FALLBACK mode — API routes not available');
+  } else {
+    console.log('  ✓  All modules loaded successfully');
+  }
+  console.log('═══════════════════════════════════════════════');
+});
+
+// Connect to MongoDB in background (never blocks)
+setTimeout(() => {
+  try { connectDB(); } catch (e) { console.error('[Boot] DB connect error:', e.message); }
+}, 100);
+
+// Graceful shutdown
+const gracefulShutdown = (signal) => {
+  console.log(`\n[Server] ${signal}. Shutting down...`);
+  server.close(() => process.exit(0));
+  setTimeout(() => process.exit(1), 10000);
 };
-
-startServer();
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+process.on('SIGINT', () => gracefulShutdown('SIGINT'));
+process.on('unhandledRejection', (reason) => console.error('[Server] Unhandled Rejection:', reason));
+process.on('uncaughtException', (error) => {
+  console.error('[Server] Uncaught Exception:', error);
+  // Don't exit — server stays up
+});

@@ -1,4 +1,4 @@
-name: Deploy FYP Portal to Production
+name: Deploy FYP Portal
 
 on:
   push:
@@ -17,129 +17,35 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           script: |
             set -e
-
             FE_REPO="/var/www/fyp-frontend-repo"
             BE_DIR="/var/www/fyp"
 
-            # ================================================================
-            # STEP 1: Pull FYP-fe (this repo — contains backend + frontend)
-            # ================================================================
-            echo "=== Pulling FYP-fe repo ==="
-            if [ -d "$FE_REPO/.git" ]; then
-              cd "$FE_REPO"; git stash --include-untracked 2>/dev/null || true; git pull origin main
-            else
-              rm -rf "$FE_REPO"
-              git clone https://github.com/artdevelopers-artbyzefa/FYP-fe.git "$FE_REPO"
-            fi
-            echo "✓ FYP-fe pulled"
-
-            # ================================================================
-            # STEP 2: Deploy backend from FYP-fe/backend
-            # ================================================================
-            echo "=== Deploying backend ==="
-            rm -rf "$BE_DIR"
-            mkdir -p "$BE_DIR"
-            cp -r "$FE_REPO/backend/"* "$BE_DIR/"
-
-            # Create .env with correct production values (using printf to avoid heredoc indentation issues in YAML)
-            printf 'PORT=5001\nNODE_ENV=production\nMONGODB_URI=mongodb+srv://ininsico_db_user:4dCuve4pmYqove4K@ininsico.lgmaryq.mongodb.net/fypportal?appName=fypportal\nJWT_SECRET=%s\nJWT_EXPIRES_IN=7d\nFRONTEND_URL=https://fyp.artdevelopers.site\nSENDER_EMAIL=internshipofficecuiatd@gmail.com\nSENDER_NAME=CUI-ATD\n' "$(openssl rand -hex 32)" > "$BE_DIR/.env"
-
-            # Inject Brevo API key if GitHub secret exists
-            if [ -n "${{ secrets.BREVO_API_KEY }}" ]; then
-              printf 'BREVO_API_KEY=%s\n' "${{ secrets.BREVO_API_KEY }}" >> "$BE_DIR/.env"
+            echo "=== Pull FYP-fe ==="
+            if [ -d "$FE_REPO/.git" ]; then cd "$FE_REPO"; git stash --include-untracked 2>/dev/null || true; git pull origin main
+            else rm -rf "$FE_REPO"; git clone https://github.com/artdevelopers-artbyzefa/FYP-fe.git "$FE_REPO"
             fi
 
-            # Install backend dependencies
-            cd "$BE_DIR"
-            npm install 2>&1
-            echo "✓ Backend deps installed"
+            echo "=== Deploy backend ==="
+            rm -rf "$BE_DIR"; mkdir -p "$BE_DIR"; cp -r "$FE_REPO/backend/"* "$BE_DIR/"
+            printf 'PORT=5001\nNODE_ENV=production\nMONGODB_URI=mongodb://ininsico_db_user:4dCuve4pmYqove4K@ac-mqypx9f-shard-00-00.lgmaryq.mongodb.net:27017,ac-mqypx9f-shard-00-01.lgmaryq.mongodb.net:27017,ac-mqypx9f-shard-00-02.lgmaryq.mongodb.net:27017/fypportal?ssl=true&replicaSet=atlas-cqyufl-shard-0&authSource=admin&retryWrites=true&w=majority\nJWT_SECRET=%s\nJWT_EXPIRES_IN=7d\nFRONTEND_URL=https://fyp.artdevelopers.site\nSENDER_NAME=CUI-ATD\n' "$(openssl rand -hex 32)" > "$BE_DIR/.env"
+            cd "$BE_DIR"; npm install 2>&1
 
-            # ================================================================
-            # STEP 3: Build and deploy frontend
-            # ================================================================
-            echo "=== Building frontend ==="
-            cd "$FE_REPO/frontend"
-            npm install 2>&1 | tail -3
-            npm run build 2>&1
-            echo "✓ Frontend built"
-
-            rm -rf /var/www/fyp-frontend/dist
-            mkdir -p /var/www/fyp-frontend/dist
+            echo "=== Build frontend ==="
+            cd "$FE_REPO/frontend"; npm install 2>&1 | tail -3; npm run build 2>&1
+            rm -rf /var/www/fyp-frontend/dist; mkdir -p /var/www/fyp-frontend/dist
             cp -r "$FE_REPO/frontend/dist/"* /var/www/fyp-frontend/dist/
-            echo "✓ Frontend deployed"
 
-            # ================================================================
-            # STEP 4: Start/restart backend via PM2
-            # ================================================================
-            echo "=== Starting backend via PM2 ==="
+            echo "=== Start backend via PM2 ==="
             pm2 delete fyp-backend 2>/dev/null || true
-            pm2 start "$BE_DIR/server.js" --name fyp-backend --log /var/log/fyp-backend.log 2>&1
+            pm2 start "$BE_DIR/server.js" --name fyp-backend 2>&1
             pm2 save 2>/dev/null || true
-            echo "✓ PM2 process fyp-backend started"
 
-            # ================================================================
-            # STEP 5: Wait for server to be ready (health check loop)
-            # ================================================================
-            echo "=== Waiting for server to be ready ==="
-            for i in 1 2 3 4 5 6 7 8 9 10; do
-              sleep 3
+            echo "=== Verify ==="
+            for i in 1 2 3 4 5 6 7 8; do
+              sleep 2
               STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5001/api/health 2>/dev/null || echo "000")
-              if [ "$STATUS" = "200" ]; then
-                echo "✓ Server is UP (HTTP $STATUS)"
-                break
-              fi
-              if [ "$STATUS" = "502" ] || [ "$STATUS" = "000" ]; then
-                echo "  Attempt $i/10 — server not ready yet (HTTP $STATUS)"
-                # Show PM2 logs for debugging
-                pm2 logs fyp-backend --lines 20 --nostream 2>/dev/null || true
-              fi
-              if [ "$i" = "10" ]; then
-                echo "✗ Server failed to start after 30 seconds"
-                echo "=== Last 50 lines of PM2 log ==="
-                tail -50 /var/log/fyp-backend.log 2>/dev/null || echo "No log file found"
-                echo "=== PM2 process list ==="
-                pm2 list 2>/dev/null || true
-              fi
+              if [ "$STATUS" = "200" ]; then echo "✓ Server UP (attempt $i)"; break; fi
+              [ "$i" = "8" ] && echo "✗ Server failed" && pm2 logs fyp-backend --lines 20 --nostream 2>/dev/null || true
             done
-
-            echo "=== Verifying server stays up ==="
-            sleep 5
-            STATUS2=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5001/api/health 2>/dev/null || echo "000")
-            if [ "$STATUS2" = "200" ]; then
-              echo "✓ Server still UP after 5s"
-            else
-              echo "✗ Server went DOWN! HTTP $STATUS2"
-              echo "=== PM2 log dump ==="
-              pm2 logs fyp-backend --lines 50 --nostream 2>/dev/null || true
-              echo "=== PM2 status ==="
-              pm2 show fyp-backend 2>/dev/null || true
-            fi
-
-            # ================================================================
-            # FINAL: Write diagnostics to web-accessible file
-            # ================================================================
-            echo "=== Testing MongoDB connectivity ==="
-            MONGO_HOST="ininsico.lgmaryq.mongodb.net"
-            echo "DNS: $(host "$MONGO_HOST" 2>&1 || nslookup "$MONGO_HOST" 2>&1 | head -5)"
-            echo "Reachability: $(curl -s --connect-timeout 5 "https://$MONGO_HOST:27017" 2>&1 || echo 'Connection test completed')"
-
-            echo "=== Writing diagnostics ==="
-            {
-              echo "TIME: $(date -u)"
-              echo "--- PM2 ---"
-              pm2 list 2>&1
-              echo "--- PORT 5001 ---"
-              ss -tlnp 2>&1 | grep 5001 || echo "NOT LISTENING ON 5001"
-              echo "--- CURL localhost:5001/api/health ---"
-              curl -s http://localhost:5001/api/health 2>&1 || echo "FAILED"
-              echo "--- CURL 127.0.0.1:5001/api/health ---"
-              curl -s http://127.0.0.1:5001/api/health 2>&1 || echo "FAILED"
-              echo "--- MONGO TEST ---"
-              host "$MONGO_HOST" 2>&1 || nslookup "$MONGO_HOST" 2>&1 || echo "DNS lookup failed"
-              timeout 5 bash -c "echo > /dev/tcp/$MONGO_HOST/27017" 2>&1 && echo "TCP 27017 OPEN" || echo "TCP 27017 NOT REACHABLE"
-              echo "--- .ENV (URIs only) ---"
-              grep -E "MONGO|PORT|NODE_ENV" /var/www/fyp/.env 2>/dev/null || echo ".env not found"
-            } > /var/www/fyp-frontend/dist/diag.txt 2>&1
-            echo "✓ Diagnostics at /diag.txt"
 
             echo "=== Deploy complete ==="

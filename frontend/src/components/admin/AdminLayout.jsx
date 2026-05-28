@@ -38,107 +38,106 @@ export default function AdminLayout() {
   const unreadCount = notifications.filter(n => !n.read).length;
 
   return (
-    <div className="flex h-screen overflow-hidden" style={{ fontFamily: "'Poppins', sans-serif" }}>
-      {/* ═══════════════ SIDEBAR ═══════════════ */}
+    <div className="flex h-screen overflow-hidden bg-lightbg selection:bg-secondary/20 font-poppins">
+      {/* SIDEBAR */}
       <aside
-        className={`bg-blue-600 flex flex-col flex-shrink-0 transition-all duration-300 overflow-hidden z-50 h-full border-r border-white/10 shadow-2xl
-          fixed lg:relative ${mobileSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}
-        style={{ width: sidebarCollapsed ? 68 : 256, minWidth: sidebarCollapsed ? 68 : 256 }}
+        className={`bg-primary flex flex-col flex-shrink-0 transition-all duration-300 overflow-hidden z-50 h-full
+          fixed lg:relative ${mobileSidebarOpen ? 'translate-x-0 w-64 shadow-2xl' : '-translate-x-full lg:translate-x-0'} ${sidebarCollapsed ? 'lg:w-[68px]' : 'w-64 lg:w-64'}`}
       >
-        <div className="flex items-center gap-3 px-4 py-5 border-b border-white/10 relative flex-shrink-0">
-          <div className="w-9 h-9 bg-white/15 rounded-xl flex items-center justify-center flex-shrink-0 shadow-inner">
+        <div className="flex items-center gap-3 px-4 py-5 border-b border-white/10 flex-shrink-0">
+          <div className="w-9 h-9 bg-white/15 rounded-xl flex items-center justify-center flex-shrink-0">
             <Landmark className="text-white text-sm" />
           </div>
           {!sidebarCollapsed && (
-            <div className="overflow-hidden transition-all duration-300">
-              <div className="text-white text-sm font-black whitespace-nowrap tracking-wide">CUI ABBOTTABAD</div>
-              <div className="text-white/60 text-[11px] whitespace-nowrap leading-tight font-semibold">System Administrator</div>
+            <div className="overflow-hidden">
+              <div className="text-white text-sm font-bold whitespace-nowrap">CUI DIMS</div>
+              <div className="text-white/60 text-xs whitespace-nowrap leading-tight">System Administrator</div>
             </div>
           )}
-          <button onClick={() => setMobileSidebarOpen(false)} className="ml-auto lg:hidden bg-transparent border-0 text-white cursor-pointer p-1 rounded-lg hover:bg-white/15 transition-colors absolute right-4">
+          <button onClick={() => setSidebarCollapsed(!sidebarCollapsed)} className="ml-auto hidden lg:flex bg-transparent border-0 text-white cursor-pointer flex-shrink-0 p-1 rounded-lg hover:bg-white/15 transition-colors">
+            {sidebarCollapsed ? <ChevronRight className="text-sm" /> : <ChevronLeft className="text-sm" />}
+          </button>
+          <button onClick={() => setMobileSidebarOpen(false)} className="ml-auto lg:hidden bg-transparent border-0 text-white cursor-pointer p-1 rounded-lg hover:bg-white/15 transition-colors">
             <X className="text-lg" />
           </button>
         </div>
 
-        <nav className="flex-1 overflow-y-auto p-3 space-y-1" style={{ scrollbarWidth: 'none' }}>
+        <nav className="flex-1 overflow-y-auto p-2 sidebar-nav">
           {navItems.map((item) => (
             <React.Fragment key={item.id}>
               {item.section && !sidebarCollapsed && (
-                <div className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-3 mb-2 pt-4">{item.section}</div>
+                <div className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-3 mb-1 pt-3">{item.section}</div>
               )}
               <button
                 onClick={() => { navigate(item.id); setMobileSidebarOpen(false); }}
                 title={sidebarCollapsed ? item.label : ''}
-                style={location.pathname === item.id ? { backgroundColor: '#2563EB' } : {}}
-                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-200 text-left
-                  ${location.pathname === item.id ? 'text-white shadow-lg font-bold' : 'text-white/80 hover:bg-white/10 hover:text-white'}
+                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-200 text-left outline-none
+                  ${location.pathname === item.id ? 'bg-secondary text-white shadow-lg shadow-blue-600/30 font-bold' : 'text-white/80 hover:bg-white/15 hover:text-white'}
                   ${sidebarCollapsed ? 'justify-center' : ''}`}
               >
-                {React.createElement(item.icon, { className: "w-4 h-4" })}
+                {React.createElement(item.icon, { className: "w-4 h-4 flex-shrink-0" })}
                 {!sidebarCollapsed && <span className="text-sm font-medium whitespace-nowrap flex-1">{item.label}</span>}
               </button>
             </React.Fragment>
           ))}
         </nav>
 
-        <div className="p-3 border-t border-white/10 bg-blue-600/10 flex-shrink-0">
-          <button onClick={() => logout()} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-white/80 hover:bg-blue-600/20 hover:text-blue-600 transition-all duration-200 font-bold ${sidebarCollapsed ? 'justify-center' : ''}`}>
-            <LogOut className="text-sm w-5 text-center flex-shrink-0" />
-            {!sidebarCollapsed && <span className="text-sm">Logout</span>}
+        <div className="p-2 border-t border-white/10 flex-shrink-0">
+          <button onClick={() => logout()} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-white/80 hover:bg-white/15 hover:text-white transition-all duration-200 ${sidebarCollapsed ? 'justify-center' : ''}`}>
+            <LogOut className="w-4 h-4 flex-shrink-0" />
+            {!sidebarCollapsed && <span className="text-sm font-medium">Logout</span>}
           </button>
         </div>
       </aside>
 
-      {/* Mobile overlay */}
-      {mobileSidebarOpen && <div onClick={() => setMobileSidebarOpen(false)} className="fixed inset-0 bg-blue-600/50 z-40 lg:hidden backdrop-blur-sm" />}
+      {mobileSidebarOpen && <div onClick={() => setMobileSidebarOpen(false)} className="fixed inset-0 bg-black/50 z-40 lg:hidden backdrop-blur-sm" />}
 
-      {/* ═══════════════ MAIN ═══════════════ */}
+      {/* MAIN */}
       <div className="flex-1 flex flex-col overflow-hidden w-full">
         {/* TOPBAR */}
-        <header className="bg-white border-b border-blue-100 px-4 md:px-6 h-16 flex items-center justify-between shadow-sm flex-shrink-0 z-30 gap-3">
-          <div className="flex items-center gap-3 min-w-0">
-            <button onClick={() => setMobileSidebarOpen(true)} className="w-9 h-9 rounded-xl bg-white flex items-center justify-center text-slate-600 hover:bg-blue-50 transition-all border-0 lg:hidden flex-shrink-0 cursor-pointer">
+        <header className="bg-white border-b border-gray-100 px-3 md:px-6 h-14 md:h-16 flex items-center justify-between shadow-sm flex-shrink-0 z-30 gap-3">
+          <div className="flex items-center gap-2 md:gap-3 min-w-0">
+            <button onClick={() => { window.innerWidth >= 1024 ? setSidebarCollapsed(!sidebarCollapsed) : setMobileSidebarOpen(true); }} className="w-9 h-9 rounded-xl bg-gray-50 border-0 flex items-center justify-center text-gray-500 hover:bg-gray-100 hover:text-primary transition-all cursor-pointer flex-shrink-0">
               <Menu className="text-sm" />
             </button>
-            <button onClick={() => setSidebarCollapsed(p => !p)} className="hidden lg:flex w-9 h-9 rounded-xl bg-white items-center justify-center text-slate-600 hover:bg-blue-50 transition-all border-0 flex-shrink-0 cursor-pointer">
-              {sidebarCollapsed  ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
-            </button>
             <div className="min-w-0">
-              <h2 className="text-base font-black leading-tight truncate" style={{ color: '#2B3990' }}>{pageTitle}</h2>
-              <p className="text-[11px] text-slate-500 leading-tight hidden sm:block font-medium">COMSATS University Islamabad, Abbottabad Campus</p>
+              <h2 className="text-sm md:text-base font-bold text-primary leading-tight truncate">{pageTitle}</h2>
+              <p className="text-[10px] text-gray-400 leading-tight hidden sm:block">CUI Abbottabad</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 flex-shrink-0">
-            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-white border border-blue-100 rounded-xl text-xs font-bold text-slate-700 whitespace-nowrap shadow-sm">
-              <Shield className="text-primary" />
+          <div className="flex items-center gap-1.5 md:gap-2 flex-shrink-0">
+            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-gray-50 border border-gray-100 rounded-xl text-[10px] font-bold text-gray-700 whitespace-nowrap">
+              <Shield className="w-3.5 h-3.5 text-primary" />
               <span>System Administrator</span>
             </div>
 
             {/* Notifications */}
             <div className="relative" ref={notifRef}>
-              <button onClick={() => setNotifOpen(p => !p)} className="w-9 h-9 rounded-xl bg-white border border-blue-100 flex items-center justify-center text-slate-600 hover:bg-blue-50 transition-all cursor-pointer relative">
+              <button onClick={() => setNotifOpen(p => !p)} className="w-9 h-9 rounded-xl bg-gray-50 border-0 flex items-center justify-center text-gray-600 hover:bg-blue-50 hover:text-secondary transition-all cursor-pointer relative">
                 <Bell className="text-sm" />
-                {unreadCount > 0 && <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-white rounded-full border-2 border-white animate-pulse"></span>}
+                {unreadCount > 0 && <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>}
               </button>
               {notifOpen && (
-                <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-2xl shadow-2xl border border-blue-100 overflow-hidden z-[100]">
-                  <div className="p-4 bg-white border-b border-blue-100 flex items-center justify-between">
-                    <span className="text-sm font-black text-slate-900">System Notifications</span>
-                    <button onClick={() => { setNotifications(prev => prev.map(n => ({ ...n, read: true }))); toast.success('All notifications marked as read'); }} className="text-xs font-bold text-primary hover:underline cursor-pointer">Mark all as read</button>
+                <div className="absolute right-0 top-11 bg-white border border-gray-100 rounded-2xl w-80 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-200 overflow-hidden">
+                  <div className="px-4 py-3 bg-gray-50/50 border-b border-gray-100 flex items-center justify-between">
+                    <span className="text-[11px] font-bold text-primary">System Notifications</span>
+                    <button onClick={() => { setNotifications(prev => prev.map(n => ({ ...n, read: true }))); toast.success('All notifications marked as read'); }} className="text-[10px] font-bold text-secondary hover:underline cursor-pointer">Mark all read</button>
                   </div>
-                  <div className="max-h-72 overflow-y-auto divide-y divide-blue-600">
+                  <div className="max-h-[350px] overflow-y-auto">
                     {notifications.length === 0 ? (
-                      <p className="p-8 text-center text-xs text-slate-500 font-bold">No new notifications</p>
+                      <div className="py-12 flex flex-col items-center justify-center text-gray-300">
+                        <p className="text-xs font-medium">No notifications</p>
+                      </div>
                     ) : notifications.map(n => (
-                      <div key={n.id} className={`p-4 hover:bg-blue-50/50 transition-colors flex gap-3 items-start border-l-4 ${n.read ? 'border-transparent' : 'border-primary'}`}>
-                        <div className={`w-8 h-8 rounded-xl bg-${n.color}-100 text-${n.color}-700 flex items-center justify-center text-xs flex-shrink-0 mt-0.5`}>
-                          <Bell className="w-4 h-4 text-slate-600" />
+                      <div key={n.id} className={`flex items-start gap-3 px-4 py-3.5 border-b border-gray-50 last:border-0 hover:bg-gray-50/80 cursor-pointer transition-colors ${!n.read ? 'bg-blue-50/30' : ''}`}>
+                        <div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-500 flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <Bell className="text-xs" />
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="text-xs font-bold text-black">{n.title}</div>
-                          <div className="text-[11px] text-slate-600 mt-0.5">{n.body}</div>
-                          <div className="text-[10px] text-slate-500 mt-1 font-bold">{n.time}</div>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-xs font-bold text-gray-900">{n.title}</p>
+                          <p className="text-[10px] text-gray-400 mt-0.5 line-clamp-2">{n.body}</p>
+                          <p className="text-[9px] text-gray-300 font-bold mt-1.5">{n.time}</p>
                         </div>
                       </div>
                     ))}
@@ -148,31 +147,25 @@ export default function AdminLayout() {
             </div>
 
             {/* User menu */}
-            <div className="flex items-center gap-2 p-1 md:px-2.5 md:py-1.5 bg-white rounded-xl cursor-pointer border border-blue-100 hover:bg-blue-50 hover:border-primary transition-all">
-              <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center text-primary text-xs font-bold shadow-sm flex-shrink-0">
+            <div className="flex items-center gap-2 p-1 md:px-2.5 md:py-1.5 bg-gray-50 rounded-xl border border-gray-100">
+              <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center text-primary text-xs font-bold shadow-sm flex-shrink-0">
                 {user.avatar || 'SA'}
               </div>
               <div className="text-left hidden sm:block">
-                <div className="text-xs font-bold text-slate-900 leading-tight truncate max-w-28">{user.name}</div>
-                <div className="text-[10px] text-slate-500 leading-tight font-bold">SysAdmin</div>
+                <div className="text-xs font-bold text-gray-800 leading-tight truncate max-w-28">{user.name}</div>
+                <div className="text-[10px] text-gray-400 leading-tight font-bold">SysAdmin</div>
               </div>
             </div>
           </div>
         </header>
 
-        {/* MAIN CONTENT (Renders child pages here) */}
-        <main className="flex-1 overflow-y-auto p-4 md:p-6 scroll-smooth">
-          <div className="max-w-[1600px] mx-auto w-full">
+        {/* MAIN CONTENT */}
+        <main className="flex-1 overflow-y-auto p-3 sm:p-4 md:p-5 lg:p-6 bg-lightbg scroll-smooth" onClick={() => setNotifOpen(false)}>
+          <div className="max-w-[1600px] mx-auto w-full animate-[fadeIn_0.3s_ease-out]">
             <Outlet context={{ user }} />
           </div>
         </main>
       </div>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap');
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-      `}</style>
     </div>
   );
 }

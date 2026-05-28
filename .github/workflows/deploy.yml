@@ -18,13 +18,10 @@ jobs:
           script: |
             set -e
 
-            echo "=== Pulling backend (FYP-be) ==="
-            cd /var/www/fyp
-            git stash --include-untracked 2>/dev/null || true
-            git pull origin main
-
-            echo "=== Cloning / pulling frontend (FYP-fe) ==="
             FE_REPO="/var/www/fyp-frontend-repo"
+            BE_DIR="/var/www/fyp"
+
+            echo "=== Pulling FYP-fe (frontend + backend) ==="
             if [ -d "$FE_REPO/.git" ]; then
               cd "$FE_REPO"
               git stash --include-untracked 2>/dev/null || true
@@ -34,9 +31,36 @@ jobs:
               git clone https://github.com/artdevelopers-artbyzefa/FYP-fe.git "$FE_REPO"
             fi
 
-            echo "=== Installing backend deps ==="
-            cd /var/www/fyp
+            echo "=== Deploying backend from FYP-fe/backend ==="
+            rm -rf "$BE_DIR"
+            mkdir -p "$BE_DIR"
+            cp -r "$FE_REPO/backend/"* "$BE_DIR/"
+            cd "$BE_DIR"
             npm install --production --silent 2>&1 | tail -1
+
+            echo "=== Configuring backend .env ==="
+            if [ ! -f "$BE_DIR/.env" ]; then
+              cp "$BE_DIR/.env.example" "$BE_DIR/.env"
+              # Set production values
+              sed -i "s|JWT_SECRET=.*|JWT_SECRET=$(openssl rand -hex 32)|" "$BE_DIR/.env"
+              sed -i "s|NODE_ENV=.*|NODE_ENV=production|" "$BE_DIR/.env"
+              sed -i "s|FRONTEND_URL=.*|FRONTEND_URL=https://fyp.artdevelopers.site|" "$BE_DIR/.env"
+            fi
+            # Inject Brevo API key from GitHub secret
+            if [ -n "${{ secrets.BREVO_API_KEY }}" ]; then
+              if grep -q "BREVO_API_KEY" "$BE_DIR/.env" 2>/dev/null; then
+                sed -i "s|BREVO_API_KEY=.*|BREVO_API_KEY=${{ secrets.BREVO_API_KEY }}|" "$BE_DIR/.env"
+              else
+                echo "BREVO_API_KEY=${{ secrets.BREVO_API_KEY }}" >> "$BE_DIR/.env"
+              fi
+            fi
+            # Ensure sender config in .env
+            grep -q "SENDER_EMAIL" "$BE_DIR/.env" || echo "SENDER_EMAIL=internshipofficecuiatd@gmail.com" >> "$BE_DIR/.env"
+            grep -q "SENDER_NAME" "$BE_DIR/.env" || echo "SENDER_NAME=CUI-ATD" >> "$BE_DIR/.env"
+
+            echo "=== Running database seed ==="
+            cd "$BE_DIR"
+            node seed.js 2>&1 || echo "Seed completed (may have been run before)"
 
             echo "=== Installing frontend deps & building ==="
             cd "$FE_REPO/frontend"
@@ -48,12 +72,8 @@ jobs:
             mkdir -p /var/www/fyp-frontend/dist
             cp -r "$FE_REPO/frontend/dist/"* /var/www/fyp-frontend/dist/
 
-            echo "=== Installing email route into backend ==="
-            cd /var/www/fyp
-            # Inject route into backend Express app & configure env vars
-            node "$FE_REPO/server/inject-route.js" /var/www/fyp "${{ secrets.BREVO_API_KEY }}"
-
             echo "=== Restarting PM2 ==="
-            pm2 restart fyp-backend 2>&1 | tail -5
+            pm2 delete fyp-backend 2>/dev/null || true
+            pm2 start "$BE_DIR/server.js" --name fyp-backend 2>&1 | tail -5
 
             echo "=== Deploy complete ==="

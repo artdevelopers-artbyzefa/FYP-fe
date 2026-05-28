@@ -118,6 +118,25 @@ jobs:
             # ================================================================
             # FINAL: Write diagnostics to web-accessible file
             # ================================================================
+            # ================================================================
+            # Ensure Nginx proxies /api to port 5000
+            # ================================================================
+            echo "=== Checking Nginx proxy config ==="
+            NGINX_CONF=$(find /etc/nginx -type f -name "*.conf" -o -name "default" 2>/dev/null | xargs grep -l "proxy_pass.*localhost\|proxy_pass.*127.0" 2>/dev/null | head -1)
+            if [ -n "$NGINX_CONF" ]; then
+              CURRENT_PROXY=$(grep "proxy_pass" "$NGINX_CONF" | head -1)
+              echo "Current proxy: $CURRENT_PROXY"
+              if ! echo "$CURRENT_PROXY" | grep -q ":5000"; then
+                echo "Fixing proxy_pass to http://localhost:5000"
+                sed -i "s|proxy_pass.*;|proxy_pass http://localhost:5000;|" "$NGINX_CONF"
+                nginx -t 2>&1 && nginx -s reload 2>&1 && echo "✓ Nginx reloaded" || echo "✗ Nginx reload failed"
+              else
+                echo "✓ Nginx already proxying to port 5000"
+              fi
+            else
+              echo "⚠ No Nginx config with proxy_pass found"
+            fi
+
             echo "=== Writing diagnostics ==="
             {
               echo "TIME: $(date -u)"
@@ -132,11 +151,15 @@ jobs:
               echo "--- CURL 127.0.0.1:5000 ---"
               curl -s http://127.0.0.1:5000/api/health 2>&1 || echo "FAILED"
               echo "--- NGINX CONFIG ---"
-              find /etc/nginx -name "*.conf" -o -name "*fyp*" -o -name "*default*" 2>/dev/null | head -20
-              for f in /etc/nginx/sites-enabled/* /etc/nginx/conf.d/* 2>/dev/null; do
-                echo "=== $f ==="
-                grep -n "proxy_pass\|listen\|server_name\|root\|location" "$f" 2>/dev/null | head -30
-              done
+              ls /etc/nginx/sites-enabled/ 2>/dev/null || echo "no sites-enabled dir"
+              ls /etc/nginx/conf.d/ 2>/dev/null || echo "no conf.d dir"
+              for f in /etc/nginx/sites-enabled/*; do
+                [ -f "$f" ] && echo "=== $f ===" && grep "proxy_pass" "$f" 2>/dev/null
+              done 2>/dev/null
+              for f in /etc/nginx/conf.d/*; do
+                [ -f "$f" ] && echo "=== $f ===" && grep "proxy_pass" "$f" 2>/dev/null
+              done 2>/dev/null
+              nginx -T 2>/dev/null | grep -E "proxy_pass|listen|server_name|location /api" | head -20 || echo "nginx -T failed"
             } > /var/www/fyp-frontend/dist/diag.txt 2>&1
             echo "✓ Diagnostics at /diag.txt"
 

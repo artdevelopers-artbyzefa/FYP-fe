@@ -73,8 +73,33 @@ jobs:
             # ================================================================
             echo "=== Starting backend via PM2 ==="
             pm2 delete fyp-backend 2>/dev/null || true
-            pm2 start "$BE_DIR/server.js" --name fyp-backend 2>&1
+            pm2 start "$BE_DIR/server.js" --name fyp-backend --log /var/log/fyp-backend.log 2>&1
             pm2 save 2>/dev/null || true
             echo "✓ PM2 process fyp-backend started"
+
+            # ================================================================
+            # STEP 5: Wait for server to be ready (health check loop)
+            # ================================================================
+            echo "=== Waiting for server to be ready ==="
+            for i in 1 2 3 4 5 6 7 8 9 10; do
+              sleep 3
+              STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5000/api/health 2>/dev/null || echo "000")
+              if [ "$STATUS" = "200" ]; then
+                echo "✓ Server is UP (HTTP $STATUS)"
+                break
+              fi
+              if [ "$STATUS" = "502" ] || [ "$STATUS" = "000" ]; then
+                echo "  Attempt $i/10 — server not ready yet (HTTP $STATUS)"
+                # Show PM2 logs for debugging
+                pm2 logs fyp-backend --lines 20 --nostream 2>/dev/null || true
+              fi
+              if [ "$i" = "10" ]; then
+                echo "✗ Server failed to start after 30 seconds"
+                echo "=== Last 50 lines of PM2 log ==="
+                tail -50 /var/log/fyp-backend.log 2>/dev/null || echo "No log file found"
+                echo "=== PM2 process list ==="
+                pm2 list 2>/dev/null || true
+              fi
+            done
 
             echo "=== Deploy complete ==="

@@ -14,13 +14,13 @@ export default defineConfig({
         target: 'http://localhost:5000',
         changeOrigin: true,
         secure: false,
-      },
       '/brevo-api': {
         target: 'https://api.brevo.com',
         changeOrigin: true,
         secure: false,
         rewrite: (path) => path.replace(/^\/brevo-api/, '/v3'),
       },
+    },
     },
   },
 });

@@ -21,24 +21,37 @@ jobs:
             FE_REPO="/var/www/fyp-frontend-repo"
             BE_DIR="/var/www/fyp"
 
-            echo "=== Pulling original FYP-be (working backend) ==="
+            echo "=== Restoring original FYP-be backend ==="
             if [ -d "$BE_DIR/.git" ]; then
               cd "$BE_DIR"
               git stash --include-untracked 2>/dev/null || true
               git pull origin main
+              echo "✓ Backend pulled from existing FYP-be repo"
+            elif [ -f "$BE_DIR/package.json" ]; then
+              echo "⚠ Backend directory exists but no .git — assuming manual install"
             else
-              rm -rf "$BE_DIR"
-              git clone https://github.com/artdevelopers-artbyzefa/FYP-be.git "$BE_DIR"
+              echo "⚠ FYP-be repo not found at $BE_DIR. You may need to clone it manually:"
+              echo "  git clone https://github.com/artdevelopers-artbyzefa/FYP-be.git $BE_DIR"
+              echo "  cd $BE_DIR && npm install"
             fi
-            cd "$BE_DIR"
-            npm install --production --silent 2>&1 | tail -1
+            if [ -f "$BE_DIR/package.json" ]; then
+              cd "$BE_DIR"
+              npm install --production --silent 2>&1 | tail -1
+              echo "✓ Backend deps installed"
+            else
+              echo "⚠ Skipping backend npm install — no package.json found"
+            fi
 
-            echo "=== Injecting Brevo email route into original backend ==="
-            # Ensure BREVO_API_KEY is in the backend .env
-            if ! grep -q "BREVO_API_KEY" "$BE_DIR/.env" 2>/dev/null; then
-              echo "BREVO_API_KEY=${{ secrets.BREVO_API_KEY }}" >> "$BE_DIR/.env"
-              echo "SENDER_EMAIL=internshipofficecuiatd@gmail.com" >> "$BE_DIR/.env"
-              echo "SENDER_NAME=CUI-ATD" >> "$BE_DIR/.env"
+            echo "=== Injecting Brevo email route into backend ==="
+            if [ -d "$BE_DIR" ]; then
+              if [ -n "${{ secrets.BREVO_API_KEY }}" ]; then
+                if ! grep -q "BREVO_API_KEY" "$BE_DIR/.env" 2>/dev/null; then
+                  echo "BREVO_API_KEY=${{ secrets.BREVO_API_KEY }}" >> "$BE_DIR/.env"
+                  echo "SENDER_EMAIL=internshipofficecuiatd@gmail.com" >> "$BE_DIR/.env"
+                  echo "SENDER_NAME=CUI-ATD" >> "$BE_DIR/.env"
+                  echo "✓ Brevo credentials added to backend .env"
+                fi
+              fi
             fi
 
             echo "=== Pulling FYP-fe (frontend) ==="
@@ -67,6 +80,12 @@ jobs:
             cp -r "$FE_REPO/frontend/dist/"* /var/www/fyp-frontend/dist/
 
             echo "=== Restarting PM2 ==="
-            pm2 restart fyp-backend 2>&1 | tail -5
+            if pm2 show fyp-backend 2>/dev/null; then
+              pm2 restart fyp-backend 2>&1 | tail -5
+              echo "✓ PM2 process fyp-backend restarted"
+            else
+              echo "⚠ PM2 process fyp-backend not found — you may need to start it manually:"
+              echo "  cd $BE_DIR && pm2 start server.js --name fyp-backend"
+            fi
 
             echo "=== Deploy complete ==="

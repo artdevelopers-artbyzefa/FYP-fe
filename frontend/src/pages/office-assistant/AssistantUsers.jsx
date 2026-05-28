@@ -60,18 +60,18 @@ const AssistantUsers = () => {
 
   const handleDelete = (u) => {
     showAlert.confirm(
-      'Delete User',
-      `Permanently delete ${u.name}? This action cannot be undone.`,
-      'Delete',
+      'Deactivate User',
+      `Deactivate ${u.name}? Their account will be disabled but all existing records will be preserved.`,
+      'Deactivate',
       'Cancel'
     ).then(async (res) => {
       if (res.isConfirmed) {
         try {
           await deleteOfficeUser(u.id);
-          showToast.success(`${u.name} deleted.`);
+          showToast.success(`${u.name} deactivated.`);
           loadUsers(page);
         } catch (err) {
-          showToast.error(err?.response?.data?.message || 'Failed to delete user.');
+          showToast.error(err?.response?.data?.message || 'Failed to deactivate user.');
         }
       }
     });

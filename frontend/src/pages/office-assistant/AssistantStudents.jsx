@@ -106,18 +106,18 @@ const AssistantStudents = () => {
 
   const handleDelete = (student) => {
     showAlert.confirm(
-      'Delete Student',
-      `Permanently delete ${student.name}? This will also remove their user account.`,
-      'Delete',
+      'Deactivate Student',
+      `Deactivate ${student.name}? Their account will be disabled but all existing records (groups, proposals, evaluations) will be preserved.`,
+      'Deactivate',
       'Cancel'
     ).then(async (res) => {
       if (res.isConfirmed) {
         try {
           await deleteOfficeStudent(student.id);
-          showToast.success(`${student.name} deleted.`);
+          showToast.success(`${student.name} deactivated.`);
           loadStudents(page);
         } catch (err) {
-          showToast.error(err?.response?.data?.message || 'Failed to delete student.');
+          showToast.error(err?.response?.data?.message || 'Failed to deactivate student.');
         }
       }
     });
@@ -246,8 +246,11 @@ const AssistantStudents = () => {
             </thead>
             <tbody className="divide-y divide-gray-50 text-sm font-medium text-gray-700">
               {students.map(s => (
-                <tr key={s.id || s._id} className="hover:bg-gray-50/50 transition-colors">
-                  <td className="py-4 px-6 font-bold text-gray-800">{s.name}</td>
+                <tr key={s.id || s._id} className={`hover:bg-gray-50/50 transition-colors ${s.isactive === false ? 'opacity-50' : ''}`}>
+                  <td className="py-4 px-6 font-bold text-gray-800">
+                    {s.name}
+                    {s.isactive === false && <span className="ml-2 text-[10px] font-bold text-gray-400 bg-gray-100 px-2 py-0.5 rounded-lg">Deactivated</span>}
+                  </td>
                   <td className="py-4 px-6 text-gray-500 font-mono text-xs">{s.regNo || s.id}</td>
                   <td className="py-4 px-6 text-gray-600 text-xs">{s.email || '-'}</td>
                   <td className="py-4 px-6 text-gray-600 text-xs">{s.semester ? `Sem ${s.semester}` : '-'}{s.section ? ` / ${s.section}` : ''}</td>
@@ -261,9 +264,11 @@ const AssistantStudents = () => {
                   </td>
                   <td className="py-4 px-6 text-gray-600 truncate max-w-[200px]" title={s.project}>{s.project || 'Not assigned'}</td>
                   <td className="py-4 px-6 text-right">
-                    <button onClick={() => handleDelete(s)} className="px-3 py-1.5 rounded-lg bg-rose-50 text-rose-600 border border-rose-200 text-xs font-bold transition-all hover:bg-rose-100 cursor-pointer flex items-center gap-1.5 ml-auto">
-                      <Trash2 className="w-3 h-3" /> Delete
-                    </button>
+                    {s.isactive !== false && (
+                      <button onClick={() => handleDelete(s)} className="px-3 py-1.5 rounded-lg bg-rose-50 text-rose-600 border border-rose-200 text-xs font-bold transition-all hover:bg-rose-100 cursor-pointer flex items-center gap-1.5 ml-auto">
+                        <Trash2 className="w-3 h-3" /> Deactivate
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))}

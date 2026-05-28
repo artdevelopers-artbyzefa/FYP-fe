@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { getOfficeStudents, createOfficeStudent } from '../../services/office-assistant.service';
-import { showToast } from '../../components/AppToast';
+import { getOfficeStudents, createOfficeStudent, deleteOfficeStudent } from '../../services/office-assistant.service';
+import { showToast, showAlert } from '../../components/AppToast';
 import { sendWelcomeEmail } from '../../services/email.service';
-import { Search, UserPlus, X, Send } from 'lucide-react';
+import { Search, UserPlus, X, Send, Trash2, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const initialForm = { name: '', reg: '', email: '', semester: '7', fatherName: '', whatsappNumber: '', section: '', cgpa: '' };
 
@@ -19,20 +19,29 @@ const validateForm = (form) => {
 
 const AssistantStudents = () => {
   const [students, setStudents] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [total, setTotal] = useState(0);
   const [isBulkOpen, setIsBulkOpen] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState(initialForm);
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
+  const limit = 20;
 
-  const loadStudents = useCallback(() => {
-    getOfficeStudents().then(res => {
-      const data = Array.isArray(res.data) ? res.data : Array.isArray(res) ? res : [];
-      setStudents(data);
+  const loadStudents = useCallback((p) => {
+    getOfficeStudents(p || page, limit).then(res => {
+      setStudents(Array.isArray(res.data) ? res.data : []);
+      setTotalPages(res.totalPages || 1);
+      setTotal(res.total || 0);
     }).catch(console.error);
-  }, []);
+  }, [page]);
 
-  useEffect(() => { loadStudents(); }, [loadStudents]);
+  useEffect(() => { loadStudents(page); }, [page, loadStudents]);
+
+  const goToPage = (p) => {
+    if (p >= 1 && p <= totalPages) setPage(p);
+  };
 
   const normalizeRegNumber = (input) => {
     let val = input.trim();
@@ -77,21 +86,35 @@ const AssistantStudents = () => {
         name: form.name.trim(),
         email: form.email.trim(),
         regNo: form.reg,
-      }).then(res => {
-        if (res.success) {
-          showToast.success('Welcome email sent to student.');
-        } else {
-          showToast.error('Student created but welcome email failed to send.');
-        }
-      });
+      }).catch(() => {});
       setShowForm(false);
       setForm(initialForm);
-      loadStudents();
+      setPage(1);
+      loadStudents(1);
     } catch (err) {
       showToast.error(err?.response?.data?.message || 'Failed to create student.');
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const handleDelete = (student) => {
+    showAlert.confirm(
+      'Delete Student',
+      `Permanently delete ${student.name}? This will also remove their user account.`,
+      'Delete',
+      'Cancel'
+    ).then(async (res) => {
+      if (res.isConfirmed) {
+        try {
+          await deleteOfficeStudent(student.id);
+          showToast.success(`${student.name} deleted.`);
+          loadStudents(page);
+        } catch (err) {
+          showToast.error(err?.response?.data?.message || 'Failed to delete student.');
+        }
+      }
+    });
   };
 
   const handleBulkSubmit = (e) => {
@@ -123,7 +146,6 @@ const AssistantStudents = () => {
         </div>
       </div>
 
-      {/* Inline Add Student Form */}
       <div className={`transition-all duration-500 ease-in-out overflow-hidden ${showForm ? 'max-h-[800px] opacity-100 mb-6' : 'max-h-0 opacity-0 pointer-events-none'}`}>
         <div className="bg-gray-50 rounded-2xl p-5 sm:p-6 border border-gray-100 shadow-inner">
           <div className="flex items-center gap-3 sm:gap-4 mb-6">
@@ -210,9 +232,11 @@ const AssistantStudents = () => {
                 <th className="py-3.5 px-6 w-12"><input type="checkbox" className="accent-primary cursor-pointer" /></th>
                 <th className="py-3.5 px-6">Student Name</th>
                 <th className="py-3.5 px-6">Registration Number</th>
+                <th className="py-3.5 px-6">Email</th>
+                <th className="py-3.5 px-6">Semester/Section</th>
                 <th className="py-3.5 px-6">FYP Status</th>
                 <th className="py-3.5 px-6">Assigned Project</th>
-                <th className="py-3.5 px-6 text-right">Profile</th>
+                <th className="py-3.5 px-6 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50 text-sm font-medium text-gray-700">
@@ -220,7 +244,9 @@ const AssistantStudents = () => {
                 <tr key={s.id || s._id} className="hover:bg-gray-50/50 transition-colors">
                   <td className="py-4 px-6"><input type="checkbox" className="accent-primary cursor-pointer" /></td>
                   <td className="py-4 px-6 font-bold text-gray-800">{s.name}</td>
-                  <td className="py-4 px-6 text-gray-500 font-mono">{s.id || s.regNo}</td>
+                  <td className="py-4 px-6 text-gray-500 font-mono text-xs">{s.regNo || s.id}</td>
+                  <td className="py-4 px-6 text-gray-600 text-xs">{s.email || '-'}</td>
+                  <td className="py-4 px-6 text-gray-600 text-xs">{s.semester ? `Sem ${s.semester}` : '-'}{s.section ? ` / ${s.section}` : ''}</td>
                   <td className="py-4 px-6">
                     <span className={`font-bold text-xs px-2.5 py-1 rounded-lg border tracking-wider ${
                       s.status === 'Completed' ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
@@ -229,9 +255,11 @@ const AssistantStudents = () => {
                             : 'bg-gray-50 text-gray-500 border-gray-200'
                     }`}>{s.status || 'Not Started'}</span>
                   </td>
-                  <td className="py-4 px-6 text-gray-600 truncate max-w-xs">{s.project || 'Not assigned'}</td>
+                  <td className="py-4 px-6 text-gray-600 truncate max-w-[200px]" title={s.project}>{s.project || 'Not assigned'}</td>
                   <td className="py-4 px-6 text-right">
-                    <button className="px-3 py-1.5 rounded-lg bg-gray-50 text-gray-500 border border-gray-200 text-xs font-bold transition-all hover:bg-gray-100 cursor-pointer tracking-wider">View Profile</button>
+                    <button onClick={() => handleDelete(s)} className="px-3 py-1.5 rounded-lg bg-rose-50 text-rose-600 border border-rose-200 text-xs font-bold transition-all hover:bg-rose-100 cursor-pointer flex items-center gap-1.5 ml-auto">
+                      <Trash2 className="w-3 h-3" /> Delete
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -240,7 +268,30 @@ const AssistantStudents = () => {
         </div>
       </div>
 
-      {/* Bulk Message Modal */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between mt-4 px-2">
+          <span className="text-xs font-bold text-gray-400">{total} total students</span>
+          <div className="flex items-center gap-2">
+            <button onClick={() => goToPage(page - 1)} disabled={page <= 1} className="p-2 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer">
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+            {Array.from({ length: Math.min(totalPages, 7) }, (_, i) => {
+              const start = Math.max(1, Math.min(page - 3, totalPages - 6));
+              const p = start + i;
+              if (p > totalPages) return null;
+              return (
+                <button key={p} onClick={() => goToPage(p)} className={`w-8 h-8 rounded-lg text-xs font-bold transition-all cursor-pointer ${p === page ? 'bg-primary text-white' : 'border border-gray-200 text-gray-500 hover:bg-gray-50'}`}>
+                  {p}
+                </button>
+              );
+            })}
+            <button onClick={() => goToPage(page + 1)} disabled={page >= totalPages} className="p-2 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer">
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      )}
+
       {isBulkOpen && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[150] flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl w-full max-w-lg p-6 sm:p-8 shadow-2xl border border-gray-100">

@@ -73,21 +73,21 @@ export const getOfficeDashboardStats = async () => {
   }
 };
 
-export const getOfficeUsers = async () => {
+export const getOfficeUsers = async (page = 1, limit = 20) => {
   try {
-    const res = await apiClient.get(OFFICE_USERS_API_URL);
+    const res = await apiClient.get(OFFICE_USERS_API_URL, { params: { page, limit } });
     return res.data;
   } catch (error) {
-    return { data: DEMO_USERS };
+    return { data: DEMO_USERS, total: DEMO_USERS.length, page: 1, limit: 20, totalPages: 1 };
   }
 };
 
-export const getOfficeStudents = async () => {
+export const getOfficeStudents = async (page = 1, limit = 20) => {
   try {
-    const res = await apiClient.get(OFFICE_STUDENTS_API_URL);
+    const res = await apiClient.get(OFFICE_STUDENTS_API_URL, { params: { page, limit } });
     return res.data;
   } catch (error) {
-    return { data: DEMO_STUDENTS };
+    return { data: DEMO_STUDENTS, total: DEMO_STUDENTS.length, page: 1, limit: 20, totalPages: 1 };
   }
 };
 
@@ -143,4 +143,14 @@ export const createOfficeStudent = async (payload) => {
   } catch (error) {
     throw error;
   }
+};
+
+export const deleteOfficeUser = async (id) => {
+  const res = await apiClient.delete(OFFICE_USERS_API_URL + '/' + id);
+  return res.data;
+};
+
+export const deleteOfficeStudent = async (id) => {
+  const res = await apiClient.delete(OFFICE_STUDENTS_API_URL + '/' + id);
+  return res.data;
 };

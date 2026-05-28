@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { getOfficeUsers } from '../../services/office-assistant.service';
+import React, { useEffect, useState, useCallback } from 'react';
+import { getOfficeUsers, deleteOfficeUser } from '../../services/office-assistant.service';
 import { showToast, showAlert } from '../../components/AppToast';
-import { Search, UserPlus, X, Eye, EyeOff } from 'lucide-react';
+import { Search, UserPlus, X, ChevronLeft, ChevronRight, Trash2 } from 'lucide-react';
 
 const getInitials = (name) => {
   if (!name) return '?';
@@ -31,15 +31,26 @@ const normalizeStatus = (raw) => {
 
 const AssistantUsers = () => {
   const [users, setUsers] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [total, setTotal] = useState(0);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [showPassword, setShowPassword] = useState({});
+  const limit = 20;
 
-  useEffect(() => {
-    getOfficeUsers().then(res => {
-      const data = Array.isArray(res.data) ? res.data : Array.isArray(res) ? res : [];
-      setUsers(data);
+  const loadUsers = useCallback((p) => {
+    getOfficeUsers(p || page, limit).then(res => {
+      setUsers(Array.isArray(res.data) ? res.data : []);
+      setTotalPages(res.totalPages || 1);
+      setTotal(res.total || 0);
     }).catch(console.error);
-  }, []);
+  }, [page]);
+
+  useEffect(() => { loadUsers(page); }, [page, loadUsers]);
+
+  const goToPage = (p) => {
+    if (p >= 1 && p <= totalPages) setPage(p);
+  };
 
   const handleCreate = (e) => {
     e.preventDefault();
@@ -47,9 +58,23 @@ const AssistantUsers = () => {
     setIsCreateOpen(false);
   };
 
-  const handleDeactivate = (name) => {
-    showAlert.confirm('Deactivate User', `Are you sure you want to deactivate ${name}?`, 'Deactivate', 'Cancel')
-      .then((res) => { if (res.isConfirmed) showToast.warning(`${name} deactivated.`); });
+  const handleDelete = (u) => {
+    showAlert.confirm(
+      'Delete User',
+      `Permanently delete ${u.name}? This action cannot be undone.`,
+      'Delete',
+      'Cancel'
+    ).then(async (res) => {
+      if (res.isConfirmed) {
+        try {
+          await deleteOfficeUser(u.id);
+          showToast.success(`${u.name} deleted.`);
+          loadUsers(page);
+        } catch (err) {
+          showToast.error(err?.response?.data?.message || 'Failed to delete user.');
+        }
+      }
+    });
   };
 
   const renderActions = (u) => {
@@ -61,18 +86,8 @@ const AssistantUsers = () => {
             Unlock
           </button>
         )}
-        {status === 'Deactivated' && (
-          <button onClick={() => showToast.success('Account reactivated!')} className="px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold transition-all hover:bg-emerald-100 cursor-pointer whitespace-nowrap">
-            Reactivate
-          </button>
-        )}
-        {status === 'Active' && (
-          <button onClick={() => handleDeactivate(u.name)} className="px-3 py-1.5 rounded-lg bg-rose-50 text-rose-600 border border-rose-200 text-xs font-bold transition-all hover:bg-rose-100 cursor-pointer whitespace-nowrap">
-            Deactivate
-          </button>
-        )}
-        <button onClick={() => showToast.info('Edit feature coming soon.')} className="px-3 py-1.5 rounded-lg bg-gray-50 text-gray-500 border border-gray-200 text-xs font-bold transition-all hover:bg-gray-100 cursor-pointer whitespace-nowrap">
-          Edit
+        <button onClick={() => handleDelete(u)} className="px-3 py-1.5 rounded-lg bg-rose-50 text-rose-600 border border-rose-200 text-xs font-bold transition-all hover:bg-rose-100 cursor-pointer whitespace-nowrap flex items-center gap-1">
+          <Trash2 className="w-3 h-3" /> Delete
         </button>
       </div>
     );
@@ -117,7 +132,6 @@ const AssistantUsers = () => {
         </div>
       </div>
 
-      {/* Mobile Card View */}
       <div className="grid grid-cols-1 gap-3 md:hidden">
         {users.map(u => {
           const status = normalizeStatus(u.status);
@@ -145,7 +159,6 @@ const AssistantUsers = () => {
         })}
       </div>
 
-      {/* Desktop Table */}
       <div className="hidden md:block bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
@@ -191,6 +204,30 @@ const AssistantUsers = () => {
           </table>
         </div>
       </div>
+
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between mt-4 px-2">
+          <span className="text-xs font-bold text-gray-400">{total} total users</span>
+          <div className="flex items-center gap-2">
+            <button onClick={() => goToPage(page - 1)} disabled={page <= 1} className="p-2 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer">
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+            {Array.from({ length: Math.min(totalPages, 7) }, (_, i) => {
+              const start = Math.max(1, Math.min(page - 3, totalPages - 6));
+              const p = start + i;
+              if (p > totalPages) return null;
+              return (
+                <button key={p} onClick={() => goToPage(p)} className={`w-8 h-8 rounded-lg text-xs font-bold transition-all cursor-pointer ${p === page ? 'bg-primary text-white' : 'border border-gray-200 text-gray-500 hover:bg-gray-50'}`}>
+                  {p}
+                </button>
+              );
+            })}
+            <button onClick={() => goToPage(page + 1)} disabled={page >= totalPages} className="p-2 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer">
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      )}
 
       {isCreateOpen && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[150] flex items-center justify-center p-4">

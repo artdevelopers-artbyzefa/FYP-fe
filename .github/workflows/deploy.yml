@@ -21,7 +21,27 @@ jobs:
             FE_REPO="/var/www/fyp-frontend-repo"
             BE_DIR="/var/www/fyp"
 
-            echo "=== Pulling FYP-fe (frontend + backend) ==="
+            echo "=== Pulling original FYP-be (working backend) ==="
+            if [ -d "$BE_DIR/.git" ]; then
+              cd "$BE_DIR"
+              git stash --include-untracked 2>/dev/null || true
+              git pull origin main
+            else
+              rm -rf "$BE_DIR"
+              git clone https://github.com/artdevelopers-artbyzefa/FYP-be.git "$BE_DIR"
+            fi
+            cd "$BE_DIR"
+            npm install --production --silent 2>&1 | tail -1
+
+            echo "=== Injecting Brevo email route into original backend ==="
+            # Ensure BREVO_API_KEY is in the backend .env
+            if ! grep -q "BREVO_API_KEY" "$BE_DIR/.env" 2>/dev/null; then
+              echo "BREVO_API_KEY=${{ secrets.BREVO_API_KEY }}" >> "$BE_DIR/.env"
+              echo "SENDER_EMAIL=internshipofficecuiatd@gmail.com" >> "$BE_DIR/.env"
+              echo "SENDER_NAME=CUI-ATD" >> "$BE_DIR/.env"
+            fi
+
+            echo "=== Pulling FYP-fe (frontend) ==="
             if [ -d "$FE_REPO/.git" ]; then
               cd "$FE_REPO"
               git stash --include-untracked 2>/dev/null || true
@@ -31,37 +51,10 @@ jobs:
               git clone https://github.com/artdevelopers-artbyzefa/FYP-fe.git "$FE_REPO"
             fi
 
-            echo "=== Deploying backend from FYP-fe/backend ==="
-            rm -rf "$BE_DIR"
-            mkdir -p "$BE_DIR"
-            cp -r "$FE_REPO/backend/"* "$BE_DIR/"
-            cd "$BE_DIR"
-            npm install --production --silent 2>&1 | tail -1
-
-            echo "=== Configuring backend .env ==="
-            if [ ! -f "$BE_DIR/.env" ]; then
-              cp "$BE_DIR/.env.example" "$BE_DIR/.env"
-              # Set production values
-              sed -i "s|JWT_SECRET=.*|JWT_SECRET=$(openssl rand -hex 32)|" "$BE_DIR/.env"
-              sed -i "s|NODE_ENV=.*|NODE_ENV=production|" "$BE_DIR/.env"
-              sed -i "s|FRONTEND_URL=.*|FRONTEND_URL=https://fyp.artdevelopers.site|" "$BE_DIR/.env"
-              sed -i "s|MONGODB_URI=.*|MONGODB_URI=mongodb+srv://ininsico_db_user:4dCuve4pmYqove4K@ininsico.lgmaryq.mongodb.net/fypportal?appName=fypportal|" "$BE_DIR/.env"
-            fi
-            # Inject Brevo API key from GitHub secret
-            if [ -n "${{ secrets.BREVO_API_KEY }}" ]; then
-              if grep -q "BREVO_API_KEY" "$BE_DIR/.env" 2>/dev/null; then
-                sed -i "s|BREVO_API_KEY=.*|BREVO_API_KEY=${{ secrets.BREVO_API_KEY }}|" "$BE_DIR/.env"
-              else
-                echo "BREVO_API_KEY=${{ secrets.BREVO_API_KEY }}" >> "$BE_DIR/.env"
-              fi
-            fi
-            # Ensure sender config in .env
-            grep -q "SENDER_EMAIL" "$BE_DIR/.env" || echo "SENDER_EMAIL=internshipofficecuiatd@gmail.com" >> "$BE_DIR/.env"
-            grep -q "SENDER_NAME" "$BE_DIR/.env" || echo "SENDER_NAME=CUI-ATD" >> "$BE_DIR/.env"
-
-            echo "=== Running database seed ==="
-            cd "$BE_DIR"
-            node seed.js 2>&1 || echo "Seed completed (may have been run before)"
+            echo "=== Installing email route into backend ==="
+            mkdir -p "$BE_DIR/routes"
+            cp "$FE_REPO/server/send-email-route.js" "$BE_DIR/routes/send-email-route.js"
+            node "$FE_REPO/server/inject-route.js" "$BE_DIR"
 
             echo "=== Installing frontend deps & building ==="
             cd "$FE_REPO/frontend"
@@ -74,7 +67,6 @@ jobs:
             cp -r "$FE_REPO/frontend/dist/"* /var/www/fyp-frontend/dist/
 
             echo "=== Restarting PM2 ==="
-            pm2 delete fyp-backend 2>/dev/null || true
-            pm2 start "$BE_DIR/server.js" --name fyp-backend 2>&1 | tail -5
+            pm2 restart fyp-backend 2>&1 | tail -5
 
             echo "=== Deploy complete ==="

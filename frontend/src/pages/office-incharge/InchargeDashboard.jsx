@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
+import { usePhase } from '../../contexts/PhaseContext';
 import { getInchargeDashboardStats } from '../../services/office-incharge.service';
-import { ArrowRight, Calendar, ClipboardList, GraduationCap, Scale, UserPlus, Users } from 'lucide-react';
+import { ArrowRight, Calendar, ClipboardList, GraduationCap, Scale, ToggleRight, UserPlus, Users } from 'lucide-react';
 
 const InchargeDashboard = () => {
   const navigate = useNavigate();
   const { user } = useOutletContext();
+  const { currentPhase, loading: phaseLoading } = usePhase();
   const [stats, setStats] = useState(null);
 
   useEffect(() => {
@@ -13,6 +15,7 @@ const InchargeDashboard = () => {
   }, []);
 
   const quickLinks = [
+    { onClick: () => navigate('/office-incharge/phases'), icon: ToggleRight, title: 'Phase Control', desc: 'Activate or switch academic phases. Registration, Proposal, Development, and more.' },
     { onClick: () => navigate('/office-incharge/rubrics'), icon: ClipboardList, title: 'Rubric Builder', desc: 'Design proposal & CLO evaluation rubrics with 100% weight validation.' },
     { onClick: () => navigate('/office-incharge/sessions'), icon: Calendar, title: 'Academic Sessions', desc: 'Configure milestone deadlines and handle FYP-1 repeat registrations.' },
     { onClick: () => navigate('/office-incharge/committee-oversight'), icon: Users, title: 'Committee Oversight', desc: 'Monitor active boards, manage head change requests, and trigger re-evaluations.' },
@@ -21,6 +24,26 @@ const InchargeDashboard = () => {
 
   return (
     <div className="space-y-6">
+
+      {/* Active Phase Banner */}
+      {!phaseLoading && currentPhase && (
+        <div onClick={() => navigate('/office-incharge/phases')} className="bg-gradient-to-r from-primary to-blue-700 rounded-2xl shadow-sm border border-blue-800/20 p-4 md:p-6 flex items-center justify-between cursor-pointer hover:shadow-md transition-all group">
+          <div className="flex items-center gap-4">
+            <div className="w-10 h-10 bg-white/15 rounded-xl flex items-center justify-center">
+              <ToggleRight className="text-white w-5 h-5" />
+            </div>
+            <div>
+              <div className="text-[10px] font-bold text-blue-200 uppercase tracking-widest">Current Academic Phase</div>
+              <div className="text-white text-base md:text-lg font-bold">{currentPhase.name}</div>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 text-white/70 group-hover:text-white transition-colors">
+            <span className="text-[10px] font-bold hidden sm:inline">Manage Phases</span>
+            <ArrowRight className="w-4 h-4" />
+          </div>
+        </div>
+      )}
+
       {/* Welcome Banner */}
       <div className="bg-white p-4 md:p-8 rounded-2xl shadow-sm border border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>

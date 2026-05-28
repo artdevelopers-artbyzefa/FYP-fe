@@ -21,48 +21,11 @@ jobs:
             FE_REPO="/var/www/fyp-frontend-repo"
             BE_DIR="/var/www/fyp"
 
-            echo "=== Restoring original FYP-be backend ==="
-            BACKEND_RESTORED=false
-            if [ -d "$BE_DIR/.git" ]; then
-              cd "$BE_DIR"
-              git stash --include-untracked 2>/dev/null || true
-              git pull origin main && BACKEND_RESTORED=true
-              echo "✓ Backend pulled from existing FYP-be repo"
-            else
-              rm -rf "$BE_DIR"
-              git clone https://github.com/artdevelopers-artbyzefa/FYP-be.git "$BE_DIR" 2>&1 && BACKEND_RESTORED=true || echo "⚠ FYP-be clone failed"
-            fi
-
-            if [ "$BACKEND_RESTORED" = false ]; then
-              echo "=== FYP-be not available — using FYP-fe/backend as fallback ==="
-              rm -rf "$BE_DIR"
-              mkdir -p "$BE_DIR"
-              cp -r "$FE_REPO/backend/"* "$BE_DIR/"
-              # Set correct MongoDB URI for Atlas
-              sed -i "s|MONGODB_URI=.*|MONGODB_URI=mongodb+srv://ininsico_db_user:4dCuve4pmYqove4K@ininsico.lgmaryq.mongodb.net/fypportal?appName=fypportal|" "$BE_DIR/.env.example"
-              echo "✓ Fallback backend deployed from FYP-fe/backend"
-            fi
-            if [ -f "$BE_DIR/package.json" ]; then
-              cd "$BE_DIR"
-              npm install --production --silent 2>&1 | tail -1
-              echo "✓ Backend deps installed"
-            else
-              echo "⚠ Skipping backend npm install — no package.json found"
-            fi
-
-            echo "=== Injecting Brevo email route into backend ==="
-            if [ -d "$BE_DIR" ]; then
-              if [ -n "${{ secrets.BREVO_API_KEY }}" ]; then
-                if ! grep -q "BREVO_API_KEY" "$BE_DIR/.env" 2>/dev/null; then
-                  echo "BREVO_API_KEY=${{ secrets.BREVO_API_KEY }}" >> "$BE_DIR/.env"
-                  echo "SENDER_EMAIL=internshipofficecuiatd@gmail.com" >> "$BE_DIR/.env"
-                  echo "SENDER_NAME=CUI-ATD" >> "$BE_DIR/.env"
-                  echo "✓ Brevo credentials added to backend .env"
-                fi
-              fi
-            fi
-
-            echo "=== Pulling FYP-fe (frontend) ==="
+            # ================================================================
+            # STEP 1: Pull FYP-fe (this repo) — needed for fallback backend,
+            #          email route files, and frontend build
+            # ================================================================
+            echo "=== Pulling FYP-fe (frontend repo) ==="
             if [ -d "$FE_REPO/.git" ]; then
               cd "$FE_REPO"
               git stash --include-untracked 2>/dev/null || true
@@ -71,29 +34,91 @@ jobs:
               rm -rf "$FE_REPO"
               git clone https://github.com/artdevelopers-artbyzefa/FYP-fe.git "$FE_REPO"
             fi
+            echo "✓ FYP-fe pulled"
 
-            echo "=== Installing email route into backend ==="
+            # ================================================================
+            # STEP 2: Restore/install backend
+            # ================================================================
+            echo "=== Restoring backend ==="
+            BACKEND_RESTORED=false
+            if [ -d "$BE_DIR/.git" ]; then
+              cd "$BE_DIR"
+              git stash --include-untracked 2>/dev/null || true
+              git pull origin main 2>&1 && BACKEND_RESTORED=true
+            else
+              rm -rf "$BE_DIR"
+              git clone https://github.com/artdevelopers-artbyzefa/FYP-be.git "$BE_DIR" 2>&1 && BACKEND_RESTORED=true
+            fi
+
+            if [ "$BACKEND_RESTORED" = false ]; then
+              echo "=== FYP-be not available — deploying FYP-fe/backend as fallback ==="
+              rm -rf "$BE_DIR"
+              mkdir -p "$BE_DIR"
+              cp -r "$FE_REPO/backend/"* "$BE_DIR/"
+              # Create .env from example with correct Atlas URI
+              cp "$BE_DIR/.env.example" "$BE_DIR/.env"
+              sed -i "s|MONGODB_URI=.*|MONGODB_URI=mongodb+srv://ininsico_db_user:4dCuve4pmYqove4K@ininsico.lgmaryq.mongodb.net/fypportal?appName=fypportal|" "$BE_DIR/.env"
+              sed -i "s|JWT_SECRET=.*|JWT_SECRET=$(openssl rand -hex 32)|" "$BE_DIR/.env"
+              sed -i "s|NODE_ENV=.*|NODE_ENV=production|" "$BE_DIR/.env"
+              sed -i "s|FRONTEND_URL=.*|FRONTEND_URL=https://fyp.artdevelopers.site|" "$BE_DIR/.env"
+              echo "✓ Fallback backend deployed from FYP-fe/backend"
+            fi
+
+            if [ -f "$BE_DIR/package.json" ]; then
+              cd "$BE_DIR"
+              npm install --production 2>&1 | tail -5
+              echo "✓ Backend deps installed"
+            fi
+
+            # ================================================================
+            # STEP 3: Inject email route + Brevo API key into backend
+            # ================================================================
+            echo "=== Injecting email route into backend ==="
+            if [ -n "${{ secrets.BREVO_API_KEY }}" ]; then
+              if grep -q "BREVO_API_KEY" "$BE_DIR/.env" 2>/dev/null; then
+                sed -i "s|BREVO_API_KEY=.*|BREVO_API_KEY=${{ secrets.BREVO_API_KEY }}|" "$BE_DIR/.env"
+              else
+                echo "BREVO_API_KEY=${{ secrets.BREVO_API_KEY }}" >> "$BE_DIR/.env"
+              fi
+              grep -q "SENDER_EMAIL" "$BE_DIR/.env" || echo "SENDER_EMAIL=internshipofficecuiatd@gmail.com" >> "$BE_DIR/.env"
+              grep -q "SENDER_NAME" "$BE_DIR/.env" || echo "SENDER_NAME=CUI-ATD" >> "$BE_DIR/.env"
+              echo "✓ Brevo credentials configured"
+            fi
+
             mkdir -p "$BE_DIR/routes"
-            cp "$FE_REPO/server/send-email-route.js" "$BE_DIR/routes/send-email-route.js"
-            node "$FE_REPO/server/inject-route.js" "$BE_DIR"
+            if [ -f "$FE_REPO/server/send-email-route.js" ]; then
+              cp "$FE_REPO/server/send-email-route.js" "$BE_DIR/routes/send-email-route.js"
+              if [ -f "$FE_REPO/server/inject-route.js" ]; then
+                node "$FE_REPO/server/inject-route.js" "$BE_DIR" 2>&1 || echo "⚠ Route injection skipped (non-critical)"
+              fi
+              echo "✓ Email route files copied"
+            fi
 
-            echo "=== Installing frontend deps & building ==="
+            # ================================================================
+            # STEP 4: Build and deploy frontend
+            # ================================================================
+            echo "=== Building frontend ==="
             cd "$FE_REPO/frontend"
-            npm install --silent 2>&1 | tail -1
-            npm run build
+            npm install 2>&1 | tail -3
+            npm run build 2>&1 | tail -5
+            echo "✓ Frontend built"
 
             echo "=== Copying frontend build to production path ==="
             rm -rf /var/www/fyp-frontend/dist
             mkdir -p /var/www/fyp-frontend/dist
             cp -r "$FE_REPO/frontend/dist/"* /var/www/fyp-frontend/dist/
+            echo "✓ Frontend deployed"
 
+            # ================================================================
+            # STEP 5: Restart backend PM2
+            # ================================================================
             echo "=== Restarting PM2 ==="
             if pm2 show fyp-backend 2>/dev/null; then
               pm2 restart fyp-backend 2>&1 | tail -5
               echo "✓ PM2 process fyp-backend restarted"
             else
-              echo "⚠ PM2 process fyp-backend not found — you may need to start it manually:"
-              echo "  cd $BE_DIR && pm2 start server.js --name fyp-backend"
+              echo "⚠ Starting fyp-backend for the first time..."
+              pm2 start "$BE_DIR/server.js" --name fyp-backend --watch 2>&1 | tail -5
             fi
 
             echo "=== Deploy complete ==="

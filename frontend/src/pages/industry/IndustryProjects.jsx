@@ -62,7 +62,7 @@ export default function IndustryProjects() {
                   <td className="py-4 px-6">
                     <div>
                       <span className="font-bold text-black block">{p.title}</span>
-                      <span className="text-xs text-black font-mono">Group {p.groupId} · {p.members} Members</span>
+                      <span className="text-xs text-black font-mono">Group {p.groupId} | {p.members} Members</span>
                     </div>
                   </td>
                   <td className="py-4 px-6 text-black font-bold">{p.internalSupervisor}</td>

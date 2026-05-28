@@ -25,7 +25,7 @@ export default function Grievances() {
                 <span className="font-black text-black text-base">Ahmed Farooq (SP21-BCS-001)</span>
                 <span className="bg-white text-black font-bold text-xs px-2.5 py-1 rounded-lg border border-black"><AlertCircle className="w-4 h-4 mr-1" /> SLA Breach (15 Days)</span>
               </div>
-              <p className="text-xs text-black font-bold">Category: Evaluation Dispute · Filed: May 02, 2026</p>
+              <p className="text-xs text-black font-bold">Category: Evaluation Dispute | Filed: May 02, 2026</p>
             </div>
             <span className="bg-white text-black font-bold text-xs px-3 py-1.5 rounded-xl border border-black shadow-sm">Under Investigation</span>
           </div>
@@ -51,7 +51,7 @@ export default function Grievances() {
                 <span className="font-black text-black text-base">Aima Khalid (SP21-BCS-019)</span>
                 <span className="bg-white text-black font-bold text-xs px-2.5 py-1 rounded-lg border border-black"><Clock className="w-4 h-4 mr-1" /> SLA Warning (2 Days Left)</span>
               </div>
-              <p className="text-xs text-black font-bold">Category: Supervision Dispute · Filed: May 15, 2026</p>
+              <p className="text-xs text-black font-bold">Category: Supervision Dispute | Filed: May 15, 2026</p>
             </div>
             <span className="bg-white text-black font-bold text-xs px-3 py-1.5 rounded-xl border border-black shadow-sm">New Filing</span>
           </div>

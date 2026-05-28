@@ -63,7 +63,7 @@ export default function DashboardLayout() {
   return (
     <div className={`flex h-screen overflow-hidden relative bg-white selection:bg-blue-600/20 ${isLocked ? 'profile-locked' : ''}`} style={{ fontFamily: "'Poppins', sans-serif", backgroundColor: '#EFF6FF' }}>
       
-      {/* ═══════════════ SIDEBAR ═══════════════ */}
+      {/* ============= SIDEBAR ============= */}
       <div 
         className={`bg-blue-600 flex flex-col flex-shrink-0 transition-all duration-300 overflow-hidden fixed lg:relative z-[50] h-full ${mobileSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}
         style={{ width: sidebarCollapsed ? 68 : 256, minWidth: sidebarCollapsed ? 68 : 256, backgroundColor: '#1E3A8A' }}
@@ -158,7 +158,7 @@ export default function DashboardLayout() {
       {/* Mobile Overlay */}
       {mobileSidebarOpen && <div onClick={() => setMobileSidebarOpen(false)} className="fixed inset-0 bg-blue-600/50 z-[40] lg:hidden backdrop-blur-sm" />}
 
-      {/* ═══════════════ MAIN CONTENT WRAPPER ═══════════════ */}
+      {/* ============= MAIN CONTENT WRAPPER ============= */}
       <div className="flex-1 flex flex-col overflow-hidden w-full transition-all duration-300 ease-in-out">
         
         {/* TOPBAR */}
@@ -174,7 +174,7 @@ export default function DashboardLayout() {
 
             <div className="min-w-0">
               <h2 className="text-sm md:text-base font-bold text-slate-900 leading-tight truncate">{pageTitle}</h2>
-              <p className="text-[10px] text-slate-500 leading-tight hidden sm:block">CUI Abbottabad · <span>{currentDate}</span></p>
+              <p className="text-[10px] text-slate-500 leading-tight hidden sm:block">CUI Abbottabad | <span>{currentDate}</span></p>
             </div>
           </div>
 

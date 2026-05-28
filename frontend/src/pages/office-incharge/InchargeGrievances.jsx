@@ -38,7 +38,7 @@ const InchargeGrievances = () => {
                     {g.sla.includes('Breach')  ? <AlertCircle className="w-4 h-4" /> : <Clock className="w-4 h-4" />} {g.sla}
                   </span>
                 </div>
-                <p className="text-xs text-black font-bold">Category: {g.category} · Filed: {g.date}</p>
+                <p className="text-xs text-black font-bold">Category: {g.category} | Filed: {g.date}</p>
               </div>
               <span className={`font-bold text-xs px-3 py-1.5 rounded-xl border shadow-sm ${g.status === 'New Filing' ? 'bg-blue-50 text-black border-blue-200' : 'bg-white'}`}>{g.status}</span>
             </div>

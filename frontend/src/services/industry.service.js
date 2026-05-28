@@ -13,7 +13,7 @@ import {
 // local database-structured templates on request errors.
 // ============================================================================
 
-// ─── Demo Data (Safe to delete after API integration) ──────────────────────────
+// --- Demo Data (Safe to delete after API integration) ---------------------------
 
 const DEMO_ASSIGNED_PROJECTS = [
   {
@@ -48,7 +48,7 @@ const DEMO_NOTIFICATIONS = [
   },
 ];
 
-// ─── Service Functions ──────────────────────────────────────────────────────────
+// --- Service Functions -----------------------------------------------------------
 
 /**
  * Fetch all projects assigned to the logged-in Industry Supervisor.

@@ -27,7 +27,7 @@ import {
 //    `try/catch` wrappers to let errors propagate naturally.
 // ============================================================================
 
-// ─── Demo Data (Safe to delete after API integration) ──────────────────────────
+// --- Demo Data (Safe to delete after API integration) ---------------------------
 
 const DEMO_STATS = {
   totalUsers: 512,
@@ -83,7 +83,7 @@ const DEMO_NOTIFICATIONS = [
   },
 ];
 
-// ─── Service Functions ──────────────────────────────────────────────────────────
+// --- Service Functions -----------------------------------------------------------
 
 /** Get admin dashboard overview stats */
 export const getAdminStats = async () => {

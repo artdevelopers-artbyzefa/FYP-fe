@@ -25,14 +25,14 @@ const Team = () => {
         {
           initials: "AI",
           name: "Ms. Ayesha Irshad",
-          role: "FYP Coordinator · Lecturer",
+          role: "FYP Coordinator - Lecturer",
           desc: "Expertise in Trust in IoT devices. Coordinating project lifecycles and academic standards for the FYP Portal.",
         },
         
         {
           initials: "FA",
           name: "Dr. Faraz Ahmad",
-          role: "FYP Coordinator · Lecturer",
+          role: "FYP Coordinator - Lecturer",
           desc: "Focused on core computing principles and guiding student development across various technology stacks.",
         },
       ],

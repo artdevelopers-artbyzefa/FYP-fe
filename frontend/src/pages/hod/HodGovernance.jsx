@@ -25,7 +25,7 @@ const HodGovernance = () => {
               <div key={com.id} className="p-4 rounded-2xl bg-white border border-black flex justify-between items-center text-xs">
                 <div>
                   <span className="font-bold text-black block mb-0.5 text-sm">{com.name}</span>
-                  <span className="text-black">Head: {com.head} · {com.members} Members</span>
+                  <span className="text-black">Head: {com.head} | {com.members} Members</span>
                 </div>
                 <span className="bg-white text-black font-bold px-3 py-1 rounded-xl border border-black/20">{com.status}</span>
               </div>

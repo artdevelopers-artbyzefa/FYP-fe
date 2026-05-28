@@ -48,7 +48,7 @@ export default function InchargeLayout() {
   return (
     <div className="flex h-screen overflow-hidden relative bg-white selection:bg-blue-600 selection:text-white" style={{ fontFamily: "'Poppins', sans-serif", backgroundColor: '#EFF6FF' }}>
       
-      {/* ═══════════════ SIDEBAR ═══════════════ */}
+      {/* ============= SIDEBAR ============= */}
       <div 
         className={`bg-blue-600 flex flex-col flex-shrink-0 transition-all duration-300 overflow-hidden fixed lg:relative z-[50] h-full ${mobileSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} border-r border-white/10 shadow-2xl lg:shadow-none`}
         style={{ width: sidebarCollapsed ? 68 : 256, minWidth: sidebarCollapsed ? 68 : 256, backgroundColor: '#2B3990' }}
@@ -105,7 +105,7 @@ export default function InchargeLayout() {
       {/* Mobile Overlay */}
       {mobileSidebarOpen && <div onClick={() => setMobileSidebarOpen(false)} className="fixed inset-0 bg-blue-600/50 z-[40] lg:hidden backdrop-blur-sm" />}
 
-      {/* ═══════════════ MAIN CONTENT WRAPPER ═══════════════ */}
+      {/* ============= MAIN CONTENT WRAPPER ============= */}
       <div className="flex-1 flex flex-col overflow-hidden w-full transition-all duration-300 ease-in-out">
         
         {/* TOPBAR */}

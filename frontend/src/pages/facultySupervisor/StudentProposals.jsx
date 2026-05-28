@@ -187,7 +187,7 @@ export default function StudentProposals() {
                     </span>
                   </div>
                   <p className="text-sm font-semibold text-black">
-                    Group {proposal.groupId} · Leader: {proposal.leaderName} ({proposal.leaderRegNo})
+                    Group {proposal.groupId} | Leader: {proposal.leaderName} ({proposal.leaderRegNo})
                   </p>
                 </div>
 

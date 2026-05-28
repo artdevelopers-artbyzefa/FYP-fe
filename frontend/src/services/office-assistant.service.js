@@ -37,7 +37,7 @@ const DEMO_STUDENTS = [
 
 const DEMO_FACULTY = [
   { id: 'AH', name: 'Dr. Ali Hassan', designation: 'Associate Professor', proposed: 6, inProgress: '4 (Max)', completed: 28, research: ['Artificial Intelligence', 'Machine Learning', 'Computer Vision'], schedule: ['Mon 10:00-12:00', 'Tue 10:00-12:00', 'Wed 10:00-12:00'] },
-  { id: 'SM', name: 'Dr. Sara Malik', designation: 'Senior Lecturer · In-charge', proposed: 4, inProgress: 3, completed: 19, research: ['Software Engineering', 'Federated Learning'], schedule: ['Thu 14:00-16:00', 'Fri 10:00-12:00'] },
+  { id: 'SM', name: 'Dr. Sara Malik', designation: 'Senior Lecturer - In-charge', proposed: 4, inProgress: 3, completed: 19, research: ['Software Engineering', 'Federated Learning'], schedule: ['Thu 14:00-16:00', 'Fri 10:00-12:00'] },
   { id: 'FK', name: 'Dr. Fatima Khan', designation: 'Assistant Professor', proposed: 5, inProgress: 1, completed: 14, research: ['IoT Systems', 'Cybersecurity'], schedule: ['Mon 09:00-11:00', 'Wed 14:00-16:00'] }
 ];
 

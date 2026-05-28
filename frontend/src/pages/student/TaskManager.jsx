@@ -549,7 +549,7 @@ const TaskManager = () => {
                       Welcome back, {user?.name || 'Student'}!
                     </h3>
                     <p className="text-black/80 font-medium text-[15px] mt-1">
-                      AI-Powered Recommendation System · Sprint 2 of 4
+                      AI-Powered Recommendation System - Sprint 2 of 4
                     </p>
 
                     <div className="mt-8 flex items-center gap-6">

@@ -64,7 +64,7 @@ const HodEscalations = () => {
                 <span className="font-black text-black text-lg">{esc.student} ({esc.regNo})</span>
                 <span className="bg-white text-black font-bold text-xs px-3 py-1 rounded-xl border border-black shadow-sm"><AlertTriangle className="w-4 h-4 mr-1" /> Escalated by In-charge</span>
               </div>
-              <p className="text-xs text-black font-bold">Category: {esc.category} · Escalated: {esc.date}</p>
+              <p className="text-xs text-black font-bold">Category: {esc.category} | Escalated: {esc.date}</p>
             </div>
             <span className="bg-white text-black font-bold text-xs px-4 py-2 rounded-2xl border border-black shadow-sm">HOD Ruling Required</span>
           </div>

@@ -25,7 +25,7 @@ const InchargeStudentReports = () => {
               </div>
               <div>
                 <h3 className="text-xl font-black text-black">{s.name}</h3>
-                <p className="text-xs text-black font-mono mt-0.5">{s.regNo} · Computer Science</p>
+                <p className="text-xs text-black font-mono mt-0.5">{s.regNo} | Computer Science</p>
               </div>
             </div>
             <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-2xl border border-black">

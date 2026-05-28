@@ -13,7 +13,7 @@ export default function AdminDashboard() {
   const navigate = useNavigate();
   const user = getUserInfo() || { name: 'Tariq Mehmood', avatar: 'SA' };
 
-  /* ── State ──────────────────────────────────────────────────────────────── */
+  /* --- State --------------------------------------------------------------- */
   const [activeView, setActiveView] = useState('dashboard');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
@@ -34,7 +34,7 @@ export default function AdminDashboard() {
 
   const notifRef = useRef(null);
 
-  /* ── Load data ──────────────────────────────────────────────────────────── */
+  /* --- Load data ----------------------------------------------------------- */
   useEffect(() => {
     getAdminStats().then(setStats);
     getAdminUsers().then(setUsers);
@@ -50,7 +50,7 @@ export default function AdminDashboard() {
     return () => document.removeEventListener('mousedown', handler);
   }, []);
 
-  /* ── Helpers ────────────────────────────────────────────────────────────── */
+  /* --- Helpers ------------------------------------------------------------- */
   const goTo = (view) => {
     setActiveView(view);
     setMobileSidebarOpen(false);
@@ -82,7 +82,7 @@ export default function AdminDashboard() {
     }
   };
 
-  /* ── Nav items ──────────────────────────────────────────────────────────── */
+  /* --- Nav items ----------------------------------------------------------- */
   const navItems = [
     { id: 'dashboard',   label: 'Dashboard',             icon: Server,      section: 'System' },
     { id: 'users',       label: 'User Accounts',         icon: UserCog,    section: 'Account & RBAC' },
@@ -104,11 +104,11 @@ export default function AdminDashboard() {
     (actionFilter === '' || a.action === actionFilter)
   );
 
-  /* ── Render ─────────────────────────────────────────────────────────────── */
+  /* --- Render -------------------------------------------------------------- */
   return (
     <div className="flex h-screen overflow-hidden" style={{ fontFamily: "'Poppins', sans-serif", backgroundColor: '#EFF6FF' }}>
 
-      {/* ═══════════════ SIDEBAR ═══════════════ */}
+      {/* ============= SIDEBAR ============= */}
       <aside
         id="admin-sidebar"
         style={{ backgroundColor: '#2B3990', width: sidebarCollapsed ? 68 : 256, minWidth: sidebarCollapsed ? 68 : 256 }}
@@ -163,7 +163,7 @@ export default function AdminDashboard() {
       {/* Mobile overlay */}
       {mobileSidebarOpen && <div onClick={() => setMobileSidebarOpen(false)} className="fixed inset-0 bg-blue-600/50 z-40 lg:hidden backdrop-blur-sm" />}
 
-      {/* ═══════════════ MAIN ═══════════════ */}
+      {/* ============= MAIN ============= */}
       <div className="flex-1 flex flex-col overflow-hidden w-full">
 
         {/* TOPBAR */}
@@ -239,7 +239,7 @@ export default function AdminDashboard() {
         <main className="flex-1 overflow-y-auto p-4 md:p-6 scroll-smooth">
           <div className="max-w-[1600px] mx-auto w-full">
 
-            {/* ── VIEW: DASHBOARD ── */}
+            {/* --- VIEW: DASHBOARD --- */}
             {activeView === 'dashboard' && (
               <div className="animate-in fade-in slide-in- duration-300">
                 {/* Banner */}
@@ -322,7 +322,7 @@ export default function AdminDashboard() {
               </div>
             )}
 
-            {/* ── VIEW: USERS ── */}
+            {/* --- VIEW: USERS --- */}
             {activeView === 'users' && (
               <div className="animate-in fade-in slide-in- duration-300">
                 <div className="border-b border-black pb-4 mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -383,7 +383,7 @@ export default function AdminDashboard() {
               </div>
             )}
 
-            {/* ── VIEW: RBAC ── */}
+            {/* --- VIEW: RBAC --- */}
             {activeView === 'rbac' && (
               <div className="animate-in fade-in slide-in- duration-300">
                 <div className="border-b border-black pb-4 mb-6">
@@ -418,7 +418,7 @@ export default function AdminDashboard() {
               </div>
             )}
 
-            {/* ── VIEW: AUDIT LOGS ── */}
+            {/* --- VIEW: AUDIT LOGS --- */}
             {activeView === 'audit' && (
               <div className="animate-in fade-in slide-in- duration-300">
                 <div className="border-b border-black pb-4 mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -475,7 +475,7 @@ export default function AdminDashboard() {
               </div>
             )}
 
-            {/* ── VIEW: MAINTENANCE ── */}
+            {/* --- VIEW: MAINTENANCE --- */}
             {activeView === 'maintenance' && (
               <div className="animate-in fade-in slide-in- duration-300">
                 <div className="border-b border-black pb-4 mb-6">

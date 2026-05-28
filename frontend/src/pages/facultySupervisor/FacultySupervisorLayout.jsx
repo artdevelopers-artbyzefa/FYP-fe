@@ -43,7 +43,7 @@ export default function FacultySupervisorLayout() {
             
             <div className="min-w-0">
               <h2 className="text-sm md:text-base font-bold text-[#1e3a8a] leading-tight truncate">{pageTitle}</h2>
-              <p className="text-[10px] text-black leading-tight hidden sm:block">CUI Abbottabad · <span>{currentDate}</span></p>
+              <p className="text-[10px] text-black leading-tight hidden sm:block">CUI Abbottabad | <span>{currentDate}</span></p>
             </div>
           </div>
 

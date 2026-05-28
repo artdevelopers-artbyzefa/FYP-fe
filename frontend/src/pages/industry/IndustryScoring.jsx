@@ -59,7 +59,7 @@ export default function IndustryScoring() {
               <span className="font-black text-black text-lg">Group {selectedGroup.groupId}: {selectedGroup.title}</span>
               <span className="bg-white text-black font-bold text-xs px-3 py-1 rounded-xl border border-black shadow-sm">External Evaluation</span>
             </div>
-            <p className="text-xs text-black font-bold">Internal Supervisor: {selectedGroup.internalSupervisor} · {selectedGroup.members} Students</p>
+            <p className="text-xs text-black font-bold">Internal Supervisor: {selectedGroup.internalSupervisor} | {selectedGroup.members} Students</p>
           </div>
           <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-2xl border border-black">
             <span className="text-xs font-bold text-black">Evaluation Rubric:</span>

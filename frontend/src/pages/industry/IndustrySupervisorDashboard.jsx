@@ -5,14 +5,14 @@ import { getAssignedProjects, submitScorecard, getIndustryNotifications } from '
 import { showToast as toast } from '../../components/AppToast';
 import { Bell, CheckCheck, CheckCircle, ChevronLeft, ChevronRight, FileText, GitBranch, Landmark, Lock, LogOut, Menu, Pencil, StarHalf, User, X } from 'lucide-react';
 
-/* ─── Color palette from Figma ────────────────────────────────────────────────
+/* --- Color palette from Figma -------------------------------------------------
    primary  : #2B3990   (sidebar bg)
    secondary: #2563EB   (active nav, buttons)
    lightbg  : #EFF6FF   (main bg)
    success  : #059669
    warning  : #D97706
    danger   : #DC2626
-─────────────────────────────────────────────────────────────────────────────── */
+------------------------------------------------------------------------------- */
 
 const STATUS_BADGE = {
   pending: 'bg-white',
@@ -23,7 +23,7 @@ export default function IndustrySupervisorDashboard() {
   const navigate = useNavigate();
   const user = getUserInfo() || { name: 'Engr. Kamran Shah', avatar: 'KS' };
 
-  /* ── State ──────────────────────────────────────────────────────────────── */
+  /* --- State --------------------------------------------------------------- */
   const [activeView, setActiveView] = useState('dashboard');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
@@ -36,7 +36,7 @@ export default function IndustrySupervisorDashboard() {
   const [remarks, setRemarks] = useState('');
   const notifRef = useRef(null);
 
-  /* ── Load data ──────────────────────────────────────────────────────────── */
+  /* --- Load data ----------------------------------------------------------- */
   useEffect(() => {
     getAssignedProjects().then(setProjects);
     getIndustryNotifications().then(setNotifications);
@@ -48,7 +48,7 @@ export default function IndustrySupervisorDashboard() {
     return () => document.removeEventListener('mousedown', handler);
   }, []);
 
-  /* ── Helpers ────────────────────────────────────────────────────────────── */
+  /* --- Helpers ------------------------------------------------------------- */
   const goTo = (view, project) => {
     if (project) setSelectedGroup(project);
     setActiveView(view);
@@ -78,7 +78,7 @@ export default function IndustrySupervisorDashboard() {
     setTimeout(() => goTo('dashboard', null), 1500);
   };
 
-  /* ── Nav items ──────────────────────────────────────────────────────────── */
+  /* --- Nav items ----------------------------------------------------------- */
   const navItems = [
     { id: 'dashboard', label: 'Assigned Projects', icon: GitBranch, section: 'Evaluation Console' },
     { id: 'scoring',   label: 'Rubric Scoring',    icon: StarHalf,   section: null },
@@ -87,11 +87,11 @@ export default function IndustrySupervisorDashboard() {
   const pageTitle = navItems.find(n => n.id === activeView)?.label || 'Dashboard';
   const unreadCount = notifications.filter(n => !n.read).length;
 
-  /* ── Render ─────────────────────────────────────────────────────────────── */
+  /* --- Render -------------------------------------------------------------- */
   return (
     <div className="flex h-screen overflow-hidden" style={{ fontFamily: "'Poppins', sans-serif", backgroundColor: '#EFF6FF' }}>
 
-      {/* ═══════════════ SIDEBAR ═══════════════ */}
+      {/* ============= SIDEBAR ============= */}
       <aside
         id="industry-sidebar"
         style={{ backgroundColor: '#2B3990', width: sidebarCollapsed ? 68 : 256, minWidth: sidebarCollapsed ? 68 : 256 }}
@@ -154,7 +154,7 @@ export default function IndustrySupervisorDashboard() {
         <div onClick={() => setMobileSidebarOpen(false)} className="fixed inset-0 bg-blue-600/50 z-40 lg:hidden backdrop-blur-sm" />
       )}
 
-      {/* ═══════════════ MAIN ═══════════════ */}
+      {/* ============= MAIN ============= */}
       <div className="flex-1 flex flex-col overflow-hidden w-full">
 
         {/* TOPBAR */}
@@ -234,7 +234,7 @@ export default function IndustrySupervisorDashboard() {
         <main className="flex-1 overflow-y-auto p-4 md:p-6 scroll-smooth" style={{ backgroundColor: '#EFF6FF' }}>
           <div className="max-w-[1600px] mx-auto w-full">
 
-            {/* ── VIEW: ASSIGNED PROJECTS ── */}
+            {/* --- VIEW: ASSIGNED PROJECTS --- */}
             {activeView === 'dashboard' && (
               <div style={{ animation: 'fadeInUp 0.3s ease-out' }}>
                 {/* Welcome banner */}
@@ -281,7 +281,7 @@ export default function IndustrySupervisorDashboard() {
                             <td className="py-4 px-6">
                               <div>
                                 <span className="font-bold text-black block">{p.title}</span>
-                                <span className="text-xs text-black font-mono">Group {p.groupId} · {p.members} Members</span>
+                                <span className="text-xs text-black font-mono">Group {p.groupId} | {p.members} Members</span>
                               </div>
                             </td>
                             <td className="py-4 px-6 text-black font-bold">{p.internalSupervisor}</td>
@@ -317,7 +317,7 @@ export default function IndustrySupervisorDashboard() {
               </div>
             )}
 
-            {/* ── VIEW: RUBRIC SCORING ── */}
+            {/* --- VIEW: RUBRIC SCORING --- */}
             {activeView === 'scoring' && (
               <div style={{ animation: 'fadeInUp 0.3s ease-out' }}>
                 <div className="border-b border-black pb-4 mb-6">
@@ -334,7 +334,7 @@ export default function IndustrySupervisorDashboard() {
                         </span>
                         <span className="bg-white text-black font-bold text-xs px-3 py-1 rounded-xl border border-black shadow-sm">External Evaluation</span>
                       </div>
-                      <p className="text-xs text-black font-bold">Internal Supervisor: {selectedGroup?.internalSupervisor} · {selectedGroup?.members} Students</p>
+                      <p className="text-xs text-black font-bold">Internal Supervisor: {selectedGroup?.internalSupervisor} | {selectedGroup?.members} Students</p>
                     </div>
                     <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-2xl border border-black">
                       <span className="text-xs font-bold text-black">Evaluation Rubric:</span>

@@ -82,7 +82,7 @@ export default function FacultyDashboardLayout() {
             {/* Status Capsule */}
             <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-white border border-blue-100 rounded-full text-xs font-bold text-secondary whitespace-nowrap">
               <User className="w-3.5 h-3.5" />
-              <span>Faculty Supervisor · Committee Head</span>
+              <span>Faculty Supervisor - Committee Head</span>
             </div>
 
             {/* Notification Bell */}

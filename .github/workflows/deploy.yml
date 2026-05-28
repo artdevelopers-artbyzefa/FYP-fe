@@ -115,4 +115,16 @@ jobs:
               pm2 show fyp-backend 2>/dev/null || true
             fi
 
+            # ================================================================
+            # FINAL: Diagnostic dump
+            # ================================================================
+            echo "=== Diagnostic dump ==="
+            echo "--- PM2 List ---"
+            pm2 list 2>/dev/null || echo "PM2 not available"
+            echo "--- Listening ports ---"
+            ss -tlnp 2>/dev/null || netstat -tlnp 2>/dev/null || echo "No port info"
+            echo "--- Curl localhost test ---"
+            curl -s http://localhost:5000/api/health 2>/dev/null || echo "Failed to curl localhost:5000"
+            curl -s http://127.0.0.1:5000/api/health 2>/dev/null || echo "Failed to curl 127.0.0.1:5000"
+
             echo "=== Deploy complete ==="

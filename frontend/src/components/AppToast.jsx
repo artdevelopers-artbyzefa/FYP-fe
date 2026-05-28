@@ -109,7 +109,7 @@ export const showAlert = {
                 cancelButton: 'rounded-xl px-6 py-3'
             }
         });
-        return result.isConfirmed;
+        return result;
     },
     datePrompt: async (title, text) => {
         const result = await MySwal.fire({

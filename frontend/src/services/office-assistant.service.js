@@ -83,12 +83,8 @@ export const getOfficeUsers = async (page = 1, limit = 20) => {
 };
 
 export const getOfficeStudents = async (page = 1, limit = 20) => {
-  try {
-    const res = await apiClient.get(OFFICE_STUDENTS_API_URL, { params: { page, limit } });
-    return res.data;
-  } catch (error) {
-    return { data: DEMO_STUDENTS, total: DEMO_STUDENTS.length, page: 1, limit: 20, totalPages: 1 };
-  }
+  const res = await apiClient.get(OFFICE_STUDENTS_API_URL, { params: { page, limit } });
+  return res.data;
 };
 
 export const getOfficeFaculty = async () => {

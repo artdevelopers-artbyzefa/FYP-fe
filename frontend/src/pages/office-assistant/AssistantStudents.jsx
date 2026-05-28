@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { getOfficeStudents, createOfficeStudent, deleteOfficeStudent } from '../../services/office-assistant.service';
 import { showToast, showAlert } from '../../components/AppToast';
 import { sendWelcomeEmail } from '../../services/email.service';
@@ -27,6 +27,7 @@ const AssistantStudents = () => {
   const [form, setForm] = useState(initialForm);
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
+  const submitLock = useRef(false);
   const limit = 20;
 
   const loadStudents = useCallback((p) => {
@@ -34,7 +35,10 @@ const AssistantStudents = () => {
       setStudents(Array.isArray(res.data) ? res.data : []);
       setTotalPages(res.totalPages || 1);
       setTotal(res.total || 0);
-    }).catch(console.error);
+    }).catch(err => {
+      console.error(err);
+      showToast.error('Failed to load students. Is the backend running?');
+    });
   }, [page]);
 
   useEffect(() => { loadStudents(page); }, [page, loadStudents]);
@@ -64,11 +68,12 @@ const AssistantStudents = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (submitting) return;
+    if (submitting || submitLock.current) return;
     const errs = validateForm(form);
     setErrors(errs);
     if (Object.keys(errs).length) return;
 
+    submitLock.current = true;
     setSubmitting(true);
     try {
       await createOfficeStudent({
@@ -94,6 +99,7 @@ const AssistantStudents = () => {
     } catch (err) {
       showToast.error(err?.response?.data?.message || 'Failed to create student.');
     } finally {
+      submitLock.current = false;
       setSubmitting(false);
     }
   };
@@ -229,7 +235,6 @@ const AssistantStudents = () => {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-gray-50/50 text-[11px] font-bold text-gray-400 tracking-wider">
-                <th className="py-3.5 px-6 w-12"><input type="checkbox" className="accent-primary cursor-pointer" /></th>
                 <th className="py-3.5 px-6">Student Name</th>
                 <th className="py-3.5 px-6">Registration Number</th>
                 <th className="py-3.5 px-6">Email</th>
@@ -242,7 +247,6 @@ const AssistantStudents = () => {
             <tbody className="divide-y divide-gray-50 text-sm font-medium text-gray-700">
               {students.map(s => (
                 <tr key={s.id || s._id} className="hover:bg-gray-50/50 transition-colors">
-                  <td className="py-4 px-6"><input type="checkbox" className="accent-primary cursor-pointer" /></td>
                   <td className="py-4 px-6 font-bold text-gray-800">{s.name}</td>
                   <td className="py-4 px-6 text-gray-500 font-mono text-xs">{s.regNo || s.id}</td>
                   <td className="py-4 px-6 text-gray-600 text-xs">{s.email || '-'}</td>

@@ -7,6 +7,9 @@ on:
       - 'frontend/**'
   workflow_dispatch:
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build:
     name: Build Frontend
@@ -38,11 +41,3 @@ jobs:
           name: frontend-build
           path: FYP-fe/frontend/dist/
           retention-days: 1
-
-      - name: Trigger backend deploy
-        uses: peter-evans/repository-dispatch@v3
-        with:
-          token: ${{ secrets.BE_DEPLOY_TOKEN }}
-          repository: artdevelopers-artbyzefa/FYP-be
-          event-type: frontend-updated
-          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'

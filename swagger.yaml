@@ -1,0 +1,2608 @@
+openapi: 3.0.3
+info:
+  title: FYP Portal API - COMSATS University Islamabad, Abbottabad Campus
+  description: >
+    Backend API for the Final Year Project (FYP) Portal. Supports student enrollment,
+    supervision management, proposal workflows, evaluations, committee oversight,
+    grievance handling, RBAC administration, and industry supervisor integration.
+  version: 1.0.0
+  contact:
+    email: internshipofficecuiatd@gmail.com
+
+servers:
+  - url: /api
+    description: Proxied API base (via Vite dev server or Nginx)
+
+security:
+  - BearerAuth: []
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token obtained from POST /auth/login
+
+  schemas:
+    # ------------------------------------------------------------------
+    # Common / Shared Schemas
+    # ------------------------------------------------------------------
+    ApiSuccess:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: Operation completed
+
+    ApiError:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+          example: Something went wrong
+        error:
+          type: string
+
+    # ------------------------------------------------------------------
+    # Auth Schemas
+    # ------------------------------------------------------------------
+    LoginRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          format: email
+          example: student@cuiatd.edu.pk
+        password:
+          type: string
+          format: password
+          example: "123"
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIs...
+        user:
+          $ref: '#/components/schemas/User'
+
+    RegisterRequest:
+      type: object
+      required: [name, email, password]
+      properties:
+        name:
+          type: string
+          example: Ahmed Farooq
+        email:
+          type: string
+          format: email
+          example: student@cuiatd.edu.pk
+        password:
+          type: string
+          format: password
+          example: "123"
+        role:
+          type: string
+          enum: [student, faculty, hod, office-assistant, office-incharge, admin, industry]
+          default: student
+
+    RefreshTokenRequest:
+      type: object
+      properties:
+        refreshToken:
+          type: string
+
+    # ------------------------------------------------------------------
+    # User Schemas
+    # ------------------------------------------------------------------
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        role:
+          type: string
+        status:
+          type: string
+          enum: [Active, Locked, Deactivated]
+
+    UserProfile:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        regNo:
+          type: string
+        semester:
+          type: string
+        section:
+          type: string
+        cgpa:
+          type: string
+        fatherName:
+          type: string
+        profileCompleted:
+          type: boolean
+
+    # ------------------------------------------------------------------
+    # Student Schemas
+    # ------------------------------------------------------------------
+    StudentPartner:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        regNo:
+          type: string
+        cgpa:
+          type: string
+        semester:
+          type: string
+        section:
+          type: string
+
+    PartnerRequest:
+      type: object
+      properties:
+        id:
+          type: string
+        fromId:
+          type: string
+        name:
+          type: string
+        regNo:
+          type: string
+        cgpa:
+          type: string
+        program:
+          type: string
+
+    Supervisor:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        designation:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        avatar:
+          type: string
+
+    IdeaSubmission:
+      type: object
+      properties:
+        title:
+          type: string
+        desc:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        supervisor:
+          type: string
+
+    ApprovedIdea:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        desc:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        supervisor:
+          type: string
+
+    Task:
+      type: object
+      properties:
+        id:
+          type: number
+        title:
+          type: string
+        status:
+          type: string
+          enum: [todo, in-progress, review, done]
+        categories:
+          type: array
+          items:
+            type: string
+        priority:
+          type: string
+          enum: [high, medium, low]
+        date:
+          type: string
+          format: date
+        overdue:
+          type: boolean
+        assignee:
+          type: string
+        progress:
+          type: number
+
+    # ------------------------------------------------------------------
+    # Faculty Schemas
+    # ------------------------------------------------------------------
+    FacultyDashboard:
+      type: object
+      properties:
+        supervisedGroups:
+          type: number
+        supervisedCap:
+          type: number
+        pendingProposals:
+          type: number
+        weeklyLogs:
+          type: string
+        committeeHead:
+          type: string
+
+    FacultyProfile:
+      type: object
+      properties:
+        tags:
+          type: array
+          items:
+            type: string
+
+    AvailabilitySlot:
+      type: object
+      properties:
+        id:
+          type: string
+        day:
+          type: string
+        slots:
+          type: array
+          items:
+            type: string
+
+    Proposal:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        students:
+          type: array
+          items:
+            type: string
+        status:
+          type: string
+
+    SupervisionGroup:
+      type: object
+      properties:
+        groupId:
+          type: string
+        title:
+          type: string
+        members:
+          type: array
+          items:
+            type: string
+        progress:
+          type: string
+        logStatus:
+          type: string
+
+    Message:
+      type: object
+      properties:
+        sender:
+          type: string
+        text:
+          type: string
+        time:
+          type: string
+
+    Evaluation:
+      type: object
+      properties:
+        id:
+          type: string
+        student:
+          type: string
+        committee:
+          type: string
+        type:
+          type: string
+        status:
+          type: string
+
+    HeadDuty:
+      type: object
+      properties:
+        committeeId:
+          type: string
+        activeMembers:
+          type: number
+        pendingConsolidations:
+          type: number
+        nextMeeting:
+          type: string
+
+    MessagingGroup:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        members:
+          type: array
+          items:
+            type: string
+        lastMessage:
+          type: string
+
+    ScorecardPayload:
+      type: object
+      required: [groupId, scores]
+      properties:
+        groupId:
+          type: string
+        scores:
+          type: array
+          items:
+            type: object
+            properties:
+              criterion:
+                type: string
+              weight:
+                type: number
+              score:
+                type: number
+        remarks:
+          type: string
+
+    ConsensusGroup:
+      type: object
+      properties:
+        groupId:
+          type: string
+        title:
+          type: string
+        scores:
+          type: array
+          items:
+            type: object
+        status:
+          type: string
+
+    # ------------------------------------------------------------------
+    # HOD Schemas
+    # ------------------------------------------------------------------
+    HodDashboard:
+      type: object
+      properties:
+        totalGroups:
+          type: number
+        escalatedGrievances:
+          type: number
+        activeFaculty:
+          type: number
+        cloAttainmentAvg:
+          type: string
+
+    Escalation:
+      type: object
+      properties:
+        id:
+          type: string
+        student:
+          type: string
+        regNo:
+          type: string
+        category:
+          type: string
+        date:
+          type: string
+        details:
+          type: string
+        inchargeNote:
+          type: string
+        escalatedBy:
+          type: string
+
+    FacultyWorkload:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        designation:
+          type: string
+        slots:
+          type: string
+        research:
+          type: array
+          items:
+            type: string
+        compliance:
+          type: string
+
+    GovernanceData:
+      type: object
+      properties:
+        committees:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+              head:
+                type: string
+              members:
+                type: array
+                items:
+                  type: string
+              status:
+                type: string
+        rubrics:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+              status:
+                type: string
+              validation:
+                type: string
+
+    AnalyticsData:
+      type: object
+      properties:
+        passRate:
+          type: string
+        repeatRate:
+          type: string
+        grades:
+          type: array
+          items:
+            type: object
+            properties:
+              grade:
+                type: string
+              percentage:
+                type: number
+        clos:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              average:
+                type: number
+
+    # ------------------------------------------------------------------
+    # Office Assistant Schemas
+    # ------------------------------------------------------------------
+    OfficeDashboard:
+      type: object
+      properties:
+        totalUsers:
+          type: number
+        activeUsers:
+          type: string
+        fypStudents:
+          type: number
+        studentsStatus:
+          type: string
+        activeProjects:
+          type: number
+        projectsStatus:
+          type: string
+        committees:
+          type: number
+        committeesStatus:
+          type: string
+
+    OfficeUser:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        roleDetail:
+          type: string
+        email:
+          type: string
+        roles:
+          type: array
+          items:
+            type: string
+        status:
+          type: string
+          enum: [Active, Locked, Deactivated]
+
+    OfficeStudent:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+        project:
+          type: string
+        progress:
+          type: string
+        supervisor:
+          type: string
+
+    CreateStudentPayload:
+      type: object
+      required: [name, regNo, email]
+      properties:
+        name:
+          type: string
+        regNo:
+          type: string
+        email:
+          type: string
+        semester:
+          type: string
+        fatherName:
+          type: string
+        whatsappNumber:
+          type: string
+        section:
+          type: string
+        cgpa:
+          type: string
+
+    OfficeFaculty:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        designation:
+          type: string
+        proposed:
+          type: number
+        inProgress:
+          type: number
+        completed:
+          type: number
+        research:
+          type: array
+          items:
+            type: string
+        schedule:
+          type: array
+          items:
+            type: string
+
+    OfficeProject:
+      type: object
+      properties:
+        id:
+          type: number
+        title:
+          type: string
+        leader:
+          type: string
+        supervisor:
+          type: string
+        status:
+          type: string
+        stack:
+          type: string
+        desc:
+          type: string
+
+    ContentItem:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        currentVersion:
+          type: string
+        date:
+          type: string
+        size:
+          type: string
+        history:
+          type: array
+          items:
+            type: object
+            properties:
+              version:
+                type: string
+              date:
+                type: string
+
+    ExternalEvaluator:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        email:
+          type: string
+        window:
+          type: string
+        project:
+          type: string
+        status:
+          type: string
+
+    ResultEntry:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        project:
+          type: string
+        m10:
+          type: string
+        m30:
+          type: string
+        m60:
+          type: string
+        m100:
+          type: string
+        final:
+          type: string
+
+    # ------------------------------------------------------------------
+    # Office In-charge Schemas
+    # ------------------------------------------------------------------
+    InchargeDashboard:
+      type: object
+      properties:
+        activeRubrics:
+          type: number
+        pendingSupervisionReqs:
+          type: number
+        openGrievances:
+          type: number
+        slaBreaches:
+          type: number
+        activeSession:
+          type: string
+
+    Rubric:
+      type: object
+      properties:
+        version:
+          type: string
+        date:
+          type: string
+        status:
+          type: string
+
+    Session:
+      type: object
+      properties:
+        sessionName:
+          type: string
+        duration:
+          type: string
+        repeats:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              regNo:
+                type: string
+              status:
+                type: string
+
+    SupervisionRequest:
+      type: object
+      properties:
+        faculty:
+          type: string
+        designation:
+          type: string
+        load:
+          type: number
+        requested:
+          type: number
+        justification:
+          type: string
+
+    CommitteeOversight:
+      type: object
+      properties:
+        boards:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              head:
+                type: string
+              members:
+                type: array
+                items:
+                  type: string
+              schedule:
+                type: string
+        requests:
+          type: array
+          items:
+            type: object
+            properties:
+              title:
+                type: string
+              description:
+                type: string
+
+    Grievance:
+      type: object
+      properties:
+        id:
+          type: string
+        student:
+          type: string
+        category:
+          type: string
+        date:
+          type: string
+        status:
+          type: string
+        sla:
+          type: string
+        desc:
+          type: string
+
+    FacultyReport:
+      type: object
+      properties:
+        name:
+          type: string
+        dept:
+          type: string
+        groups:
+          type: number
+        workload:
+          type: string
+        evalScore:
+          type: string
+
+    StudentReport:
+      type: object
+      properties:
+        name:
+          type: string
+        regNo:
+          type: string
+        progress:
+          type: string
+        group:
+          type: string
+        supervisor:
+          type: string
+        score:
+          type: string
+
+    AuditLog:
+      type: object
+      properties:
+        time:
+          type: string
+        user:
+          type: string
+        type:
+          type: string
+        entity:
+          type: string
+        ip:
+          type: string
+
+    Phase:
+      type: object
+      properties:
+        key:
+          type: string
+        label:
+          type: string
+        active:
+          type: boolean
+        order:
+          type: number
+
+    # ------------------------------------------------------------------
+    # Admin Schemas
+    # ------------------------------------------------------------------
+    AdminStats:
+      type: object
+      properties:
+        totalUsers:
+          type: number
+        activeRoles:
+          type: number
+        auditLogEntries:
+          type: string
+        systemHealth:
+          type: string
+
+    AdminUser:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        role:
+          type: string
+        status:
+          type: string
+
+    CreateUserPayload:
+      type: object
+      required: [name, email, role]
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        role:
+          type: string
+
+    RbacEntry:
+      type: object
+      properties:
+        role:
+          type: string
+        permissions:
+          type: array
+          items:
+            type: string
+        users:
+          type: number
+        status:
+          type: string
+
+    SystemHealth:
+      type: object
+      properties:
+        cpuLoad:
+          type: string
+        ramUsed:
+          type: string
+        ramTotal:
+          type: string
+        dbUsed:
+          type: string
+        dbTotal:
+          type: string
+        uptime:
+          type: string
+
+    Notification:
+      type: object
+      properties:
+        id:
+          type: string
+        icon:
+          type: string
+        title:
+          type: string
+        body:
+          type: string
+        time:
+          type: string
+        read:
+          type: boolean
+        color:
+          type: string
+
+    # ------------------------------------------------------------------
+    # Industry Schemas
+    # ------------------------------------------------------------------
+    AssignedProject:
+      type: object
+      properties:
+        groupId:
+          type: string
+        title:
+          type: string
+        members:
+          type: array
+          items:
+            type: string
+        internalSupervisor:
+          type: string
+        thesisFile:
+          type: string
+        evaluationStatus:
+          type: string
+          enum: [pending, submitted]
+        submittedAt:
+          type: string
+
+    # ------------------------------------------------------------------
+    # Email Schemas
+    # ------------------------------------------------------------------
+    SendWelcomeEmailPayload:
+      type: object
+      required: [name, email, regNo]
+      properties:
+        name:
+          type: string
+          example: Ahmed Farooq
+        email:
+          type: string
+          format: email
+          example: student@cuiatd.edu.pk
+        regNo:
+          type: string
+          example: CIIT/FA21-BCS-001/ATD
+        subject:
+          type: string
+          example: FYP Portal Account Created - CUI-ATD
+
+paths:
+  # ==================================================================
+  # AUTH
+  # ==================================================================
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: Authenticate user and return JWT
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+  /auth/register:
+    post:
+      tags: [Auth]
+      summary: Register a new user account
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201':
+          description: Account created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiSuccess'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+  /auth/logout:
+    post:
+      tags: [Auth]
+      summary: Invalidate current session
+      responses:
+        '200':
+          description: Logged out
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiSuccess'
+
+  /auth/refresh-token:
+    post:
+      tags: [Auth]
+      summary: Refresh expired JWT
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshTokenRequest'
+      responses:
+        '200':
+          description: New token issued
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+
+  # ==================================================================
+  # USER PROFILE
+  # ==================================================================
+  /user/profile:
+    get:
+      tags: [User]
+      summary: Get current user profile
+      responses:
+        '200':
+          description: Profile data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+    post:
+      tags: [User]
+      summary: Update current user profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserProfile'
+      responses:
+        '200':
+          description: Profile updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiSuccess'
+
+  # ==================================================================
+  # STUDENT
+  # ==================================================================
+  /student/profile:
+    get:
+      tags: [Student]
+      summary: Get student profile
+      responses:
+        '200':
+          description: Student profile data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+
+  /student/profile/update:
+    post:
+      tags: [Student]
+      summary: Update student profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserProfile'
+      responses:
+        '200':
+          description: Profile updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiSuccess'
+
+  /student/partners/search:
+    get:
+      tags: [Student]
+      summary: Search for potential project partners
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Search query (matches regNo and email)
+      responses:
+        '200':
+          description: Matching students
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StudentPartner'
+
+  /student/partners/request:
+    post:
+      tags: [Student]
+      summary: Send partner request to a student
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [studentId]
+              properties:
+                studentId:
+                  type: string
+      responses:
+        '200':
+          description: Request sent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiSuccess'
+
+  /student/partners/incoming:
+    get:
+      tags: [Student]
+      summary: Get incoming partner requests
+      responses:
+        '200':
+          description: Incoming requests
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PartnerRequest'
+
+  /student/partners/respond:
+    post:
+      tags: [Student]
+      summary: Accept or reject a partner request
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [requestId, status]
+              properties:
+                requestId:
+                  type: string
+                status:
+                  type: string
+                  enum: [accepted, rejected]
+      responses:
+        '200':
+          description: Response recorded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiSuccess'
+
+  /student/supervisors:
+    get:
+      tags: [Student]
+      summary: List available supervisors
+      responses:
+        '200':
+          description: Supervisor list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Supervisor'
+
+  /student/supervisors/request:
+    post:
+      tags: [Student]
+      summary: Request a supervisor
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [supervisorId]
+              properties:
+                supervisorId:
+                  type: string
+      responses:
+        '200':
+          description: Request submitted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiSuccess'
+
+  /student/ideas/submit:
+    post:
+      tags: [Student]
+      summary: Submit a project idea
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IdeaSubmission'
+      responses:
+        '200':
+          description: Idea submitted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiSuccess'
+
+  /student/ideas/approved:
+    get:
+      tags: [Student]
+      summary: Get approved project ideas
+      responses:
+        '200':
+          description: Approved ideas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApprovedIdea'
+
+  /student/ideas/select:
+    post:
+      tags: [Student]
+      summary: Select an approved idea
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ideaId]
+              properties:
+                ideaId:
+                  type: string
+      responses:
+        '200':
+          description: Idea selected
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiSuccess'
+
+  /student/tasks:
+    get:
+      tags: [Student]
+      summary: Get student tasks
+      responses:
+        '200':
+          description: Task list (flat array or grouped object)
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: array
+                    items:
+                      $ref: '#/components/schemas/Task'
+                  - type: object
+                    additionalProperties:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/Task'
+    post:
+      tags: [Student]
+      summary: Create a new task
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Task'
+      responses:
+        '201':
+          description: Task created
+
+  /student/tasks/{id}:
+    put:
+      tags: [Student]
+      summary: Update a task
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Task'
+      responses:
+        '200':
+          description: Task updated
+    delete:
+      tags: [Student]
+      summary: Delete a task
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Task deleted
+
+  # ==================================================================
+  # FACULTY / SUPERVISOR
+  # ==================================================================
+  /faculty/dashboard:
+    get:
+      tags: [Faculty]
+      summary: Get faculty dashboard stats
+      responses:
+        '200':
+          description: Dashboard stats
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FacultyDashboard'
+
+  /faculty/profile:
+    get:
+      tags: [Faculty]
+      summary: Get faculty profile (research tags)
+      responses:
+        '200':
+          description: Faculty profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FacultyProfile'
+
+  /faculty/research-tags:
+    get:
+      tags: [Faculty]
+      summary: Get all research tags (reserved)
+
+  /faculty/availability:
+    get:
+      tags: [Faculty]
+      summary: Get faculty availability schedule
+      responses:
+        '200':
+          description: Availability slots
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AvailabilitySlot'
+
+  /faculty/proposals:
+    get:
+      tags: [Faculty]
+      summary: Get faculty proposal list
+      responses:
+        '200':
+          description: Proposals
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Proposal'
+
+  /faculty/supervision:
+    get:
+      tags: [Faculty]
+      summary: Get supervised groups
+      responses:
+        '200':
+          description: Supervised groups
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SupervisionGroup'
+
+  /faculty/messaging:
+    get:
+      tags: [Faculty]
+      summary: Get recent messages
+      responses:
+        '200':
+          description: Messages
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+
+  /faculty/evaluations:
+    get:
+      tags: [Faculty]
+      summary: Get evaluation assignments
+      responses:
+        '200':
+          description: Evaluations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Evaluation'
+
+  /faculty/head-duties:
+    get:
+      tags: [Faculty]
+      summary: Get committee head duties
+      responses:
+        '200':
+          description: Head duties
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/HeadDuty'
+
+  /faculty/groups:
+    get:
+      tags: [Faculty]
+      summary: Get all groups (reserved)
+
+  /faculty/head-management:
+    get:
+      tags: [Faculty]
+      summary: Head management data (reserved)
+
+  # ------------------------------------------------------------------
+  # Proposals
+  # ------------------------------------------------------------------
+  /proposals:
+    get:
+      tags: [Proposals]
+      summary: List all proposals
+      responses:
+        '200':
+          description: Proposals
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Proposal'
+
+  /proposals/{id}:
+    get:
+      tags: [Proposals]
+      summary: Get proposal by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Proposal detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Proposal'
+
+  /proposals/{id}/download:
+    get:
+      tags: [Proposals]
+      summary: Download proposal document
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Binary file (PDF/DOC)
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+
+  /proposals/{id}/accept:
+    post:
+      tags: [Proposals]
+      summary: Accept a proposal
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Proposal accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiSuccess'
+
+  /proposals/{id}/revisions:
+    post:
+      tags: [Proposals]
+      summary: Request revisions on a proposal
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [comments]
+              properties:
+                comments:
+                  type: string
+      responses:
+        '200':
+          description: Revision requested
+
+  /proposals/{id}/reject:
+    post:
+      tags: [Proposals]
+      summary: Reject a proposal
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [justification]
+              properties:
+                justification:
+                  type: string
+      responses:
+        '200':
+          description: Proposal rejected
+
+  # ------------------------------------------------------------------
+  # Supervision
+  # ------------------------------------------------------------------
+  /supervision/groups:
+    get:
+      tags: [Supervision]
+      summary: Get supervised groups
+      responses:
+        '200':
+          description: Groups
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SupervisionGroup'
+
+  /supervision/groups/{groupId}/logs/{logId}/approve:
+    post:
+      tags: [Supervision]
+      summary: Approve a weekly log
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: logId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Log approved
+
+  /supervision/groups/{groupId}/logs/{logId}/reject:
+    post:
+      tags: [Supervision]
+      summary: Reject a weekly log with feedback
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: logId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [feedback]
+              properties:
+                feedback:
+                  type: string
+      responses:
+        '200':
+          description: Log rejected
+
+  # ------------------------------------------------------------------
+  # Evaluations
+  # ------------------------------------------------------------------
+  /evaluations/groups/{groupId}:
+    get:
+      tags: [Evaluations]
+      summary: Get evaluation data for a group
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Evaluation data
+
+  /v1/evaluations/submit:
+    post:
+      tags: [Evaluations]
+      summary: Submit evaluation scorecard
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScorecardPayload'
+      responses:
+        '200':
+          description: Scorecard submitted
+
+  # ------------------------------------------------------------------
+  # Messaging
+  # ------------------------------------------------------------------
+  /messages/groups:
+    get:
+      tags: [Messaging]
+      summary: Get messaging groups
+      responses:
+        '200':
+          description: Messaging groups
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MessagingGroup'
+
+  /messages/groups/{groupId}:
+    get:
+      tags: [Messaging]
+      summary: Get messages in a group
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Messages
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+    post:
+      tags: [Messaging]
+      summary: Send a message to a group
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [text]
+              properties:
+                text:
+                  type: string
+      responses:
+        '200':
+          description: Message sent
+
+  # ------------------------------------------------------------------
+  # Availability
+  # ------------------------------------------------------------------
+  /availability:
+    get:
+      tags: [Availability]
+      summary: Get all availability slots
+      responses:
+        '200':
+          description: Slots
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AvailabilitySlot'
+    post:
+      tags: [Availability]
+      summary: Create availability slot
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [day, slots]
+              properties:
+                day:
+                  type: string
+                slots:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '201':
+          description: Slot created
+
+  /availability/{id}:
+    put:
+      tags: [Availability]
+      summary: Update availability slot
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                day:
+                  type: string
+                slots:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Slot updated
+    delete:
+      tags: [Availability]
+      summary: Delete availability slot
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Slot deleted
+
+  # ------------------------------------------------------------------
+  # Head / Committee Head
+  # ------------------------------------------------------------------
+  /head/consensus-groups:
+    get:
+      tags: [Head]
+      summary: Get groups requiring consensus score
+      responses:
+        '200':
+          description: Consensus groups
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ConsensusGroup'
+
+  /v1/committee/publish:
+    post:
+      tags: [Head]
+      summary: Publish consensus scores
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                groupId:
+                  type: string
+                scores:
+                  type: array
+                  items:
+                    type: object
+      responses:
+        '200':
+          description: Scores published
+
+  /head/consensus-groups/{groupId}/reassign:
+    post:
+      tags: [Head]
+      summary: Request committee reassignment
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Reassignment requested
+
+  # ==================================================================
+  # HOD
+  # ==================================================================
+  /hod/dashboard:
+    get:
+      tags: [HOD]
+      summary: Get HOD dashboard stats
+      responses:
+        '200':
+          description: Dashboard
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HodDashboard'
+
+  /hod/escalations:
+    get:
+      tags: [HOD]
+      summary: Get escalated grievances
+      responses:
+        '200':
+          description: Escalations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Escalation'
+
+  /hod/faculty-oversight:
+    get:
+      tags: [HOD]
+      summary: Get faculty workload oversight
+      responses:
+        '200':
+          description: Faculty workloads
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FacultyWorkload'
+
+  /hod/governance:
+    get:
+      tags: [HOD]
+      summary: Get governance data (committees & rubrics)
+      responses:
+        '200':
+          description: Governance data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GovernanceData'
+
+  /hod/analytics:
+    get:
+      tags: [HOD]
+      summary: Get analytics (pass rates, grades, CLOs)
+      responses:
+        '200':
+          description: Analytics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyticsData'
+
+  # ==================================================================
+  # OFFICE ASSISTANT
+  # ==================================================================
+  /office-assistant/dashboard:
+    get:
+      tags: [Office Assistant]
+      summary: Get office assistant dashboard stats
+      responses:
+        '200':
+          description: Dashboard
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OfficeDashboard'
+
+  /office-assistant/users:
+    get:
+      tags: [Office Assistant]
+      summary: List all system users
+      responses:
+        '200':
+          description: User list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OfficeUser'
+
+  /office-assistant/students:
+    get:
+      tags: [Office Assistant]
+      summary: List all students
+      responses:
+        '200':
+          description: Student list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OfficeStudent'
+    post:
+      tags: [Office Assistant]
+      summary: Manually onboard a student
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateStudentPayload'
+      responses:
+        '201':
+          description: Student created
+
+  /office-assistant/faculty:
+    get:
+      tags: [Office Assistant]
+      summary: List faculty members
+      responses:
+        '200':
+          description: Faculty list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OfficeFaculty'
+
+  /office-assistant/projects:
+    get:
+      tags: [Office Assistant]
+      summary: List all FYP projects
+      responses:
+        '200':
+          description: Project list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OfficeProject'
+
+  /office-assistant/content:
+    get:
+      tags: [Office Assistant]
+      summary: List template content items
+      responses:
+        '200':
+          description: Content list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ContentItem'
+
+  /office-assistant/external:
+    get:
+      tags: [Office Assistant]
+      summary: List external evaluators
+      responses:
+        '200':
+          description: External evaluators
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ExternalEvaluator'
+
+  /office-assistant/results:
+    get:
+      tags: [Office Assistant]
+      summary: List evaluation results
+      responses:
+        '200':
+          description: Results
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ResultEntry'
+
+  /office-assistant/proposal-committee:
+    get:
+      tags: [Office Assistant]
+      summary: Get proposal committee data (reserved)
+
+  /office-assistant/eval-committee:
+    get:
+      tags: [Office Assistant]
+      summary: Get evaluation committee data (reserved)
+
+  # ==================================================================
+  # OFFICE IN-CHARGE
+  # ==================================================================
+  /office-incharge/dashboard:
+    get:
+      tags: [Office In-charge]
+      summary: Get in-charge dashboard stats
+      responses:
+        '200':
+          description: Dashboard
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InchargeDashboard'
+
+  /office-incharge/rubrics:
+    get:
+      tags: [Office In-charge]
+      summary: Get rubric versions
+      responses:
+        '200':
+          description: Rubrics
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Rubric'
+    post:
+      tags: [Office In-charge]
+      summary: Create a new rubric
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Rubric'
+      responses:
+        '201':
+          description: Rubric created
+
+  /office-incharge/sessions:
+    get:
+      tags: [Office In-charge]
+      summary: Get FYP session data & repeat registrations
+      responses:
+        '200':
+          description: Session data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'
+    post:
+      tags: [Office In-charge]
+      summary: Create a new session
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Session'
+      responses:
+        '201':
+          description: Session created
+
+  /office-incharge/supervision-requests:
+    get:
+      tags: [Office In-charge]
+      summary: Get supervision load requests
+      responses:
+        '200':
+          description: Requests
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SupervisionRequest'
+
+  /office-incharge/supervision-requests/{requestId}:
+    put:
+      tags: [Office In-charge]
+      summary: Process a supervision request (approve/reject)
+      parameters:
+        - name: requestId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [status]
+              properties:
+                status:
+                  type: string
+      responses:
+        '200':
+          description: Request processed
+
+  /office-incharge/committee-oversight:
+    get:
+      tags: [Office In-charge]
+      summary: Get committee oversight data
+      responses:
+        '200':
+          description: Committee data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommitteeOversight'
+
+  /office-incharge/committee-oversight/{committeeId}:
+    put:
+      tags: [Office In-charge]
+      summary: Process a committee request
+      parameters:
+        - name: committeeId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+      responses:
+        '200':
+          description: Committee request processed
+
+  /office-incharge/grievances:
+    get:
+      tags: [Office In-charge]
+      summary: Get grievance list
+      responses:
+        '200':
+          description: Grievances
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Grievance'
+
+  /office-incharge/grievances/{grievanceId}:
+    put:
+      tags: [Office In-charge]
+      summary: Process a grievance (resolve, escalate)
+      parameters:
+        - name: grievanceId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                resolution:
+                  type: string
+      responses:
+        '200':
+          description: Grievance updated
+
+  /office-incharge/faculty-reports:
+    get:
+      tags: [Office In-charge]
+      summary: Get faculty reports (with optional filters)
+      parameters:
+        - name: dept
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Faculty reports
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FacultyReport'
+
+  /office-incharge/student-reports:
+    get:
+      tags: [Office In-charge]
+      summary: Get student reports (with optional filters)
+      parameters:
+        - name: regNo
+          in: query
+          schema:
+            type: string
+        - name: status
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Student reports
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StudentReport'
+
+  /office-incharge/audit-log:
+    get:
+      tags: [Office In-charge]
+      summary: Get audit log entries (with optional filters)
+      parameters:
+        - name: user
+          in: query
+          schema:
+            type: string
+        - name: type
+          in: query
+          schema:
+            type: string
+        - name: from
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: to
+          in: query
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Audit logs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AuditLog'
+
+  # ------------------------------------------------------------------
+  # Phases
+  # ------------------------------------------------------------------
+  /phases:
+    get:
+      tags: [Phases]
+      summary: Get all FYP phases
+      responses:
+        '200':
+          description: Phase list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Phase'
+
+  /phases/active:
+    put:
+      tags: [Phases]
+      summary: Set the active phase
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [key]
+              properties:
+                key:
+                  type: string
+      responses:
+        '200':
+          description: Phase updated
+
+  # ==================================================================
+  # ADMIN
+  # ==================================================================
+  /admin/dashboard/stats:
+    get:
+      tags: [Admin]
+      summary: Get admin dashboard stats
+      responses:
+        '200':
+          description: Admin stats
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminStats'
+
+  /admin/users:
+    get:
+      tags: [Admin]
+      summary: List all users
+      responses:
+        '200':
+          description: User list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AdminUser'
+    post:
+      tags: [Admin]
+      summary: Create a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserPayload'
+      responses:
+        '201':
+          description: User created
+
+  /admin/users/{id}/reset-password:
+    post:
+      tags: [Admin]
+      summary: Reset user password
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Password reset email sent
+
+  /admin/users/{id}/toggle-status:
+    post:
+      tags: [Admin]
+      summary: Toggle user active/locked status
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Status toggled
+
+  /admin/rbac:
+    get:
+      tags: [Admin]
+      summary: Get RBAC matrix
+      responses:
+        '200':
+          description: RBAC data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RbacEntry'
+
+  /admin/audit-logs:
+    get:
+      tags: [Admin]
+      summary: Get system audit logs
+      responses:
+        '200':
+          description: Audit logs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AuditLog'
+
+  /admin/system-health:
+    get:
+      tags: [Admin]
+      summary: Get system health metrics
+      responses:
+        '200':
+          description: System health
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemHealth'
+
+  /admin/trigger-backup:
+    post:
+      tags: [Admin]
+      summary: Trigger database backup
+      responses:
+        '200':
+          description: Backup initiated
+
+  /admin/clear-cache:
+    post:
+      tags: [Admin]
+      summary: Clear application cache
+      responses:
+        '200':
+          description: Cache cleared
+
+  /admin/notifications:
+    get:
+      tags: [Admin]
+      summary: Get admin notifications
+      responses:
+        '200':
+          description: Notifications
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Notification'
+
+  # ==================================================================
+  # INDUSTRY SUPERVISOR
+  # ==================================================================
+  /industry/assigned-projects:
+    get:
+      tags: [Industry]
+      summary: Get assigned projects for evaluation
+      responses:
+        '200':
+          description: Assigned projects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AssignedProject'
+
+  /industry/submit-scorecard:
+    post:
+      tags: [Industry]
+      summary: Submit evaluation scorecard
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScorecardPayload'
+      responses:
+        '200':
+          description: Scorecard submitted
+
+  /industry/scorecard-status:
+    get:
+      tags: [Industry]
+      summary: Get scorecard submission status (reserved)
+
+  /industry/notifications:
+    get:
+      tags: [Industry]
+      summary: Get industry supervisor notifications
+      responses:
+        '200':
+          description: Notifications
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Notification'
+
+  # ==================================================================
+  # EMAIL / NOTIFICATION
+  # ==================================================================
+  /send-welcome-email:
+    post:
+      tags: [Email]
+      summary: Send welcome email with credentials to newly registered student
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendWelcomeEmailPayload'
+      responses:
+        '200':
+          description: Email sent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiSuccess'
+        '400':
+          description: Missing required fields
+        '502':
+          description: Brevo API error
+
+  # ==================================================================
+  # DASHBOARD (Generic Stats)
+  # ==================================================================
+  /dashboard/stats:
+    get:
+      tags: [Dashboard]
+      summary: Get generic dashboard stats (reserved)

@@ -131,6 +131,12 @@ jobs:
               curl -s http://localhost:5000/api/health 2>&1 || echo "FAILED"
               echo "--- CURL 127.0.0.1:5000 ---"
               curl -s http://127.0.0.1:5000/api/health 2>&1 || echo "FAILED"
+              echo "--- NGINX CONFIG ---"
+              find /etc/nginx -name "*.conf" -o -name "*fyp*" -o -name "*default*" 2>/dev/null | head -20
+              for f in /etc/nginx/sites-enabled/* /etc/nginx/conf.d/* 2>/dev/null; do
+                echo "=== $f ==="
+                grep -n "proxy_pass\|listen\|server_name\|root\|location" "$f" 2>/dev/null | head -30
+              done
             } > /var/www/fyp-frontend/dist/diag.txt 2>&1
             echo "✓ Diagnostics at /diag.txt"
 

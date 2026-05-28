@@ -116,15 +116,22 @@ jobs:
             fi
 
             # ================================================================
-            # FINAL: Diagnostic dump
+            # FINAL: Write diagnostics to web-accessible file
             # ================================================================
-            echo "=== Diagnostic dump ==="
-            echo "--- PM2 List ---"
-            pm2 list 2>/dev/null || echo "PM2 not available"
-            echo "--- Listening ports ---"
-            ss -tlnp 2>/dev/null || netstat -tlnp 2>/dev/null || echo "No port info"
-            echo "--- Curl localhost test ---"
-            curl -s http://localhost:5000/api/health 2>/dev/null || echo "Failed to curl localhost:5000"
-            curl -s http://127.0.0.1:5000/api/health 2>/dev/null || echo "Failed to curl 127.0.0.1:5000"
+            echo "=== Writing diagnostics ==="
+            {
+              echo "TIME: $(date -u)"
+              echo "--- PM2 ---"
+              pm2 list 2>&1
+              echo "--- PORT 5000 ---"
+              ss -tlnp 2>&1 | grep 5000 || echo "NOT LISTENING ON 5000"
+              echo "--- ALL PORTS ---"
+              ss -tlnp 2>&1
+              echo "--- CURL localhost:5000 ---"
+              curl -s http://localhost:5000/api/health 2>&1 || echo "FAILED"
+              echo "--- CURL 127.0.0.1:5000 ---"
+              curl -s http://127.0.0.1:5000/api/health 2>&1 || echo "FAILED"
+            } > /var/www/fyp-frontend/dist/diag.txt 2>&1
+            echo "✓ Diagnostics at /diag.txt"
 
             echo "=== Deploy complete ==="

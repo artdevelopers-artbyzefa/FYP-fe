@@ -9,6 +9,7 @@ import Guidelines from "../pages/Guidelines";
 import Eligibility from "../pages/Eligibility";
 import Login from "../pages/Login";
 import SetPassword from "../pages/SetPassword";
+import ForgotPassword from "../pages/ForgotPassword";
 import StudentLayout from "../pages/student/StudentLayout";
 import StudentDashboard from "../pages/student/StudentDashboard";
 import StudentProfile from "../pages/student/StudentProfile";
@@ -84,6 +85,7 @@ const AppRoutes = () => {
             <Route path="/eligibility" element={<Eligibility />} />
             <Route path="/login" element={<Login />} />
             <Route path="/set-password" element={<SetPassword />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
 
             {/* Student Portal Routes */}
             <Route element={<StudentLayout />}>

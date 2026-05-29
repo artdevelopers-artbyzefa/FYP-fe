@@ -76,7 +76,11 @@ const AssistantFaculty = () => {
         facultyType: form.facultyType,
         phone: form.phone.trim() || undefined
       });
-      showToast.success('Faculty onboarded. Invitation email sent.');
+      if (res.warning) {
+        showToast.warning(res.warning);
+      } else {
+        showToast.success('Faculty onboarded. Invitation email sent.');
+      }
       setShowForm(false);
       setForm(initialForm);
       loadFaculty();

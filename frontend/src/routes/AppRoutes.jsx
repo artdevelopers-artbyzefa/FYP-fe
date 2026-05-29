@@ -29,6 +29,7 @@ import AssistantDashboard from '../pages/office-assistant/AssistantDashboard';
 import AssistantUsers from '../pages/office-assistant/AssistantUsers';
 import AssistantStudents from '../pages/office-assistant/AssistantStudents';
 import AssistantFaculty from '../pages/office-assistant/AssistantFaculty';
+import SupervisorDetail from '../pages/office-assistant/SupervisorDetail';
 import AssistantProjects from '../pages/office-assistant/AssistantProjects';
 import AssistantContent from '../pages/office-assistant/AssistantContent';
 import AssistantProposalCommittees from '../pages/office-assistant/AssistantProposalCommittees';
@@ -114,6 +115,7 @@ const AppRoutes = () => {
                 <Route path="users" element={<AssistantUsers />} />
                 <Route path="students" element={<AssistantStudents />} />
                 <Route path="faculty" element={<AssistantFaculty />} />
+                <Route path="faculty/:id" element={<SupervisorDetail />} />
                 <Route path="projects" element={<AssistantProjects />} />
                 <Route path="content" element={<AssistantContent />} />
                 <Route path="proposal-committee" element={<AssistantProposalCommittees />} />

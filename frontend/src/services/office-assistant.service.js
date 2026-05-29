@@ -8,7 +8,8 @@ import {
   OFFICE_CONTENT_API_URL,
   OFFICE_EXTERNAL_API_URL,
   OFFICE_RESULTS_API_URL,
-  OFFICE_CREATE_STUDENT_API_URL
+  OFFICE_CREATE_STUDENT_API_URL,
+  OFFICE_CREATE_FACULTY_API_URL
 } from '../utils/constants/api-url.constant';
 
 const DEMO_DASHBOARD_STATS = {
@@ -148,5 +149,10 @@ export const deleteOfficeUser = async (id) => {
 
 export const deleteOfficeStudent = async (id) => {
   const res = await apiClient.delete(OFFICE_STUDENTS_API_URL + '/' + id);
+  return res.data;
+};
+
+export const createOfficeFaculty = async (payload) => {
+  const res = await apiClient.post(OFFICE_CREATE_FACULTY_API_URL, payload);
   return res.data;
 };

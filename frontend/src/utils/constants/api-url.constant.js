@@ -59,6 +59,7 @@ export const OFFICE_EVAL_COMM_API_URL = '/office-assistant/eval-committee';
 export const OFFICE_EXTERNAL_API_URL = '/office-assistant/external';
 export const OFFICE_RESULTS_API_URL = '/office-assistant/results';
 export const OFFICE_CREATE_STUDENT_API_URL = '/office-assistant/students';
+export const OFFICE_CREATE_FACULTY_API_URL = '/office-assistant/faculty';
 
 /**
  * Faculty Supervisor Endpoints

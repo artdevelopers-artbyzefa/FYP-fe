@@ -199,6 +199,13 @@ const Login = () => {
                 >
                   Faculty
                 </button>
+                <button
+                  type="button"
+                  onClick={() => handleQuickLogin('Faculty Supervisor', 'ininsico@gmail.com', 'Megamix@123')}
+                  className="py-2.5 px-3 text-xs font-bold rounded-lg border border-amber-200 text-amber-700 bg-amber-50 hover:bg-primary hover:text-white hover:border-primary transition-all text-center focus:outline-none"
+                >
+                  Faculty (ininsico)
+                </button>
               </div>
               <div className="flex justify-center mt-2">
                 <button

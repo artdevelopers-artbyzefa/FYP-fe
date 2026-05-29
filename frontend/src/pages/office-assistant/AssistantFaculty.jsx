@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
-import { getOfficeFaculty, createOfficeFaculty, deleteOfficeUser } from '../../services/office-assistant.service';
+import { getOfficeFaculty, createOfficeFaculty, deleteOfficeUser, sendFacultyInvite } from '../../services/office-assistant.service';
 import { showToast, showAlert } from '../../components/AppToast';
-import { Search, UserPlus, X, ChevronLeft, ChevronRight, Trash2 } from 'lucide-react';
+import { Search, UserPlus, X, ChevronLeft, ChevronRight, Trash2, Send } from 'lucide-react';
 
 const FACULTY_TYPES = ['committee', 'supervisor', 'both'];
 
@@ -97,6 +97,15 @@ const AssistantFaculty = () => {
         }
       }
     });
+  };
+
+  const handleResendInvite = async (f) => {
+    try {
+      await sendFacultyInvite(f.id);
+      showToast.success(`Invitation email resent to ${f.email}`);
+    } catch (err) {
+      showToast.error(err?.response?.data?.message || 'Failed to resend invite.');
+    }
   };
 
   const facultyTypeBadge = (type) => {
@@ -212,9 +221,14 @@ const AssistantFaculty = () => {
                   <td className="py-4 px-6 text-gray-600 text-xs font-bold">{f.inProgress}</td>
                   <td className="py-4 px-6 text-gray-600 text-xs font-bold">{f.completed}</td>
                   <td className="py-4 px-6 text-right">
-                    <button onClick={() => handleDelete(f)} className="px-3 py-1.5 rounded-lg bg-rose-50 text-rose-600 border border-rose-200 text-xs font-bold transition-all hover:bg-rose-100 cursor-pointer flex items-center gap-1.5 ml-auto">
-                      <Trash2 className="w-3 h-3" /> Deactivate
-                    </button>
+                    <div className="flex gap-1.5 justify-end">
+                      <button onClick={() => handleResendInvite(f)} className="px-3 py-1.5 rounded-lg bg-blue-50 text-blue-600 border border-blue-200 text-xs font-bold transition-all hover:bg-blue-100 cursor-pointer flex items-center gap-1.5">
+                        <Send className="w-3 h-3" /> Resend Invite
+                      </button>
+                      <button onClick={() => handleDelete(f)} className="px-3 py-1.5 rounded-lg bg-rose-50 text-rose-600 border border-rose-200 text-xs font-bold transition-all hover:bg-rose-100 cursor-pointer flex items-center gap-1.5">
+                        <Trash2 className="w-3 h-3" /> Deactivate
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}

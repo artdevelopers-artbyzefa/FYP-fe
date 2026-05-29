@@ -156,3 +156,8 @@ export const createOfficeFaculty = async (payload) => {
   const res = await apiClient.post(OFFICE_CREATE_FACULTY_API_URL, payload);
   return res.data;
 };
+
+export const sendFacultyInvite = async (id) => {
+  const res = await apiClient.post(OFFICE_FACULTY_API_URL + '/' + id + '/invite');
+  return res.data;
+};

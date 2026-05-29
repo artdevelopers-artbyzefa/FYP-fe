@@ -161,3 +161,8 @@ export const sendFacultyInvite = async (id) => {
   const res = await apiClient.post(OFFICE_FACULTY_API_URL + '/' + id + '/invite');
   return res.data;
 };
+
+export const deleteOfficeFaculty = async (id) => {
+  const res = await apiClient.delete(OFFICE_FACULTY_API_URL + '/' + id);
+  return res.data;
+};

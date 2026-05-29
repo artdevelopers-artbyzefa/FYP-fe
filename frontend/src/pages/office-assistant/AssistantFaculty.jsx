@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getOfficeFaculty, createOfficeFaculty, deleteOfficeUser, sendFacultyInvite } from '../../services/office-assistant.service';
+import { getOfficeFaculty, createOfficeFaculty, deleteOfficeFaculty, sendFacultyInvite } from '../../services/office-assistant.service';
 import { showToast, showAlert } from '../../components/AppToast';
 import { Search, UserPlus, X, Send, Trash2, ChevronRight, Mail, Shield, UserCheck, UserX } from 'lucide-react';
 
@@ -94,18 +94,18 @@ const AssistantFaculty = () => {
 
   const handleDelete = (f) => {
     showAlert.confirm(
-      'Deactivate Faculty',
-      `Deactivate ${f.name}? Their account will be disabled but all records preserved.`,
-      'Deactivate',
+      'Delete Faculty',
+      `Permanently delete ${f.name}? This action cannot be undone. Any supervised groups will have their supervisor set to unassigned.`,
+      'Delete',
       'Cancel'
     ).then(async (res) => {
       if (res.isConfirmed) {
         try {
-          await deleteOfficeUser(f.id);
-          showToast.success(`${f.name} deactivated.`);
+          await deleteOfficeFaculty(f.id);
+          showToast.success(`${f.name} deleted permanently.`);
           loadFaculty();
         } catch (err) {
-          showToast.error(err?.response?.data?.message || 'Failed to deactivate.');
+          showToast.error(err?.response?.data?.message || 'Failed to delete faculty.');
         }
       }
     });
@@ -276,7 +276,7 @@ const AssistantFaculty = () => {
                 onClick={(e) => { e.stopPropagation(); handleDelete(f); }}
                 className="mt-1.5 w-full py-1.5 bg-transparent text-gray-400 hover:text-rose-500 rounded-xl text-[10px] font-bold hover:bg-rose-50/50 transition-all cursor-pointer flex items-center justify-center gap-1"
               >
-                <Trash2 className="w-3 h-3" /> Deactivate
+                <Trash2 className="w-3 h-3" /> Delete
               </button>
             </div>
           );

@@ -27,7 +27,6 @@ export default function StudentProposals() {
       if (response.data && response.data.length > 0) {
         setProposals(response.data);
       } else {
-        // Mock data if backend is empty
         setProposals([
           {
             id: 1,
@@ -45,7 +44,7 @@ export default function StudentProposals() {
         ]);
       }
     } catch (error) {
-      console.warn('Backend unavailable, using mock data.', error);
+      console.error(error);
       setProposals([
         {
           id: 1,
@@ -344,3 +343,4 @@ export default function StudentProposals() {
     </div>
   );
 }
+

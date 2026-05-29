@@ -8,7 +8,7 @@ import { Bell, ChevronLeft, ChevronRight, GitBranch, Landmark, LogOut, Menu, Sta
 export default function IndustryLayout() {
   const navigate = useNavigate();
   const location = useLocation();
-  const user = getUserInfo() || { name: 'Engr. Kamran Shah', avatar: 'KS' };
+  const user = getUserInfo() ?? null;
 
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
@@ -163,3 +163,4 @@ export default function IndustryLayout() {
     </div>
   );
 }
+

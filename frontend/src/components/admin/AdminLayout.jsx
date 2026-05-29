@@ -8,7 +8,7 @@ import { Bell, ChevronLeft, ChevronRight, History, Landmark, LogOut, Menu, Serve
 export default function AdminLayout() {
   const navigate = useNavigate();
   const location = useLocation();
-  const user = getUserInfo() || { name: 'Tariq Mehmood', avatar: 'SA' };
+  const user = getUserInfo() ?? null;
 
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
@@ -169,3 +169,4 @@ export default function AdminLayout() {
     </div>
   );
 }
+

@@ -33,10 +33,6 @@ export default function CommitteeEvaluations() {
 
   const fetchData = async () => {
     try {
-      // ==========================================
-      // BACKEND CONFIGURATION IS ALREADY DONE
-      // Fetching group info for evaluation
-      // ==========================================
       const res = await getEvaluationData(evaluationData.groupId);
       if (res.data) {
         setEvaluationData(prev => ({ ...prev, ...res.data }));
@@ -86,10 +82,6 @@ export default function CommitteeEvaluations() {
     };
 
     try {
-      // ==========================================
-      // BACKEND CONFIGURATION IS ALREADY DONE
-      // Submit locked scorecard payload exactly matching spec models
-      // ==========================================
       await submitScorecard(payload);
       
       showToast('Scorecard submitted successfully!');

@@ -27,11 +27,11 @@ export default function SupervisedGroups() {
       if (response.data && response.data.length > 0) {
         setGroups(response.data);
       } else {
-        setMockData();
+        
       }
     } catch (error) {
-      console.warn('Backend unavailable, using mock data.', error);
-      setMockData();
+      console.error(error);
+      
     } finally {
       setLoading(false);
     }
@@ -226,3 +226,5 @@ export default function SupervisedGroups() {
     </div>
   );
 }
+
+

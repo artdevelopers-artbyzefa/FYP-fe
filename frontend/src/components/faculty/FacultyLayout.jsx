@@ -10,7 +10,7 @@ const FacultyLayout = () => {
   const [showNotif, setShowNotif] = useState(false);
   const navigate = useNavigate();
 
-  const user = getCurrentUser() || { name: 'Dr. Ali Hassan', avatar: 'AH', role: 'Faculty Supervisor' };
+  const user = getCurrentUser() ?? null;
 
   const handleLogout = () => {
     logoutUser();
@@ -165,3 +165,5 @@ const FacultyLayout = () => {
 };
 
 export default FacultyLayout;
+
+

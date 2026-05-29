@@ -6,7 +6,7 @@ import { BarChart3, Bell, Calendar, ChevronLeft, ChevronRight, ClipboardList, Gr
 export default function InchargeLayout() {
   const navigate = useNavigate();
   const location = useLocation();
-  const user = getUserInfo() || { name: 'Dr. Sara Malik', avatar: 'SM', role: 'In-charge' };
+  const user = getUserInfo() ?? null;
 
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
@@ -167,3 +167,4 @@ export default function InchargeLayout() {
     </div>
   );
 }
+

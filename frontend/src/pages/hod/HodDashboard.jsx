@@ -7,7 +7,7 @@ import { CheckCircle, ChevronRight, ClipboardList, Gavel, Landmark, LineChart, P
 const HodDashboard = () => {
   const navigate = useNavigate();
   const [stats, setStats] = useState(null);
-  const user = getCurrentUser() || { name: 'Prof. Dr. Zafar Ali' };
+  const user = getCurrentUser() ?? null;
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -179,3 +179,4 @@ const HodDashboard = () => {
 };
 
 export default HodDashboard;
+

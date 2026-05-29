@@ -10,7 +10,7 @@ const HodLayout = () => {
   const [showNotif, setShowNotif] = useState(false);
   const navigate = useNavigate();
 
-  const user = getCurrentUser() || { name: 'Prof. Dr. Zafar Ali', avatar: 'ZA' };
+  const user = getCurrentUser() ?? null;
 
   const handleLogout = () => {
     logoutUser();
@@ -164,3 +164,5 @@ const HodLayout = () => {
 };
 
 export default HodLayout;
+
+

@@ -7,13 +7,7 @@ import FacultySidebar from '../components/FacultySidebar/FacultySidebar';
 export default function FacultyDashboardLayout() {
   const navigate = useNavigate();
   const location = useLocation();
-  const user = getUserInfo() || { 
-    id: 'AROOJ71004', 
-    name: 'Dr. Ali Hassan', 
-    avatar: 'AH', 
-    role: 'Faculty Supervisor',
-    designation: 'Assoc. Prof.' 
-  };
+  const user = getUserInfo() ?? null;
 
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
@@ -182,3 +176,4 @@ export default function FacultyDashboardLayout() {
     </div>
   );
 }
+

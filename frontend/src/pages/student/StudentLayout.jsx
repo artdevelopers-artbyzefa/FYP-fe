@@ -6,7 +6,7 @@ import { Bell, ChevronDown, ChevronLeft, ChevronRight, Circle, ClipboardList, Gr
 export default function DashboardLayout() {
   const navigate = useNavigate();
   const location = useLocation();
-  const user = getUserInfo() || { name: 'Student User', avatar: 'ST', role: 'Student' };
+  const user = getUserInfo() ?? null;
 
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
@@ -222,3 +222,4 @@ export default function DashboardLayout() {
     </div>
   );
 }
+

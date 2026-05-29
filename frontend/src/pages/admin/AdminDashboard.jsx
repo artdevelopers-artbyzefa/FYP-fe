@@ -11,7 +11,7 @@ import { ArrowRight, Bell, Broom, ChevronLeft, ChevronRight, CloudDownload, Data
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
-  const user = getUserInfo() || { name: 'Tariq Mehmood', avatar: 'SA' };
+  const user = getUserInfo() ?? null;
 
   /* --- State --------------------------------------------------------------- */
   const [activeView, setActiveView] = useState('dashboard');
@@ -578,3 +578,4 @@ export default function AdminDashboard() {
     </div>
   );
 }
+

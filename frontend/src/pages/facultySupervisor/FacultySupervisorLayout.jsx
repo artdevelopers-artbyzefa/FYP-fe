@@ -6,7 +6,7 @@ import { Bell, ChevronDown, Menu } from 'lucide-react';
 
 export default function FacultySupervisorLayout() {
   const location = useLocation();
-  const user = getUserInfo() || { name: 'Faculty Supervisor', avatar: 'FS', role: 'Supervisor' };
+  const user = getUserInfo() ?? null;
 
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   
@@ -82,3 +82,4 @@ export default function FacultySupervisorLayout() {
     </div>
   );
 }
+

@@ -21,7 +21,7 @@ const STATUS_BADGE = {
 
 export default function IndustrySupervisorDashboard() {
   const navigate = useNavigate();
-  const user = getUserInfo() || { name: 'Engr. Kamran Shah', avatar: 'KS' };
+  const user = getUserInfo() ?? null;
 
   /* --- State --------------------------------------------------------------- */
   const [activeView, setActiveView] = useState('dashboard');
@@ -432,3 +432,4 @@ export default function IndustrySupervisorDashboard() {
     </div>
   );
 }
+

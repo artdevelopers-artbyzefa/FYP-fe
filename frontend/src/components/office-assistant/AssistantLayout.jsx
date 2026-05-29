@@ -10,7 +10,7 @@ const AssistantLayout = () => {
   const [showNotif, setShowNotif] = useState(false);
   const navigate = useNavigate();
 
-  const user = getCurrentUser() || { name: 'Mr. Tariq Mehmood', avatar: 'TM', role: 'FYP Office Assistant' };
+  const user = getCurrentUser() ?? null;
 
   const handleLogout = () => {
     logoutUser();
@@ -168,3 +168,5 @@ const AssistantLayout = () => {
 };
 
 export default AssistantLayout;
+
+

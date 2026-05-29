@@ -37,11 +37,11 @@ export default function StudentMessaging() {
         setActiveGroupId(groupsRes.data[0].id);
         fetchMessages(groupsRes.data[0].id);
       } else {
-        setMockData();
+        
       }
     } catch (error) {
-      console.warn('Backend unavailable, using mock data.', error);
-      setMockData();
+      console.error(error);
+      
     } finally {
       setLoading(false);
     }
@@ -52,7 +52,6 @@ export default function StudentMessaging() {
       const res = await getGroupMessages(groupId);
       if (res.data) setMessages(res.data);
     } catch (error) {
-      // mock handled below
     }
   };
 
@@ -89,11 +88,10 @@ export default function StudentMessaging() {
   const handleGroupSelect = (groupId) => {
     setActiveGroupId(groupId);
     // In real scenario, fetchMessages(groupId) here.
-    // We'll just reset messages to the default mock if they switch for demo.
     if (groupId !== 'G-042') {
       setMessages([]);
     } else {
-      setMockData(); // reset G-042 mock
+       // reset G-042 mock
     }
   };
 
@@ -295,3 +293,5 @@ export default function StudentMessaging() {
     </div>
   );
 }
+
+

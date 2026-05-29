@@ -32,7 +32,7 @@ export default function Dashboard() {
           setData(response.data);
         }
       } catch (error) {
-        console.warn('Backend API connection failed, using demo/mock dashboard data.', error);
+        console.error(error);
       } finally {
         setLoading(false);
       }
@@ -267,3 +267,4 @@ export default function Dashboard() {
     </div>
   );
 }
+

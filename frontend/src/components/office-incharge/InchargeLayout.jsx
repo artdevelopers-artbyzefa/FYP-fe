@@ -72,7 +72,7 @@ const LayoutInner = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [showNotif, setShowNotif] = useState(false);
   const navigate = useNavigate();
-  const user = getCurrentUser() || { name: 'Dr. Sara Malik', avatar: 'SM', role: 'FYP Office In-charge' };
+  const user = getCurrentUser() ?? null;
   const { currentPhase, loading } = usePhase();
 
   const handleLogout = () => {
@@ -183,3 +183,5 @@ const InchargeLayout = () => (
 );
 
 export default InchargeLayout;
+
+

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import apiClient from '../../api/apiClient';
 import { showToast } from '../../components/AppToast';
-import { ArrowLeft, UserCheck, UserX, Shield, GraduationCap, Mail, Phone, Calendar, Clock } from 'lucide-react';
+import { ArrowLeft, UserCheck, UserX, Shield, GraduationCap, Mail, Phone, Calendar, Users } from 'lucide-react';
 
 const statusColors = {
   forming: 'bg-gray-100 text-gray-600 border-gray-200',
@@ -19,10 +20,9 @@ const SupervisorDetail = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/api/office-assistant/faculty/' + id)
-      .then(res => res.json())
+    apiClient.get('/office-assistant/faculty/' + id)
       .then(res => {
-        if (res.data) setFaculty(res.data);
+        if (res.data?.data) setFaculty(res.data.data);
         else showToast.error('Faculty not found');
       })
       .catch(() => showToast.error('Failed to load faculty details'))
@@ -105,9 +105,18 @@ const SupervisorDetail = () => {
             <div className="flex items-start justify-between gap-4">
               <div className="min-w-0 flex-1">
                 <h4 className="font-bold text-gray-800 text-sm truncate">{g.title}</h4>
-                <p className="text-xs text-gray-400 mt-1">Leader: {g.leader}</p>
-                {g.members.length > 0 && (
-                  <p className="text-xs text-gray-400 mt-0.5">Members: {g.members.join(', ')}</p>
+                <div className="flex items-center gap-1.5 mt-2 text-xs text-gray-400">
+                  <Users className="w-3.5 h-3.5" />
+                  <span className="font-bold text-gray-500">{g.members?.length || 0}</span>
+                  <span>student{(g.members?.length || 0) !== 1 ? 's' : ''}</span>
+                  <span className="text-gray-300 mx-1">|</span>
+                  <span className="font-medium">Lead: {g.leader || 'None'}</span>
+                </div>
+                {g.members && g.members.length > 0 && (
+                  <p className="text-xs text-gray-400 mt-1 ml-5">{g.members.join(', ')}</p>
+                )}
+                {(!g.members || g.members.length === 0) && (
+                  <p className="text-xs text-gray-300 italic mt-1 ml-5">No students assigned to this group</p>
                 )}
               </div>
               <div className="flex flex-col items-end gap-1.5 flex-shrink-0">

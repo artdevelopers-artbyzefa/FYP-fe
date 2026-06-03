@@ -59,15 +59,15 @@ const Team = () => {
       members: [
         {
           initials: "AM",
-          name: "Mr.Ans Abdullah Malik",
+          name: "Mr.Arslan Rathore",
           role: "Backend Developer",
-          desc: "Expertise in backend systems, database optimization, and scalable API development.",
+          desc: "Built the Backend & Integrated with the Frontend",
         },
         {
           initials: "SR",
-          name: "Mr.Syed Azzaz Haider Rizvi",
-          role: "Backend Developer",
-          desc: "Focused on server-side logic, project records, and secure data handling.",
+          name: "Mudasir",
+          role: "UI/UX & Security Developer",
+          desc: "Specialized in Secuirty Audits & Desigining the Frontend Figma.",
         },
       ],
     },

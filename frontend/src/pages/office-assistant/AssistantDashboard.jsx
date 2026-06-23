@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { getOfficeDashboardStats } from '../../services/office-assistant.service';
-import { ArrowRight, CalendarCheck, FileUp, GitBranch, GraduationCap, Layers, UserPen, UserPlus, Users } from 'lucide-react';
+import { ArrowRight, CalendarCheck, FileUp, GitBranch, GraduationCap, Layers, UserPen, UserPlus, Users, FileSignature, Star, Loader2 } from 'lucide-react';
+
+const iconMap = {
+  FileUp, UserPen, UserPlus, FileSignature, CalendarCheck, Star
+};
 
 const AssistantDashboard = () => {
   const navigate = useNavigate();
@@ -11,6 +15,23 @@ const AssistantDashboard = () => {
   useEffect(() => {
     getOfficeDashboardStats().then((res) => setStats(res.data)).catch(console.error);
   }, []);
+
+  const formatTime = (dateStr) => {
+    const d = new Date(dateStr);
+    const now = new Date();
+    const diffMs = now - d;
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+    if (diffDays === 0) {
+      return `Today, ${d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+    } else if (diffDays === 1) {
+      return `Yesterday, ${d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+    } else {
+      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    }
+  };
+
+  const actions = stats?.recentActions || [];
 
   return (
     <div className="space-y-6">
@@ -117,30 +138,34 @@ const AssistantDashboard = () => {
             </div>
           </div>
           <div className="space-y-4">
-            <div className="flex gap-4 items-start pb-4 border-b border-gray-100">
-              <div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-500 flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5"><UserPen className="w-4 h-4" /></div>
-              <div>
-                <div className="text-xs font-bold text-gray-800">Role Assigned: Dr. Ali Hassan</div>
-                <div className="text-[11px] text-gray-500 mt-0.5">Assigned to Proposal Evaluation Committee (PEC-1).</div>
-                <div className="text-[10px] text-gray-400 font-bold mt-1">Today, 10:15 AM</div>
+            {actions.length === 0 ? (
+              <div className="text-center py-8 text-gray-400">
+                <Loader2 className="w-6 h-6 mx-auto mb-2 animate-spin" />
+                <p className="text-xs font-medium">No recent activity yet.</p>
               </div>
-            </div>
-            <div className="flex gap-4 items-start pb-4 border-b border-gray-100">
-              <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5"><FileUp className="w-4 h-4" /></div>
-              <div>
-                <div className="text-xs font-bold text-gray-800">Thesis Template v2.4 Uploaded</div>
-                <div className="text-[11px] text-gray-500 mt-0.5">Replaced older version in FYP Content Management repository.</div>
-                <div className="text-[10px] text-gray-400 font-bold mt-1">Yesterday, 04:30 PM</div>
-              </div>
-            </div>
-            <div className="flex gap-4 items-start pb-2">
-              <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-500 flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5"><CalendarCheck className="w-4 h-4" /></div>
-              <div>
-                <div className="text-xs font-bold text-gray-800">Meeting Schedule Published</div>
-                <div className="text-[11px] text-gray-500 mt-0.5">Published FYP-1 mid-term defense schedule for 24 groups.</div>
-                <div className="text-[10px] text-gray-400 font-bold mt-1">May 15, 2026</div>
-              </div>
-            </div>
+            ) : (
+              actions.map((a, i) => {
+                const Icon = iconMap[a.icon] || CalendarCheck;
+                return (
+                  <div key={i} className={`flex gap-4 items-start ${i < actions.length - 1 ? 'pb-4 border-b border-gray-100' : 'pb-2'}`}>
+                    <div className={`w-8 h-8 rounded-xl flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5 ${
+                      a.category === 'content' ? 'bg-amber-50 text-amber-500' :
+                      a.category === 'committee' ? 'bg-blue-50 text-blue-500' :
+                      a.category === 'user' ? 'bg-purple-50 text-purple-500' :
+                      a.category === 'proposal' ? 'bg-indigo-50 text-indigo-500' :
+                      'bg-emerald-50 text-emerald-500'
+                    }`}>
+                      <Icon className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="text-xs font-bold text-gray-800">{a.title}</div>
+                      <div className="text-[11px] text-gray-500 mt-0.5">{a.description}</div>
+                      <div className="text-[10px] text-gray-400 font-bold mt-1">{formatTime(a.time)}</div>
+                    </div>
+                  </div>
+                );
+              })
+            )}
           </div>
         </div>
       </div>

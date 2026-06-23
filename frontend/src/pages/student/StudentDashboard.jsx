@@ -3,19 +3,23 @@ import { useOutletContext, Link, Navigate } from 'react-router-dom';
 import { getStudentProfile } from '../../services/student.service';
 import { FolderOpen, IdCard, Inbox, Lightbulb, Loader, Mail, User, Users } from 'lucide-react';
 
+const PROFILE_CACHE_KEY = 'cached_profile';
+
 export default function Dashboard() {
   const { user } = useOutletContext();
-  const [profile, setProfile] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const cached = (() => { try { const d = localStorage.getItem(PROFILE_CACHE_KEY); return d ? JSON.parse(d) : null; } catch { return null; } })();
+  const [profile, setProfile] = useState(cached);
+  const [loading, setLoading] = useState(!cached);
 
   useEffect(() => {
     getStudentProfile().then(data => {
       setProfile(data);
       setLoading(false);
+      try { localStorage.setItem(PROFILE_CACHE_KEY, JSON.stringify(data)); } catch {}
     });
   }, []);
 
-  if (loading) return <div className="p-8 text-center"><Loader className="animate-spin text-black text-2xl" /></div>;
+  if (loading) return <div className="flex items-center justify-center min-h-[60vh]"><Loader className="animate-spin text-black text-3xl" /></div>;
 
   if (!profile?.profileCompleted) {
     return <Navigate to="/profile" replace />;
@@ -27,7 +31,11 @@ export default function Dashboard() {
       {/* Student Profile Card (Internship Portal Matching) */}
       <div className="bg-white rounded-[2rem] border border-black shadow-sm p-4 sm:p-6 mb-8 flex flex-col md:flex-row items-center gap-4 sm:gap-6">
         <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-white border overflow-hidden flex-shrink-0 flex items-center justify-center text-black text-3xl">
-          <User className="text-black" />
+          {profile.profilepicture ? (
+            <img src={profile.profilepicture} alt={profile.name} className="w-full h-full object-cover" />
+          ) : (
+            <User className="text-black" />
+          )}
         </div>
         <div className="flex-1 text-center md:text-left min-w-0 w-full">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">

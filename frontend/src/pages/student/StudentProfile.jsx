@@ -1,7 +1,7 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useOutletContext, useNavigate } from 'react-router-dom';
 import { setUserInfo } from '../../utils/app.utils';
-import { updateStudentProfile } from '../../services/student.service';
+import { getStudentProfile, updateStudentProfile } from '../../services/student.service';
 import { showToast as toast } from '../../components/AppToast';
 import { AlertTriangle, Cake, Camera, Loader, Phone, Save, User, UserPlus, Users } from 'lucide-react';
 
@@ -9,14 +9,30 @@ export default function Profile() {
   const { user } = useOutletContext();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    fatherName: user.fatherName || '',
-    section: user.section || '',
+    fatherName: '',
+    section: '',
     dob: '',
     phone: ''
   });
   const [loading, setLoading] = useState(false);
+  const [fetching, setFetching] = useState(true);
   const fileInputRef = useRef(null);
   const [profilePicPreview, setProfilePicPreview] = useState(null);
+
+  useEffect(() => {
+    getStudentProfile().then(data => {
+      setFormData({
+        fatherName: data.fatherName || '',
+        section: data.section || '',
+        dob: data.dateofBirth ? data.dateofBirth.split('T')[0] : '',
+        phone: data.whatsappNumber || ''
+      });
+      if (data.profilepicture) setProfilePicPreview(data.profilepicture);
+      setFetching(false);
+    }).catch(() => {
+      setFetching(false);
+    });
+  }, []);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -30,17 +46,42 @@ export default function Profile() {
     }
   };
 
+  const [phoneError, setPhoneError] = useState('');
+
+  const validatePhone = (phone) => /^\+92-\d{10}$/.test(phone);
+
+  const handlePhoneChange = (e) => {
+    const val = e.target.value;
+    setFormData({ ...formData, phone: val });
+    if (val && !validatePhone(val)) {
+      setPhoneError('Format: +92-XXXXXXXXXX');
+    } else {
+      setPhoneError('');
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (formData.phone && !validatePhone(formData.phone)) {
+      toast.error('Phone must be in +92-XXXXXXXXXX format (e.g. +92-3315821144)');
+      return;
+    }
+    
     setLoading(true);
     try {
-      const res = await updateStudentProfile(formData);
+      const payload = {
+        fatherName: formData.fatherName,
+        section: formData.section,
+        dob: formData.dob,
+        phone: formData.phone,
+        profilepicture: profilePicPreview || undefined
+      };
+      const res = await updateStudentProfile(payload);
       toast.success(res.message);
       
-      // Update local storage so the UI unlocks
-      setUserInfo({ ...user, profileCompleted: true });
+      setUserInfo({ ...user, profileCompleted: true, profilepicture: profilePicPreview || user.profilepicture });
       
-      // Then navigate to dashboard
       setTimeout(() => {
         window.location.href = '/dashboard';
       }, 1000);
@@ -50,6 +91,8 @@ export default function Profile() {
       setLoading(false);
     }
   };
+
+  if (fetching) return <div className="flex items-center justify-center min-h-[60vh]"><Loader className="animate-spin text-black text-3xl" /></div>;
 
   return (
     <div className="animate-in fade-in slide-in- duration-300">
@@ -109,7 +152,13 @@ export default function Profile() {
               <label className="block text-xs font-bold text-black mb-1.5">Current Section</label>
               <div className="relative">
                 <Users className="absolute left-3.5 top-1/2 -translate-y-1/2 text-black text-sm" />
-                <input type="text" value={formData.section} onChange={e => setFormData({...formData, section: e.target.value})} placeholder="e.g. A, B, C" className="w-full bg-white border border-black rounded-xl py-2.5 pl-10 pr-3 text-sm focus:border-black focus:ring-2 focus:ring-blue-100 outline-none transition-all" required />
+                <select value={formData.section} onChange={e => setFormData({...formData, section: e.target.value})} className="w-full bg-white border border-black rounded-xl py-2.5 pl-10 pr-3 text-sm focus:border-black focus:ring-2 focus:ring-blue-100 outline-none transition-all appearance-none cursor-pointer" required>
+                  <option value="">Select Section</option>
+                  <option value="A">A</option>
+                  <option value="B">B</option>
+                  <option value="C">C</option>
+                  <option value="D">D</option>
+                </select>
               </div>
             </div>
             <div>
@@ -123,8 +172,20 @@ export default function Profile() {
               <label className="block text-xs font-bold text-black mb-1.5">WhatsApp/Mobile Number</label>
               <div className="relative">
                 <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 text-black text-sm" />
-                <input type="tel" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} placeholder="+92..." className="w-full bg-white border border-black rounded-xl py-2.5 pl-10 pr-3 text-sm focus:border-black focus:ring-2 focus:ring-blue-100 outline-none transition-all" required />
+                <input type="tel" value={formData.phone} onChange={handlePhoneChange} placeholder="+92-3315821144" className={`w-full bg-white border rounded-xl py-2.5 pl-10 pr-3 text-sm outline-none transition-all ${
+                  !formData.phone ? 'border-black'
+                  : validatePhone(formData.phone) ? 'border-emerald-500 ring-2 ring-emerald-200'
+                  : 'border-red-500 ring-2 ring-red-200'
+                }`} required />
               </div>
+              {formData.phone && (
+                <p className={`text-[10px] mt-1 ${validatePhone(formData.phone) ? 'text-emerald-600' : 'text-red-500'}`}>
+                  {validatePhone(formData.phone) ? 'Valid format' : 'Must be +92-XXXXXXXXXX (10 digits)'}
+                </p>
+              )}
+              {!formData.phone && (
+                <p className="text-[10px] text-gray-500 mt-1">Format: +92-XXXXXXXXXX (e.g. +92-3315821144)</p>
+              )}
             </div>
           </div>
 

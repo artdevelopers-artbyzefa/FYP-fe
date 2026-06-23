@@ -26,7 +26,7 @@ const FacultyLayout = () => {
     { to: '/faculty/profile', icon: Tags, label: 'Research Tags', section: 'Profile & Schedule' },
     { to: '/faculty/availability', icon: Calendar, label: 'Availability Grid', section: 'Profile & Schedule' },
     
-    { to: '/faculty/proposals', icon: FileSignature, label: 'Student Proposals', section: 'Supervision Workflows' },
+    { to: '/faculty/proposals', icon: FileSignature, label: 'Supervision Requests', section: 'Supervision Workflows' },
     { to: '/faculty/supervision', icon: GitBranch, label: 'Supervised Groups', section: 'Supervision Workflows' },
     { to: '/faculty/messaging', icon: MessageSquare, label: 'Student Messaging', section: 'Supervision Workflows' },
     

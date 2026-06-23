@@ -1,25 +1,58 @@
-import React, { useState } from 'react';
-import { searchPartners, sendPartnerRequest } from '../../services/student.service';
+import React, { useState, useRef, useEffect } from 'react';
+import { searchPartners, sendPartnerRequest, getSentRequests } from '../../services/student.service';
 import { showToast as toast } from '../../components/AppToast';
-import { Check, Loader, Search, Send } from 'lucide-react';
+import { Check, ChevronDown, ChevronUp, Clock, Loader, Search, Send, UserCheck, UserX, Users, X } from 'lucide-react';
 
 export default function NewRequest() {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [sending, setSending] = useState({});
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [sentRequests, setSentRequests] = useState([]);
+  const [sentOpen, setSentOpen] = useState(false);
+  const debounceRef = useRef(null);
+  const wrapperRef = useRef(null);
 
-  const handleSearch = async () => {
-    if (!query) return;
-    setLoading(true);
-    try {
-      const data = await searchPartners(query);
-      setResults(data);
-    } catch {
-      toast.error('Search failed.');
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    loadSent();
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const loadSent = () => {
+    getSentRequests().then(data => {
+      setSentRequests(Array.isArray(data) ? data : []);
+    }).catch(() => {});
+  };
+
+  const doSearch = (q) => {
+    if (!q || q.length < 2) {
+      setResults([]);
+      setShowDropdown(false);
+      return;
     }
+    setLoading(true);
+    searchPartners(q).then(data => {
+      setResults(Array.isArray(data) ? data : []);
+      setShowDropdown(true);
+    }).catch(() => {
+      toast.error('Search failed.');
+    }).finally(() => {
+      setLoading(false);
+    });
+  };
+
+  const handleQueryChange = (e) => {
+    const val = e.target.value;
+    setQuery(val);
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => doSearch(val), 300);
   };
 
   const handleSend = async (id) => {
@@ -27,6 +60,8 @@ export default function NewRequest() {
     try {
       const res = await sendPartnerRequest(id);
       toast.success(res.message);
+      setResults(prev => prev.filter(s => s.id !== id));
+      loadSent();
     } catch {
       toast.error('Failed to send request.');
     } finally {
@@ -34,52 +69,108 @@ export default function NewRequest() {
     }
   };
 
+  const statusIcon = (status) => {
+    if (status === 'accepted') return <UserCheck className="w-4 h-4 text-emerald-600" />;
+    if (status === 'rejected') return <UserX className="w-4 h-4 text-red-500" />;
+    return <Clock className="w-4 h-4 text-amber-500" />;
+  };
+
+  const statusBadge = (status) => {
+    if (status === 'accepted') return 'bg-emerald-50 text-emerald-700 border-emerald-200';
+    if (status === 'rejected') return 'bg-red-50 text-red-600 border-red-200';
+    return 'bg-amber-50 text-amber-700 border-amber-200';
+  };
+
   return (
     <div className="animate-in fade-in slide-in- duration-300">
       <div className="bg-white rounded-2xl border border-black shadow-sm p-6 max-w-2xl mx-auto">
         <h2 className="text-xl font-bold text-black mb-2">Find FYP Partners</h2>
         <p className="text-sm text-black mb-6">Search for students by Registration Number or Email to send a group request.</p>
-        
-        <div className="flex gap-2">
-          <input 
-            type="text" 
-            value={query}
-            onChange={e => setQuery(e.target.value)}
-            onKeyDown={e => e.key === 'Enter' && handleSearch()}
-            className="flex-1 bg-white border border-black rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-black" 
-            placeholder="e.g. SP21-BCS-005" 
-          />
-          <button 
-            className="bg-blue-600 hover:bg-blue-600 text-white px-5 py-2.5 rounded-xl font-bold text-sm transition-colors" 
-            onClick={handleSearch}
-            disabled={loading}
-          >
-            {loading ? <Loader className="w-4 h-4 animate-spin mr-2" /> : <Search className="w-4 h-4 mr-2" />} {loading ? 'Searching...' : 'Search'}
-          </button>
-        </div>
-        
-        {results.length > 0 && (
-          <div className="mt-8 space-y-3">
-            {results.map(student => (
-              <div key={student.id} className="flex items-center justify-between p-4 border border-black rounded-xl bg-white hover:border-blue-600 transition-colors">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-white text-black rounded-full flex items-center justify-center font-black text-lg">
-                    {student.name.substring(0,2).toUpperCase()}
-                  </div>
-                  <div>
-                    <div className="font-bold text-black">{student.name}</div>
-                    <div className="text-xs text-black mt-0.5">{student.regNo} • CGPA: {student.cgpa}</div>
-                  </div>
+
+        <div className="relative" ref={wrapperRef}>
+          <div className="flex items-center gap-2 bg-white border border-black rounded-xl px-4 py-2.5 focus-within:border-blue-600 focus-within:ring-2 focus-within:ring-blue-100 transition-all">
+            <Search className="w-4 h-4 text-gray-400 flex-shrink-0" />
+            <input
+              type="text"
+              value={query}
+              onChange={handleQueryChange}
+              onFocus={() => { if (results.length) setShowDropdown(true); }}
+              className="flex-1 bg-transparent border-0 text-sm outline-none p-0"
+              placeholder="Search by name, reg no or email..."
+            />
+            {loading && <Loader className="w-4 h-4 animate-spin text-gray-400 flex-shrink-0" />}
+            {query && !loading && (
+              <button onClick={() => { setQuery(''); setResults([]); setShowDropdown(false); }} className="bg-transparent border-0 p-0 text-gray-400 hover:text-gray-600 cursor-pointer">
+                <X className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+
+          {showDropdown && (
+            <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-lg z-50 max-h-80 overflow-y-auto">
+              {results.length === 0 ? (
+                <div className="flex flex-col items-center py-8 text-gray-400">
+                  <Users className="w-8 h-8 mb-2" />
+                  <p className="text-sm font-medium">No available students found</p>
+                  <p className="text-xs mt-1">Try a different search term</p>
                 </div>
-                <button 
-                  disabled={sending[student.id]}
-                  className="border border-black hover:border-blue-600 hover:text-blue-600 px-4 py-2 rounded-lg text-sm font-bold transition-all disabled:bg-white disabled:text-white disabled:border-black" 
-                  onClick={() => handleSend(student.id)}
-                >
-                  {sending[student.id] ? <><Check className="w-4 h-4 mr-1.5" /> Sent</> : <><Send className="w-4 h-4 mr-1.5" /> Send</>}
-                </button>
+              ) : (
+                results.map(student => (
+                  <div key={student.id} className="flex items-center justify-between px-4 py-3 hover:bg-gray-50 border-b border-gray-50 last:border-0 transition-colors">
+                    <div className="flex items-center gap-3 min-w-0 flex-1">
+                      <div className="w-10 h-10 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
+                        {student.name.substring(0,2).toUpperCase()}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="font-bold text-sm text-gray-800 truncate">{student.name}</div>
+                        <div className="text-xs text-gray-500 mt-0.5">{student.regNo} {student.semester ? `• Sem ${student.semester}` : ''} {student.cgpa ? `• CGPA: ${student.cgpa}` : ''}</div>
+                      </div>
+                    </div>
+                    <button
+                      disabled={sending[student.id]}
+                      onClick={() => handleSend(student.id)}
+                      className="ml-3 flex-shrink-0 bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-2 rounded-lg text-xs font-bold transition-all border-0 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5"
+                    >
+                      {sending[student.id] ? <><Check className="w-3.5 h-3.5" /> Sent</> : <><Send className="w-3.5 h-3.5" /> Send</>}
+                    </button>
+                  </div>
+                ))
+              )}
+            </div>
+          )}
+        </div>
+
+        {sentRequests.length > 0 && (
+          <div className="mt-8 border-t border-gray-100 pt-6">
+            <button
+              onClick={() => setSentOpen(!sentOpen)}
+              className="flex items-center justify-between w-full text-left"
+            >
+              <h3 className="text-sm font-bold text-gray-700">Sent Requests ({sentRequests.length})</h3>
+              {sentOpen ? <ChevronUp className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
+            </button>
+
+            {sentOpen && (
+              <div className="mt-3 space-y-2">
+                {sentRequests.map(r => (
+                  <div key={r.id} className="flex items-center justify-between px-4 py-3 bg-gray-50 rounded-xl border border-gray-100">
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 bg-gray-200 text-gray-600 rounded-full flex items-center justify-center font-bold text-xs flex-shrink-0">
+                        {r.name.substring(0,2).toUpperCase()}
+                      </div>
+                      <div>
+                        <div className="text-sm font-bold text-gray-800">{r.name}</div>
+                        <div className="text-xs text-gray-500">{r.regNo}</div>
+                      </div>
+                    </div>
+                    <span className={`flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg border ${statusBadge(r.status)}`}>
+                      {statusIcon(r.status)}
+                      {r.status}
+                    </span>
+                  </div>
+                ))}
               </div>
-            ))}
+            )}
           </div>
         )}
       </div>

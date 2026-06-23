@@ -173,10 +173,17 @@ const Login = () => {
               <div className="grid grid-cols-2 gap-2">
                 <button
                   type="button"
-                  onClick={() => handleQuickLogin('Student', 'student@cuiatd.edu.pk', 'Megamix@123')}
+                  onClick={() => handleQuickLogin('Student', 'fa23-bcs-013@cuiatd.edu.pk', 'Megamix@123')}
                   className="py-2.5 px-3 text-xs font-bold rounded-lg border border-gray-200 text-gray-700 bg-white hover:bg-primary hover:text-white hover:border-primary transition-all text-center focus:outline-none"
                 >
-                  Student
+                  Student (FA23-BCS-013)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleQuickLogin('Student', 'fa23-bcs-034@cuiatd.edu.pk', 'Megamix@123')}
+                  className="py-2.5 px-3 text-xs font-bold rounded-lg border border-amber-200 text-amber-700 bg-amber-50 hover:bg-primary hover:text-white hover:border-primary transition-all text-center focus:outline-none"
+                >
+                  Student (FA23-BCS-034)
                 </button>
                 <button
                   type="button"
@@ -205,6 +212,13 @@ const Login = () => {
                   className="py-2.5 px-3 text-xs font-bold rounded-lg border border-amber-200 text-amber-700 bg-amber-50 hover:bg-primary hover:text-white hover:border-primary transition-all text-center focus:outline-none"
                 >
                   Faculty (ininsico)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleQuickLogin('Faculty Supervisor', 'bilalrathore577@gmail.com', 'Megamix@123')}
+                  className="py-2.5 px-3 text-xs font-bold rounded-lg border border-amber-200 text-amber-700 bg-amber-50 hover:bg-primary hover:text-white hover:border-primary transition-all text-center focus:outline-none"
+                >
+                  Faculty (Bilal)
                 </button>
               </div>
               <div className="flex justify-center mt-2">

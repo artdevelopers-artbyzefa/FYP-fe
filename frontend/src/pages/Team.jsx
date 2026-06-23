@@ -63,6 +63,12 @@ const Team = () => {
           role: "Backend Developer",
           desc: "Built the Backend & Integrated with the Frontend",
         },
+         {
+          initials: "AF",
+          name: "Mr.Ahsan Faraz ",
+          role: "Secuirty Engineer",
+          desc: "Tackled different Secuirty Protocols & made the website pentesting-pruned.",
+        },
         {
           initials: "SR",
           name: "Mudasir",

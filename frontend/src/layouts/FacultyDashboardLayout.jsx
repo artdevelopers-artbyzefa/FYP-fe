@@ -27,7 +27,7 @@ export default function FacultyDashboardLayout() {
     '/faculty/dashboard': 'Faculty Dashboard',
     '/faculty/research-tags': 'Research Profile & Tags',
     '/faculty/availability': 'Availability Grid',
-    '/faculty/proposals': 'Student Proposals',
+    '/faculty/proposals': 'Supervision Requests',
     '/faculty/groups': 'Supervised Groups',
     '/faculty/messages': 'Student Messaging',
     '/faculty/evaluations': 'Committee Evaluations',

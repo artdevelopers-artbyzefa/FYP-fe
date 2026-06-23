@@ -38,6 +38,11 @@ export const getIncomingRequests = async () => {
   return res.data;
 };
 
+export const getSentRequests = async () => {
+  const res = await apiClient.get('/student/partners/sent');
+  return res.data;
+};
+
 export const respondPartnerRequest = async (requestId, status) => {
   const res = await apiClient.post(STUDENT_RESPOND_REQUEST_URL, { requestId, status });
   return res.data;
@@ -55,6 +60,16 @@ export const requestSupervisor = async (supervisorId) => {
 
 export const submitIdea = async (payload) => {
   const res = await apiClient.post(STUDENT_SUBMIT_IDEA_URL, payload);
+  return res.data;
+};
+
+export const cancelSupervisorRequest = async () => {
+  const res = await apiClient.post('/student/supervisors/cancel');
+  return res.data;
+};
+
+export const getStudentGroup = async () => {
+  const res = await apiClient.get('/student/group');
   return res.data;
 };
 

@@ -13,9 +13,8 @@ import ForgotPassword from "../pages/ForgotPassword";
 import StudentLayout from "../pages/student/StudentLayout";
 import StudentDashboard from "../pages/student/StudentDashboard";
 import StudentProfile from "../pages/student/StudentProfile";
-import IncomingRequests from "../pages/student/IncomingRequests";
 import ApprovedIdeas from "../pages/student/ApprovedIdeas";
-import NewRequest from "../pages/student/NewRequest";
+import FYPGroup from "../pages/student/FYPGroup";
 import NewIdea from "../pages/student/NewIdea";
 import SupervisorSelection from "../pages/student/SupervisorSelection";
 import TaskManager from "../pages/student/TaskManager";
@@ -25,6 +24,9 @@ import HodEscalations from '../pages/hod/HodEscalations';
 import HodFacultyOversight from '../pages/hod/HodFacultyOversight';
 import HodGovernance from '../pages/hod/HodGovernance';
 import HodAnalytics from '../pages/hod/HodAnalytics';
+import HodStudents from '../pages/hod/HodStudents';
+import HodCommittees from '../pages/hod/HodCommittees';
+import HodFaculty from '../pages/hod/HodFaculty';
 import AssistantLayout from '../components/office-assistant/AssistantLayout';
 import AssistantDashboard from '../pages/office-assistant/AssistantDashboard';
 import AssistantUsers from '../pages/office-assistant/AssistantUsers';
@@ -91,8 +93,7 @@ const AppRoutes = () => {
             <Route element={<StudentLayout />}>
                 <Route path="/dashboard" element={<StudentDashboard />} />
                 <Route path="/profile" element={<StudentProfile />} />
-                <Route path="/partners/new" element={<NewRequest />} />
-                <Route path="/partners/requests" element={<IncomingRequests />} />
+                <Route path="/fyp-group" element={<FYPGroup />} />
                 <Route path="/supervisor-selection" element={<SupervisorSelection />} />
                 <Route path="/project/new" element={<NewIdea />} />
                 <Route path="/project/approved" element={<ApprovedIdeas />} />
@@ -108,6 +109,9 @@ const AppRoutes = () => {
                 <Route path="faculty-oversight" element={<HodFacultyOversight />} />
                 <Route path="governance" element={<HodGovernance />} />
                 <Route path="analytics" element={<HodAnalytics />} />
+                <Route path="students" element={<HodStudents />} />
+                <Route path="committees" element={<HodCommittees />} />
+                <Route path="faculty" element={<HodFaculty />} />
             </Route>
 
             {/* Office Assistant Layout Routes */}

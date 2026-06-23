@@ -7,7 +7,8 @@ import {
   FACULTY_SUPERVISION_API_URL,
   FACULTY_MESSAGING_API_URL,
   FACULTY_EVALUATIONS_API_URL,
-  FACULTY_HEAD_DUTIES_API_URL
+  FACULTY_HEAD_DUTIES_API_URL,
+  FACULTY_SUPERVISOR_REQUESTS_API_URL
 } from '../utils/constants/api-url.constant';
 
 export const getFacultyDashboardStats = async () => {
@@ -47,5 +48,20 @@ export const getFacultyEvaluations = async () => {
 
 export const getFacultyHeadDuties = async () => {
   const res = await apiClient.get(FACULTY_HEAD_DUTIES_API_URL);
+  return res.data;
+};
+
+export const getSupervisorRequests = async () => {
+  const res = await apiClient.get(FACULTY_SUPERVISOR_REQUESTS_API_URL);
+  return res.data;
+};
+
+export const approveSupervisorRequest = async (groupId) => {
+  const res = await apiClient.post(`/faculty/supervisor-requests/${groupId}/approve`);
+  return res.data;
+};
+
+export const rejectSupervisorRequest = async (groupId) => {
+  const res = await apiClient.post(`/faculty/supervisor-requests/${groupId}/reject`);
   return res.data;
 };

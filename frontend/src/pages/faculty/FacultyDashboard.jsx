@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { getFacultyDashboardStats } from '../../services/faculty.service';
-import { ArrowRight, CalendarCheck, Crown, FileSignature, GitBranch, Star } from 'lucide-react';
+import { ArrowRight, CalendarCheck, Crown, FileSignature, GitBranch, Star, UserCheck } from 'lucide-react';
 
 const FacultyDashboard = () => {
   const navigate = useNavigate();
@@ -19,12 +19,12 @@ const FacultyDashboard = () => {
         <div className="text-white">
           <h1 className="text-2xl sm:text-3xl font-black mb-2 tracking-tight">Welcome, {user?.name || 'Faculty'}!</h1>
           <p className="text-sm text-white/80 font-medium max-w-2xl leading-relaxed">
-            Here is your academic supervision and committee management dashboard. Track active student groups, review pending project proposals, and input committee evaluation scores.
+            Here is your academic supervision and committee management dashboard. Track active student groups, review supervision requests, and input committee evaluation scores.
           </p>
         </div>
         <div className="flex gap-3 flex-wrap">
           <button onClick={() => navigate('/faculty/proposals')} className="bg-white text-black hover:bg-white px-5 py-3 rounded-xl font-bold text-sm shadow-lg transition-all flex items-center gap-2 cursor-pointer">
-            <FileSignature className="w-4 h-4" /> Pending Proposals (1)
+            <UserCheck className="w-4 h-4" /> Supervision Requests ({stats?.pendingRequests ?? '...'})
           </button>
           <button onClick={() => navigate('/faculty/evaluations')} className="bg-white hover:bg-white text-white px-5 py-3 rounded-xl font-bold text-sm shadow-lg transition-all flex items-center gap-2 cursor-pointer">
             <Star className="w-4 h-4" /> Defenses (2)
@@ -40,16 +40,16 @@ const FacultyDashboard = () => {
             <div className="text-xs font-bold text-black uppercase tracking-wider mb-1 truncate">Supervised Groups</div>
             <div className="flex items-baseline justify-between">
               <span className="text-3xl font-black text-black">{stats ? stats.supervisedGroups : '...'}</span>
-              <span className="text-xs font-bold text-black bg-white px-2 py-0.5 rounded-lg">Full Cap ({stats ? stats.supervisedCap : ''}/{stats ? stats.supervisedCap : ''})</span>
+              <span className="text-xs font-bold text-black bg-white px-2 py-0.5 rounded-lg">{stats ? stats.supervisedGroups : 0}/{stats ? stats.supervisedCap : 8} Full</span>
             </div>
           </div>
         </div>
         <div className="bg-white rounded-2xl border border-black p-6 shadow-sm flex items-center gap-5 hover:border-blue-600 transition-all">
-          <div className="w-14 h-14 rounded-2xl bg-white text-black flex items-center justify-center text-2xl flex-shrink-0 shadow-inner"><FileSignature className="w-4 h-4" /></div>
+          <div className="w-14 h-14 rounded-2xl bg-white text-black flex items-center justify-center text-2xl flex-shrink-0 shadow-inner"><UserCheck className="w-4 h-4" /></div>
           <div className="min-w-0 flex-1">
-            <div className="text-xs font-bold text-black uppercase tracking-wider mb-1 truncate">Pending Proposals</div>
+            <div className="text-xs font-bold text-black uppercase tracking-wider mb-1 truncate">Supervision Requests</div>
             <div className="flex items-baseline justify-between">
-              <span className="text-3xl font-black text-black">{stats ? stats.pendingProposals : '...'}</span>
+              <span className="text-3xl font-black text-black">{stats ? stats.pendingRequests : '...'}</span>
               <span className="text-xs font-bold text-black bg-white px-2 py-0.5 rounded-lg">Requires Review</span>
             </div>
           </div>
@@ -80,12 +80,12 @@ const FacultyDashboard = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <div onClick={() => navigate('/faculty/proposals')} className="bg-white p-6 rounded-2xl border border-black shadow-sm hover:border-blue-600 hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between">
           <div className="flex justify-between items-center mb-4">
-            <div className="w-10 h-10 rounded-xl bg-white text-black flex items-center justify-center font-bold"><FileSignature className="text-base" /></div>
+            <div className="w-10 h-10 rounded-xl bg-white text-black flex items-center justify-center font-bold"><UserCheck className="text-base" /></div>
             <ArrowRight className="text-black group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
           </div>
           <div>
-            <h3 className="font-bold text-black text-base mb-1">Student Proposals</h3>
-            <p className="text-xs text-black font-medium">Review incoming project proposals and request mandatory revisions.</p>
+            <h3 className="font-bold text-black text-base mb-1">Supervision Requests</h3>
+            <p className="text-xs text-black font-medium">Review student requests to be your supervisee. Accept or reject supervision requests.</p>
           </div>
         </div>
         <div onClick={() => navigate('/faculty/supervision')} className="bg-white p-6 rounded-2xl border border-black shadow-sm hover:border-blue-600 hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between">

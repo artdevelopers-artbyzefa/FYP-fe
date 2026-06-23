@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Outlet, useNavigate, useLocation, Link } from 'react-router-dom';
 import { getUserInfo, logout } from '../../utils/app.utils';
+import apiClient from '../../api/apiClient';
 import { Bell, ChevronDown, ChevronLeft, ChevronRight, Circle, ClipboardList, GraduationCap, Home, Lightbulb, Lock, LogOut, Menu, User, UserCircle, Users, X } from 'lucide-react';
 
 export default function DashboardLayout() {
@@ -12,16 +13,41 @@ export default function DashboardLayout() {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   
   // Dropdown states
-  const [partnersOpen, setPartnersOpen] = useState(false);
   const [ideasOpen, setIdeasOpen] = useState(false);
 
   // Path helpers
   const path = location.pathname;
   const isLocked = !user.profileCompleted;
 
+  // Phase gating
+  const [phaseSeq, setPhaseSeq] = useState(1);
+  const [phaseName, setPhaseName] = useState('Phase 1: Student Registration');
+  useEffect(() => {
+    apiClient.get('/phases').then(res => {
+      const phases = res.data?.data || [];
+      const active = phases.find(p => p.isActive);
+      if (active) {
+        setPhaseSeq(active.sequence);
+        setPhaseName(active.name);
+      }
+    }).catch(() => {});
+  }, []);
+
+  const phaseVisible = (itemId) => {
+    const lookup = {
+      '/dashboard': 1, '/profile': 1, '/fyp-group': 1, '/supervisor-selection': 1,
+      '/task-manager': 4
+    };
+    const match = Object.entries(lookup).find(([key]) => itemId.startsWith(key));
+    const min = match ? match[1] : (itemId.startsWith('/project') ? 2 : 1);
+    return phaseSeq >= min;
+  };
+  const sectionVisible = (items) => items.some(item =>
+    item.isDropdown ? item.subItems.some(sub => phaseVisible(sub.id)) : phaseVisible(item.id)
+  );
+
   // Auto-expand dropdowns based on active path
   useEffect(() => {
-    if (path.includes('/partners')) setPartnersOpen(true);
     if (path.includes('/project')) setIdeasOpen(true);
   }, [path]);
 
@@ -33,10 +59,7 @@ export default function DashboardLayout() {
       { id: '/profile', label: 'My Profile', icon: UserCircle }
     ]},
     { section: 'Group & Supervisor', items: [
-      { id: 'group_partners', label: 'FYP Partners', icon: Users, isDropdown: true, subItems: [
-        { id: '/partners/new', label: 'New Request' },
-        { id: '/partners/requests', label: 'Incoming Requests' }
-      ]},
+      { id: '/fyp-group', label: 'FYP Group', icon: Users },
       { id: '/supervisor-selection', label: 'Supervisor Selection', icon: User }
     ]},
     { section: 'Project Execution', items: [
@@ -84,37 +107,46 @@ export default function DashboardLayout() {
         </div>
 
         <nav className="flex-1 overflow-y-auto p-2 mt-2" style={{ scrollbarWidth: 'none' }}>
-          {navItems.map((group, idx) => (
+          {navItems.map((group, idx) => {
+            const visItems = group.items.filter(item =>
+              item.isDropdown
+                ? item.subItems.some(sub => phaseVisible(sub.id))
+                : phaseVisible(item.id)
+            );
+            if (visItems.length === 0) return null;
+            return (
             <div key={idx} className={`mb-1 ${idx > 0 ? 'mt-4' : ''}`}>
               {!sidebarCollapsed && (
                 <div className="text-[0.6rem] font-bold uppercase tracking-widest text-white/30 px-3 mb-1 truncate transition-all">
                   {group.section}
                 </div>
               )}
-              {group.items.map((item) => {
-                const isNavLocked = isLocked && item.id !== '/profile';
+              {visItems
+                .map((item) => {
+                const isProfileLocked = isLocked && item.id !== '/profile';
                 const isActive = path === item.id || (item.isDropdown && item.subItems.some(sub => path === sub.id));
                 
                 if (item.isDropdown) {
-                  const isOpen = item.id === 'group_partners' ? partnersOpen : ideasOpen;
-                  const setOpen = item.id === 'group_partners' ? setPartnersOpen : setIdeasOpen;
+                  const isOpen = ideasOpen;
+                  const setOpen = setIdeasOpen;
+                  const visSubs = item.subItems.filter(sub => phaseVisible(sub.id));
                   
                   return (
                     <div key={item.id} className="mb-1">
                       <div 
-                        onClick={() => { if(!isNavLocked) setOpen(!isOpen); }}
-                        className={`flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-200 ${isNavLocked ? 'opacity-40 cursor-not-allowed pointer-events-none' : ''} ${isActive && !isOpen ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30 font-bold' : 'text-white/90 hover:bg-white/15 hover:text-white'} ${sidebarCollapsed ? 'justify-center' : ''}`}
+                        onClick={() => { if(!isProfileLocked) setOpen(!isOpen); }}
+                        className={`flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-200 ${isProfileLocked ? 'opacity-40 cursor-not-allowed pointer-events-none' : ''} ${isActive && !isOpen ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30 font-bold' : 'text-white/90 hover:bg-white/15 hover:text-white'} ${sidebarCollapsed ? 'justify-center' : ''}`}
                         title={item.label}
                       >
                         {React.createElement(item.icon, { className: "w-4 h-4" })}
                         {!sidebarCollapsed && <span className="text-sm font-medium flex-1 whitespace-nowrap">{item.label}</span>}
-                        {!sidebarCollapsed && isNavLocked && <Lock className="text-[10px] text-white/40 animate-pulse mr-1" />}
-                        {!sidebarCollapsed && !isNavLocked && <ChevronDown className="w-4 h-4" />}
+                        {!sidebarCollapsed && isProfileLocked && <Lock className="text-[10px] text-white/40 animate-pulse mr-1" />}
+                        {!sidebarCollapsed && !isProfileLocked && <ChevronDown className="w-4 h-4" />}
                       </div>
                       
-                      {!sidebarCollapsed && isOpen && !isNavLocked && (
+                      {!sidebarCollapsed && isOpen && !isProfileLocked && (
                         <div className="mt-1 ml-4 border-l border-white/10 pl-2 space-y-1">
-                          {item.subItems.map(sub => (
+                          {visSubs.map(sub => (
                             <div 
                               key={sub.id} 
                               onClick={() => { navigate(sub.id); setMobileSidebarOpen(false); }}
@@ -133,18 +165,19 @@ export default function DashboardLayout() {
                 return (
                   <div 
                     key={item.id}
-                    onClick={() => { if(!isNavLocked) { navigate(item.id); setMobileSidebarOpen(false); } }}
-                    className={`flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-200 ${isNavLocked ? 'opacity-40 cursor-not-allowed pointer-events-none' : ''} ${isActive ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30 font-bold' : 'text-white/90 hover:bg-white/15 hover:text-white'} ${sidebarCollapsed ? 'justify-center' : ''}`}
+                    onClick={() => { if(!isProfileLocked) { navigate(item.id); setMobileSidebarOpen(false); } }}
+                    className={`flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-200 ${isProfileLocked ? 'opacity-40 cursor-not-allowed pointer-events-none' : ''} ${isActive ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30 font-bold' : 'text-white/90 hover:bg-white/15 hover:text-white'} ${sidebarCollapsed ? 'justify-center' : ''}`}
                     title={item.label}
                   >
                     {React.createElement(item.icon, { className: "w-4 h-4" })}
                     {!sidebarCollapsed && <span className="text-sm font-medium flex-1 whitespace-nowrap">{item.label}</span>}
-                    {!sidebarCollapsed && isNavLocked && <Lock className="text-[10px] text-white/40 animate-pulse" />}
+                    {!sidebarCollapsed && isProfileLocked && <Lock className="text-[10px] text-white/40 animate-pulse" />}
                   </div>
                 );
               })}
             </div>
-          ))}
+          );
+          })}
         </nav>
 
         <div className="p-2 border-t border-white/10">
@@ -184,7 +217,7 @@ export default function DashboardLayout() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
               </span>
-              <span>Phase 1: Student Registration</span>
+              <span>{phaseName}</span>
             </div>
 
             <div className="relative">
@@ -195,8 +228,12 @@ export default function DashboardLayout() {
             </div>
 
             <Link to="/profile" className="flex items-center gap-2 p-1 md:px-2.5 md:py-1.5 bg-white rounded-xl cursor-pointer border border-blue-100 hover:bg-white hover:border-blue-600 transition-all">
-              <div className="w-8 h-8 bg-white/50 rounded-lg flex items-center justify-center text-slate-700 text-xs font-bold shadow-sm flex-shrink-0">
-                {user.avatar || 'ST'}
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-700 text-xs font-bold shadow-sm flex-shrink-0 overflow-hidden">
+                {user.profilepicture ? (
+                  <img src={user.profilepicture} alt="" className="w-full h-full object-cover" />
+                ) : (
+                  <div className="w-full h-full bg-white/50 flex items-center justify-center">{user.avatar || 'ST'}</div>
+                )}
               </div>
               <div className="text-left hidden sm:block">
                 <div className="text-xs font-bold text-slate-900 leading-tight truncate max-w-28">{user.name}</div>

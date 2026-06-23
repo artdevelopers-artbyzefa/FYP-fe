@@ -1,132 +1,151 @@
 import React, { useEffect, useState } from 'react';
-import { getFacultyProposals } from '../../services/faculty.service';
-import { showToast, showAlert } from '../../components/AppToast';
-import { X } from 'lucide-react';
+import { getSupervisorRequests, approveSupervisorRequest, rejectSupervisorRequest } from '../../services/faculty.service';
+import { X, Check, Loader2, CheckCircle, AlertCircle, UserCheck } from 'lucide-react';
 
 const FacultyProposals = () => {
-  const [proposals, setProposals] = useState([]);
-  const [isRevisionOpen, setIsRevisionOpen] = useState(false);
-  const [isRejectOpen, setIsRejectOpen] = useState(false);
-  const [selectedProposal, setSelectedProposal] = useState(null);
+  const [requests, setRequests] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [actionLoading, setActionLoading] = useState(null);
+  const [toast, setToast] = useState({ show: false, type: '', message: '' });
 
   useEffect(() => {
-    getFacultyProposals().then(res => setProposals(res.data)).catch(console.error);
+    fetchRequests();
   }, []);
 
-  const handleApprove = () => {
-    showToast.success('Proposal officially accepted.');
+  const fetchRequests = async () => {
+    try {
+      const res = await getSupervisorRequests();
+      setRequests(res.data || []);
+    } catch (error) {
+      console.error(error);
+      showToastMsg('error', 'Failed to load supervisor requests.');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleRevisionSubmit = (e) => {
-    e.preventDefault();
-    showToast.warning('Revision request dispatched to group.');
-    setIsRevisionOpen(false);
+  const showToastMsg = (type, message) => {
+    setToast({ show: true, type, message });
+    setTimeout(() => setToast({ show: false, type: '', message: '' }), 4000);
   };
 
-  const handleRejectSubmit = (e) => {
-    e.preventDefault();
-    showAlert.confirm('Reject Proposal', 'Are you sure you want to reject this proposal?', 'Reject', 'Cancel')
-      .then(res => {
-        if (res.isConfirmed) {
-          showToast.error('Proposal rejected with official justification.');
-          setIsRejectOpen(false);
-        }
-      });
+  const handleApprove = async (reqId) => {
+    setActionLoading(reqId);
+    try {
+      await approveSupervisorRequest(reqId);
+      showToastMsg('success', 'Supervisor request approved. Group is now under your supervision.');
+      setRequests(prev => prev.filter(r => r.id !== reqId));
+    } catch (error) {
+      showToastMsg('error', error?.response?.data?.message || 'Failed to approve request.');
+    } finally {
+      setActionLoading(null);
+    }
   };
 
-  const openModal = (modalSetter, proposal) => {
-    setSelectedProposal(proposal);
-    modalSetter(true);
+  const handleReject = async (reqId) => {
+    if (!window.confirm('Reject this supervision request? The group will need to select another supervisor.')) return;
+    setActionLoading(reqId);
+    try {
+      await rejectSupervisorRequest(reqId);
+      showToastMsg('success', 'Supervisor request rejected.');
+      setRequests(prev => prev.filter(r => r.id !== reqId));
+    } catch (error) {
+      showToastMsg('error', error?.response?.data?.message || 'Failed to reject request.');
+    } finally {
+      setActionLoading(null);
+    }
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <Loader2 className="w-6 h-6 text-black animate-spin" />
+        <span className="ml-2 text-sm text-black font-medium">Loading requests...</span>
+      </div>
+    );
+  }
 
   return (
     <>
       <div className="border-b border-black pb-4 mb-6">
-        <h2 className="text-xl font-black text-black">Student Proposals</h2>
-        <p className="text-xs text-black mt-0.5 font-medium">Review incoming project proposals, request revisions, or issue final approvals/rejections.</p>
+        <h2 className="text-xl font-black text-black">Supervision Requests</h2>
+        <p className="text-xs text-black mt-0.5 font-medium">Review incoming student requests to be your supervisee. Accept to take them under your supervision or reject to decline.</p>
       </div>
 
-      <div className="bg-white rounded-2xl border border-black shadow-sm overflow-hidden mb-6">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="bg-white/75 border-b border-black text-[11px] font-black text-black tracking-wider">
-                <th className="py-3.5 px-6">Proposal Ref</th>
-                <th className="py-3.5 px-6">Project Title</th>
-                <th className="py-3.5 px-6">Student Group</th>
-                <th className="py-3.5 px-6">Status</th>
-                <th className="py-3.5 px-6 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-blue-600 text-sm font-medium text-black">
-              {proposals.map(p => (
-                <tr key={p.id} className="hover:bg-white/50 transition-colors">
-                  <td className="py-4 px-6 text-black font-mono text-xs font-bold">{p.id}</td>
-                  <td className="py-4 px-6 font-bold text-black max-w-xs truncate">{p.title}</td>
-                  <td className="py-4 px-6 text-black text-xs">
-                    {p.students.map((s, i) => <div key={i}>{s}</div>)}
-                  </td>
-                  <td className="py-4 px-6">
-                    <span className={`font-bold text-[10px] px-2.5 py-1 rounded-lg border ${p.status === 'Approved' ? 'bg-success/10 text-success border-success/20' : 'bg-white'}`}>
-                      {p.status}
-                    </span>
-                  </td>
-                  <td className="py-4 px-6 text-right">
-                    {p.status === 'Pending Review' ? (
-                      <div className="flex justify-end gap-1">
-                        <button onClick={handleApprove} className="px-2.5 py-1.5 rounded-lg bg-white hover:bg-white text-black border border-black text-xs font-bold transition-all cursor-pointer">Accept</button>
-                        <button onClick={() => openModal(setIsRevisionOpen, p)} className="px-2.5 py-1.5 rounded-lg bg-white hover:bg-white text-black border border-black text-xs font-bold transition-all cursor-pointer">Revise</button>
-                        <button onClick={() => openModal(setIsRejectOpen, p)} className="px-2.5 py-1.5 rounded-lg bg-white hover:bg-white text-black border border-black text-xs font-bold transition-all cursor-pointer">Reject</button>
-                      </div>
-                    ) : (
-                      <span className="text-xs text-black font-bold italic">Processed</span>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {isRevisionOpen && (
-        <div className="fixed inset-0 bg-blue-600/50 backdrop-blur-sm z-[150] flex items-center justify-center p-4">
-          <div className="bg-white rounded-[2rem] w-full max-w-lg p-6 sm:p-8 shadow-2xl border border-black">
-            <div className="flex justify-between items-center mb-6 pb-3 border-b border-black">
-              <h3 className="text-lg font-black text-black">Request Mandatory Revisions</h3>
-              <X className="w-4 h-4 cursor-pointer cursor-pointer text-lg" onClick={() => setIsRevisionOpen(false)} />
-            </div>
-            <form onSubmit={handleRevisionSubmit} className="space-y-5">
-              <div>
-                <label className="block text-xs font-bold text-black mb-1.5">Revision Comments</label>
-                <textarea placeholder="Outline required changes here..." className="w-full bg-white border border-black rounded-xl px-4 py-3 text-sm outline-none focus:border-black focus:bg-white transition-all h-32" required></textarea>
-              </div>
-              <div className="flex justify-end gap-3 pt-4 border-t border-black">
-                <button type="button" onClick={() => setIsRevisionOpen(false)} className="px-5 py-2.5 rounded-xl text-xs font-bold text-black hover:bg-white transition-colors cursor-pointer">Cancel</button>
-                <button type="submit" className="bg-white hover:bg-white text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow-lg transition-all cursor-pointer">Submit Revisions</button>
-              </div>
-            </form>
+      <div className="space-y-4">
+        {requests.length === 0 ? (
+          <div className="bg-white rounded-2xl border border-black p-8 text-center text-black shadow-sm">
+            <UserCheck className="w-10 h-10 mx-auto mb-3 text-black/40" />
+            <p className="font-bold text-black">No pending supervision requests</p>
+            <p className="text-xs text-black mt-1">When students request you as their supervisor, they will appear here.</p>
           </div>
-        </div>
-      )}
-
-      {isRejectOpen && (
-        <div className="fixed inset-0 bg-blue-600/50 backdrop-blur-sm z-[150] flex items-center justify-center p-4">
-          <div className="bg-white rounded-[2rem] w-full max-w-lg p-6 sm:p-8 shadow-2xl border border-black">
-            <div className="flex justify-between items-center mb-6 pb-3 border-b border-black">
-              <h3 className="text-lg font-black text-black">Reject Proposal</h3>
-              <X className="w-4 h-4 cursor-pointer cursor-pointer text-lg" onClick={() => setIsRejectOpen(false)} />
+        ) : (
+          requests.map(r => (
+            <div key={r.id} className="bg-white rounded-2xl border border-black shadow-sm overflow-hidden">
+              <div className="p-5 md:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap mb-2">
+                    <h3 className="font-black text-black text-base truncate">{r.groupName}</h3>
+                    {r.title && (
+                      <span className="text-xs font-bold text-black bg-white border border-black px-2 py-0.5 rounded-lg truncate max-w-[200px]">
+                        {r.title}
+                      </span>
+                    )}
+                    <span className="text-[10px] font-bold text-black bg-yellow-100 border border-yellow-300 px-2 py-0.5 rounded-lg">
+                      Pending
+                    </span>
+                  </div>
+                  <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-black font-medium">
+                    <span>Leader: <strong>{r.leaderName}</strong> ({r.leaderRegNo})</span>
+                    <span>Members: <strong>{r.members.length}</strong></span>
+                    {r.members.length > 0 && (
+                      <span className="text-black/70">
+                        ({r.members.map(m => m.name).join(', ')})
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  <button
+                    onClick={() => handleApprove(r.id)}
+                    disabled={actionLoading === r.id}
+                    className="flex items-center gap-1.5 px-4 py-2 bg-green-600 text-white text-xs font-bold rounded-xl hover:bg-green-700 active:scale-95 transition-all disabled:opacity-50 cursor-pointer"
+                  >
+                    {actionLoading === r.id ? (
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    ) : (
+                      <Check className="w-3.5 h-3.5" />
+                    )}
+                    Accept
+                  </button>
+                  <button
+                    onClick={() => handleReject(r.id)}
+                    disabled={actionLoading === r.id}
+                    className="flex items-center gap-1.5 px-4 py-2 bg-white text-black text-xs font-bold rounded-xl border border-black hover:bg-white active:scale-95 transition-all disabled:opacity-50 cursor-pointer"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                    Reject
+                  </button>
+                </div>
+              </div>
             </div>
-            <form onSubmit={handleRejectSubmit} className="space-y-5">
-              <div>
-                <label className="block text-xs font-bold text-black mb-1.5">Rejection Justification</label>
-                <textarea placeholder="Explain why the proposal is not viable..." className="w-full bg-white border border-black rounded-xl px-4 py-3 text-sm outline-none focus:border-black focus:bg-white transition-all h-32" required></textarea>
-              </div>
-              <div className="flex justify-end gap-3 pt-4 border-t border-black">
-                <button type="button" onClick={() => setIsRejectOpen(false)} className="px-5 py-2.5 rounded-xl text-xs font-bold text-black hover:bg-white transition-colors cursor-pointer">Cancel</button>
-                <button type="submit" className="bg-white hover:bg-white text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow-lg transition-all cursor-pointer">Confirm Rejection</button>
-              </div>
-            </form>
+          ))
+        )}
+      </div>
+
+      {toast.show && (
+        <div className="fixed bottom-8 right-8 z-50 animate-in fade-in slide-in- slide-in- duration-300">
+          <div className={`flex items-center gap-3 px-6 py-4 rounded-xl shadow-xl text-sm font-bold border ${
+            toast.type === 'success'
+              ? 'bg-black text-white border-gray-800'
+              : 'bg-white text-black border-black'
+          }`}>
+            {toast.type === 'success' ? (
+              <CheckCircle className="w-5 h-5 shrink-0" />
+            ) : (
+              <AlertCircle className="w-5 h-5 shrink-0" />
+            )}
+            <span>{toast.message}</span>
           </div>
         </div>
       )}

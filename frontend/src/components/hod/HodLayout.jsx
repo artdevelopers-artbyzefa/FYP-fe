@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { showToast as toast } from '../AppToast';
 import { logoutUser, getCurrentUser } from '../../services/auth.service';
-import { Bell, ChevronLeft, ChevronRight, Crown, Gavel, Landmark, LineChart, LogOut, Menu, PieChart, Presentation, X } from 'lucide-react';
+import { Bell, ChevronLeft, ChevronRight, Crown, Gavel, Landmark, LineChart, LogOut, Menu, PieChart, Presentation, Shield, Users, UserCheck, X } from 'lucide-react';
 
 const HodLayout = () => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -25,6 +25,9 @@ const HodLayout = () => {
     { to: '/hod/escalations', icon: Gavel, label: 'Escalated Grievances', section: 'Grievance & Escalations' },
     { to: '/hod/faculty-oversight', icon: Presentation, label: 'Faculty Workload', section: 'Department Oversight' },
     { to: '/hod/governance', icon: Landmark, label: 'Governance Oversight', section: 'Department Oversight' },
+    { to: '/hod/students', icon: Users, label: 'Students', section: 'Department Oversight' },
+    { to: '/hod/committees', icon: Shield, label: 'FYP Committees', section: 'Department Oversight' },
+    { to: '/hod/faculty', icon: UserCheck, label: 'Faculty', section: 'Department Oversight' },
     { to: '/hod/analytics', icon: LineChart, label: 'FYP Analytics', section: 'Department Oversight' },
   ];
 

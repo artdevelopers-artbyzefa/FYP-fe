@@ -44,6 +44,9 @@ export const HOD_ESCALATIONS_API_URL = '/hod/escalations';
 export const HOD_FACULTY_API_URL = '/hod/faculty-oversight';
 export const HOD_GOVERNANCE_API_URL = '/hod/governance';
 export const HOD_ANALYTICS_API_URL = '/hod/analytics';
+export const HOD_STUDENTS_API_URL = '/hod/students';
+export const HOD_COMMITTEES_API_URL = '/hod/committees';
+export const HOD_FACULTY_LIST_API_URL = '/hod/faculty';
 
 /**
  * FYP Office Assistant Endpoints
@@ -72,6 +75,7 @@ export const FACULTY_SUPERVISION_API_URL = '/faculty/supervision';
 export const FACULTY_MESSAGING_API_URL = '/faculty/messaging';
 export const FACULTY_EVALUATIONS_API_URL = '/faculty/evaluations';
 export const FACULTY_HEAD_DUTIES_API_URL = '/faculty/head-duties';
+export const FACULTY_SUPERVISOR_REQUESTS_API_URL = '/faculty/supervisor-requests';
 
 /**
  * FYP Office In-charge Endpoints

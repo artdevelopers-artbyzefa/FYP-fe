@@ -52,7 +52,7 @@ const FacultySidebar = ({ isOpen, onClose }) => {
     {
       title: 'SUPERVISION WORKFLOWS',
       items: [
-        { to: '/faculty/proposals', label: 'Student Proposals', icon: ProposalsIcon },
+        { to: '/faculty/proposals', label: 'Supervision Requests', icon: ProposalsIcon },
         { to: '/faculty/groups', label: 'Supervised Groups', icon: GroupsIcon },
         { to: '/faculty/messages', label: 'Student Messaging', icon: MessagesIcon }
       ]

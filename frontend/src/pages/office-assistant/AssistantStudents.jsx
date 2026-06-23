@@ -28,6 +28,7 @@ const AssistantStudents = () => {
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
   const submitLock = useRef(false);
+  const [loading, setLoading] = useState(true);
   const limit = 20;
 
   const loadStudents = useCallback((p) => {
@@ -38,7 +39,7 @@ const AssistantStudents = () => {
     }).catch(err => {
       console.error(err);
       showToast.error('Failed to load students. Is the backend running?');
-    });
+    }).finally(() => setLoading(false));
   }, [page]);
 
   useEffect(() => { loadStudents(page); }, [page, loadStudents]);
@@ -245,7 +246,15 @@ const AssistantStudents = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50 text-sm font-medium text-gray-700">
-              {students.map(s => (
+              {loading
+                ? Array.from({ length: 5 }, (_, i) => (
+                    <tr key={i} className="animate-pulse">
+                      {Array.from({ length: 7 }, (_, j) => (
+                        <td key={j} className="py-4 px-6"><div className="h-4 rounded-md skeleton w-24" /></td>
+              ))}
+                    </tr>
+                  ))
+                : students.map(s => (
                 <tr key={s.id || s._id} className={`hover:bg-gray-50/50 transition-colors ${s.isactive === false ? 'opacity-50' : ''}`}>
                   <td className="py-4 px-6 font-bold text-gray-800">
                     {s.name}

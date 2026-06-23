@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Save, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 import { getAvailability, saveAvailability } from '../../services/availabilityService';
+import { motion } from 'framer-motion';
+const container = { hidden: {}, show: { transition: { staggerChildren: 0.04 } } };
+const item = { hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } };
 
 const days = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'];
 
@@ -55,7 +58,6 @@ export default function AvailabilityGrid() {
   const [showError, setShowError] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
-  // Fetch schedule from backend on mount
   useEffect(() => {
     const fetchSchedule = async () => {
       try {
@@ -64,7 +66,6 @@ export default function AvailabilityGrid() {
           setSchedule(response.data);
         }
       } catch (error) {
-        // Backend not available — use default mock data silently
         console.warn('Backend unavailable, using default schedule data.', error);
       } finally {
         setLoading(false);
@@ -73,7 +74,6 @@ export default function AvailabilityGrid() {
     fetchSchedule();
   }, []);
 
-  // Save schedule to backend
   const handleSave = async () => {
     setSaving(true);
     setShowError(false);
@@ -107,10 +107,10 @@ export default function AvailabilityGrid() {
       }
     } else if (isBreak) {
       bg = 'bg-white';
-      text = 'text-gray-400 font-medium italic';
+      text = 'text-slate-400 font-medium italic';
     } else {
       bg = 'bg-white';
-      text = 'text-gray-400 font-medium';
+      text = 'text-slate-400 font-medium';
     }
 
     return `${bg} ${text} ${border}`;
@@ -120,21 +120,21 @@ export default function AvailabilityGrid() {
     return (
       <div className="flex items-center justify-center py-20">
         <Loader2 className="w-6 h-6 text-[#2563eb] animate-spin" />
-        <span className="ml-2 text-sm text-black font-medium">Loading schedule...</span>
+        <span className="ml-2 text-sm text-slate-500 font-medium">Loading schedule...</span>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
+    <motion.div variants={container} initial="hidden" animate="show" className="space-y-6">
 
       {/* Header Row: Title + Save Button */}
-      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+      <motion.div variants={item} className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
         <div className="space-y-1.5">
-          <h1 className="text-xl md:text-2xl font-extrabold text-black tracking-tight">
+          <h1 className="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">
             Weekly Availability & Consultation Matrix
           </h1>
-          <p className="text-sm text-black">
+          <p className="text-sm text-slate-500">
             Block out office hours and consultation slots for student meetings (Mon–Fri, 08:30 to 16:30)
           </p>
         </div>
@@ -142,7 +142,7 @@ export default function AvailabilityGrid() {
         <button
           onClick={handleSave}
           disabled={saving}
-          className="flex items-center gap-2 px-5 py-2.5 bg-white text-white text-sm font-bold rounded-xl hover:bg-white active:scale-[0.97] transition-all duration-150 shadow-sm hover:shadow-md shrink-0 self-start disabled:opacity-60 disabled:cursor-not-allowed"
+          className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white text-sm font-bold rounded-xl hover:bg-blue-700 active:scale-[0.97] transition-all duration-150 shadow-card hover:shadow-md shrink-0 self-start disabled:opacity-60 disabled:cursor-not-allowed focus-visible:ring-2 focus-visible:ring-blue-500"
         >
           {saving ? (
             <Loader2 className="w-4 h-4 animate-spin" />
@@ -151,22 +151,22 @@ export default function AvailabilityGrid() {
           )}
           {saving ? 'Saving...' : 'Save Grid Schedule'}
         </button>
-      </div>
+      </motion.div>
 
       {/* Schedule Table */}
-      <div className="bg-white rounded-2xl border border-black shadow-sm overflow-hidden">
+      <motion.div variants={item} className="bg-white rounded-2xl border border-line shadow-card overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full border-collapse min-w-[700px]">
             {/* Table Header */}
             <thead>
-              <tr className="border-b border-black">
-                <th className="px-4 py-3.5 text-left text-[10px] font-bold text-black tracking-widest bg-white/50 w-[110px]">
+              <tr className="border-b border-line">
+                <th className="px-4 py-3.5 text-left text-[10px] font-bold text-slate-900 tracking-widest bg-blue-50 w-[110px]">
                   Time Slot
                 </th>
                 {days.map((day) => (
                   <th
                     key={day}
-                    className="px-4 py-3.5 text-center text-[10px] font-bold text-black tracking-widest bg-white/50"
+                    className="px-4 py-3.5 text-center text-[10px] font-bold text-slate-900 tracking-widest bg-blue-50"
                   >
                     {day}
                   </th>
@@ -179,10 +179,10 @@ export default function AvailabilityGrid() {
               {schedule.map((row, rowIdx) => (
                 <tr
                   key={rowIdx}
-                  className="border-b border-black last:border-b-0"
+                  className="border-b border-line last:border-b-0"
                 >
                   {/* Time Slot Cell */}
-                  <td className="px-4 py-4 text-xs font-bold text-black whitespace-nowrap bg-white">
+                  <td className="px-4 py-4 text-xs font-bold text-slate-900 whitespace-nowrap bg-white">
                     {row.time}
                   </td>
 
@@ -192,7 +192,7 @@ export default function AvailabilityGrid() {
                     return (
                       <td
                         key={colIdx}
-                        className={`px-4 py-4 text-center text-sm whitespace-nowrap border-l border-gray-100 ${getCellStyle(slot, isFriday)}`}
+                        className={`px-4 py-4 text-center text-sm whitespace-nowrap border-l border-line ${getCellStyle(slot, isFriday)}`}
                       >
                         {slot.status === 'Break'
                           ? slot.type
@@ -205,13 +205,13 @@ export default function AvailabilityGrid() {
             </tbody>
           </table>
         </div>
-      </div>
+      </motion.div>
 
       {/* Success Toast */}
       {showSuccess && (
         <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 animate-in fade-in slide-in- duration-300">
           <div className="flex items-center gap-2.5 bg-white text-white px-6 py-3.5 rounded-full shadow-xl text-sm font-semibold">
-            <CheckCircle className="w-5 h-5 text-black shrink-0" />
+            <CheckCircle className="w-5 h-5 text-slate-900 shrink-0" />
             <span className="italic">Availability schedule saved successfully!</span>
           </div>
         </div>
@@ -221,12 +221,11 @@ export default function AvailabilityGrid() {
       {showError && (
         <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 animate-in fade-in slide-in- duration-300">
           <div className="flex items-center gap-2.5 bg-white text-white px-6 py-3.5 rounded-full shadow-xl text-sm font-semibold">
-            <AlertCircle className="w-5 h-5 text-black shrink-0" />
+            <AlertCircle className="w-5 h-5 text-slate-900 shrink-0" />
             <span>{errorMsg}</span>
           </div>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }
-

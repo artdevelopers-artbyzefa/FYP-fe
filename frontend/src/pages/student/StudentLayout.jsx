@@ -11,15 +11,11 @@ export default function DashboardLayout() {
 
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
-  
-  // Dropdown states
   const [ideasOpen, setIdeasOpen] = useState(false);
 
-  // Path helpers
   const path = location.pathname;
   const isLocked = !user.profileCompleted;
 
-  // Phase gating
   const [phaseSeq, setPhaseSeq] = useState(1);
   const [phaseName, setPhaseName] = useState('Phase 1: Student Registration');
   useEffect(() => {
@@ -42,11 +38,7 @@ export default function DashboardLayout() {
     const min = match ? match[1] : (itemId.startsWith('/project') ? 2 : 1);
     return phaseSeq >= min;
   };
-  const sectionVisible = (items) => items.some(item =>
-    item.isDropdown ? item.subItems.some(sub => phaseVisible(sub.id)) : phaseVisible(item.id)
-  );
 
-  // Auto-expand dropdowns based on active path
   useEffect(() => {
     if (path.includes('/project')) setIdeasOpen(true);
   }, [path]);
@@ -73,7 +65,6 @@ export default function DashboardLayout() {
 
   const currentDate = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
 
-  // Compute Page Title
   let pageTitle = 'Dashboard';
   if (path === '/profile') pageTitle = 'My Profile';
   else if (path.includes('/partners/new')) pageTitle = 'New Request';
@@ -84,29 +75,27 @@ export default function DashboardLayout() {
   else if (path.includes('/task-manager')) pageTitle = 'Task Manager';
 
   return (
-    <div className={`flex h-screen overflow-hidden relative bg-white selection:bg-blue-600/20 ${isLocked ? 'profile-locked' : ''}`} style={{ fontFamily: "'Poppins', sans-serif", backgroundColor: '#EFF6FF' }}>
-      
-      {/* ============= SIDEBAR ============= */}
+    <div className="flex h-screen overflow-hidden relative bg-surface selection:bg-blue-100 selection:text-blue-900 font-poppins">
       <div 
-        className={`bg-blue-600 flex flex-col flex-shrink-0 transition-all duration-300 overflow-hidden fixed lg:relative z-[50] h-full ${mobileSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}
-        style={{ width: sidebarCollapsed ? 68 : 256, minWidth: sidebarCollapsed ? 68 : 256, backgroundColor: '#1E3A8A' }}
+        className={`bg-white border-r border-line flex flex-col flex-shrink-0 transition-all duration-300 overflow-hidden fixed lg:relative z-[50] h-full ${mobileSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}
+        style={{ width: sidebarCollapsed ? 68 : 256, minWidth: sidebarCollapsed ? 68 : 256 }}
       >
-        <div className="flex items-center gap-3 px-4 py-5 border-b border-white/10 relative">
-          <div className="w-9 h-9 bg-white/15 rounded-xl flex items-center justify-center flex-shrink-0">
-            <GraduationCap className="text-white text-sm" />
+        <div className="flex items-center gap-3 px-4 py-5 border-b border-line relative">
+          <div className="w-9 h-9 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+            <GraduationCap className="text-blue-600" size={16} />
           </div>
           {!sidebarCollapsed && (
             <div className="overflow-hidden transition-all duration-300">
-              <div className="text-white text-sm font-bold whitespace-nowrap">CUI DFYP</div>
-              <div className="text-white/60 text-xs whitespace-nowrap leading-tight">Student Portal</div>
+              <div className="text-slate-900 text-sm font-bold whitespace-nowrap">CUI DFYP</div>
+              <div className="text-slate-400 text-xs whitespace-nowrap leading-tight">Student Portal</div>
             </div>
           )}
-          <button onClick={() => setMobileSidebarOpen(false)} className="ml-auto lg:hidden bg-transparent border-0 text-white cursor-pointer p-1 rounded-lg hover:bg-white/15 transition-colors absolute right-4">
-            <X className="text-lg" />
+          <button onClick={() => setMobileSidebarOpen(false)} className="ml-auto lg:hidden bg-transparent border-0 text-slate-400 cursor-pointer p-1 rounded-lg hover:bg-slate-100 transition-colors absolute right-4">
+            <X size={18} />
           </button>
         </div>
 
-        <nav className="flex-1 overflow-y-auto p-2 mt-2" style={{ scrollbarWidth: 'none' }}>
+        <nav className="flex-1 overflow-y-auto p-2" style={{ scrollbarWidth: 'none' }}>
           {navItems.map((group, idx) => {
             const visItems = group.items.filter(item =>
               item.isDropdown
@@ -117,12 +106,11 @@ export default function DashboardLayout() {
             return (
             <div key={idx} className={`mb-1 ${idx > 0 ? 'mt-4' : ''}`}>
               {!sidebarCollapsed && (
-                <div className="text-[0.6rem] font-bold uppercase tracking-widest text-white/30 px-3 mb-1 truncate transition-all">
+                <div className="text-[0.6rem] font-bold uppercase tracking-widest text-slate-400 px-3 mb-1 truncate transition-all">
                   {group.section}
                 </div>
               )}
-              {visItems
-                .map((item) => {
+              {visItems.map((item) => {
                 const isProfileLocked = isLocked && item.id !== '/profile';
                 const isActive = path === item.id || (item.isDropdown && item.subItems.some(sub => path === sub.id));
                 
@@ -135,24 +123,24 @@ export default function DashboardLayout() {
                     <div key={item.id} className="mb-1">
                       <div 
                         onClick={() => { if(!isProfileLocked) setOpen(!isOpen); }}
-                        className={`flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-200 ${isProfileLocked ? 'opacity-40 cursor-not-allowed pointer-events-none' : ''} ${isActive && !isOpen ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30 font-bold' : 'text-white/90 hover:bg-white/15 hover:text-white'} ${sidebarCollapsed ? 'justify-center' : ''}`}
+                        className={`flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-200 focus-visible:ring-2 focus-visible:ring-blue-500 ${isProfileLocked ? 'opacity-40 cursor-not-allowed pointer-events-none' : ''} ${isActive && !isOpen ? 'bg-blue-100 text-blue-700 font-semibold' : 'text-slate-600 hover:bg-blue-50 hover:text-blue-700'} ${sidebarCollapsed ? 'justify-center' : ''}`}
                         title={item.label}
                       >
-                        {React.createElement(item.icon, { className: "w-4 h-4" })}
+                        {React.createElement(item.icon, { size: 16 })}
                         {!sidebarCollapsed && <span className="text-sm font-medium flex-1 whitespace-nowrap">{item.label}</span>}
-                        {!sidebarCollapsed && isProfileLocked && <Lock className="text-[10px] text-white/40 animate-pulse mr-1" />}
-                        {!sidebarCollapsed && !isProfileLocked && <ChevronDown className="w-4 h-4" />}
+                        {!sidebarCollapsed && isProfileLocked && <Lock size={10} className="text-slate-300 animate-pulse mr-1" />}
+                        {!sidebarCollapsed && !isProfileLocked && <ChevronDown size={14} className="text-slate-400" />}
                       </div>
                       
                       {!sidebarCollapsed && isOpen && !isProfileLocked && (
-                        <div className="mt-1 ml-4 border-l border-white/10 pl-2 space-y-1">
+                        <div className="mt-1 ml-4 border-l border-slate-200 pl-2 space-y-1">
                           {visSubs.map(sub => (
                             <div 
                               key={sub.id} 
                               onClick={() => { navigate(sub.id); setMobileSidebarOpen(false); }}
-                              className={`flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer transition-all text-sm ${path === sub.id ? 'text-white bg-white/10 font-bold' : 'text-white/50 hover:text-white hover:bg-white/5'}`}
+                              className={`flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer transition-all text-sm focus-visible:ring-2 focus-visible:ring-blue-500 ${path === sub.id ? 'text-blue-700 bg-blue-50 font-semibold' : 'text-slate-500 hover:text-blue-700 hover:bg-blue-50'}`}
                             >
-                              <Circle className="text-[4px]" />
+                              <Circle size={4} className="fill-current" />
                               <span className="whitespace-nowrap">{sub.label}</span>
                             </div>
                           ))}
@@ -166,12 +154,12 @@ export default function DashboardLayout() {
                   <div 
                     key={item.id}
                     onClick={() => { if(!isProfileLocked) { navigate(item.id); setMobileSidebarOpen(false); } }}
-                    className={`flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-200 ${isProfileLocked ? 'opacity-40 cursor-not-allowed pointer-events-none' : ''} ${isActive ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30 font-bold' : 'text-white/90 hover:bg-white/15 hover:text-white'} ${sidebarCollapsed ? 'justify-center' : ''}`}
+                    className={`flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-200 focus-visible:ring-2 focus-visible:ring-blue-500 ${isProfileLocked ? 'opacity-40 cursor-not-allowed pointer-events-none' : ''} ${isActive ? 'bg-blue-100 text-blue-700 font-semibold' : 'text-slate-600 hover:bg-blue-50 hover:text-blue-700'} ${sidebarCollapsed ? 'justify-center' : ''}`}
                     title={item.label}
                   >
-                    {React.createElement(item.icon, { className: "w-4 h-4" })}
+                    {React.createElement(item.icon, { size: 16 })}
                     {!sidebarCollapsed && <span className="text-sm font-medium flex-1 whitespace-nowrap">{item.label}</span>}
-                    {!sidebarCollapsed && isProfileLocked && <Lock className="text-[10px] text-white/40 animate-pulse" />}
+                    {!sidebarCollapsed && isProfileLocked && <Lock size={10} className="text-slate-300 animate-pulse" />}
                   </div>
                 );
               })}
@@ -180,29 +168,25 @@ export default function DashboardLayout() {
           })}
         </nav>
 
-        <div className="p-2 border-t border-white/10">
-          <div onClick={() => logout()} className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-white/90 hover:bg-white/20 hover:text-blue-600 transition-all duration-200" title="Logout">
-            <LogOut className="text-sm w-5 text-center flex-shrink-0" />
-            {!sidebarCollapsed && <span className="text-sm font-medium transition-all duration-200">Logout</span>}
+        <div className="p-2 border-t border-line">
+          <div onClick={() => logout()} className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-slate-400 hover:bg-red-50 hover:text-red-500 transition-all duration-200" title="Logout">
+            <LogOut size={16} className="flex-shrink-0" />
+            {!sidebarCollapsed && <span className="text-sm font-medium">Logout</span>}
           </div>
         </div>
       </div>
 
-      {/* Mobile Overlay */}
-      {mobileSidebarOpen && <div onClick={() => setMobileSidebarOpen(false)} className="fixed inset-0 bg-blue-600/50 z-[40] lg:hidden backdrop-blur-sm" />}
+      {mobileSidebarOpen && <div onClick={() => setMobileSidebarOpen(false)} className="fixed inset-0 bg-black/30 z-[40] lg:hidden" />}
 
-      {/* ============= MAIN CONTENT WRAPPER ============= */}
       <div className="flex-1 flex flex-col overflow-hidden w-full transition-all duration-300 ease-in-out">
-        
-        {/* TOPBAR */}
-        <div className="bg-white border-b border-blue-100 px-3 md:px-6 h-14 md:h-16 flex items-center justify-between shadow-sm flex-shrink-0 z-[30] gap-3">
+        <div className="bg-white border-b border-line px-3 md:px-6 h-14 md:h-16 flex items-center justify-between flex-shrink-0 z-[30] gap-3">
           <div className="flex items-center gap-2 md:gap-3 min-w-0">
-            <button onClick={() => setMobileSidebarOpen(true)} className="w-9 h-9 rounded-xl bg-white flex items-center justify-center text-slate-500 hover:bg-white hover:text-primary transition-all border-0 lg:hidden flex-shrink-0">
-              <Menu className="text-sm" />
+            <button onClick={() => setMobileSidebarOpen(true)} className="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 hover:bg-blue-100 transition-all border-0 lg:hidden flex-shrink-0 focus-visible:ring-2 focus-visible:ring-blue-500">
+              <Menu size={15} />
             </button>
             
-            <button onClick={() => setSidebarCollapsed(!sidebarCollapsed)} className="hidden lg:flex w-9 h-9 rounded-xl bg-white items-center justify-center text-slate-500 hover:text-primary hover:bg-blue-50 transition-all border-0 flex-shrink-0">
-              {sidebarCollapsed  ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
+            <button onClick={() => setSidebarCollapsed(!sidebarCollapsed)} className="hidden lg:flex w-9 h-9 rounded-xl bg-blue-50 items-center justify-center text-blue-600 hover:bg-blue-100 transition-all border-0 flex-shrink-0">
+              {sidebarCollapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
             </button>
 
             <div className="min-w-0">
@@ -212,51 +196,43 @@ export default function DashboardLayout() {
           </div>
 
           <div className="flex items-center gap-1.5 md:gap-2 flex-shrink-0">
-            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-white border border-blue-100 rounded-xl text-xs font-bold text-slate-700 whitespace-nowrap">
+            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-blue-50 rounded-xl text-xs font-semibold text-blue-700 whitespace-nowrap">
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
               </span>
               <span>{phaseName}</span>
             </div>
 
             <div className="relative">
-              <button className="w-9 h-9 rounded-xl bg-white flex items-center justify-center text-slate-500 hover:bg-white hover:text-primary transition-all">
-                <Bell className="text-sm" />
-                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-white rounded-full border-2 border-white"></span>
+              <button className="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 hover:bg-blue-100 transition-all focus-visible:ring-2 focus-visible:ring-blue-500">
+                <Bell size={15} />
               </button>
             </div>
 
-            <Link to="/profile" className="flex items-center gap-2 p-1 md:px-2.5 md:py-1.5 bg-white rounded-xl cursor-pointer border border-blue-100 hover:bg-white hover:border-blue-600 transition-all">
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-700 text-xs font-bold shadow-sm flex-shrink-0 overflow-hidden">
+            <Link to="/profile" className="flex items-center gap-2 p-1 md:px-2.5 md:py-1.5 bg-blue-50 rounded-xl cursor-pointer hover:bg-blue-100 transition-all focus-visible:ring-2 focus-visible:ring-blue-500">
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center text-blue-700 text-xs font-bold flex-shrink-0 overflow-hidden">
                 {user.profilepicture ? (
                   <img src={user.profilepicture} alt="" className="w-full h-full object-cover" />
                 ) : (
-                  <div className="w-full h-full bg-white/50 flex items-center justify-center">{user.avatar || 'ST'}</div>
+                  <div className="w-full h-full bg-blue-100 flex items-center justify-center">{user.avatar || 'ST'}</div>
                 )}
               </div>
               <div className="text-left hidden sm:block">
-                <div className="text-xs font-bold text-slate-900 leading-tight truncate max-w-28">{user.name}</div>
-                <div className="text-[10px] text-slate-500 leading-tight font-bold">{user.role}</div>
+                <div className="text-xs font-semibold text-slate-900 leading-tight truncate max-w-28">{user.name}</div>
+                <div className="text-[10px] text-slate-400 leading-tight font-medium">{user.role}</div>
               </div>
-              <ChevronDown className="text-slate-500 ml-0.5 hidden sm:block text-[9px]" />
+              <ChevronDown size={10} className="text-slate-400 ml-0.5 hidden sm:block" />
             </Link>
           </div>
         </div>
 
-        {/* MAIN CONTENT AREA */}
-        <main className="flex-1 overflow-y-auto p-3 sm:p-4 md:p-5 lg:p-6 bg-white scroll-smooth relative" style={{ backgroundColor: '#EFF6FF' }}>
-          <div className="max-w-[1600px] mx-auto w-full">
+        <main className="flex-1 overflow-y-auto p-3 sm:p-4 md:p-5 lg:p-6 bg-surface scroll-smooth">
+          <div className="max-w-[1600px] mx-auto w-full animate-fadeSlideUp">
             <Outlet context={{ user }} />
           </div>
         </main>
       </div>
-      <style>{`
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-      `}</style>
     </div>
   );
 }
-

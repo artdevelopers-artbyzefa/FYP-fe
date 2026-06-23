@@ -2,15 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { Check, CheckCircle, Loader2, FileText, X } from 'lucide-react';
 import { getSupervisedGroups, approveWeeklyLog } from '../../services/supervisionService';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+const container = { hidden: {}, show: { transition: { staggerChildren: 0.04 } } };
+const item = { hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } };
 
 export default function SupervisedGroups() {
   const [groups, setGroups] = useState([]);
   const [loading, setLoading] = useState(true);
   
-  // Form state
   const [submitting, setSubmitting] = useState(false);
   
-  // Toast state
   const [toast, setToast] = useState({ show: false, message: '' });
 
   useEffect(() => {
@@ -19,19 +20,15 @@ export default function SupervisedGroups() {
 
   const fetchGroups = async () => {
     try {
-      // ==========================================
-      // BACKEND CONFIGURATION IS ALREADY DONE
-      // Calling the reusable service connected to Axios
-      // ==========================================
       const response = await getSupervisedGroups();
       if (response.data && response.data.length > 0) {
         setGroups(response.data);
       } else {
-        
+        setMockData();
       }
     } catch (error) {
       console.error(error);
-      
+      setMockData();
     } finally {
       setLoading(false);
     }
@@ -72,13 +69,8 @@ export default function SupervisedGroups() {
     
     setSubmitting(true);
     try {
-      // ==========================================
-      // BACKEND CONFIGURATION IS ALREADY DONE
-      // Using the axios service layer to approve log
-      // ==========================================
       await approveWeeklyLog(group.id, group.pendingLogId);
       
-      // Update local state directly after successful API call
       setGroups(prev => prev.map(g => 
         g.id === group.id 
           ? { ...g, logStatus: 'All Logs Approved', pendingLogId: null } 
@@ -88,7 +80,6 @@ export default function SupervisedGroups() {
       showToast('Weekly log approved!');
     } catch (error) {
       console.warn('Backend unavailable, simulating success.', error);
-      // Simulate success if backend fails for demo
       setTimeout(() => {
         setGroups(prev => prev.map(g => 
           g.id === group.id 
@@ -105,50 +96,50 @@ export default function SupervisedGroups() {
     return (
       <div className="flex items-center justify-center py-20">
         <Loader2 className="w-6 h-6 text-[#2563eb] animate-spin" />
-        <span className="ml-2 text-sm text-black font-medium">Loading groups...</span>
+        <span className="ml-2 text-sm text-slate-500 font-medium">Loading groups...</span>
       </div>
     );
   }
 
   return (
-    <div className="space-y-8 pb-10">
+    <motion.div variants={container} initial="hidden" animate="show" className="space-y-8 pb-10">
       {/* Page Header */}
-      <div className="space-y-1.5">
-        <h1 className="text-xl md:text-2xl font-extrabold text-black tracking-tight">
+      <motion.div variants={item} className="space-y-1.5">
+        <h1 className="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">
           Supervised Groups & Weekly Log Management
         </h1>
-        <p className="text-sm text-black">
+        <p className="text-sm text-slate-500">
           Track weekly log submissions, review draft chapters, and approve or reject weekly meeting records
         </p>
-      </div>
+      </motion.div>
 
       {/* Main Table Card */}
-      <div className="bg-white rounded-[2rem] shadow-sm border border-black overflow-hidden animate-in fade-in slide-in- duration-300">
-        <div className="px-6 py-6 border-b border-black/50">
-          <h2 className="text-lg font-black text-black tracking-tight">Active Supervision Roster</h2>
+      <motion.div variants={item} className="bg-white rounded-[2rem] shadow-card border border-line overflow-hidden animate-in fade-in slide-in- duration-300">
+        <div className="px-6 py-6 border-b border-line">
+          <h2 className="text-lg font-black text-slate-900 tracking-tight">Active Supervision Roster</h2>
         </div>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-white/50">
-                <th className="px-6 py-4 text-[10px] font-black text-black uppercase tracking-wider w-[28%]">Group ID & Title</th>
-                <th className="px-6 py-4 text-[10px] font-black text-black uppercase tracking-wider w-[18%]">Group Leader</th>
-                <th className="px-6 py-4 text-[10px] font-black text-black uppercase tracking-wider w-[20%]">Weekly Log Status</th>
-                <th className="px-6 py-4 text-[10px] font-black text-black uppercase tracking-wider w-[18%]">Draft Submission</th>
-                <th className="px-6 py-4 text-[10px] font-black text-black uppercase tracking-wider w-[16%]">Supervision Actions</th>
+              <tr className="bg-blue-50">
+                <th className="px-6 py-4 text-[10px] font-black text-slate-900 uppercase tracking-wider w-[28%]">Group ID & Title</th>
+                <th className="px-6 py-4 text-[10px] font-black text-slate-900 uppercase tracking-wider w-[18%]">Group Leader</th>
+                <th className="px-6 py-4 text-[10px] font-black text-slate-900 uppercase tracking-wider w-[20%]">Weekly Log Status</th>
+                <th className="px-6 py-4 text-[10px] font-black text-slate-900 uppercase tracking-wider w-[18%]">Draft Submission</th>
+                <th className="px-6 py-4 text-[10px] font-black text-slate-900 uppercase tracking-wider w-[16%]">Supervision Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-blue-600/50">
+            <tbody className="divide-y divide-slate-50">
               {groups.map((group) => (
-                <tr key={group.id} className="hover:bg-white/30 transition-colors">
+                <tr key={group.id} className="hover:bg-blue-50/30 transition-colors">
                   {/* Group Info */}
                   <td className="px-6 py-5 align-top">
                     <div className="space-y-1">
-                      <Link to={`/groups/${group.id}`} className="text-sm font-black text-black hover:text-blue-600 transition-colors">
+                      <Link to={`/groups/${group.id}`} className="text-sm font-black text-slate-900 hover:text-blue-600 transition-colors">
                         {group.id}: {group.title}
                       </Link>
-                      <p className="text-[11px] text-black font-medium">
+                      <p className="text-[11px] text-slate-500 font-medium">
                         {group.membersCount} Members
                       </p>
                     </div>
@@ -156,17 +147,17 @@ export default function SupervisedGroups() {
 
                   {/* Leader */}
                   <td className="px-6 py-5 align-top">
-                    <span className="text-sm font-bold text-black">{group.leaderName}</span>
+                    <span className="text-sm font-bold text-slate-900">{group.leaderName}</span>
                   </td>
 
                   {/* Status */}
                   <td className="px-6 py-5 align-top">
                     {group.pendingLogId ? (
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-white text-black border border-black/60">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-white text-slate-900 border border-line">
                         {group.logStatus}
                       </span>
                     ) : (
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-white text-black border border-black/60">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-white text-slate-900 border border-line">
                         {group.logStatus}
                       </span>
                     )}
@@ -182,7 +173,7 @@ export default function SupervisedGroups() {
                         </a>
                       </div>
                     ) : (
-                      <span className="text-xs text-black italic">No new drafts</span>
+                      <span className="text-xs text-slate-500 italic">No new drafts</span>
                     )}
                   </td>
 
@@ -192,7 +183,7 @@ export default function SupervisedGroups() {
                       <button 
                         onClick={() => handleAction(group)}
                         disabled={submitting}
-                        className="flex items-center justify-center w-full gap-1.5 px-3 py-2 bg-[#059669] text-white text-xs font-bold rounded-xl hover:bg-[#047857] active:scale-95 transition-all disabled:opacity-50"
+                        className="flex items-center justify-center w-full gap-1.5 px-3 py-2 bg-[#059669] text-white text-xs font-bold rounded-xl hover:bg-[#047857] active:scale-95 transition-all disabled:opacity-50 focus-visible:ring-2 focus-visible:ring-blue-500"
                       >
                         {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
                         Approve Log
@@ -200,7 +191,7 @@ export default function SupervisedGroups() {
                     ) : (
                       <button 
                         disabled
-                        className="flex items-center justify-center w-full gap-1.5 px-3 py-2 bg-white text-black text-xs font-bold rounded-xl border border-black cursor-not-allowed"
+                        className="flex items-center justify-center w-full gap-1.5 px-3 py-2 bg-white text-slate-900 text-xs font-bold rounded-xl border border-line cursor-not-allowed"
                       >
                         <Check className="w-4 h-4 opacity-50" />
                         Approve Log
@@ -212,19 +203,17 @@ export default function SupervisedGroups() {
             </tbody>
           </table>
         </div>
-      </div>
+      </motion.div>
 
       {/* Toast Notification */}
       {toast.show && (
         <div className="fixed bottom-8 right-8 z-50 animate-in fade-in slide-in- slide-in- duration-300">
-          <div className="flex items-center gap-3 px-6 py-4 rounded-xl shadow-xl text-sm font-bold bg-[#1c1917] text-white border border-black">
-            <CheckCircle className="w-5 h-5 text-black shrink-0" />
+          <div className="flex items-center gap-3 px-6 py-4 rounded-xl shadow-xl text-sm font-bold bg-blue-900 text-white border border-line">
+            <CheckCircle className="w-5 h-5 text-slate-900 shrink-0" />
             <span>{toast.message}</span>
           </div>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }
-
-

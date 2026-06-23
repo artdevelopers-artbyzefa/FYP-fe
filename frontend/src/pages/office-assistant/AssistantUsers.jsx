@@ -36,6 +36,7 @@ const AssistantUsers = () => {
   const [total, setTotal] = useState(0);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [showPassword, setShowPassword] = useState({});
+  const [loading, setLoading] = useState(true);
   const limit = 20;
 
   const loadUsers = useCallback((p) => {
@@ -43,7 +44,7 @@ const AssistantUsers = () => {
       setUsers(Array.isArray(res.data) ? res.data : []);
       setTotalPages(res.totalPages || 1);
       setTotal(res.total || 0);
-    }).catch(console.error);
+    }).catch(console.error).finally(() => setLoading(false));
   }, [page]);
 
   useEffect(() => { loadUsers(page); }, [page, loadUsers]);
@@ -133,7 +134,25 @@ const AssistantUsers = () => {
       </div>
 
       <div className="grid grid-cols-1 gap-3 md:hidden">
-        {users.map(u => {
+        {loading
+          ? Array.from({ length: 4 }, (_, i) => (
+              <div key={i} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 animate-pulse">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="skeleton w-10 h-10 rounded-xl flex-shrink-0" />
+                  <div className="flex-1 space-y-2">
+                    <div className="skeleton h-4 w-32" />
+                    <div className="skeleton h-3 w-40" />
+                  </div>
+                  <div className="skeleton h-5 w-16 rounded-lg" />
+                </div>
+                <div className="skeleton h-3 w-48 mb-2" />
+                <div className="skeleton h-5 w-24 mb-3" />
+                <div className="pt-3 border-t border-gray-50">
+                  <div className="skeleton h-8 w-20 rounded-lg" />
+                </div>
+              </div>
+            ))
+          : users.map(u => {
           const status = normalizeStatus(u.status);
           return (
             <div key={getUserKey(u)} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
@@ -172,7 +191,15 @@ const AssistantUsers = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50 text-sm font-medium text-gray-700">
-              {users.map(u => {
+              {loading
+                ? Array.from({ length: 5 }, (_, i) => (
+                    <tr key={i} className="animate-pulse">
+                      {Array.from({ length: 5 }, (_, j) => (
+                        <td key={j} className="py-4 px-6"><div className="h-4 rounded-md skeleton w-24" /></td>
+                      ))}
+                    </tr>
+                  ))
+                : users.map(u => {
                 const status = normalizeStatus(u.status);
                 return (
                   <tr key={getUserKey(u)} className="hover:bg-gray-50/50 transition-colors">
@@ -198,8 +225,9 @@ const AssistantUsers = () => {
                     </td>
                     <td className="py-4 px-6">{renderActions(u)}</td>
                   </tr>
-                );
-              })}
+                )
+              }
+            )}
             </tbody>
           </table>
         </div>

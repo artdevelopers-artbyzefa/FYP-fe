@@ -20,6 +20,7 @@ const AssistantFaculty = () => {
   const [search, setSearch] = useState('');
   const [typeFilter, setTypeFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
+  const [loading, setLoading] = useState(true);
 
   const loadFaculty = useCallback(() => {
     getOfficeFaculty().then(res => {
@@ -29,7 +30,7 @@ const AssistantFaculty = () => {
     }).catch(err => {
       console.error(err);
       showToast.error('Failed to load faculty.');
-    });
+    }).finally(() => setLoading(false));
   }, []);
 
   useEffect(() => { loadFaculty(); }, [loadFaculty]);
@@ -207,7 +208,32 @@ const AssistantFaculty = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {filtered.map(f => {
+        {loading
+          ? Array.from({ length: 6 }, (_, i) => (
+              <div key={i} className="rounded-2xl border-2 p-5 shadow-sm animate-pulse">
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex items-center gap-3">
+                    <div className="skeleton w-11 h-11 rounded-xl flex-shrink-0" />
+                    <div className="space-y-2">
+                      <div className="skeleton h-4 w-24" />
+                      <div className="skeleton h-3 w-32" />
+                    </div>
+                  </div>
+                  <div className="skeleton w-4 h-4 rounded" />
+                </div>
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="skeleton h-5 w-16 rounded-lg" />
+                  <div className="skeleton h-5 w-16 rounded-lg" />
+                </div>
+                <div className="mt-auto pt-3 border-t border-gray-100/60">
+                  <div className="flex gap-4">
+                    <div className="skeleton h-3 w-20" />
+                    <div className="skeleton h-3 w-16" />
+                  </div>
+                </div>
+              </div>
+            ))
+          : filtered.map(f => {
           const isActive = f.active;
           return (
             <div

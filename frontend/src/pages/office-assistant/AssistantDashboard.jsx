@@ -11,9 +11,10 @@ const AssistantDashboard = () => {
   const navigate = useNavigate();
   const { user } = useOutletContext();
   const [stats, setStats] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getOfficeDashboardStats().then((res) => setStats(res.data)).catch(console.error);
+    getOfficeDashboardStats().then((res) => setStats(res.data)).catch(console.error).finally(() => setLoading(false));
   }, []);
 
   const formatTime = (dateStr) => {
@@ -53,6 +54,14 @@ const AssistantDashboard = () => {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+        {loading
+          ? Array.from({ length: 4 }, (_, i) => (
+              <div key={i} className="rounded-2xl border p-4 md:p-5 animate-pulse">
+                <div className="skeleton h-8 w-16 mb-2" />
+                <div className="skeleton h-3 w-24" />
+              </div>
+            ))
+          : <>
         <div className="bg-blue-50 rounded-2xl border border-blue-100 p-4 md:p-5 text-center lg:text-left">
           <div className="text-2xl md:text-3xl font-black text-blue-600 mb-1">{stats?.totalUsers || 0}</div>
           <div className="text-[9px] md:text-[10px] font-bold text-blue-400 uppercase tracking-widest leading-tight">Total Users</div>
@@ -69,10 +78,57 @@ const AssistantDashboard = () => {
           <div className="text-2xl md:text-3xl font-black text-amber-600 mb-1">{stats?.committees || 0}</div>
           <div className="text-[9px] md:text-[10px] font-bold text-amber-400 uppercase tracking-widest leading-tight">Committees</div>
         </div>
+        </>}
       </div>
 
       {/* Quick Navigation & Recent Activities */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {loading
+          ? <>
+              <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-8 animate-pulse">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="skeleton w-10 h-10 rounded-xl" />
+                  <div className="space-y-2">
+                    <div className="skeleton h-5 w-48" />
+                    <div className="skeleton h-3 w-64" />
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {Array.from({ length: 4 }, (_, i) => (
+                    <div key={i} className="p-5 rounded-2xl bg-white border border-gray-100">
+                      <div className="flex justify-between items-center mb-4">
+                        <div className="skeleton w-10 h-10 rounded-xl" />
+                        <div className="skeleton w-5 h-5 rounded" />
+                      </div>
+                      <div className="skeleton h-4 w-32 mb-2" />
+                      <div className="skeleton h-3 w-full" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-8 animate-pulse">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="skeleton w-10 h-10 rounded-xl" />
+                  <div className="space-y-2">
+                    <div className="skeleton h-5 w-32" />
+                    <div className="skeleton h-3 w-40" />
+                  </div>
+                </div>
+                <div className="space-y-4">
+                  {Array.from({ length: 3 }, (_, i) => (
+                    <div key={i} className="flex gap-4 items-start pb-4 border-b border-gray-100">
+                      <div className="skeleton w-8 h-8 rounded-xl flex-shrink-0" />
+                      <div className="flex-1 space-y-2">
+                        <div className="skeleton h-3 w-full" />
+                        <div className="skeleton h-3 w-3/4" />
+                        <div className="skeleton h-3 w-24" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </>
+          : <>
         <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-8">
           <div className="flex items-center gap-4 mb-6">
             <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
@@ -168,6 +224,7 @@ const AssistantDashboard = () => {
             )}
           </div>
         </div>
+        </>}
       </div>
     </div>
   );

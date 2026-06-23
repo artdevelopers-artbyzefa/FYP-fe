@@ -1,125 +1,214 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { getFacultyDashboardStats } from '../../services/faculty.service';
-import { ArrowRight, CalendarCheck, Crown, FileSignature, GitBranch, Star, UserCheck } from 'lucide-react';
+import { ArrowRight, CalendarCheck, Crown, FileSignature, GitBranch, Landmark, Star, UserCheck } from 'lucide-react';
+import { motion } from 'framer-motion';
+const container = { hidden: {}, show: { transition: { staggerChildren: 0.04 } } };
+const item = { hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } };
 
 const FacultyDashboard = () => {
   const navigate = useNavigate();
   const { user } = useOutletContext();
   const [stats, setStats] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getFacultyDashboardStats().then((res) => setStats(res.data)).catch(console.error);
+    getFacultyDashboardStats().then((res) => setStats(res.data)).catch(console.error).finally(() => setLoading(false));
   }, []);
 
-  return (
-    <>
-      {/* Welcome Banner */}
-      <div className="bg-white rounded-[2rem] border border-black shadow-sm p-6 sm:p-8 mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 animate-[fadeIn_0.4s_ease-out]" >
-        <div className="text-white">
-          <h1 className="text-2xl sm:text-3xl font-black mb-2 tracking-tight">Welcome, {user?.name || 'Faculty'}!</h1>
-          <p className="text-sm text-white/80 font-medium max-w-2xl leading-relaxed">
-            Here is your academic supervision and committee management dashboard. Track active student groups, review supervision requests, and input committee evaluation scores.
-          </p>
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <div className="skeleton h-56 rounded-2xl" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {Array.from({ length: 4 }, (_, i) => (
+            <div key={i} className="bg-white rounded-2xl border border-line p-6 shadow-card">
+              <div className="flex items-start justify-between mb-4">
+                <div className="skeleton h-12 w-12 rounded-2xl" />
+                <div className="skeleton h-6 w-20 rounded-full" />
+              </div>
+              <div className="skeleton h-3 w-32 rounded-md mb-2" />
+              <div className="skeleton h-8 w-16 rounded-md" />
+            </div>
+          ))}
         </div>
-        <div className="flex gap-3 flex-wrap">
-          <button onClick={() => navigate('/faculty/proposals')} className="bg-white text-black hover:bg-white px-5 py-3 rounded-xl font-bold text-sm shadow-lg transition-all flex items-center gap-2 cursor-pointer">
-            <UserCheck className="w-4 h-4" /> Supervision Requests ({stats?.pendingRequests ?? '...'})
-          </button>
-          <button onClick={() => navigate('/faculty/evaluations')} className="bg-white hover:bg-white text-white px-5 py-3 rounded-xl font-bold text-sm shadow-lg transition-all flex items-center gap-2 cursor-pointer">
-            <Star className="w-4 h-4" /> Defenses (2)
-          </button>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {Array.from({ length: 4 }, (_, i) => (
+            <div key={i} className="bg-white p-6 rounded-2xl border border-line shadow-card">
+              <div className="flex justify-between items-center mb-4">
+                <div className="skeleton h-10 w-10 rounded-xl" />
+                <div className="skeleton h-5 w-5 rounded-md" />
+              </div>
+              <div className="skeleton h-5 w-40 rounded-md mb-1" />
+              <div className="skeleton h-3 w-full rounded-md" />
+            </div>
+          ))}
         </div>
       </div>
+    );
+  }
+
+  return (
+    <motion.div variants={container} initial="hidden" animate="show" className="space-y-6">
+      {/* Welcome Banner */}
+      <motion.div variants={item} className="relative overflow-hidden bg-gradient-to-br from-blue-950 via-blue-900 to-blue-700 rounded-2xl">
+        <div className="absolute -top-24 -right-24 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
+        <div className="absolute -bottom-16 -left-16 w-64 h-64 bg-blue-400/5 rounded-full blur-3xl" />
+        <div className="relative px-6 sm:px-8 py-6 sm:py-8">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+            <div className="text-white">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
+                  <Landmark size={16} className="text-white/90" />
+                </div>
+                <span className="text-[11px] font-semibold text-blue-200 tracking-widest uppercase">Faculty Portal</span>
+              </div>
+              <h1 className="text-2xl sm:text-3xl font-bold mb-2 tracking-tight text-balance">Supervision & Committee Hub</h1>
+              <p className="text-sm text-blue-200 font-medium max-w-2xl leading-relaxed">
+                Welcome back, <span className="text-white font-semibold">{user?.name || 'Faculty'}</span> — track active student groups, review supervision requests, and input committee evaluation scores.
+              </p>
+            </div>
+            <div className="flex gap-3 flex-wrap">
+              <button onClick={() => navigate('/faculty/proposals')} className="group relative overflow-hidden bg-white text-blue-900 px-5 py-2.5 rounded-full font-semibold text-sm shadow-lg transition-all duration-300 flex items-center gap-2 cursor-pointer active:scale-95 hover:shadow-xl focus-visible:ring-2 focus-visible:ring-white">
+                <span className="relative flex items-center gap-2">
+                  <UserCheck size={14} />
+                  Supervision Requests
+                  {(stats?.pendingRequests ?? 0) > 0 && (
+                    <span className="bg-blue-600 text-white px-2 py-0.5 rounded-full text-[10px] font-bold">
+                      {stats.pendingRequests}
+                    </span>
+                  )}
+                </span>
+              </button>
+              <button onClick={() => navigate('/faculty/evaluations')} className="group relative overflow-hidden bg-white/15 border border-white/20 text-white px-5 py-2.5 rounded-full font-semibold text-sm shadow-lg transition-all duration-300 flex items-center gap-2 cursor-pointer active:scale-95 hover:bg-white/20 hover:shadow-xl focus-visible:ring-2 focus-visible:ring-white">
+                <Star size={14} />
+                Committee Evaluations
+              </button>
+            </div>
+          </div>
+        </div>
+      </motion.div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
-        <div className="bg-white rounded-2xl border border-black p-6 shadow-sm flex items-center gap-5 hover:border-blue-600 transition-all">
-          <div className="w-14 h-14 rounded-2xl bg-white text-black flex items-center justify-center text-2xl flex-shrink-0 shadow-inner"><GitBranch className="w-4 h-4" /></div>
-          <div className="min-w-0 flex-1">
-            <div className="text-xs font-bold text-black uppercase tracking-wider mb-1 truncate">Supervised Groups</div>
-            <div className="flex items-baseline justify-between">
-              <span className="text-3xl font-black text-black">{stats ? stats.supervisedGroups : '...'}</span>
-              <span className="text-xs font-bold text-black bg-white px-2 py-0.5 rounded-lg">{stats ? stats.supervisedGroups : 0}/{stats ? stats.supervisedCap : 8} Full</span>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <motion.div variants={item} className="group bg-white rounded-2xl border border-line p-6 shadow-card transition-all duration-300 hover:shadow-card-hover hover:-translate-y-0.5">
+          <div className="flex items-start justify-between mb-4">
+            <div className="w-12 h-12 rounded-2xl bg-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-105 transition-transform duration-300">
+              <GitBranch size={20} />
             </div>
+            <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full whitespace-nowrap text-blue-700 bg-blue-50">
+              {stats ? `${stats.supervisedGroups}/${stats.supervisedCap || 8}` : '.../8'}
+            </span>
           </div>
-        </div>
-        <div className="bg-white rounded-2xl border border-black p-6 shadow-sm flex items-center gap-5 hover:border-blue-600 transition-all">
-          <div className="w-14 h-14 rounded-2xl bg-white text-black flex items-center justify-center text-2xl flex-shrink-0 shadow-inner"><UserCheck className="w-4 h-4" /></div>
-          <div className="min-w-0 flex-1">
-            <div className="text-xs font-bold text-black uppercase tracking-wider mb-1 truncate">Supervision Requests</div>
-            <div className="flex items-baseline justify-between">
-              <span className="text-3xl font-black text-black">{stats ? stats.pendingRequests : '...'}</span>
-              <span className="text-xs font-bold text-black bg-white px-2 py-0.5 rounded-lg">Requires Review</span>
+          <div className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-0.5">Supervised Groups</div>
+          <div className="text-3xl font-extrabold text-slate-900 tabular-nums tracking-tight">{stats ? stats.supervisedGroups : '...'}</div>
+        </motion.div>
+        <motion.div variants={item} className="group bg-white rounded-2xl border border-line p-6 shadow-card transition-all duration-300 hover:shadow-card-hover hover:-translate-y-0.5">
+          <div className="flex items-start justify-between mb-4">
+            <div className="w-12 h-12 rounded-2xl bg-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-105 transition-transform duration-300">
+              <UserCheck size={20} />
             </div>
+            <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full whitespace-nowrap text-amber-700 bg-amber-50">
+              Requires Review
+            </span>
           </div>
-        </div>
-        <div className="bg-white rounded-2xl border border-black p-6 shadow-sm flex items-center gap-5 hover:border-blue-600 transition-all">
-          <div className="w-14 h-14 rounded-2xl bg-white text-black flex items-center justify-center text-2xl flex-shrink-0 shadow-inner"><CalendarCheck className="w-4 h-4" /></div>
-          <div className="min-w-0 flex-1">
-            <div className="text-xs font-bold text-black uppercase tracking-wider mb-1 truncate">Weekly Log Approvals</div>
-            <div className="flex items-baseline justify-between">
-              <span className="text-3xl font-black text-black">{stats ? stats.weeklyLogs : '...'}</span>
-              <span className="text-xs font-bold text-black bg-white px-2 py-0.5 rounded-lg">Up to date</span>
+          <div className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-0.5">Supervision Requests</div>
+          <div className="text-3xl font-extrabold text-slate-900 tabular-nums tracking-tight">{stats ? stats.pendingRequests : '...'}</div>
+        </motion.div>
+        <motion.div variants={item} className="group bg-white rounded-2xl border border-line p-6 shadow-card transition-all duration-300 hover:shadow-card-hover hover:-translate-y-0.5">
+          <div className="flex items-start justify-between mb-4">
+            <div className="w-12 h-12 rounded-2xl bg-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-105 transition-transform duration-300">
+              <CalendarCheck size={20} />
             </div>
+            <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full whitespace-nowrap text-emerald-700 bg-emerald-50">
+              Up to date
+            </span>
           </div>
-        </div>
-        <div className="bg-white rounded-2xl border border-black p-6 shadow-sm flex items-center gap-5 hover:border-blue-600 transition-all">
-          <div className="w-14 h-14 rounded-2xl bg-white text-black flex items-center justify-center text-2xl flex-shrink-0 shadow-inner"><Crown className="w-4 h-4" /></div>
-          <div className="min-w-0 flex-1">
-            <div className="text-xs font-bold text-black uppercase tracking-wider mb-1 truncate">Committee Head Status</div>
-            <div className="flex items-baseline justify-between">
-              <span className="text-3xl font-black text-black">{stats ? stats.committeeHead : '...'}</span>
-              <span className="text-xs font-bold text-black bg-white px-2 py-0.5 rounded-lg">Active Head</span>
+          <div className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-0.5">Weekly Log Approvals</div>
+          <div className="text-3xl font-extrabold text-slate-900 tabular-nums tracking-tight">{stats ? stats.weeklyLogs : '...'}</div>
+        </motion.div>
+        <motion.div variants={item} className="group bg-white rounded-2xl border border-line p-6 shadow-card transition-all duration-300 hover:shadow-card-hover hover:-translate-y-0.5">
+          <div className="flex items-start justify-between mb-4">
+            <div className="w-12 h-12 rounded-2xl bg-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-105 transition-transform duration-300">
+              <Crown size={20} />
             </div>
+            <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full whitespace-nowrap text-blue-700 bg-blue-50">
+              Active Head
+            </span>
           </div>
-        </div>
+          <div className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-0.5">Committee Head Status</div>
+          <div className="text-3xl font-extrabold text-slate-900 tabular-nums tracking-tight">{stats ? stats.committeeHead : '...'}</div>
+        </motion.div>
       </div>
 
       {/* Quick Access Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <div onClick={() => navigate('/faculty/proposals')} className="bg-white p-6 rounded-2xl border border-black shadow-sm hover:border-blue-600 hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <motion.div
+          variants={item}
+          onClick={() => navigate('/faculty/proposals')}
+          className="group bg-white p-6 rounded-2xl border border-line shadow-card hover:shadow-card-hover hover:-translate-y-0.5 hover:border-blue-200 transition-all duration-300 cursor-pointer flex flex-col justify-between"
+        >
           <div className="flex justify-between items-center mb-4">
-            <div className="w-10 h-10 rounded-xl bg-white text-black flex items-center justify-center font-bold"><UserCheck className="text-base" /></div>
-            <ArrowRight className="text-black group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
+            <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-105 transition-transform duration-200">
+              <UserCheck size={18} />
+            </div>
+            <ArrowRight className="text-slate-300 group-hover:text-blue-600 group-hover:translate-x-1 transition-all w-5 h-5" />
           </div>
           <div>
-            <h3 className="font-bold text-black text-base mb-1">Supervision Requests</h3>
-            <p className="text-xs text-black font-medium">Review student requests to be your supervisee. Accept or reject supervision requests.</p>
+            <h3 className="font-semibold text-slate-900 text-base mb-1 group-hover:text-blue-700 transition-colors">Supervision Requests</h3>
+            <p className="text-xs text-slate-400 font-medium">Review student requests to be your supervisee. Accept or reject supervision requests.</p>
           </div>
-        </div>
-        <div onClick={() => navigate('/faculty/supervision')} className="bg-white p-6 rounded-2xl border border-black shadow-sm hover:border-blue-600 hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between">
+        </motion.div>
+        <motion.div
+          variants={item}
+          onClick={() => navigate('/faculty/supervision')}
+          className="group bg-white p-6 rounded-2xl border border-line shadow-card hover:shadow-card-hover hover:-translate-y-0.5 hover:border-blue-200 transition-all duration-300 cursor-pointer flex flex-col justify-between"
+        >
           <div className="flex justify-between items-center mb-4">
-            <div className="w-10 h-10 rounded-xl bg-white text-black flex items-center justify-center font-bold"><GitBranch className="text-base" /></div>
-            <ArrowRight className="text-black group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
+            <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-105 transition-transform duration-200">
+              <GitBranch size={18} />
+            </div>
+            <ArrowRight className="text-slate-300 group-hover:text-blue-600 group-hover:translate-x-1 transition-all w-5 h-5" />
           </div>
           <div>
-            <h3 className="font-bold text-black text-base mb-1">Project Supervision</h3>
-            <p className="text-xs text-black font-medium">Track weekly log submissions and review draft thesis chapters.</p>
+            <h3 className="font-semibold text-slate-900 text-base mb-1 group-hover:text-blue-700 transition-colors">Project Supervision</h3>
+            <p className="text-xs text-slate-400 font-medium">Track weekly log submissions and review draft thesis chapters.</p>
           </div>
-        </div>
-        <div onClick={() => navigate('/faculty/evaluations')} className="bg-white p-6 rounded-2xl border border-black shadow-sm hover:border-blue-600 hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between">
+        </motion.div>
+        <motion.div
+          variants={item}
+          onClick={() => navigate('/faculty/evaluations')}
+          className="group bg-white p-6 rounded-2xl border border-line shadow-card hover:shadow-card-hover hover:-translate-y-0.5 hover:border-blue-200 transition-all duration-300 cursor-pointer flex flex-col justify-between"
+        >
           <div className="flex justify-between items-center mb-4">
-            <div className="w-10 h-10 rounded-xl bg-white text-black flex items-center justify-center font-bold"><Star className="text-base" /></div>
-            <ArrowRight className="text-black group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
+            <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-105 transition-transform duration-200">
+              <Star size={18} />
+            </div>
+            <ArrowRight className="text-slate-300 group-hover:text-blue-600 group-hover:translate-x-1 transition-all w-5 h-5" />
           </div>
           <div>
-            <h3 className="font-bold text-black text-base mb-1">Committee Evaluations</h3>
-            <p className="text-xs text-black font-medium">Input scores per CLO criteria and submit locked evaluation scorecards.</p>
+            <h3 className="font-semibold text-slate-900 text-base mb-1 group-hover:text-blue-700 transition-colors">Committee Evaluations</h3>
+            <p className="text-xs text-slate-400 font-medium">Input scores per CLO criteria and submit locked evaluation scorecards.</p>
           </div>
-        </div>
-        <div onClick={() => navigate('/faculty/head-duties')} className="bg-white p-6 rounded-2xl border border-black shadow-sm hover:border-blue-600 hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between bg-white/10">
+        </motion.div>
+        <motion.div
+          variants={item}
+          onClick={() => navigate('/faculty/head-duties')}
+          className="group bg-white p-6 rounded-2xl border border-line shadow-card hover:shadow-card-hover hover:-translate-y-0.5 hover:border-blue-200 transition-all duration-300 cursor-pointer flex flex-col justify-between"
+        >
           <div className="flex justify-between items-center mb-4">
-            <div className="w-10 h-10 rounded-xl bg-white text-black flex items-center justify-center font-bold"><Crown className="text-base" /></div>
-            <ArrowRight className="text-black group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
+            <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-105 transition-transform duration-200">
+              <Crown size={18} />
+            </div>
+            <ArrowRight className="text-slate-300 group-hover:text-blue-600 group-hover:translate-x-1 transition-all w-5 h-5" />
           </div>
           <div>
-            <h3 className="font-bold text-black text-base mb-1">Committee Head Duties</h3>
-            <p className="text-xs text-black font-medium">Consolidate member evaluations and publish final consensus scores.</p>
+            <h3 className="font-semibold text-slate-900 text-base mb-1 group-hover:text-blue-700 transition-colors">Committee Head Duties</h3>
+            <p className="text-xs text-slate-400 font-medium">Consolidate member evaluations and publish final consensus scores.</p>
           </div>
-        </div>
+        </motion.div>
       </div>
-    </>
+    </motion.div>
   );
 };
 

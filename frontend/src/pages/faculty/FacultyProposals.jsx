@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { getSupervisorRequests, approveSupervisorRequest, rejectSupervisorRequest } from '../../services/faculty.service';
 import { X, Check, Loader2, CheckCircle, AlertCircle, UserCheck } from 'lucide-react';
+import { motion } from 'framer-motion';
+const container = { hidden: {}, show: { transition: { staggerChildren: 0.04 } } };
+const item = { hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } };
 
 const FacultyProposals = () => {
   const [requests, setRequests] = useState([]);
@@ -59,47 +62,47 @@ const FacultyProposals = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 className="w-6 h-6 text-black animate-spin" />
-        <span className="ml-2 text-sm text-black font-medium">Loading requests...</span>
+        <Loader2 className="w-6 h-6 text-blue-600 animate-spin" />
+        <span className="ml-2 text-sm text-slate-500 font-medium">Loading requests...</span>
       </div>
     );
   }
 
   return (
-    <>
-      <div className="border-b border-black pb-4 mb-6">
-        <h2 className="text-xl font-black text-black">Supervision Requests</h2>
-        <p className="text-xs text-black mt-0.5 font-medium">Review incoming student requests to be your supervisee. Accept to take them under your supervision or reject to decline.</p>
-      </div>
+    <motion.div variants={container} initial="hidden" animate="show" className="space-y-6">
+      <motion.div variants={item} className="border-b border-line pb-4 mb-6">
+        <h2 className="text-xl font-bold text-slate-900">Supervision Requests</h2>
+        <p className="text-xs text-slate-500 mt-0.5 font-medium">Review incoming student requests to be your supervisee. Accept to take them under your supervision or reject to decline.</p>
+      </motion.div>
 
       <div className="space-y-4">
         {requests.length === 0 ? (
-          <div className="bg-white rounded-2xl border border-black p-8 text-center text-black shadow-sm">
-            <UserCheck className="w-10 h-10 mx-auto mb-3 text-black/40" />
-            <p className="font-bold text-black">No pending supervision requests</p>
-            <p className="text-xs text-black mt-1">When students request you as their supervisor, they will appear here.</p>
-          </div>
+          <motion.div variants={item} className="bg-white rounded-2xl border border-line p-8 text-center shadow-card">
+            <UserCheck className="w-10 h-10 mx-auto mb-3 text-slate-300" />
+            <p className="font-semibold text-slate-900">No pending supervision requests</p>
+            <p className="text-xs text-slate-500 mt-1">When students request you as their supervisor, they will appear here.</p>
+          </motion.div>
         ) : (
           requests.map(r => (
-            <div key={r.id} className="bg-white rounded-2xl border border-black shadow-sm overflow-hidden">
+            <motion.div key={r.id} variants={item} className="bg-white rounded-2xl border border-line shadow-card overflow-hidden">
               <div className="p-5 md:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap mb-2">
-                    <h3 className="font-black text-black text-base truncate">{r.groupName}</h3>
+                    <h3 className="font-semibold text-slate-900 text-base truncate">{r.groupName}</h3>
                     {r.title && (
-                      <span className="text-xs font-bold text-black bg-white border border-black px-2 py-0.5 rounded-lg truncate max-w-[200px]">
+                      <span className="text-xs font-semibold text-slate-700 bg-slate-100 border border-line px-2 py-0.5 rounded-lg truncate max-w-[200px]">
                         {r.title}
                       </span>
                     )}
-                    <span className="text-[10px] font-bold text-black bg-yellow-100 border border-yellow-300 px-2 py-0.5 rounded-lg">
+                    <span className="text-[10px] font-semibold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-lg">
                       Pending
                     </span>
                   </div>
-                  <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-black font-medium">
-                    <span>Leader: <strong>{r.leaderName}</strong> ({r.leaderRegNo})</span>
-                    <span>Members: <strong>{r.members.length}</strong></span>
+                  <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-500 font-medium">
+                    <span>Leader: <strong className="text-slate-700">{r.leaderName}</strong> ({r.leaderRegNo})</span>
+                    <span>Members: <strong className="text-slate-700">{r.members.length}</strong></span>
                     {r.members.length > 0 && (
-                      <span className="text-black/70">
+                      <span className="text-slate-400">
                         ({r.members.map(m => m.name).join(', ')})
                       </span>
                     )}
@@ -109,7 +112,7 @@ const FacultyProposals = () => {
                   <button
                     onClick={() => handleApprove(r.id)}
                     disabled={actionLoading === r.id}
-                    className="flex items-center gap-1.5 px-4 py-2 bg-green-600 text-white text-xs font-bold rounded-xl hover:bg-green-700 active:scale-95 transition-all disabled:opacity-50 cursor-pointer"
+                    className="flex items-center gap-1.5 px-4 py-2 bg-emerald-600 text-white text-xs font-semibold rounded-xl hover:bg-emerald-700 active:scale-95 transition-all disabled:opacity-50 cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500"
                   >
                     {actionLoading === r.id ? (
                       <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -121,24 +124,24 @@ const FacultyProposals = () => {
                   <button
                     onClick={() => handleReject(r.id)}
                     disabled={actionLoading === r.id}
-                    className="flex items-center gap-1.5 px-4 py-2 bg-white text-black text-xs font-bold rounded-xl border border-black hover:bg-white active:scale-95 transition-all disabled:opacity-50 cursor-pointer"
+                    className="flex items-center gap-1.5 px-4 py-2 bg-white text-slate-600 text-xs font-semibold rounded-xl border border-line hover:bg-red-50 hover:text-red-600 hover:border-red-200 active:scale-95 transition-all disabled:opacity-50 cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500"
                   >
                     <X className="w-3.5 h-3.5" />
                     Reject
                   </button>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))
         )}
       </div>
 
       {toast.show && (
-        <div className="fixed bottom-8 right-8 z-50 animate-in fade-in slide-in- slide-in- duration-300">
-          <div className={`flex items-center gap-3 px-6 py-4 rounded-xl shadow-xl text-sm font-bold border ${
+        <div className="fixed bottom-8 right-8 z-50 animate-fadeSlideUp">
+          <div className={`flex items-center gap-3 px-6 py-4 rounded-xl shadow-lg text-sm font-semibold border ${
             toast.type === 'success'
-              ? 'bg-black text-white border-gray-800'
-              : 'bg-white text-black border-black'
+              ? 'bg-emerald-600 text-white border-emerald-500'
+              : 'bg-white text-slate-800 border-line'
           }`}>
             {toast.type === 'success' ? (
               <CheckCircle className="w-5 h-5 shrink-0" />
@@ -149,7 +152,7 @@ const FacultyProposals = () => {
           </div>
         </div>
       )}
-    </>
+    </motion.div>
   );
 };
 

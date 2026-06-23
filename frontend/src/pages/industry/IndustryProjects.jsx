@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { getAssignedProjects } from '../../services/industry.service';
 import { showToast as toast } from '../../components/AppToast';
 import { FileText, Pencil, StarHalf } from 'lucide-react';
+
+const container = { hidden: {}, show: { transition: { staggerChildren: 0.04 } } };
+const item = { hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } };
 
 const STATUS_BADGE = {
   pending: 'bg-white',
@@ -20,7 +24,7 @@ export default function IndustryProjects() {
 
   return (
     <div style={{ animation: 'fadeInUp 0.3s ease-out' }}>
-      <div className="rounded-[2rem] p-6 sm:p-8 mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 border border-black shadow-sm"
+      <div className="rounded-[2rem] p-6 sm:p-8 mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 border border-line shadow-card"
         >
         <div className="text-white">
           <h1 className="text-2xl sm:text-3xl font-black mb-2 tracking-tight">External Evaluation Portal</h1>
@@ -41,14 +45,14 @@ export default function IndustryProjects() {
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl border border-black shadow-sm overflow-hidden mb-8">
-        <div className="p-5 bg-white border-b border-black">
-          <h3 className="text-base font-black text-black">Assigned Projects Roster</h3>
+      <div className="bg-white rounded-2xl border border-line shadow-card overflow-hidden mb-8">
+        <div className="p-5 bg-white border-b border-line">
+          <h3 className="text-base font-black text-slate-900">Assigned Projects Roster</h3>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-white/75 border-b border-black text-[11px] font-black text-black uppercase tracking-wider">
+              <tr className="bg-blue-50 border-b border-line text-[11px] font-black text-slate-900 uppercase tracking-wider">
                 <th className="py-3.5 px-6">Project Title & Group ID</th>
                 <th className="py-3.5 px-6">Internal Supervisor</th>
                 <th className="py-3.5 px-6">Thesis Document</th>
@@ -56,18 +60,18 @@ export default function IndustryProjects() {
                 <th className="py-3.5 px-6 text-right">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-blue-600 text-sm font-medium text-black">
+            <tbody className="divide-slate-50 text-sm font-medium text-slate-900">
               {projects.map(p => (
-                <tr key={p.groupId} className="hover:bg-white/50 transition-colors">
+                <tr key={p.groupId} className="hover:bg-blue-50/30 transition-colors">
                   <td className="py-4 px-6">
                     <div>
-                      <span className="font-bold text-black block">{p.title}</span>
-                      <span className="text-xs text-black font-mono">Group {p.groupId} | {p.members} Members</span>
+                      <span className="font-bold text-slate-900 block">{p.title}</span>
+                      <span className="text-xs text-slate-900 font-mono">Group {p.groupId} | {p.members} Members</span>
                     </div>
                   </td>
-                  <td className="py-4 px-6 text-black font-bold">{p.internalSupervisor}</td>
+                  <td className="py-4 px-6 text-slate-900 font-bold">{p.internalSupervisor}</td>
                   <td className="py-4 px-6">
-                    <button onClick={() => toast.info(`Downloading ${p.thesisFile}...`)} className="text-xs font-bold text-black hover:underline cursor-pointer">
+                    <button onClick={() => toast.info(`Downloading ${p.thesisFile}...`)} className="text-xs font-bold text-slate-900 hover:underline cursor-pointer">
                       <FileText className="w-4 h-4 mr-1" />{p.thesisFile}
                     </button>
                   </td>
@@ -80,13 +84,13 @@ export default function IndustryProjects() {
                     {p.evaluationStatus === 'pending' ? (
                       <button
                         onClick={() => navigate(`/industry-dashboard/scoring?groupId=${p.groupId}`)}
-                        className="px-3 py-1.5 rounded-lg text-white hover:bg-blue-600 text-xs font-bold transition-all cursor-pointer shadow-sm"
+                        className="px-3 py-1.5 rounded-lg text-white hover:bg-blue-600 text-xs font-bold transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none shadow-card"
                         style={{ backgroundColor: '#2563EB' }}
                       >
                         <Pencil className="w-4 h-4 mr-1" />Input Score
                       </button>
                     ) : (
-                      <span className="text-xs text-black font-bold">Locked</span>
+                      <span className="text-xs text-slate-900 font-bold">Locked</span>
                     )}
                   </td>
                 </tr>

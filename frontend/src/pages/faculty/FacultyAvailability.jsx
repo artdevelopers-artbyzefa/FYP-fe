@@ -2,12 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { getFacultyAvailability } from '../../services/faculty.service';
 import { showToast } from '../../components/AppToast';
 import { Save } from 'lucide-react';
+import { motion } from 'framer-motion';
+const container = { hidden: {}, show: { transition: { staggerChildren: 0.04 } } };
+const item = { hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } };
 
 const FacultyAvailability = () => {
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
   const timeslots = ['09:00-10:00', '10:00-11:00', '11:00-12:00', '12:00-13:00', '14:00-15:00', '15:00-16:00'];
   
   const [availability, setAvailability] = useState({});
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getFacultyAvailability().then(res => {
@@ -16,7 +20,7 @@ const FacultyAvailability = () => {
         availMap[item.day] = item.slots;
       });
       setAvailability(availMap);
-    }).catch(console.error);
+    }).catch(console.error).finally(() => setLoading(false));
   }, []);
 
   const toggleSlot = (day, slot) => {
@@ -30,7 +34,6 @@ const FacultyAvailability = () => {
       }
       return updated;
     });
-    // In a real app, this should trigger a debounced API save
   };
 
   const isAvailable = (day, slot) => {
@@ -41,38 +44,73 @@ const FacultyAvailability = () => {
     showToast.success('Availability schedule saved successfully!');
   };
 
-  return (
-    <>
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4 border-b border-black pb-4">
-        <div>
-          <h2 className="text-xl font-black text-black">Weekly Availability Schedule</h2>
-          <p className="text-xs text-black mt-0.5 font-medium">Click on time slots to toggle your availability for student consultations and defense scheduling</p>
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <div className="border-b border-line pb-4 mb-6">
+          <div className="skeleton h-7 w-64 rounded-md" />
+          <div className="skeleton h-4 w-80 rounded-md mt-2" />
         </div>
-        <button onClick={handleSave} className="bg-white hover:bg-blue-600 text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg transition-all flex items-center gap-2 cursor-pointer">
-          <Save className="w-4 h-4" /> Save Schedule
-        </button>
+        <div className="bg-white rounded-2xl border border-line shadow-card overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-center border-collapse text-xs font-semibold">
+              <thead>
+                <tr className="bg-slate-50 border-b border-line">
+                  <th className="py-4 px-4 text-left border-r border-line"><div className="skeleton h-4 w-16 rounded-md" /></th>
+                  {days.map(d => <th key={d} className="py-4 px-4 border-r border-line last:border-r-0"><div className="skeleton h-4 w-20 rounded-md mx-auto" /></th>)}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-line">
+                {Array.from({ length: 6 }, (_, i) => (
+                  <tr key={i} className="animate-pulse">
+                    <td className="py-4 px-4 text-left border-r border-line"><div className="skeleton h-4 w-24 rounded-md" /></td>
+                    {days.map((_, j) => (
+                      <td key={j} className="py-4 px-4 border-r border-line last:border-r-0">
+                        <div className="skeleton h-4 w-[80px] rounded-md mx-auto" />
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
+    );
+  }
 
-      <div className="bg-white rounded-2xl border border-black shadow-sm overflow-hidden mb-6">
+  return (
+    <motion.div variants={container} initial="hidden" animate="show" className="space-y-6">
+      <motion.div variants={item} className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4 border-b border-line pb-4">
+        <div>
+          <h2 className="text-xl font-bold text-slate-900">Weekly Availability Schedule</h2>
+          <p className="text-xs text-slate-500 mt-0.5 font-medium">Click on time slots to toggle your availability for student consultations and defense scheduling</p>
+        </div>
+        <button onClick={handleSave} className="bg-blue-600 text-white px-5 py-2.5 rounded-xl font-semibold text-sm shadow-sm hover:bg-blue-700 transition-all flex items-center gap-2 cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500">
+          <Save size={15} /> Save Schedule
+        </button>
+      </motion.div>
+
+      <motion.div variants={item} className="bg-white rounded-2xl border border-line shadow-card overflow-hidden mb-6">
         <div className="overflow-x-auto">
-          <table className="w-full text-center border-collapse text-xs font-bold">
+          <table className="w-full text-center border-collapse text-xs font-semibold">
             <thead>
-              <tr className="bg-white/75 border-b border-black text-black uppercase tracking-wider">
-                <th className="py-4 px-4 text-left border-r border-black">Time Slot</th>
-                {days.map(d => <th key={d} className="py-4 px-4 border-r border-black">{d}</th>)}
+              <tr className="bg-slate-50 border-b border-line text-slate-900 uppercase tracking-wider">
+                <th className="py-4 px-4 text-left border-r border-line">Time Slot</th>
+                {days.map(d => <th key={d} className="py-4 px-4 border-r border-line last:border-r-0">{d}</th>)}
               </tr>
             </thead>
-            <tbody className="divide-y divide-blue-600">
+            <tbody className="divide-y divide-line">
               {timeslots.map(slot => (
-                <tr key={slot} className="hover:bg-white/50 transition-colors">
-                  <td className="py-4 px-4 text-left text-black border-r border-black whitespace-nowrap">{slot}</td>
+                <tr key={slot} className="hover:bg-blue-50/30 transition-colors">
+                  <td className="py-4 px-4 text-left text-slate-900 border-r border-line whitespace-nowrap font-medium">{slot}</td>
                   {days.map(day => (
                     <td 
                       key={day} 
                       onClick={() => toggleSlot(day, slot)}
-                      className={`py-4 px-4 border-r border-gray-100 cursor-pointer transition-colors ${isAvailable(day, slot) ? 'bg-white' : 'bg-gray-100 text-gray-400'}`}
+                      className={`py-4 px-4 border-r border-line last:border-r-0 cursor-pointer transition-colors font-medium ${isAvailable(day, slot) ? 'bg-emerald-50 text-emerald-700' : 'bg-white text-slate-400'}`}
                     >
-                      {isAvailable(day, slot) ? 'Available (Consult)' : 'Busy (Blocked)'}
+                      {isAvailable(day, slot) ? 'Available (Consult)' : 'Blocked (Busy)'}
                     </td>
                   ))}
                 </tr>
@@ -80,8 +118,8 @@ const FacultyAvailability = () => {
             </tbody>
           </table>
         </div>
-      </div>
-    </>
+      </motion.div>
+    </motion.div>
   );
 };
 

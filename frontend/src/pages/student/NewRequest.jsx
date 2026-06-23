@@ -2,7 +2,10 @@ import React, { useState, useRef, useEffect } from 'react';
 import { searchPartners, sendPartnerRequest, getSentRequests } from '../../services/student.service';
 import { showToast as toast } from '../../components/AppToast';
 import { Check, ChevronDown, ChevronUp, Clock, Loader, Search, Send, UserCheck, UserX, Users, X } from 'lucide-react';
+import { motion } from 'framer-motion';
 
+const container = { hidden: {}, show: { transition: { staggerChildren: 0.04 } } };
+const item = { hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } };
 export default function NewRequest() {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
@@ -11,6 +14,7 @@ export default function NewRequest() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [sentRequests, setSentRequests] = useState([]);
   const [sentOpen, setSentOpen] = useState(false);
+  const [pageLoading, setPageLoading] = useState(true);
   const debounceRef = useRef(null);
   const wrapperRef = useRef(null);
 
@@ -26,9 +30,12 @@ export default function NewRequest() {
   }, []);
 
   const loadSent = () => {
+    setPageLoading(true);
     getSentRequests().then(data => {
       setSentRequests(Array.isArray(data) ? data : []);
-    }).catch(() => {});
+    }).catch(() => {}).finally(() => {
+      setPageLoading(false);
+    });
   };
 
   const doSearch = (q) => {
@@ -82,14 +89,22 @@ export default function NewRequest() {
   };
 
   return (
-    <div className="animate-in fade-in slide-in- duration-300">
-      <div className="bg-white rounded-2xl border border-black shadow-sm p-6 max-w-2xl mx-auto">
-        <h2 className="text-xl font-bold text-black mb-2">Find FYP Partners</h2>
-        <p className="text-sm text-black mb-6">Search for students by Registration Number or Email to send a group request.</p>
+    <motion.div variants={container} initial="hidden" animate="show" className="animate-in fade-in slide-in- duration-300">
+      {pageLoading ? (
+        <div className="space-y-6 animate-pulse bg-white rounded-2xl border border-line shadow-card p-6 max-w-2xl mx-auto">
+          <div className="skeleton h-8 w-64" />
+          <div className="skeleton h-10 w-full rounded-xl" />
+          <div className="skeleton h-32 w-full rounded-xl" />
+          <div className="skeleton h-10 w-32 rounded-xl" />
+        </div>
+      ) : (
+        <motion.div variants={item} className="bg-white rounded-2xl border border-line shadow-card p-6 max-w-2xl mx-auto">
+        <h2 className="text-xl font-bold text-slate-900 mb-2">Find FYP Partners</h2>
+        <p className="text-sm text-slate-900 mb-6">Search for students by Registration Number or Email to send a group request.</p>
 
         <div className="relative" ref={wrapperRef}>
-          <div className="flex items-center gap-2 bg-white border border-black rounded-xl px-4 py-2.5 focus-within:border-blue-600 focus-within:ring-2 focus-within:ring-blue-100 transition-all">
-            <Search className="w-4 h-4 text-gray-400 flex-shrink-0" />
+          <div className="flex items-center gap-2 bg-white border border-line rounded-xl px-4 py-2.5 focus-within:border-blue-600 focus-within:ring-2 focus-within:ring-blue-100 transition-all">
+            <Search className="w-4 h-4 text-slate-400 flex-shrink-0" />
             <input
               type="text"
               value={query}
@@ -98,32 +113,32 @@ export default function NewRequest() {
               className="flex-1 bg-transparent border-0 text-sm outline-none p-0"
               placeholder="Search by name, reg no or email..."
             />
-            {loading && <Loader className="w-4 h-4 animate-spin text-gray-400 flex-shrink-0" />}
+            {loading && <Loader className="w-4 h-4 animate-spin text-slate-400 flex-shrink-0" />}
             {query && !loading && (
-              <button onClick={() => { setQuery(''); setResults([]); setShowDropdown(false); }} className="bg-transparent border-0 p-0 text-gray-400 hover:text-gray-600 cursor-pointer">
+              <button onClick={() => { setQuery(''); setResults([]); setShowDropdown(false); }} className="bg-transparent border-0 p-0 text-slate-400 hover:text-slate-500 cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500">
                 <X className="w-4 h-4" />
               </button>
             )}
           </div>
 
           {showDropdown && (
-            <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-lg z-50 max-h-80 overflow-y-auto">
+            <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-line rounded-xl shadow-lg z-50 max-h-80 overflow-y-auto">
               {results.length === 0 ? (
-                <div className="flex flex-col items-center py-8 text-gray-400">
+                <div className="flex flex-col items-center py-8 text-slate-400">
                   <Users className="w-8 h-8 mb-2" />
                   <p className="text-sm font-medium">No available students found</p>
                   <p className="text-xs mt-1">Try a different search term</p>
                 </div>
               ) : (
                 results.map(student => (
-                  <div key={student.id} className="flex items-center justify-between px-4 py-3 hover:bg-gray-50 border-b border-gray-50 last:border-0 transition-colors">
+                  <div key={student.id} className="flex items-center justify-between px-4 py-3 hover:bg-slate-50 border-b border-slate-50 last:border-0 transition-colors">
                     <div className="flex items-center gap-3 min-w-0 flex-1">
                       <div className="w-10 h-10 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
                         {student.name.substring(0,2).toUpperCase()}
                       </div>
                       <div className="min-w-0">
-                        <div className="font-bold text-sm text-gray-800 truncate">{student.name}</div>
-                        <div className="text-xs text-gray-500 mt-0.5">{student.regNo} {student.semester ? `• Sem ${student.semester}` : ''} {student.cgpa ? `• CGPA: ${student.cgpa}` : ''}</div>
+                        <div className="font-bold text-sm text-slate-900 truncate">{student.name}</div>
+                        <div className="text-xs text-slate-500 mt-0.5">{student.regNo} {student.semester ? `• Sem ${student.semester}` : ''} {student.cgpa ? `• CGPA: ${student.cgpa}` : ''}</div>
                       </div>
                     </div>
                     <button
@@ -141,26 +156,26 @@ export default function NewRequest() {
         </div>
 
         {sentRequests.length > 0 && (
-          <div className="mt-8 border-t border-gray-100 pt-6">
+          <div className="mt-8 border-t border-line pt-6">
             <button
               onClick={() => setSentOpen(!sentOpen)}
               className="flex items-center justify-between w-full text-left"
             >
-              <h3 className="text-sm font-bold text-gray-700">Sent Requests ({sentRequests.length})</h3>
-              {sentOpen ? <ChevronUp className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
+              <h3 className="text-sm font-bold text-slate-700">Sent Requests ({sentRequests.length})</h3>
+              {sentOpen ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
             </button>
 
             {sentOpen && (
               <div className="mt-3 space-y-2">
                 {sentRequests.map(r => (
-                  <div key={r.id} className="flex items-center justify-between px-4 py-3 bg-gray-50 rounded-xl border border-gray-100">
+                  <div key={r.id} className="flex items-center justify-between px-4 py-3 bg-slate-50 rounded-xl border border-line">
                     <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 bg-gray-200 text-gray-600 rounded-full flex items-center justify-center font-bold text-xs flex-shrink-0">
+                      <div className="w-9 h-9 bg-slate-200 text-slate-500 rounded-full flex items-center justify-center font-bold text-xs flex-shrink-0">
                         {r.name.substring(0,2).toUpperCase()}
                       </div>
                       <div>
-                        <div className="text-sm font-bold text-gray-800">{r.name}</div>
-                        <div className="text-xs text-gray-500">{r.regNo}</div>
+                        <div className="text-sm font-bold text-slate-900">{r.name}</div>
+                        <div className="text-xs text-slate-500">{r.regNo}</div>
                       </div>
                     </div>
                     <span className={`flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg border ${statusBadge(r.status)}`}>
@@ -173,7 +188,8 @@ export default function NewRequest() {
             )}
           </div>
         )}
-      </div>
-    </div>
+      </motion.div>
+      )}
+    </motion.div>
   );
 }

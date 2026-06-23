@@ -49,3 +49,8 @@ export const getHodFacultyList = async (page = 1, limit = 20) => {
   const res = await apiClient.get(HOD_FACULTY_LIST_API_URL, { params: { page, limit } });
   return res.data;
 };
+
+export const resolveEscalation = async (id, action, reason) => {
+  const res = await apiClient.put(`/hod/escalations/${id}/resolve`, { action, reason });
+  return res.data;
+};

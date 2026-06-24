@@ -101,4 +101,196 @@
   .skeleton {
     @apply rounded-lg bg-gradient-to-r from-slate-100 via-slate-200 to-slate-100 bg-[length:200%_100%] animate-shimmer;
   }
+
+  .pref-card {
+    @apply relative p-4 rounded-2xl border-2 cursor-pointer transition-all duration-200 bg-white border-gray-200 hover:border-blue-300 hover:bg-blue-50/30;
+  }
+
+  .pref-card-selected {
+    @apply ring-1;
+  }
+
+  .pref-card-priority-1 {
+    @apply bg-emerald-50 border-emerald-400 ring-emerald-400;
+  }
+
+  .pref-card-priority-2 {
+    @apply bg-blue-50 border-blue-400 ring-blue-400;
+  }
+
+  .pref-card-priority-3 {
+    @apply bg-amber-50 border-amber-400 ring-amber-400;
+  }
+
+  .pref-badge-1 {
+    @apply w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 bg-emerald-500 text-white;
+  }
+
+  .pref-badge-2 {
+    @apply w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 bg-blue-500 text-white;
+  }
+
+  .pref-badge-3 {
+    @apply w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 bg-amber-500 text-white;
+  }
+
+  .pref-badge-empty {
+    @apply w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 bg-gray-100 text-gray-400;
+  }
+
+  .pref-dot-1 {
+    @apply w-3 h-3 rounded-full bg-emerald-500;
+  }
+
+  .pref-dot-2 {
+    @apply w-3 h-3 rounded-full bg-blue-500;
+  }
+
+  .pref-dot-3 {
+    @apply w-3 h-3 rounded-full bg-amber-500;
+  }
+
+  .pref-text-1 {
+    @apply text-emerald-700;
+  }
+
+  .pref-text-2 {
+    @apply text-blue-700;
+  }
+
+  .pref-text-3 {
+    @apply text-amber-700;
+  }
+
+  .pref-title {
+    @apply text-sm font-bold text-slate-900;
+  }
+
+  .pref-subtitle {
+    @apply text-[10px] font-bold mt-1;
+  }
+
+  .card-shadow {
+    @apply bg-white rounded-2xl border border-line shadow-sm;
+  }
+
+  .section-header {
+    @apply border-b border-line pb-4;
+  }
+
+  .section-title {
+    @apply text-xl font-bold text-slate-900;
+  }
+
+  .section-desc {
+    @apply text-xs text-slate-500 mt-0.5 font-medium;
+  }
+
+  .flex-center {
+    @apply flex items-center justify-center;
+  }
+
+  .flex-between {
+    @apply flex items-center justify-between;
+  }
+
+  .badge-sm {
+    @apply font-bold text-[10px] px-2 py-0.5 rounded-lg border;
+  }
+
+  .badge-active {
+    @apply bg-emerald-50 text-emerald-700 border-emerald-200;
+  }
+
+  .badge-pending {
+    @apply bg-amber-50 text-amber-700 border-amber-200;
+  }
+
+  .badge-locked {
+    @apply bg-gray-50 text-gray-500 border-gray-200;
+  }
+
+  .badge-emerald {
+    @apply bg-emerald-50 text-emerald-700 border-emerald-200;
+  }
+
+  .badge-amber {
+    @apply bg-amber-50 text-amber-700 border-amber-200;
+  }
+
+  .badge-rose {
+    @apply bg-rose-50 text-rose-600 border-rose-200;
+  }
+
+  .badge-blue {
+    @apply bg-blue-50 text-blue-700 border-blue-200;
+  }
+
+  .badge-slate {
+    @apply bg-slate-50 text-slate-500 border-slate-200;
+  }
+
+  .card {
+    @apply bg-white rounded-2xl border border-line shadow-sm;
+  }
+
+  .card-hover {
+    @apply hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-300;
+  }
+
+  .btn-edit {
+    @apply px-2.5 py-1.5 rounded-lg bg-blue-50 text-blue-600 border border-blue-200 text-[10px] font-bold transition-all hover:bg-blue-100 cursor-pointer flex items-center gap-1;
+  }
+
+  .btn-delete {
+    @apply px-2.5 py-1.5 rounded-lg bg-rose-50 text-rose-600 border border-rose-200 text-[10px] font-bold transition-all hover:bg-rose-100 cursor-pointer flex items-center gap-1;
+  }
+
+  .btn-primary {
+    @apply px-5 py-2.5 bg-blue-600 text-white rounded-xl text-xs font-bold shadow-sm hover:bg-blue-700 transition-all cursor-pointer border-0;
+  }
+
+  .btn-primary-sm {
+    @apply px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white border border-blue-600 text-xs font-semibold transition-all cursor-pointer;
+  }
+
+  .input-field {
+    @apply w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-blue-500 transition-all;
+  }
+
+  .th-header {
+    @apply bg-blue-50 text-[10px] font-bold text-slate-500 uppercase tracking-wider;
+  }
+
+  .td-cell {
+    @apply py-2.5 px-4;
+  }
+
+  .page-header {
+    @apply border-b border-line pb-4 mb-6;
+  }
+
+  .page-title {
+    @apply text-xl font-bold text-slate-900;
+  }
+
+  .page-desc {
+    @apply text-xs text-slate-500 mt-0.5 font-medium;
+  }
+
+  .skeleton-row {
+    @apply animate-pulse;
+  }
+
+  .empty-state {
+    @apply flex flex-col items-center gap-2 py-12 text-slate-400;
+  }
+
+  .empty-icon {
+    @apply w-8 h-8;
+  }
+
+  .empty-text {
+    @apply text-sm font-bold;
+  }
 }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useOutletContext, Link, Navigate } from 'react-router-dom';
 import { getStudentProfile } from '../../services/student.service';
-import { FolderOpen, IdCard, Inbox, Lightbulb, Loader, Mail, User, Users } from 'lucide-react';
+import { FolderOpen, IdCard, Inbox, Lightbulb, Loader, Mail, User, Users, UserPlus, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.04 } } };
@@ -11,16 +11,16 @@ const PROFILE_CACHE_KEY = 'cached_profile';
 
 export default function Dashboard() {
   const { user } = useOutletContext();
-  const cached = (() => { try { const d = localStorage.getItem(PROFILE_CACHE_KEY); return d ? JSON.parse(d) : null; } catch { return null; } })();
-  const [profile, setProfile] = useState(cached);
-  const [loading, setLoading] = useState(!cached);
+  const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    localStorage.removeItem(PROFILE_CACHE_KEY);
     getStudentProfile().then(data => {
       setProfile(data);
       setLoading(false);
       try { localStorage.setItem(PROFILE_CACHE_KEY, JSON.stringify(data)); } catch {}
-    });
+    }).catch(() => setLoading(false));
   }, []);
 
   if (loading) return <div className="flex items-center justify-center min-h-[60vh]"><Loader className="animate-spin text-slate-900 text-3xl" /></div>;
@@ -79,43 +79,90 @@ export default function Dashboard() {
       </motion.div>
 
       {/* Dashboard Widgets Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-5 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 items-stretch">
         
-        {/* Tabs Card */}
-        <motion.div variants={item} className="bg-white rounded-[2rem] border border-line shadow-card p-6 min-h-[250px]">
-          <div className="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-5 border-b border-line pb-4">
-            <div className="flex gap-6 w-full md:w-auto overflow-x-auto">
-              <button className="text-sm font-bold text-slate-900 border-b-2 border-line pb-2 whitespace-nowrap focus-visible:ring-2 focus-visible:ring-blue-500"><Users className="w-4 h-4 mr-1.5 focus-visible:ring-2 focus-visible:ring-blue-500" /> Group Members</button>
-              <Link to="/partners/requests" className="text-sm font-bold text-slate-900 hover:text-blue-600 pb-2 whitespace-nowrap transition-colors focus-visible:ring-2 focus-visible:ring-blue-500"><Inbox className="w-4 h-4 mr-1.5 focus-visible:ring-2 focus-visible:ring-blue-500" /> Requests</Link>
-              <Link to="/project/approved" className="text-sm font-bold text-slate-900 hover:text-blue-600 pb-2 whitespace-nowrap transition-colors focus-visible:ring-2 focus-visible:ring-blue-500"><Lightbulb className="w-4 h-4 mr-1.5 focus-visible:ring-2 focus-visible:ring-blue-500" /> Ideas</Link>
+        <motion.div variants={item} className="card p-6 flex flex-col">
+          <div className="flex items-center gap-3 mb-5 pb-4 border-b border-line">
+            <div className="w-10 h-10 rounded-xl bg-blue-100 flex-center text-blue-600">
+              <Users size={18} />
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-slate-900">Group Members</h3>
+              <p className="text-[10px] text-slate-400">{profile?.group?.name || 'Your FYP team'}</p>
             </div>
           </div>
-          <div className="text-center py-16 text-sm text-slate-900 flex flex-col items-center">
-            <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center text-2xl text-slate-900 mb-4">
-              <FolderOpen className="w-4 h-4" />
+          {profile?.group?.members?.length > 0 ? (
+            <div className="flex-1 space-y-2">
+              {profile.group.members.map((m, i) => (
+                <div key={i} className="flex items-center gap-3 p-3 rounded-xl bg-blue-50/50 border border-blue-100">
+                  <div className="w-9 h-9 rounded-lg bg-blue-100 flex-center text-blue-600 text-xs font-bold flex-shrink-0">
+                    {(m.name || '?').split(' ').filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase()}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="text-sm font-bold text-slate-900 truncate">{m.name || 'Unknown'}</div>
+                    <div className="text-[10px] text-slate-400 truncate">{m.email || ''}</div>
+                  </div>
+                </div>
+              ))}
             </div>
-            <p className="font-bold text-slate-900">No detailed records to display yet.</p>
-            <p className="text-xs mt-1">Start by finding FYP partners or submitting a new idea.</p>
+          ) : (
+            <div className="flex-1 flex flex-col items-center justify-center text-center py-6">
+              <div className="w-14 h-14 rounded-full bg-blue-50 flex-center text-blue-400 mb-4">
+                <UserPlus size={24} />
+              </div>
+              <p className="text-sm font-bold text-slate-900">No group yet</p>
+              <p className="text-xs text-slate-400 mt-1 mb-5 max-w-[200px]">Find partners to form your FYP group and start collaborating.</p>
+              <Link to="/partners" className="btn-primary text-xs inline-flex items-center gap-1.5">
+                <UserPlus size={14} /> Find Partners
+              </Link>
+            </div>
+          )}
+        </motion.div>
+
+        <motion.div variants={item} className="card p-6 flex flex-col">
+          <div className="flex items-center gap-3 mb-5 pb-4 border-b border-line">
+            <div className="w-10 h-10 rounded-xl bg-amber-50 flex-center text-amber-600">
+              <Inbox size={18} />
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-slate-900">Requests</h3>
+              <p className="text-[10px] text-slate-400">Partner invitations</p>
+            </div>
+          </div>
+          <div className="flex-1 flex flex-col items-center justify-center text-center py-6">
+            <div className="w-14 h-14 rounded-full bg-amber-50 flex-center text-amber-400 mb-4">
+              <Send size={24} />
+            </div>
+            <p className="text-sm font-bold text-slate-900">No pending requests</p>
+            <p className="text-xs text-slate-400 mt-1 mb-5 max-w-[200px]">Partner requests and invitations will appear here.</p>
+            <Link to="/partners/requests" className="text-xs font-bold text-blue-600 hover:text-blue-700 hover:underline inline-flex items-center gap-1 bg-transparent border-0 cursor-pointer">
+              View All <ArrowRight size={14} />
+            </Link>
           </div>
         </motion.div>
 
-        {/* Side Widget (Task Completion) */}
-        <motion.div variants={item} className="bg-white rounded-[2rem] border border-line shadow-card p-6 min-h-[250px] flex flex-col items-center">
-          <div className="w-full text-left mb-6">
-            <h3 className="text-base font-bold text-slate-900">Task Completion</h3>
-            <p className="text-[10px] font-bold text-slate-900 tracking-widest mt-1">Overall Project Progress</p>
-          </div>
-          
-          <div className="relative flex-1 flex items-center justify-center">
-            <svg viewBox="0 0 36 36" className="w-36 h-36">
-              <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#eff6ff" strokeWidth="4"/>
-              <path strokeDasharray="25, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#2563EB" strokeWidth="4" strokeLinecap="round"/>
-            </svg>
-            <div className="absolute inset-0 flex flex-col items-center justify-center mt-1">
-              <span className="text-3xl font-bold text-slate-900 leading-none">25%</span>
+        <motion.div variants={item} className="card p-6 flex flex-col">
+          <div className="flex items-center gap-3 mb-5 pb-4 border-b border-line">
+            <div className="w-10 h-10 rounded-xl bg-purple-50 flex-center text-purple-600">
+              <Lightbulb size={18} />
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-slate-900">Ideas</h3>
+              <p className="text-[10px] text-slate-400">Project proposals</p>
             </div>
           </div>
+          <div className="flex-1 flex flex-col items-center justify-center text-center py-6">
+            <div className="w-14 h-14 rounded-full bg-purple-50 flex-center text-purple-400 mb-4">
+              <FolderOpen size={24} />
+            </div>
+            <p className="text-sm font-bold text-slate-900">No ideas yet</p>
+            <p className="text-xs text-slate-400 mt-1 mb-5 max-w-[200px]">Submit your FYP project idea for review and approval.</p>
+            <Link to="/ideas/new" className="btn-primary text-xs inline-flex items-center gap-1.5">
+              <Lightbulb size={14} /> Submit Idea
+            </Link>
+          </div>
         </motion.div>
+
       </div>
     </motion.div>
   );

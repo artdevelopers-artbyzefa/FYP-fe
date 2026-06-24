@@ -64,7 +64,7 @@ const FacultySupervision = () => {
               >
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-bold text-slate-900 text-base truncate">{g.name}</h3>
+                    <h3 className="font-bold text-slate-900 text-base truncate">{g.name || `Group ${g.groupId?.toString().substring(0, 4)}`}</h3>
                     <p className="text-xs text-slate-500 truncate mt-0.5">{g.title}</p>
                   </div>
                   <div className="flex items-center gap-2 ml-3">

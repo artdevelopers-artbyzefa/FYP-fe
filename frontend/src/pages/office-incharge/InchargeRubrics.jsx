@@ -117,110 +117,102 @@ export default function InchargeRubrics() {
         </span>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
-
-        {/* ─── Left: Form ─── */}
-        <div className="lg:col-span-7">
-          <form onSubmit={handleSubmit} className="rounded-2xl border shadow-sm overflow-hidden h-full" style={{ borderColor: TX.line, backgroundColor: TX.white }}>
-            <div className="p-5 border-b flex items-center justify-between flex-wrap gap-3" style={{ borderColor: TX.line, backgroundColor: TX.surface }}>
-              <div className="flex items-center gap-2">
-                <FileText size={16} style={{ color: TX.primary }} />
-                <h3 className="text-base font-bold" style={{ color: TX.ink }}>Form</h3>
-              </div>
-            </div>
-
-            <div className="p-5 space-y-5">
-              <div>
-                <label className="block text-sm font-bold mb-1.5" style={{ color: TX.ink }}>Rubric Title</label>
-                <input type="text" value={rubricName} onChange={(e) => setRubricName(e.target.value)}
-                  className="w-full border rounded-xl px-4 py-3 text-base font-bold outline-none transition-all"
-                  style={{ borderColor: TX.line, color: TX.ink, backgroundColor: TX.white }}
-                  onFocus={(e) => e.target.style.borderColor = TX.accent} onBlur={(e) => e.target.style.borderColor = TX.line} placeholder="e.g. FYP-1 Evaluation Rubric" required />
-              </div>
-
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-bold" style={{ color: TX.ink }}>Criteria</span>
-                  <button type="button" onClick={addC} className="flex items-center gap-1 text-xs font-bold transition-all cursor-pointer bg-transparent border-0" style={{ color: TX.accent }}>
-                    <Plus size={13} /> Add Criterion
-                  </button>
-                </div>
-                <div className="space-y-2.5">
-                  {criteria.map(c => (
-                    <CriterionRow key={c.id} criterion={c} onChange={updC} onRemove={remC} canRemove={criteria.length > 1} />
-                  ))}
-                </div>
-                {!criteria.length && (
-                  <div className="text-center py-8 rounded-xl border border-dashed" style={{ borderColor: TX.line }}>
-                    <BookOpen size={26} className="mx-auto mb-2" style={{ color: TX.muted }} />
-                    <p className="text-sm font-medium" style={{ color: TX.muted }}>No criteria. Click "Add Criterion" to start.</p>
-                  </div>
-                )}
-              </div>
-
-              <div className="p-4 rounded-xl border flex items-center justify-between" style={{ borderColor: isValid ? '#a7f3d0' : '#fecaca', backgroundColor: isValid ? '#f0fdf4' : '#fef2f2' }}>
-                <div className="flex items-center gap-2">
-                  {isValid ? <CheckCircle size={16} style={{ color: TX.success }} /> : <XCircle size={16} style={{ color: TX.danger }} />}
-                  <span className="text-sm font-bold" style={{ color: isValid ? TX.success : TX.danger }}>Total: {totalW}%</span>
-                </div>
-                <span className="text-xs font-bold px-3 py-1 rounded-lg" style={{ backgroundColor: isValid ? '#d1fae5' : '#fee2e2', color: isValid ? '#065f46' : '#991b1b' }}>
-                  {isValid ? 'Valid' : `Needs ${totalW < 100 ? '+' : ''}${100 - totalW}%`}
-                </span>
-              </div>
-            </div>
-
-            <div className="p-5 border-t flex justify-end" style={{ borderColor: TX.line, backgroundColor: TX.surface }}>
-              <button type="submit" disabled={!isValid || hasEmpty || submitting}
-                className="flex items-center gap-2 px-7 py-3 rounded-xl text-sm font-bold shadow-sm transition-all cursor-pointer disabled:cursor-not-allowed border-0"
-                style={{ backgroundColor: !isValid || hasEmpty ? '#cbd5e1' : TX.primary, color: !isValid || hasEmpty ? '#94a3b8' : TX.white }}>
-                {submitting ? <><Loader2 size={15} className="animate-spin" /> Publishing...</> : 'Publish Rubric'}
-              </button>
-            </div>
-          </form>
+      <form onSubmit={handleSubmit} className="rounded-2xl border shadow-sm overflow-hidden mb-5" style={{ borderColor: TX.line, backgroundColor: TX.white }}>
+        <div className="p-5 border-b flex items-center justify-between flex-wrap gap-3" style={{ borderColor: TX.line, backgroundColor: TX.surface }}>
+          <div className="flex items-center gap-2">
+            <FileText size={16} style={{ color: TX.primary }} />
+            <h3 className="text-base font-bold" style={{ color: TX.ink }}>Form</h3>
+          </div>
         </div>
 
-        {/* ─── Right: Published Rubrics ─── */}
-        <div className="lg:col-span-5">
-          <div className="rounded-2xl border shadow-sm overflow-hidden" style={{ borderColor: TX.line, backgroundColor: TX.white }}>
-            <div className="p-4 border-b" style={{ borderColor: TX.line, backgroundColor: TX.surface }}>
-              <h3 className="text-sm font-bold" style={{ color: TX.ink }}>Published Rubrics</h3>
-              <p className="text-xs font-medium mt-0.5" style={{ color: TX.muted }}>All versions and their current status</p>
+        <div className="p-5 space-y-5">
+          <div>
+            <label className="block text-sm font-bold mb-1.5" style={{ color: TX.ink }}>Rubric Title</label>
+            <input type="text" value={rubricName} onChange={(e) => setRubricName(e.target.value)}
+              className="w-full border rounded-xl px-4 py-3 text-base font-bold outline-none transition-all"
+              style={{ borderColor: TX.line, color: TX.ink, backgroundColor: TX.white }}
+              onFocus={(e) => e.target.style.borderColor = TX.accent} onBlur={(e) => e.target.style.borderColor = TX.line} placeholder="e.g. FYP-1 Evaluation Rubric" required />
+          </div>
+
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-bold" style={{ color: TX.ink }}>Criteria</span>
+              <button type="button" onClick={addC} className="flex items-center gap-1 text-xs font-bold transition-all cursor-pointer bg-transparent border-0" style={{ color: TX.accent }}>
+                <Plus size={13} /> Add Criterion
+              </button>
             </div>
-            <div className="p-3 space-y-2 max-h-[500px] overflow-y-auto">
-              {loading ? Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="p-3 rounded-xl border animate-pulse" style={{ borderColor: TX.line }}>
-                  <div className="h-3.5 w-32 rounded-md skeleton mb-1.5" />
-                  <div className="h-3 w-48 rounded-md skeleton" />
-                </div>
-              )) : error ? (
-                <div className="text-center py-6 px-3">
-                  <AlertTriangle size={22} className="mx-auto mb-2" style={{ color: TX.warning }} />
-                  <p className="text-xs font-medium" style={{ color: TX.muted }}>{error}</p>
-                  <button type="button" onClick={fetchRubrics} className="mt-2 text-xs font-bold bg-transparent border-0 cursor-pointer" style={{ color: TX.accent }}>Retry</button>
-                </div>
-              ) : !rubrics.length ? (
-                <div className="text-center py-6 px-3">
-                  <BookOpen size={24} className="mx-auto mb-2" style={{ color: TX.muted }} />
-                  <p className="text-xs font-medium" style={{ color: TX.muted }}>No rubrics published yet</p>
-                </div>
-              ) : rubrics.map(r => (
-                <div key={r.id || r._id} className="p-3.5 rounded-xl border transition-all hover:shadow-sm" style={{ borderColor: TX.line }}>
-                  <div className="flex items-start justify-between gap-2 mb-1.5">
-                    <div className="min-w-0 flex-1">
-                      <p className="text-xs font-bold truncate" style={{ color: TX.ink }}>{r.name || 'Untitled'}</p>
-                      <p className="text-[11px] font-medium mt-0.5" style={{ color: TX.muted }}>{r.version || ''} · {r.criteria?.length || 0} criteria</p>
-                    </div>
-                    <Badge status={r.status} />
-                  </div>
-                  {r.createdAt && (
-                    <p className="text-[10px]" style={{ color: TX.muted }}>
-                      {new Date(r.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
-                    </p>
-                  )}
-                </div>
+            <div className="space-y-2.5">
+              {criteria.map(c => (
+                <CriterionRow key={c.id} criterion={c} onChange={updC} onRemove={remC} canRemove={criteria.length > 1} />
               ))}
             </div>
+            {!criteria.length && (
+              <div className="text-center py-8 rounded-xl border border-dashed" style={{ borderColor: TX.line }}>
+                <BookOpen size={26} className="mx-auto mb-2" style={{ color: TX.muted }} />
+                <p className="text-sm font-medium" style={{ color: TX.muted }}>No criteria. Click "Add Criterion" to start.</p>
+              </div>
+            )}
           </div>
+
+          <div className="p-4 rounded-xl border flex items-center justify-between" style={{ borderColor: isValid ? '#a7f3d0' : '#fecaca', backgroundColor: isValid ? '#f0fdf4' : '#fef2f2' }}>
+            <div className="flex items-center gap-2">
+              {isValid ? <CheckCircle size={16} style={{ color: TX.success }} /> : <XCircle size={16} style={{ color: TX.danger }} />}
+              <span className="text-sm font-bold" style={{ color: isValid ? TX.success : TX.danger }}>Total: {totalW}%</span>
+            </div>
+            <span className="text-xs font-bold px-3 py-1 rounded-lg" style={{ backgroundColor: isValid ? '#d1fae5' : '#fee2e2', color: isValid ? '#065f46' : '#991b1b' }}>
+              {isValid ? 'Valid' : `Needs ${totalW < 100 ? '+' : ''}${100 - totalW}%`}
+            </span>
+          </div>
+        </div>
+
+        <div className="p-5 border-t flex justify-end" style={{ borderColor: TX.line, backgroundColor: TX.surface }}>
+          <button type="submit" disabled={!isValid || hasEmpty || submitting}
+            className="flex items-center gap-2 px-7 py-3 rounded-xl text-sm font-bold shadow-sm transition-all cursor-pointer disabled:cursor-not-allowed border-0"
+            style={{ backgroundColor: !isValid || hasEmpty ? '#cbd5e1' : TX.primary, color: !isValid || hasEmpty ? '#94a3b8' : TX.white }}>
+            {submitting ? <><Loader2 size={15} className="animate-spin" /> Publishing...</> : 'Publish Rubric'}
+          </button>
+        </div>
+      </form>
+
+      {/* Published Rubrics */}
+      <div className="rounded-2xl border shadow-sm overflow-hidden" style={{ borderColor: TX.line, backgroundColor: TX.white }}>
+        <div className="p-4 border-b" style={{ borderColor: TX.line, backgroundColor: TX.surface }}>
+          <h3 className="text-sm font-bold" style={{ color: TX.ink }}>Published Rubrics</h3>
+          <p className="text-xs font-medium mt-0.5" style={{ color: TX.muted }}>All versions and their current status</p>
+        </div>
+        <div className="p-3 space-y-2">
+          {loading ? Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="p-3 rounded-xl border animate-pulse" style={{ borderColor: TX.line }}>
+              <div className="h-3.5 w-32 rounded-md skeleton mb-1.5" />
+              <div className="h-3 w-48 rounded-md skeleton" />
+            </div>
+          )) : error ? (
+            <div className="text-center py-6 px-3">
+              <AlertTriangle size={22} className="mx-auto mb-2" style={{ color: TX.warning }} />
+              <p className="text-xs font-medium" style={{ color: TX.muted }}>{error}</p>
+              <button type="button" onClick={fetchRubrics} className="mt-2 text-xs font-bold bg-transparent border-0 cursor-pointer" style={{ color: TX.accent }}>Retry</button>
+            </div>
+          ) : !rubrics.length ? (
+            <div className="text-center py-6 px-3">
+              <BookOpen size={24} className="mx-auto mb-2" style={{ color: TX.muted }} />
+              <p className="text-xs font-medium" style={{ color: TX.muted }}>No rubrics published yet</p>
+            </div>
+          ) : rubrics.map(r => (
+            <div key={r.id || r._id} className="p-3.5 rounded-xl border transition-all hover:shadow-sm" style={{ borderColor: TX.line }}>
+              <div className="flex items-start justify-between gap-2 mb-1.5">
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs font-bold truncate" style={{ color: TX.ink }}>{r.name || 'Untitled'}</p>
+                  <p className="text-[11px] font-medium mt-0.5" style={{ color: TX.muted }}>{r.version || ''} · {r.criteria?.length || 0} criteria</p>
+                </div>
+                <Badge status={r.status} />
+              </div>
+              {r.createdAt && (
+                <p className="text-[10px]" style={{ color: TX.muted }}>
+                  {new Date(r.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                </p>
+              )}
+            </div>
+          ))}
         </div>
       </div>
     </div>

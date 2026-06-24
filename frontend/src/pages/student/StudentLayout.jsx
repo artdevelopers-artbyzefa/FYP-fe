@@ -55,10 +55,7 @@ export default function DashboardLayout() {
       { id: '/supervisor-selection', label: 'FYP Supervisor', icon: User }
     ]},
     { section: 'Project Execution', items: [
-      { id: 'group_ideas', label: 'Project Idea', icon: Lightbulb, isDropdown: true, subItems: [
-        { id: '/project/new', label: 'Group Ideas' },
-        { id: '/project/group-ideas', label: 'Group Ideas' }
-      ]},
+      { id: '/project/new', label: 'Group Ideas', icon: Lightbulb },
       { id: '/task-manager', label: 'Task Manager', icon: ClipboardList }
     ]}
   ];

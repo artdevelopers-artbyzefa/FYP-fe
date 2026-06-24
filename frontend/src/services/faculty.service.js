@@ -61,6 +61,11 @@ export const approveSupervisorRequest = async (groupId) => {
   return res.data;
 };
 
+export const saveGroupPreferences = async (groupId, preferences) => {
+  const res = await apiClient.put(`/faculty/supervision/${groupId}/preferences`, { preferences });
+  return res.data;
+};
+
 export const rejectSupervisorRequest = async (groupId) => {
   const res = await apiClient.post(`/faculty/supervisor-requests/${groupId}/reject`);
   return res.data;

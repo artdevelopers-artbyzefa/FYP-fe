@@ -1,16 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { showToast as toast } from '../AppToast';
 import { logoutUser, getCurrentUser } from '../../services/auth.service';
-import { Bell, ChevronLeft, ChevronRight, Crown, Gavel, Landmark, LineChart, Lock, LogOut, Menu, PieChart, Presentation, Shield, Users, UserCheck, X } from 'lucide-react';
+import api from '../../services/api';
+import { Bell, ChevronLeft, ChevronRight, Crown, Gavel, Landmark, LineChart, Lock, LogOut, Menu, PieChart, Presentation, Shield, User, UserCheck, Users, X, Camera, Loader2 } from 'lucide-react';
 
 const HodLayout = () => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [showNotif, setShowNotif] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
+  const [showProfileModal, setShowProfileModal] = useState(false);
+  const [passForm, setPassForm] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
+  const [passSubmitting, setPassSubmitting] = useState(false);
+  const profileRef = useRef(null);
   const navigate = useNavigate();
 
   const user = getCurrentUser() ?? null;
+
+  useEffect(() => {
+    const handleClick = (e) => {
+      if (profileRef.current && !profileRef.current.contains(e.target)) setShowProfile(false);
+    };
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, []);
 
   const handleLogout = () => {
     logoutUser();
@@ -30,6 +44,32 @@ const HodLayout = () => {
     { to: '/hod/committees', icon: Shield, label: 'FYP Committees', section: 'Department Oversight', locked: true },
     { to: '/hod/analytics', icon: LineChart, label: 'FYP Analytics', section: 'Department Oversight', locked: true },
   ];
+
+  const handlePasswordSubmit = async (e) => {
+    e.preventDefault();
+    if (passForm.newPassword !== passForm.confirmPassword) {
+      toast.error('New passwords do not match.');
+      return;
+    }
+    if (passForm.newPassword.length < 6) {
+      toast.error('Password must be at least 6 characters.');
+      return;
+    }
+    setPassSubmitting(true);
+    try {
+      await api.post('/auth/change-password', {
+        currentPassword: passForm.currentPassword,
+        newPassword: passForm.newPassword
+      });
+      toast.success('Password changed successfully.');
+      setShowProfileModal(false);
+      setPassForm({ currentPassword: '', newPassword: '', confirmPassword: '' });
+    } catch (err) {
+      toast.error(err?.response?.data?.message || 'Failed to change password.');
+    } finally {
+      setPassSubmitting(false);
+    }
+  };
 
   return (
     <div className="flex h-screen overflow-hidden relative bg-surface selection:bg-blue-100 selection:text-blue-900 font-poppins">
@@ -145,16 +185,46 @@ const HodLayout = () => {
               )}
             </div>
 
-            <div className="relative">
-              <div className="flex items-center gap-2 p-1 md:px-2.5 md:py-1.5 bg-blue-50 rounded-xl">
-                <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center text-blue-700 text-xs font-bold flex-shrink-0">
-                  <span>{user.avatar || 'ZA'}</span>
+            <div className="relative" ref={profileRef}>
+              <div
+                onClick={() => setShowProfile(!showProfile)}
+                className="flex items-center gap-2 p-1 md:px-2.5 md:py-1.5 bg-blue-50 rounded-xl cursor-pointer hover:bg-blue-100 transition-colors"
+              >
+                <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center text-blue-700 text-xs font-bold flex-shrink-0 overflow-hidden">
+                  {user?.avatar ? (
+                    <img src={user.avatar} alt="" className="w-full h-full object-cover" />
+                  ) : (
+                    <span>{user?.name ? user.name.split(' ').filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase() : 'ZA'}</span>
+                  )}
                 </div>
                 <div className="text-left hidden sm:block">
-                  <div className="text-xs font-semibold text-slate-900 leading-tight truncate max-w-28">{user.name || 'Prof. Dr. Zafar Ali'}</div>
+                  <div className="text-xs font-semibold text-slate-900 leading-tight truncate max-w-28">{user?.name || 'HOD'}</div>
                   <div className="text-[10px] text-slate-400 leading-tight font-medium">HOD CS</div>
                 </div>
               </div>
+
+              {showProfile && (
+                <div className="absolute right-0 top-11 bg-white border border-line rounded-2xl w-56 shadow-dropdown z-50 overflow-hidden">
+                  <div className="px-4 py-3 border-b border-line">
+                    <div className="text-xs font-semibold text-slate-900">{user?.name || 'HOD'}</div>
+                    <div className="text-[10px] text-slate-400">{user?.email || ''}</div>
+                  </div>
+                  <div className="py-1">
+                    <button
+                      onClick={() => { setShowProfile(false); setShowProfileModal(true); }}
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-xs font-medium text-slate-700 hover:bg-blue-50 transition-colors cursor-pointer bg-transparent border-0 text-left"
+                    >
+                      <User size={14} /> My Profile
+                    </button>
+                    <button
+                      onClick={() => { setShowProfile(false); handleLogout(); }}
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-xs font-medium text-red-600 hover:bg-red-50 transition-colors cursor-pointer bg-transparent border-0 text-left"
+                    >
+                      <LogOut size={14} /> Sign Out
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -165,6 +235,58 @@ const HodLayout = () => {
           </div>
         </main>
       </div>
+
+      {showProfileModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[200] flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl w-full max-w-md p-6 sm:p-8 shadow-2xl border border-gray-100">
+            <div className="flex justify-between items-center mb-6 pb-3 border-b border-gray-100">
+              <h3 className="text-lg font-bold text-gray-800">My Profile</h3>
+              <button onClick={() => { setShowProfileModal(false); setPassForm({ currentPassword: '', newPassword: '', confirmPassword: '' }); }} className="w-8 h-8 rounded-lg bg-gray-50 border-0 flex items-center justify-center text-gray-400 hover:bg-gray-100 cursor-pointer transition-all">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="flex flex-col items-center mb-6">
+              <div className="relative w-20 h-20 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 text-xl font-bold overflow-hidden mb-3">
+                {user?.avatar ? (
+                  <img src={user.avatar} alt="" className="w-full h-full object-cover" />
+                ) : (
+                  <span>{user?.name ? user.name.split(' ').filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase() : '?'}</span>
+                )}
+                <button className="absolute bottom-0 right-0 w-7 h-7 bg-blue-600 text-white rounded-full flex items-center justify-center cursor-pointer border-2 border-white hover:bg-blue-700 transition-colors">
+                  <Camera size={12} />
+                </button>
+              </div>
+              <div className="text-sm font-bold text-gray-800">{user?.name || 'HOD'}</div>
+              <div className="text-xs text-gray-400">{user?.email || ''}</div>
+            </div>
+
+            <div className="border-t border-gray-100 pt-5">
+              <h4 className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">Change Password</h4>
+              <form onSubmit={handlePasswordSubmit} className="space-y-4">
+                <div>
+                  <label className="block text-[10px] font-bold text-gray-500 mb-1.5 uppercase tracking-widest">Current Password</label>
+                  <input type="password" value={passForm.currentPassword} onChange={e => setPassForm(f => ({ ...f, currentPassword: e.target.value }))} className="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-primary transition-all" required />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-bold text-gray-500 mb-1.5 uppercase tracking-widest">New Password</label>
+                  <input type="password" value={passForm.newPassword} onChange={e => setPassForm(f => ({ ...f, newPassword: e.target.value }))} className="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-primary transition-all" required />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-bold text-gray-500 mb-1.5 uppercase tracking-widest">Confirm New Password</label>
+                  <input type="password" value={passForm.confirmPassword} onChange={e => setPassForm(f => ({ ...f, confirmPassword: e.target.value }))} className="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-primary transition-all" required />
+                </div>
+                <div className="flex justify-end pt-2">
+                  <button type="submit" disabled={passSubmitting} className="px-6 py-2.5 bg-blue-600 text-white rounded-xl text-xs font-bold shadow-sm hover:bg-blue-700 transition-all cursor-pointer border-0 disabled:opacity-50 flex items-center gap-2">
+                    {passSubmitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+                    {passSubmitting ? 'Changing...' : 'Update Password'}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

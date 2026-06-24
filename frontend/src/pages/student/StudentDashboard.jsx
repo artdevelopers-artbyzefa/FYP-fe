@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useOutletContext, Link, Navigate } from 'react-router-dom';
 import { getStudentProfile } from '../../services/student.service';
-import { FolderOpen, IdCard, Inbox, Lightbulb, Loader, Mail, User, Users, UserPlus, ArrowRight } from 'lucide-react';
+import { FolderOpen, IdCard, Inbox, Lightbulb, Loader, Mail, Send, User, Users, UserPlus, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.04 } } };

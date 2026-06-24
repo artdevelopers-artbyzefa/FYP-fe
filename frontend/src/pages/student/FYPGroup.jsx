@@ -310,27 +310,7 @@ export default function FYPGroup() {
         </motion.div>
       )}
 
-      {sentRequests.length > 0 && (
-        <motion.div variants={item} className="bg-white rounded-2xl border border-line shadow-card p-6">
-          <h3 className="text-sm font-bold text-slate-700 mb-4">Sent Requests ({sentRequests.length})</h3>
-          <div className="space-y-2">
-            {sentRequests.map(r => (
-              <div key={r.id} className="flex items-center justify-between px-4 py-3 bg-slate-50 rounded-xl border border-line">
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 bg-slate-200 text-slate-500 rounded-full flex items-center justify-center font-bold text-xs">{r.name.substring(0,2).toUpperCase()}</div>
-                  <div>
-                    <div className="text-sm font-bold text-slate-900">{r.name}</div>
-                    <div className="text-xs text-slate-500">{r.regNo}</div>
-                  </div>
-                </div>
-                <span className={`flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg border capitalize ${statusBadge(r.status)}`}>
-                  {statusIcon(r.status)} {r.status}
-                </span>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-      )}
+
     </motion.div>
   );
 }

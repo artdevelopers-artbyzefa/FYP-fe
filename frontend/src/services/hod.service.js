@@ -54,3 +54,8 @@ export const resolveEscalation = async (id, action, reason) => {
   const res = await apiClient.put(`/hod/escalations/${id}/resolve`, { action, reason });
   return res.data;
 };
+
+export const updateHodFaculty = async (id, payload) => {
+  const res = await apiClient.put(`/hod/faculty/${id}`, payload);
+  return res.data;
+};

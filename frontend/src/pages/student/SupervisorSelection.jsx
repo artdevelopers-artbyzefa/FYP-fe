@@ -1,11 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { getAvailableSupervisors, requestSupervisor, cancelSupervisorRequest, getStudentGroup } from '../../services/student.service';
 import { showToast as toast } from '../../components/AppToast';
-import { Check, GraduationCap, Loader, Search, Send, Trash2, UserCheck, X } from 'lucide-react';
+import { Check, GraduationCap, Loader, MessageSquare, Search, Send, Trash2, UserCheck, X, ThumbsUp, ThumbsDown, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.04 } } };
 const item = { hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } };
+
+const STATUS_MAP = {
+  agreed: { label: 'Pending Review', color: 'bg-amber-50 text-amber-700 border-amber-200', icon: Clock },
+  supervisor_approved: { label: 'Approved', color: 'bg-emerald-50 text-emerald-700 border-emerald-200', icon: ThumbsUp },
+  supervisor_rejected: { label: 'Rejected', color: 'bg-rose-50 text-rose-600 border-rose-200', icon: ThumbsDown },
+};
+
 export default function SupervisorSelection() {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
@@ -40,9 +47,7 @@ export default function SupervisorSelection() {
     try {
       await cancelSupervisorRequest();
       toast.success('Supervisor request cancelled');
-      const [g] = await Promise.all([
-        getStudentGroup().then(d => d?.data || null).catch(() => null),
-      ]);
+      const g = await getStudentGroup().then(d => d?.data || null).catch(() => null);
       setGroup(g);
     } catch (e) {
       toast.error(e?.response?.data?.message || 'Failed to cancel');
@@ -67,33 +72,66 @@ export default function SupervisorSelection() {
 
   const isPending = group?.supervisor && group?.status === 'pending_approval';
   const hasSupervisor = group?.supervisor && group?.status !== 'pending_approval';
+  const idea = group?.idea;
 
   return (
     <motion.div variants={container} initial="hidden" animate="show" className="animate-in fade-in slide-in- duration-300 max-w-3xl mx-auto space-y-6">
       <motion.div variants={item} className="bg-white rounded-2xl border border-line shadow-card p-6">
-        <h2 className="text-xl font-bold text-slate-900 mb-2">Supervisor Selection</h2>
+        <h2 className="text-xl font-bold text-slate-900 mb-2">FYP Supervisor</h2>
         <p className="text-sm text-slate-900 mb-6">
           {hasSupervisor ? 'Your supervisor has been assigned.' : isPending ? 'Your supervisor request is pending approval.' : 'Search for faculty members to request as your FYP supervisor.'}
         </p>
 
         {hasSupervisor && (
-          <div className="p-4 bg-emerald-50 rounded-xl border border-emerald-200">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center font-bold text-lg flex-shrink-0">
-                {group.supervisor.name?.substring(0,2).toUpperCase()}
-              </div>
-              <div>
-                <div className="text-sm font-bold text-emerald-800">Assigned Supervisor</div>
-                <div className="text-sm font-bold text-slate-900 mt-0.5">{group.supervisor.name}</div>
-                <div className="text-xs text-slate-500">{group.supervisor.email}</div>
-              </div>
-              <div className="ml-auto">
-                <span className="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg border bg-emerald-50 text-emerald-700 border-emerald-200">
-                  <UserCheck className="w-3.5 h-3.5" /> Assigned
-                </span>
+          <>
+            <div className="p-4 bg-emerald-50 rounded-xl border border-emerald-200 mb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center font-bold text-lg flex-shrink-0">
+                  {group.supervisor.name?.substring(0,2).toUpperCase()}
+                </div>
+                <div>
+                  <div className="text-sm font-bold text-emerald-800">Assigned Supervisor</div>
+                  <div className="text-sm font-bold text-slate-900 mt-0.5">{group.supervisor.name}</div>
+                  <div className="text-xs text-slate-500">{group.supervisor.email}</div>
+                </div>
+                <div className="ml-auto">
+                  <span className="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg border bg-emerald-50 text-emerald-700 border-emerald-200">
+                    <UserCheck className="w-3.5 h-3.5" /> Assigned
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
+
+            {idea && (
+              <div className="p-4 rounded-xl border border-line bg-white">
+                <div className="flex items-center gap-2 mb-3">
+                  <MessageSquare size={15} className="text-blue-600" />
+                  <h3 className="text-xs font-bold text-slate-700">Supervisor Idea Remarks</h3>
+                </div>
+                <div className="mb-2">
+                  <p className="text-sm font-bold text-slate-900">{idea.title}</p>
+                  {idea.description && <p className="text-xs text-slate-500 mt-1">{idea.description}</p>}
+                </div>
+                {idea.agreementStatus && (
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className={`flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-lg border ${(STATUS_MAP[idea.agreementStatus] || {}).color || 'bg-gray-50 text-gray-500 border-gray-200'}`}>
+                      {(STATUS_MAP[idea.agreementStatus] || {}).icon && React.createElement((STATUS_MAP[idea.agreementStatus] || {}).icon, { size: 11 })}
+                      {(STATUS_MAP[idea.agreementStatus] || {}).label || idea.agreementStatus}
+                    </span>
+                  </div>
+                )}
+                {idea.supervisorFeedback && (
+                  <div className="p-3 rounded-lg bg-blue-50/50 border border-blue-100">
+                    <p className="text-[10px] font-bold text-blue-700 mb-1">Supervisor Feedback:</p>
+                    <p className="text-xs text-slate-700">{idea.supervisorFeedback}</p>
+                  </div>
+                )}
+                {!idea.supervisorFeedback && idea.agreementStatus === 'supervisor_approved' && (
+                  <p className="text-xs text-slate-400 italic">No additional remarks from supervisor.</p>
+                )}
+              </div>
+            )}
+          </>
         )}
 
         {isPending && (
@@ -111,7 +149,7 @@ export default function SupervisorSelection() {
                 <span className="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg border bg-amber-50 text-amber-700 border-amber-200">
                   Pending
                 </span>
-                <button onClick={handleCancel} className="bg-white hover:bg-red-50 text-red-500 px-3 py-1.5 rounded-lg text-xs font-bold transition-all border border-red-200 cursor-pointer flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-blue-500">
+                <button onClick={handleCancel} className="bg-white hover:bg-red-50 text-red-500 px-3 py-1.5 rounded-lg text-xs font-bold transition-all border border-red-200 cursor-pointer flex items-center gap-1.5">
                   <Trash2 className="w-3.5 h-3.5" /> Cancel
                 </button>
               </div>
@@ -126,7 +164,7 @@ export default function SupervisorSelection() {
               <input type="text" value={query} onChange={handleQueryChange} className="flex-1 bg-transparent border-0 text-sm outline-none p-0" placeholder="Search faculty by name or email..." />
               {searchLoading && <Loader className="w-4 h-4 animate-spin text-slate-400 flex-shrink-0" />}
               {query && !searchLoading && (
-                <button onClick={() => { setQuery(''); doSearch(''); }} className="bg-transparent border-0 p-0 text-slate-400 hover:text-slate-500 cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500">
+                <button onClick={() => { setQuery(''); doSearch(''); }} className="bg-transparent border-0 p-0 text-slate-400 hover:text-slate-500 cursor-pointer">
                   <X className="w-4 h-4" />
                 </button>
               )}
@@ -142,19 +180,14 @@ export default function SupervisorSelection() {
                 results.map(sup => (
                   <div key={sup.id} className="flex items-center justify-between px-4 py-3 hover:bg-slate-50 border-b border-slate-50 last:border-0 transition-colors">
                     <div className="flex items-center gap-3 min-w-0 flex-1">
-                      <div className="w-10 h-10 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
-                        {sup.avatar}
-                      </div>
+                      <div className="w-10 h-10 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">{sup.avatar}</div>
                       <div className="min-w-0">
                         <div className="font-bold text-sm text-slate-900 truncate">{sup.name}</div>
                         <div className="text-xs text-slate-500 mt-0.5 truncate">{sup.email} {sup.tags?.length > 0 ? `• ${sup.tags.join(', ')}` : ''}</div>
                       </div>
                     </div>
-                    <button
-                      disabled={requesting[sup.id] || !group}
-                      onClick={() => handleRequest(sup.id)}
-                      className="ml-3 flex-shrink-0 bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-2 rounded-lg text-xs font-bold transition-all border-0 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5"
-                    >
+                    <button disabled={requesting[sup.id] || !group} onClick={() => handleRequest(sup.id)}
+                      className="ml-3 flex-shrink-0 bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-2 rounded-lg text-xs font-bold transition-all border-0 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5">
                       {requesting[sup.id] ? <><Check className="w-3.5 h-3.5" /> Sending</> : <><Send className="w-3.5 h-3.5" /> Request</>}
                     </button>
                   </div>

@@ -52,7 +52,7 @@ export default function DashboardLayout() {
     ]},
     { section: 'Group & Supervisor', items: [
       { id: '/fyp-group', label: 'FYP Group', icon: Users },
-      { id: '/supervisor-selection', label: 'Supervisor Selection', icon: User }
+      { id: '/supervisor-selection', label: 'FYP Supervisor', icon: User }
     ]},
     { section: 'Project Execution', items: [
       { id: 'group_ideas', label: 'Project Idea', icon: Lightbulb, isDropdown: true, subItems: [
@@ -69,7 +69,7 @@ export default function DashboardLayout() {
   if (path === '/profile') pageTitle = 'My Profile';
   else if (path.includes('/partners/new')) pageTitle = 'New Request';
   else if (path.includes('/partners/requests')) pageTitle = 'Incoming Requests';
-  else if (path.includes('/supervisor-selection')) pageTitle = 'Supervisor Selection';
+  else if (path.includes('/supervisor-selection')) pageTitle = 'FYP Supervisor';
   else if (path.includes('/project/new')) pageTitle = 'New Idea';
   else if (path.includes('/project/group-ideas')) pageTitle = 'Group Ideas';
   else if (path.includes('/task-manager')) pageTitle = 'Task Manager';

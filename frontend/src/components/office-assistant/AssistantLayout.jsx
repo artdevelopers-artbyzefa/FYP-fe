@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { showToast as toast } from '../AppToast';
 import { logoutUser, getCurrentUser } from '../../services/auth.service';
-import { Award, Bell, ChevronLeft, ChevronRight, File, GitBranch, GraduationCap, Home, Layers, LogOut, Megaphone, Menu, Presentation, Shield, User, UserCog, Users, X } from 'lucide-react';
+import { Award, Bell, ChevronLeft, ChevronRight, File, GitBranch, GraduationCap, Home, Layers, Lock, LogOut, Megaphone, Menu, Presentation, Shield, User, UserCog, Users, X } from 'lucide-react';
 
 const AssistantLayout = () => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -25,8 +25,8 @@ const AssistantLayout = () => {
     { to: '/office-assistant/users', icon: Users, label: 'User Management', section: 'User & Account' },
     { to: '/office-assistant/students', icon: GraduationCap, label: 'Student Records', section: 'User & Account' },
     { to: '/office-assistant/faculty', icon: Presentation, label: 'Faculty Profiles', section: 'User & Account' },
-    { to: '/office-assistant/projects', icon: GitBranch, label: 'Project Directory', section: 'FYP Workflow' },
-    { to: '/office-assistant/content', icon: File, label: 'Content & Templates', section: 'FYP Workflow' },
+    { to: '/office-assistant/projects', icon: GitBranch, label: 'Project Directory', section: 'FYP Workflow', locked: true },
+    { to: '/office-assistant/content', icon: File, label: 'Content & Templates', section: 'FYP Workflow', locked: true },
     { to: '/office-assistant/proposal-committee', icon: Users, label: 'Proposal Committees', section: 'Committees & Evaluators' },
     { to: '/office-assistant/eval-committee', icon: Layers, label: 'Evaluation Committees', section: 'Committees & Evaluators' },
     { to: '/office-assistant/external', icon: User, label: 'Industry Supervisors', section: 'Committees & Evaluators' },
@@ -66,6 +66,17 @@ const AssistantLayout = () => {
                     {link.section}
                   </div>
                 )}
+                {link.locked ? (
+                  <div className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-300 cursor-not-allowed select-none ${isCollapsed ? 'justify-center w-[44px] h-[44px] mx-auto p-[10px]' : ''}`} title={`${link.label} — locked during Phase 1`}>
+                    {React.createElement(link.icon, { size: 16, className: "flex-shrink-0" })}
+                    {!isCollapsed && (
+                      <>
+                        <span className="text-sm font-medium whitespace-nowrap overflow-hidden flex-1">{link.label}</span>
+                        <Lock size={12} className="flex-shrink-0 text-slate-300" />
+                      </>
+                    )}
+                  </div>
+                ) : (
                 <NavLink 
                   to={link.to} 
                   onClick={() => setIsMobileOpen(false)}
@@ -74,6 +85,7 @@ const AssistantLayout = () => {
                   {React.createElement(link.icon, { size: 16, className: "flex-shrink-0" })}
                   {!isCollapsed && <span className="text-sm font-medium whitespace-nowrap overflow-hidden flex-1">{link.label}</span>}
                 </NavLink>
+                )}
               </React.Fragment>
             );
           })}

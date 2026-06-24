@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { getFacultyDashboardStats } from '../../services/faculty.service';
 import { ArrowRight, Crown, GitBranch, Landmark, Star, UserCheck } from 'lucide-react';
@@ -60,9 +60,17 @@ const FacultyDashboard = () => {
               <div className="flex items-center gap-3 mb-2">
                 <span className="text-[11px] font-semibold text-blue-200 tracking-widest ">Faculty Portal</span>
               </div>
-              <h1 className="text-2xl sm:text-3xl font-bold mb-2 tracking-tight text-balance">Supervision & Committee Hub</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold mb-2 tracking-tight text-balance">
+                {(() => {
+                  const pk = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Karachi' }));
+                  const h = pk.getHours();
+                  if (h < 12) return 'Good Morning';
+                  if (h < 17) return 'Good Afternoon';
+                  return 'Good Evening';
+                })()}, <span className="text-white font-semibold">{user?.name || 'Faculty'}</span>
+              </h1>
               <p className="text-sm text-blue-200 font-medium max-w-2xl leading-relaxed">
-                Welcome back, <span className="text-white font-semibold">{user?.name || 'Faculty'}</span> — track active student groups, review supervision requests, and input committee evaluation scores.
+                Track your supervised groups, review supervision requests, and manage committee duties.
               </p>
             </div>
             <div className="flex gap-3 flex-wrap">

@@ -23,11 +23,11 @@ const HodLayout = () => {
   const navLinks = [
     { to: '/hod/dashboard', icon: PieChart, label: 'Dashboard', section: 'Executive' },
     { to: '/hod/escalations', icon: Gavel, label: 'Escalated Grievances', section: 'Grievance & Escalations' },
+    { to: '/hod/students', icon: Users, label: 'Students', section: 'Department Oversight' },
+    { to: '/hod/faculty', icon: UserCheck, label: 'Faculty', section: 'Department Oversight' },
     { to: '/hod/faculty-oversight', icon: Presentation, label: 'Faculty Workload', section: 'Department Oversight', locked: true },
     { to: '/hod/governance', icon: Landmark, label: 'Oversight', section: 'Department Oversight', locked: true },
-    { to: '/hod/students', icon: Users, label: 'Students', section: 'Department Oversight' },
     { to: '/hod/committees', icon: Shield, label: 'FYP Committees', section: 'Department Oversight', locked: true },
-    { to: '/hod/faculty', icon: UserCheck, label: 'Faculty', section: 'Department Oversight' },
     { to: '/hod/analytics', icon: LineChart, label: 'FYP Analytics', section: 'Department Oversight', locked: true },
   ];
 

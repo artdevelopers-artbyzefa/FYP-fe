@@ -146,18 +146,7 @@ const HodDashboard = () => {
               </button>
             </div>
           </div>
-          <div className="mt-5 pt-4 border-t border-white/10">
-            <div className="flex items-center gap-1.5">
-              {['Registration', 'Proposal', 'Defense', 'Dev Phase 1', 'Mid-Eval', 'Dev Phase 2', 'Final Defense'].map((phase, i) => (
-                <div key={phase} className="flex items-center gap-0">
-                  <div className={`h-1.5 flex-1 min-w-[60px] rounded-full ${i <= 2 ? 'bg-blue-400' : 'bg-white/20'}`} />
-                  <div className="hidden lg:block text-[9px] font-medium mt-1 whitespace-nowrap text-blue-200/60">
-                    {phase}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+
         </div>
       </motion.div>
 

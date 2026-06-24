@@ -15,7 +15,7 @@ import StudentDashboard from "../pages/student/StudentDashboard";
 import StudentProfile from "../pages/student/StudentProfile";
 
 import FYPGroup from "../pages/student/FYPGroup";
-import NewIdea from "../pages/student/NewIdea";
+
 import SupervisorSelection from "../pages/student/SupervisorSelection";
 import TaskManager from "../pages/student/TaskManager";
 import GroupIdeas from "../pages/student/GroupIdeas";
@@ -63,7 +63,7 @@ import InchargeStudentReports from '../pages/office-incharge/InchargeStudentRepo
 import InchargeAuditLog from '../pages/office-incharge/InchargeAuditLog';
 
 // Placeholder components
-const ProjectIdea = () => <div className="p-6 bg-white rounded-2xl shadow-sm border border-black"> <h1 className="text-2xl font-black text-navy mb-4">Project Ideas</h1> <p className="text-black">Project idea submission page coming soon.</p> </div>;
+
 
 const NotFound = () => (
     <div className="flex flex-col items-center justify-center min-h-screen bg-white">
@@ -97,9 +97,7 @@ const AppRoutes = () => {
                 <Route path="/profile" element={<StudentProfile />} />
                 <Route path="/fyp-group" element={<FYPGroup />} />
                 <Route path="/supervisor-selection" element={<SupervisorSelection />} />
-                <Route path="/project/new" element={<NewIdea />} />
-                <Route path="/project/group-ideas" element={<GroupIdeas />} />
-                <Route path="/project/*" element={<ProjectIdea />} />
+                <Route path="/project/new" element={<GroupIdeas />} />
                 <Route path="/task-manager" element={<TaskManager />} />
             </Route>
 

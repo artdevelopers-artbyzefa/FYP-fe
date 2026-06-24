@@ -337,13 +337,13 @@ export default function InchargeRubrics() {
           </div>
           <div className="rounded-xl border mb-4 overflow-hidden" style={{ borderColor: TX.line, backgroundColor: TX.surface }}>
             <div className="p-3">
-              <RubricPreview rubric={previewRubric} selectedTemplate={selectedTemplate} onTemplateChange={setSelectedTemplate} />
+              <RubricPreview rubric={buildRubric()} selectedTemplate={selectedTemplate} onTemplateChange={setSelectedTemplate} />
             </div>
           </div>
           <div className="flex justify-end">
-            <button type="button" onClick={handleDownload} disabled={!previewRubric.criteria.length}
+            <button type="button" onClick={handleDownload} disabled={!buildRubric().criteria.length}
               className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold shadow-sm transition-all cursor-pointer disabled:cursor-not-allowed border-0"
-              style={{ backgroundColor: previewRubric.criteria.length ? TX.primary : '#cbd5e1', color: TX.white }}>
+              style={{ backgroundColor: buildRubric().criteria.length ? TX.primary : '#cbd5e1', color: TX.white }}>
               <Download size={15} /> Download PDF
             </button>
           </div>

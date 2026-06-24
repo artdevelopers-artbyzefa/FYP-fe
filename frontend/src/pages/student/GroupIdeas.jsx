@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { submitGroupIdea, getGroupIdeas, voteOnGroupIdea, getStudentGroup } from '../../services/student.service';
+import { submitGroupIdea, getGroupIdeas, voteOnGroupIdea, getStudentGroup, generateAIDescription } from '../../services/student.service';
 import { showToast as toast } from '../../components/AppToast';
-import { Check, ChevronDown, ChevronUp, Clock, Lightbulb, Loader, Plus, ThumbsDown, ThumbsUp, Upload, X } from 'lucide-react';
+import { Check, ChevronDown, ChevronUp, Clock, Lightbulb, Loader, Plus, Sparkles, ThumbsDown, ThumbsUp, Upload, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.04 } } };
@@ -23,6 +23,8 @@ export default function GroupIdeas() {
   const [newIdea, setNewIdea] = useState({ title: '', description: '', techStack: '' });
   const [submitting, setSubmitting] = useState(false);
   const [voting, setVoting] = useState({});
+  const [generating, setGenerating] = useState(false);
+  const [aiRemaining, setAiRemaining] = useState(null);
   const formRef = useRef(null);
 
   useEffect(() => {
@@ -60,6 +62,22 @@ export default function GroupIdeas() {
       toast.error(err?.response?.data?.message || 'Failed to submit idea');
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const handleGenerate = async () => {
+    if (!newIdea.title.trim()) { toast.error('Enter a title first.'); return; }
+    setGenerating(true);
+    try {
+      const res = await generateAIDescription(newIdea.title);
+      setNewIdea({ ...newIdea, description: res.data.description });
+      setAiRemaining(res.remaining);
+      toast.success(res.message);
+    } catch (err) {
+      toast.error(err?.response?.data?.message || 'Failed to generate description.');
+      if (err?.response?.status === 429) toast.error(err.response.data.message);
+    } finally {
+      setGenerating(false);
     }
   };
 
@@ -148,7 +166,14 @@ export default function GroupIdeas() {
               />
             </div>
             <div>
-              <label className="block text-sm font-bold text-slate-900 mb-1.5">Description</label>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="block text-sm font-bold text-slate-900">Description</label>
+                <button type="button" onClick={handleGenerate} disabled={generating || !newIdea.title.trim()}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 text-white text-[10px] font-bold hover:opacity-90 transition-all cursor-pointer disabled:opacity-50 border-0">
+                  {generating ? <Loader size={11} className="animate-spin" /> : <Sparkles size={11} />}
+                  {generating ? 'Generating...' : `Generate with AI${aiRemaining !== null ? ` (${aiRemaining} left)` : ''}`}
+                </button>
+              </div>
               <textarea
                 value={newIdea.description}
                 onChange={e => setNewIdea({ ...newIdea, description: e.target.value })}

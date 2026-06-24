@@ -89,6 +89,11 @@ export const getGroupIdeaById = async (id) => {
   return res.data;
 };
 
+export const generateAIDescription = async (title) => {
+  const res = await apiClient.post('/student/ai/generate-description', { title });
+  return res.data;
+};
+
 export const saveStudentGroupPreferences = async (preferences) => {
   const res = await apiClient.post('/student/group/preferences', { preferences });
   return res.data;

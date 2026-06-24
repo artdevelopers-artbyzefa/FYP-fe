@@ -7,7 +7,7 @@ import {
   CalendarIcon, 
   ProposalsIcon, 
   GroupsIcon, 
-  MessagesIcon, 
+ 
   EvaluationsIcon, 
   HeadManagementIcon, 
   LogoutIcon,
@@ -45,23 +45,22 @@ const FacultySidebar = ({ isOpen, onClose }) => {
     {
       title: 'PROFILE & SCHEDULE',
       items: [
-        { to: '/faculty/research-tags', label: 'Research Tags', icon: TagIcon },
-        { to: '/faculty/availability', label: 'Availability Grid', icon: CalendarIcon }
+        { to: '/faculty/profile', label: 'Committee Suggestion', icon: TagIcon },
+        { to: '/faculty/availability', label: 'Timetable', icon: CalendarIcon, locked: true }
       ]
     },
     {
       title: 'SUPERVISION WORKFLOWS',
       items: [
         { to: '/faculty/proposals', label: 'Supervision Requests', icon: ProposalsIcon },
-        { to: '/faculty/groups', label: 'Supervised Groups', icon: GroupsIcon },
-        { to: '/faculty/messages', label: 'Student Messaging', icon: MessagesIcon }
+        { to: '/faculty/groups', label: 'Supervised Groups', icon: GroupsIcon }
       ]
     },
     {
       title: 'COMMITTEE DUTIES',
       items: [
-        { to: '/faculty/evaluations', label: 'Committee Evaluations', icon: EvaluationsIcon },
-        { to: '/faculty/head-management', label: 'Head Management', icon: HeadManagementIcon }
+        { to: '/faculty/evaluations', label: 'Committee Evaluations', icon: EvaluationsIcon, locked: true },
+        { to: '/faculty/head-management', label: 'Head Management', icon: HeadManagementIcon, locked: true }
       ]
     }
   ];

@@ -24,11 +24,10 @@ export default function FacultyDashboardLayout() {
 
   const pageTitles = {
     '/faculty/dashboard': 'Faculty Dashboard',
-    '/faculty/research-tags': 'Research Profile & Tags',
-    '/faculty/availability': 'Availability Grid',
+    '/faculty/research-tags': 'Committee Suggestion',
+    '/faculty/availability': 'Timetable',
     '/faculty/proposals': 'Supervision Requests',
     '/faculty/groups': 'Supervised Groups',
-    '/faculty/messages': 'Student Messaging',
     '/faculty/evaluations': 'Committee Evaluations',
     '/faculty/head-management': 'Head Management'
   };

@@ -16,11 +16,10 @@ export default function FacultySupervisorLayout() {
 
   const pageTitles = {
     '/faculty/dashboard': 'Dashboard',
-    '/faculty/research-tags': 'Research Tags',
-    '/faculty/availability': 'Availability Grid',
+    '/faculty/research-tags': 'Committee Suggestion',
+    '/faculty/availability': 'Timetable',
     '/faculty/proposals': 'Supervision Requests',
     '/faculty/groups': 'Supervised Groups',
-    '/faculty/messages': 'Student Messaging',
     '/faculty/evaluations': 'Committee Evaluations',
     '/faculty/head-management': 'Head Management'
   };

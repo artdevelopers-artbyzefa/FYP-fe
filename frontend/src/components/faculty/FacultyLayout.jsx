@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { showToast as toast } from '../AppToast';
 import { logoutUser, getCurrentUser } from '../../services/auth.service';
-import { Bell, Calendar, ChevronLeft, ChevronRight, Crown, FileSignature, GitBranch, Landmark, LogOut, Menu, MessageSquare, Presentation, Star, Tags, X } from 'lucide-react';
+import { Bell, Calendar, ChevronLeft, ChevronRight, Crown, FileSignature, GitBranch, Landmark, Lock, LogOut, Menu, Presentation, Star, Tags, X } from 'lucide-react';
 
 const FacultyLayout = () => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -22,13 +22,12 @@ const FacultyLayout = () => {
 
   const navLinks = [
     { to: '/faculty/dashboard', icon: Presentation, label: 'Dashboard', section: 'Overview' },
-    { to: '/faculty/profile', icon: Tags, label: 'Research Tags', section: 'Profile & Schedule' },
-    { to: '/faculty/availability', icon: Calendar, label: 'Availability Grid', section: 'Profile & Schedule' },
+    { to: '/faculty/profile', icon: Tags, label: 'Committee Suggestion', section: 'Profile & Schedule' },
+    { to: '/faculty/availability', icon: Calendar, label: 'Timetable', section: 'Profile & Schedule', locked: true },
     { to: '/faculty/proposals', icon: FileSignature, label: 'Supervision Requests', section: 'Supervision Workflows' },
     { to: '/faculty/supervision', icon: GitBranch, label: 'Supervised Groups', section: 'Supervision Workflows' },
-    { to: '/faculty/messaging', icon: MessageSquare, label: 'Student Messaging', section: 'Supervision Workflows' },
-    { to: '/faculty/evaluations', icon: Star, label: 'Committee Evaluations', section: 'Committee Duties' },
-    { to: '/faculty/head-duties', icon: Crown, label: 'Head Management', section: 'Committee Duties', highlight: true },
+    { to: '/faculty/evaluations', icon: Star, label: 'Committee Evaluations', section: 'Committee Duties', locked: true },
+    { to: '/faculty/head-duties', icon: Crown, label: 'Head Management', section: 'Committee Duties', locked: true },
   ];
 
   return (
@@ -64,6 +63,17 @@ const FacultyLayout = () => {
                     {link.section}
                   </div>
                 )}
+                {link.locked ? (
+                  <div className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-300 cursor-not-allowed select-none ${isCollapsed ? 'justify-center w-[44px] h-[44px] mx-auto p-[10px]' : ''}`} title={`${link.label} — locked`}>
+                    {React.createElement(link.icon, { size: 16, className: "flex-shrink-0" })}
+                    {!isCollapsed && (
+                      <>
+                        <span className="text-sm font-medium whitespace-nowrap overflow-hidden flex-1">{link.label}</span>
+                        <Lock size={12} className="flex-shrink-0 text-slate-300" />
+                      </>
+                    )}
+                  </div>
+                ) : (
                 <NavLink 
                   to={link.to} 
                   onClick={() => setIsMobileOpen(false)}
@@ -72,6 +82,7 @@ const FacultyLayout = () => {
                   {React.createElement(link.icon, { size: 16, className: "flex-shrink-0" })}
                   {!isCollapsed && <span className="text-sm font-medium whitespace-nowrap overflow-hidden flex-1">{link.label}</span>}
                 </NavLink>
+                )}
               </React.Fragment>
             );
           })}

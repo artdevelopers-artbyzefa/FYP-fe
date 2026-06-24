@@ -27,10 +27,10 @@ const AssistantLayout = () => {
     { to: '/office-assistant/faculty', icon: Presentation, label: 'Faculty Profiles', section: 'User & Account' },
     { to: '/office-assistant/projects', icon: GitBranch, label: 'Project Directory', section: 'FYP Workflow', locked: true },
     { to: '/office-assistant/content', icon: File, label: 'Content & Templates', section: 'FYP Workflow', locked: true },
-    { to: '/office-assistant/proposal-committee', icon: Users, label: 'Proposal Committees', section: 'Committees & Evaluators' },
-    { to: '/office-assistant/eval-committee', icon: Layers, label: 'Evaluation Committees', section: 'Committees & Evaluators' },
-    { to: '/office-assistant/external', icon: User, label: 'Industry Supervisors', section: 'Committees & Evaluators' },
-    { to: '/office-assistant/results', icon: Award, label: 'Results & Printing', section: 'Outcomes' },
+    { to: '/office-assistant/proposal-committee', icon: Users, label: 'Proposal Committees', section: 'Committees & Evaluators', locked: true },
+    { to: '/office-assistant/eval-committee', icon: Layers, label: 'Evaluation Committees', section: 'Committees & Evaluators', locked: true },
+    { to: '/office-assistant/external', icon: User, label: 'Industry Supervisors', section: 'Committees & Evaluators', locked: true },
+    { to: '/office-assistant/results', icon: Award, label: 'Results & Printing', section: 'Outcomes', locked: true },
   ];
 
   return (

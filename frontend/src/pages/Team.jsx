@@ -55,29 +55,6 @@ const Team = () => {
       ],
     },
     {
-      title: "Backend Development",
-      members: [
-        {
-          initials: "AM",
-          name: "Mr.Arslan Rathore",
-          role: "Backend Developer",
-          desc: "Built the Backend & Integrated with the Frontend",
-        },
-         {
-          initials: "AF",
-          name: "Mr.Ahsan Faraz ",
-          role: "Secuirty Engineer",
-          desc: "Tackled different Secuirty Protocols & made the website pentesting-pruned.",
-        },
-        {
-          initials: "SR",
-          name: "Mudasir",
-          role: "UI/UX & Security Developer",
-          desc: "Specialized in Secuirty Audits & Desigining the Frontend Figma.",
-        },
-      ],
-    },
-    {
       title: "Frontend Development",
       members: [
         {
@@ -91,6 +68,12 @@ const Team = () => {
           name: "Ms.Laraib Ali",
           role: "Frontend Developer",
           desc: "Expertise in Frontend UI/UX & Backend. Crafting high-fidelity UI patterns and modular frontend components.",
+        },
+        {
+          initials: "SR",
+          name: "Mudasir",
+          role: "UI/UX & Security Developer",
+          desc: "Specialized in Secuirty Audits & Desigining the Frontend Figma.",
         },
       ],
     },

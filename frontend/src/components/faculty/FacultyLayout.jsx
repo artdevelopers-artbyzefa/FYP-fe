@@ -24,10 +24,10 @@ const FacultyLayout = () => {
     { to: '/faculty/dashboard', icon: Presentation, label: 'Dashboard', section: 'Overview' },
     { to: '/faculty/profile', icon: Tags, label: 'Committee Suggestion', section: 'Profile & Schedule' },
     { to: '/faculty/availability', icon: Calendar, label: 'Timetable', section: 'Profile & Schedule', locked: true },
-    { to: '/faculty/proposals', icon: FileSignature, label: 'Supervision Requests', section: 'Supervision Workflows' },
-    { to: '/faculty/supervision', icon: GitBranch, label: 'Supervised Groups', section: 'Supervision Workflows' },
-    { to: '/faculty/evaluations', icon: Star, label: 'Committee Evaluations', section: 'Committee Duties', locked: true },
-    { to: '/faculty/head-duties', icon: Crown, label: 'Head Management', section: 'Committee Duties', locked: true },
+    { to: '/faculty/proposals', icon: FileSignature, label: 'Supervision Requests', section: 'FYP Management' },
+    { to: '/faculty/supervision', icon: GitBranch, label: 'Supervised Groups', section: 'FYP Management' },
+    { to: '/faculty/evaluations', icon: Star, label: 'Committee Evaluations', section: 'FYP Management', locked: true },
+    { to: '/faculty/head-duties', icon: Crown, label: 'Head Management', section: 'FYP Management', locked: true },
   ];
 
   return (
@@ -59,7 +59,7 @@ const FacultyLayout = () => {
             return (
               <React.Fragment key={link.to}>
                 {showSection && !isCollapsed && (
-                  <div className={`text-[10px] font-bold uppercase tracking-widest text-slate-400 px-3 mb-1 ${index !== 0 ? 'pt-3' : 'pt-1'}`}>
+                  <div className={`text-[10px] font-bold text-slate-400 px-3 mb-1 ${index !== 0 ? 'pt-3' : 'pt-1'}`}>
                     {link.section}
                   </div>
                 )}

@@ -50,15 +50,10 @@ const FacultySidebar = ({ isOpen, onClose }) => {
       ]
     },
     {
-      title: 'SUPERVISION WORKFLOWS',
+      title: 'FYP Management',
       items: [
         { to: '/faculty/proposals', label: 'Supervision Requests', icon: ProposalsIcon },
-        { to: '/faculty/groups', label: 'Supervised Groups', icon: GroupsIcon }
-      ]
-    },
-    {
-      title: 'COMMITTEE DUTIES',
-      items: [
+        { to: '/faculty/groups', label: 'Supervised Groups', icon: GroupsIcon },
         { to: '/faculty/evaluations', label: 'Committee Evaluations', icon: EvaluationsIcon, locked: true },
         { to: '/faculty/head-management', label: 'Head Management', icon: HeadManagementIcon, locked: true }
       ]
@@ -104,7 +99,7 @@ const FacultySidebar = ({ isOpen, onClose }) => {
         <nav className="flex-grow overflow-y-auto pr-1 -mr-2 space-y-7 select-none no-scrollbar">
           {menuSections.map((section, idx) => (
             <div key={idx}>
-              <p className="px-4 text-[10.5px] font-bold text-slate-400 uppercase tracking-[0.08em] mb-2.5 block font-poppins">
+              <p className="px-4 text-[10.5px] font-bold text-slate-400 mb-2.5 block font-poppins">
                 {section.title}
               </p>
               <div className="space-y-1">

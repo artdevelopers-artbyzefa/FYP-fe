@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { getFacultyDashboardStats } from '../../services/faculty.service';
-import { ArrowRight, GitBranch, Landmark, Star, UserCheck } from 'lucide-react';
+import { ArrowRight, Crown, GitBranch, Landmark, Star, UserCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.04 } } };
 const item = { hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } };
@@ -58,7 +58,7 @@ const FacultyDashboard = () => {
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
             <div className="text-white">
               <div className="flex items-center gap-3 mb-2">
-                <span className="text-[11px] font-semibold text-blue-200 tracking-widest e">Faculty Portal</span>
+                <span className="text-[11px] font-semibold text-blue-200 tracking-widest ">Faculty Portal</span>
               </div>
               <h1 className="text-2xl sm:text-3xl font-bold mb-2 tracking-tight text-balance">Supervision & Committee Hub</h1>
               <p className="text-sm text-blue-200 font-medium max-w-2xl leading-relaxed">

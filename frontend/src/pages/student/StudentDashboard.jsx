@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useOutletContext, Link, Navigate } from 'react-router-dom';
 import { getStudentProfile } from '../../services/student.service';
-import { FolderOpen, IdCard, Inbox, Lightbulb, Loader, Mail, Send, User, Users, UserPlus, ArrowRight } from 'lucide-react';
+import { FolderOpen, IdCard, Inbox, Lightbulb, Loader, Lock, Mail, Send, User, Users, UserPlus, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.04 } } };
@@ -141,25 +141,22 @@ export default function Dashboard() {
           </div>
         </motion.div>
 
-        <motion.div variants={item} className="card p-6 flex flex-col">
+        <motion.div variants={item} className="card p-6 flex flex-col opacity-60 select-none">
           <div className="flex items-center gap-3 mb-5 pb-4 border-b border-line">
-            <div className="w-10 h-10 rounded-xl bg-purple-50 flex-center text-purple-600">
+            <div className="w-10 h-10 rounded-xl bg-gray-100 flex-center text-gray-400">
               <Lightbulb size={18} />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-slate-900">Ideas</h3>
-              <p className="text-[10px] text-slate-400">Project proposals</p>
+              <h3 className="text-sm font-bold text-gray-400">Ideas</h3>
+              <p className="text-[10px] text-gray-400">Project proposals</p>
             </div>
           </div>
           <div className="flex-1 flex flex-col items-center justify-center text-center py-6">
-            <div className="w-14 h-14 rounded-full bg-purple-50 flex-center text-purple-400 mb-4">
-              <FolderOpen size={24} />
+            <div className="w-14 h-14 rounded-full bg-gray-50 flex-center text-gray-300 mb-4">
+              <Lock size={24} />
             </div>
-            <p className="text-sm font-bold text-slate-900">No ideas yet</p>
-            <p className="text-xs text-slate-400 mt-1 mb-5 max-w-[200px]">Submit your FYP project idea for review and approval.</p>
-            <Link to="/ideas/new" className="btn-primary text-xs inline-flex items-center gap-1.5">
-              <Lightbulb size={14} /> Submit Idea
-            </Link>
+            <p className="text-sm font-bold text-gray-400">Locked — Phase 2</p>
+            <p className="text-xs text-gray-400 mt-1 max-w-[200px]">Idea submission will be available in the next phase.</p>
           </div>
         </motion.div>
 

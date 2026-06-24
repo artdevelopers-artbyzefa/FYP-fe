@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { getFacultyDashboardStats } from '../../services/faculty.service';
-import { ArrowRight, Crown, GitBranch, Landmark, Star, UserCheck } from 'lucide-react';
+import { ArrowRight, Crown, GitBranch, Landmark, Lock, Star, UserCheck, Tags } from 'lucide-react';
 import { motion } from 'framer-motion';
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.04 } } };
 const item = { hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } };
@@ -109,7 +109,7 @@ const FacultyDashboard = () => {
           </div>
           <div>
             <h3 className="font-semibold text-slate-900 text-base mb-1 group-hover:text-blue-700 transition-colors">Supervision Requests</h3>
-            <p className="text-xs text-slate-400 font-medium">Review student requests to be your supervisee. Accept or reject supervision requests.</p>
+            <p className="text-xs text-slate-400 font-medium">Review student requests to be your supervisee.</p>
           </div>
         </motion.div>
         <motion.div
@@ -125,39 +125,39 @@ const FacultyDashboard = () => {
           </div>
           <div>
             <h3 className="font-semibold text-slate-900 text-base mb-1 group-hover:text-blue-700 transition-colors">Project Supervision</h3>
-            <p className="text-xs text-slate-400 font-medium">Track weekly log submissions and review draft thesis chapters.</p>
+            <p className="text-xs text-slate-400 font-medium">Track weekly log submissions and review progress.</p>
           </div>
         </motion.div>
         <motion.div
           variants={item}
-          onClick={() => navigate('/faculty/evaluations')}
-          className="group bg-white p-6 rounded-2xl border border-line shadow-card hover:shadow-card-hover hover:-translate-y-0.5 hover:border-blue-200 transition-all duration-300 cursor-pointer flex flex-col justify-between"
+          className="bg-white p-6 rounded-2xl border border-line opacity-50 cursor-not-allowed flex flex-col justify-between select-none"
+          title="Locked during Phase 1"
         >
           <div className="flex justify-between items-center mb-4">
-            <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-105 transition-transform duration-200">
+            <div className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center text-gray-400">
               <Star size={18} />
             </div>
-            <ArrowRight className="text-slate-300 group-hover:text-blue-600 group-hover:translate-x-1 transition-all w-5 h-5" />
+            <Lock className="text-gray-300 w-5 h-5" />
           </div>
           <div>
-            <h3 className="font-semibold text-slate-900 text-base mb-1 group-hover:text-blue-700 transition-colors">Committee Evaluations</h3>
-            <p className="text-xs text-slate-400 font-medium">Input scores per CLO criteria and submit locked evaluation scorecards.</p>
+            <h3 className="font-semibold text-gray-400 text-base mb-1">Committee Evaluations</h3>
+            <p className="text-xs text-gray-400 font-medium">Locked during Phase 1.</p>
           </div>
         </motion.div>
         <motion.div
           variants={item}
-          onClick={() => navigate('/faculty/head-duties')}
-          className="group bg-white p-6 rounded-2xl border border-line shadow-card hover:shadow-card-hover hover:-translate-y-0.5 hover:border-blue-200 transition-all duration-300 cursor-pointer flex flex-col justify-between"
+          className="bg-white p-6 rounded-2xl border border-line opacity-50 cursor-not-allowed flex flex-col justify-between select-none"
+          title="Locked during Phase 1"
         >
           <div className="flex justify-between items-center mb-4">
-            <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-105 transition-transform duration-200">
+            <div className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center text-gray-400">
               <Crown size={18} />
             </div>
-            <ArrowRight className="text-slate-300 group-hover:text-blue-600 group-hover:translate-x-1 transition-all w-5 h-5" />
+            <Lock className="text-gray-300 w-5 h-5" />
           </div>
           <div>
-            <h3 className="font-semibold text-slate-900 text-base mb-1 group-hover:text-blue-700 transition-colors">Committee Head Duties</h3>
-            <p className="text-xs text-slate-400 font-medium">Consolidate member evaluations and publish final consensus scores.</p>
+            <h3 className="font-semibold text-gray-400 text-base mb-1">Committee Head Duties</h3>
+            <p className="text-xs text-gray-400 font-medium">Locked during Phase 1.</p>
           </div>
         </motion.div>
       </div>

@@ -89,6 +89,11 @@ export const getGroupIdeaById = async (id) => {
   return res.data;
 };
 
+export const saveStudentGroupPreferences = async (preferences) => {
+  const res = await apiClient.post('/student/group/preferences', { preferences });
+  return res.data;
+};
+
 export const voteOnGroupIdea = async (id, decision) => {
   const res = await apiClient.post(`${STUDENT_VOTE_GROUP_IDEA_URL}/${id}/vote`, { decision });
   return res.data;

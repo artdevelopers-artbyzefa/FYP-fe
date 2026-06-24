@@ -1,8 +1,20 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { searchPartners, sendPartnerRequest, getSentRequests, getIncomingRequests, respondPartnerRequest, getStudentGroup } from '../../services/student.service';
+import { searchPartners, sendPartnerRequest, getSentRequests, getIncomingRequests, respondPartnerRequest, getStudentGroup, saveStudentGroupPreferences } from '../../services/student.service';
 import { showToast as toast } from '../../components/AppToast';
-import { Check, Clock, Crown, Loader, Search, Send, UserCheck, UserX, Users, X } from 'lucide-react';
+import { Check, Clock, Crown, Loader, Search, Send, Sparkles, UserCheck, UserX, Users, X, CheckCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
+
+const FIELDS = [
+  'Web Development', 'Game Development', 'Software Requirement Engineering',
+  'Mobile App Development', 'Machine Learning / AI', 'Database Systems',
+  'Cybersecurity', 'Deployment'
+];
+
+const PRIORITY = {
+  1: { label: '1st Choice', weight: '50%', dot: 'bg-emerald-500' },
+  2: { label: '2nd Choice', weight: '30%', dot: 'bg-blue-500' },
+  3: { label: '3rd Choice', weight: '20%', dot: 'bg-amber-500' },
+};
 
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.04 } } };
 const item = { hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } };
@@ -16,11 +28,13 @@ export default function FYPGroup() {
   const [incomingRequests, setIncomingRequests] = useState([]);
   const [group, setGroup] = useState(null);
   const [loadingData, setLoadingData] = useState(true);
+  const [prefs, setPrefs] = useState([]);
+  const [savingPrefs, setSavingPrefs] = useState(false);
   const debounceRef = useRef(null);
 
   useEffect(() => {
     Promise.all([
-      getStudentGroup().then(d => setGroup(d?.data || null)).catch(() => {}),
+      getStudentGroup().then(d => { const g = d?.data || null; setGroup(g); setPrefs(g?.preferences?.map(p => ({ field: p.field, priority: p.priority })) || []); }).catch(() => {}),
       getSentRequests().then(d => setSentRequests(Array.isArray(d) ? d : [])).catch(() => {}),
       getIncomingRequests().then(d => setIncomingRequests(Array.isArray(d) ? d : [])).catch(() => {})
     ]).finally(() => setLoadingData(false));
@@ -71,8 +85,28 @@ export default function FYPGroup() {
       getIncomingRequests().then(d => Array.isArray(d) ? d : []).catch(() => [])
     ]);
     setGroup(g);
+    setPrefs(g?.preferences?.map(p => ({ field: p.field, priority: p.priority })) || []);
     setSentRequests(s);
     setIncomingRequests(i);
+  };
+
+  const getPrefPriority = (field) => { const p = prefs.find(p => p.field === field); return p ? p.priority : null; };
+
+  const handlePrefSelect = (field) => {
+    const current = getPrefPriority(field);
+    if (current) { setPrefs(prefs.filter(p => p.field !== field)); return; }
+    if (prefs.length >= 3) { toast.error('Max 3 preferences.'); return; }
+    setPrefs([...prefs, { field, priority: prefs.length + 1 }]);
+  };
+
+  const handleSavePrefs = async () => {
+    if (prefs.length === 0) { toast.error('Select at least one preference.'); return; }
+    setSavingPrefs(true);
+    try {
+      await saveStudentGroupPreferences(prefs);
+      toast.success('Preferences saved.');
+    } catch (err) { toast.error(err?.response?.data?.message || 'Failed.'); }
+    finally { setSavingPrefs(false); }
   };
 
   if (loadingData) return <div className="flex items-center justify-center min-h-[60vh]"><Loader className="animate-spin text-slate-900 text-3xl" /></div>;
@@ -115,6 +149,50 @@ export default function FYPGroup() {
                 </div>
               ))}
             </div>
+          </div>
+        )}
+
+        {group && group.members?.length > 0 && (
+          <div className="mb-6 p-4 rounded-xl border border-line bg-white">
+            <div className="flex items-center gap-2 mb-3">
+              <Sparkles size={15} className="text-blue-600" />
+              <h3 className="text-xs font-bold text-slate-700">Committee Assignment Preferences</h3>
+            </div>
+            <p className="text-[10px] text-slate-400 mb-3">Select up to 3 fields ranked by preference. These determine which committee evaluates your group.</p>
+            <div className="flex items-center gap-3 mb-3 text-[10px]">
+              {[1, 2, 3].map(p => (
+                <div key={p} className="flex items-center gap-1">
+                  <div className={`w-2.5 h-2.5 rounded-full ${PRIORITY[p].dot}`} />
+                  <span className="font-medium text-slate-500">{PRIORITY[p].label} ({PRIORITY[p].weight})</span>
+                </div>
+              ))}
+            </div>
+            <div className="space-y-1.5 mb-3">
+              {FIELDS.map(field => {
+                const priority = getPrefPriority(field);
+                return (
+                  <div key={field} onClick={() => handlePrefSelect(field)}
+                    className={`p-2.5 rounded-xl border-2 cursor-pointer transition-all flex items-center justify-between ${
+                      priority ? (priority === 1 ? 'bg-emerald-50 border-emerald-400' : priority === 2 ? 'bg-blue-50 border-blue-400' : 'bg-amber-50 border-amber-400') : 'bg-white border-gray-200 hover:border-blue-300'
+                    }`}>
+                    <div>
+                      <div className={`text-xs font-bold ${priority ? (priority === 1 ? 'text-emerald-700' : priority === 2 ? 'text-blue-700' : 'text-amber-700') : 'text-slate-900'}`}>{field}</div>
+                      {priority && <div className={`text-[9px] font-bold mt-0.5 ${priority === 1 ? 'text-emerald-600' : priority === 2 ? 'text-blue-600' : 'text-amber-600'}`}>{PRIORITY[priority].label} · Weight: {PRIORITY[priority].weight}</div>}
+                    </div>
+                    <div className={`w-6 h-6 rounded-full flex-center flex-shrink-0 ${
+                      priority ? (priority === 1 ? 'bg-emerald-500 text-white' : priority === 2 ? 'bg-blue-500 text-white' : 'bg-amber-500 text-white') : 'bg-gray-100 text-gray-400'
+                    }`}>
+                      {priority ? <CheckCircle size={11} /> : <span className="text-[10px] font-bold">+</span>}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <button onClick={handleSavePrefs} disabled={savingPrefs || prefs.length === 0}
+              className="w-full py-2 bg-blue-600 text-white rounded-xl text-xs font-bold hover:bg-blue-700 transition-all cursor-pointer disabled:opacity-50 border-0 flex-center gap-2">
+              {savingPrefs && <Loader size={11} className="animate-spin" />}
+              {savingPrefs ? 'Saving...' : 'Save Preferences'}
+            </button>
           </div>
         )}
 

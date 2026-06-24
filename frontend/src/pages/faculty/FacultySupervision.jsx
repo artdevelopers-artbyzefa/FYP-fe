@@ -1,19 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { getFacultySupervisedGroups, saveGroupPreferences } from '../../services/faculty.service';
-import { showToast } from '../../components/AppToast';
-import { Users, FileText, TrendingUp, Loader2, AlertCircle, ArrowLeft, CheckCircle, Sparkles } from 'lucide-react';
-
-const FIELDS = [
-  'Web Development', 'Game Development', 'Software Requirement Engineering',
-  'Mobile App Development', 'Machine Learning / AI', 'Database Systems',
-  'Cybersecurity', 'Deployment'
-];
-
-const PRIORITY = {
-  1: { label: '1st Choice', weight: '50%', card: 'bg-emerald-50 border-emerald-400 ring-1 ring-emerald-400', text: 'text-emerald-700', badge: 'bg-emerald-500 text-white', dot: 'bg-emerald-500' },
-  2: { label: '2nd Choice', weight: '30%', card: 'bg-blue-50 border-blue-400 ring-1 ring-blue-400', text: 'text-blue-700', badge: 'bg-blue-500 text-white', dot: 'bg-blue-500' },
-  3: { label: '3rd Choice', weight: '20%', card: 'bg-amber-50 border-amber-400 ring-1 ring-amber-400', text: 'text-amber-700', badge: 'bg-amber-500 text-white', dot: 'bg-amber-500' },
-};
+import { getFacultySupervisedGroups } from '../../services/faculty.service';
+import { Users, FileText, TrendingUp, Loader2, AlertCircle, ArrowLeft } from 'lucide-react';
 
 const STATUS_MAP = {
   pending_approval: 'Pending Approval', approved: 'Approved', active: 'Active',
@@ -25,8 +12,6 @@ const FacultySupervision = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedGroup, setSelectedGroup] = useState(null);
-  const [prefs, setPrefs] = useState([]);
-  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     setLoading(true); setError(null);
@@ -38,27 +23,6 @@ const FacultySupervision = () => {
 
   const openDetail = (g) => {
     setSelectedGroup(g);
-    setPrefs(g.preferences?.map(p => ({ field: p.field, priority: p.priority })) || []);
-  };
-
-  const getPriority = (field) => { const p = prefs.find(p => p.field === field); return p ? p.priority : null; };
-
-  const handleSelect = (field) => {
-    const current = getPriority(field);
-    if (current) { setPrefs(prefs.filter(p => p.field !== field)); return; }
-    if (prefs.length >= 3) { showToast.error('Max 3 preferences.'); return; }
-    setPrefs([...prefs, { field, priority: prefs.length + 1 }]);
-  };
-
-  const handleSavePrefs = async () => {
-    if (prefs.length === 0) { showToast.error('Select at least one preference.'); return; }
-    setSaving(true);
-    try {
-      await saveGroupPreferences(selectedGroup.groupId, prefs);
-      showToast.success('Preferences saved.');
-      setGroups(groups.map(g => g.groupId === selectedGroup.groupId ? { ...g, preferences: prefs } : g));
-    } catch (err) { showToast.error(err?.response?.data?.message || 'Failed.'); }
-    finally { setSaving(false); }
   };
 
   if (loading) return <div className="flex-center py-20"><Loader2 className="w-6 h-6 animate-spin text-blue-600" /><span className="ml-2 text-sm text-slate-500 font-medium">Loading groups...</span></div>;
@@ -80,7 +44,7 @@ const FacultySupervision = () => {
             }`}>{STATUS_MAP[g.status] || g.status}</span>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 gap-6">
             <div className="space-y-4">
               <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2"><Users size={15} /> Members ({g.members.length})</h3>
               <div className="space-y-2">
@@ -117,50 +81,6 @@ const FacultySupervision = () => {
                 <span className="flex items-center gap-1"><TrendingUp size={13} /> {g.progress}%</span>
                 <span>{g.approvedLogs}/{g.totalLogs} logs approved</span>
               </div>
-            </div>
-
-            <div className="card p-5">
-              <div className="flex items-center gap-2 mb-4">
-                <Sparkles size={16} className="text-blue-600" />
-                <h3 className="text-sm font-bold text-slate-900">Committee Assignment Preferences</h3>
-              </div>
-              <p className="text-[10px] text-slate-400 mb-4">Select up to 3 fields ranked by preference. These determine which committee evaluates this group.</p>
-
-              <div className="flex items-center gap-3 mb-4 text-[10px]">
-                {[1, 2, 3].map(p => (
-                  <div key={p} className="flex items-center gap-1">
-                    <div className={`w-2.5 h-2.5 rounded-full ${PRIORITY[p].dot}`} />
-                    <span className="font-medium text-slate-500">{PRIORITY[p].label} ({PRIORITY[p].weight})</span>
-                  </div>
-                ))}
-              </div>
-
-              <div className="space-y-2 mb-4">
-                {FIELDS.map(field => {
-                  const priority = getPriority(field);
-                  const cls = priority ? PRIORITY[priority] : null;
-                  return (
-                    <div key={field} onClick={() => handleSelect(field)}
-                      className={`p-3 rounded-xl border-2 cursor-pointer transition-all ${cls ? cls.card : 'bg-white border-gray-200 hover:border-blue-300'}`}>
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <div className={`text-xs font-bold ${cls ? cls.text : 'text-slate-900'}`}>{field}</div>
-                          {cls && <div className={`text-[9px] font-bold mt-0.5 ${cls.text}`}>{PRIORITY[priority].label} · Weight: {PRIORITY[priority].weight}</div>}
-                        </div>
-                        <div className={`w-6 h-6 rounded-full flex-center flex-shrink-0 ${cls ? cls.badge : 'bg-gray-100 text-gray-400'}`}>
-                          {cls ? <CheckCircle size={11} /> : <span className="text-[10px] font-bold">+</span>}
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-
-              <button onClick={handleSavePrefs} disabled={saving || prefs.length === 0}
-                className="w-full py-2.5 bg-blue-600 text-white rounded-xl text-xs font-bold hover:bg-blue-700 transition-all cursor-pointer disabled:opacity-50 border-0 flex-center gap-2">
-                {saving && <Loader2 size={12} className="animate-spin" />}
-                {saving ? 'Saving...' : 'Save Preferences'}
-              </button>
             </div>
           </div>
         </div>

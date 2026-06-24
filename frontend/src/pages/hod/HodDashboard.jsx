@@ -119,7 +119,7 @@ const HodDashboard = () => {
                 <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
                   <Landmark size={16} className="text-white/90" />
                 </div>
-                <span className="text-[11px] font-semibold text-blue-200 tracking-widest uppercase">Executive Dashboard</span>
+                <span className="text-[11px] font-semibold text-blue-200 tracking-widest">Executive Dashboard</span>
               </div>
               <h1 className="text-2xl sm:text-3xl font-bold mb-2 tracking-tight text-balance">Department Command Center</h1>
               <p className="text-sm text-blue-200 font-medium max-w-2xl leading-relaxed">

@@ -81,6 +81,11 @@ export const approveGroupIdea = async (ideaId, feedback) => {
   return res.data;
 };
 
+export const resetGroupIdea = async (ideaId) => {
+  const res = await apiClient.post(`/faculty/group-ideas/${ideaId}/reset`);
+  return res.data;
+};
+
 export const rejectGroupIdea = async (ideaId, feedback) => {
   const res = await apiClient.post(`/faculty/group-ideas/${ideaId}/review`, { decision: 'supervisor_rejected', feedback });
   return res.data;

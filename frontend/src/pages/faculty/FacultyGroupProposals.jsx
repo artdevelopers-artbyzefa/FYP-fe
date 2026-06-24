@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { getPendingGroupIdeas, approveGroupIdea, rejectGroupIdea } from '../../services/faculty.service';
-import { X, Check, Loader2, CheckCircle, AlertCircle, Lightbulb, Users, ThumbsUp, ThumbsDown, Clock, Filter } from 'lucide-react';
+import { getPendingGroupIdeas, approveGroupIdea, rejectGroupIdea, resetGroupIdea } from '../../services/faculty.service';
+import { X, Check, Loader2, CheckCircle, AlertCircle, Lightbulb, Users, ThumbsUp, ThumbsDown, Clock, RotateCcw } from 'lucide-react';
 import { motion } from 'framer-motion';
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.04 } } };
 const item = { hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } };
@@ -47,6 +47,17 @@ const FacultyGroupProposals = () => {
       showToastMsg('success', 'Proposal approved.');
       fetchAll();
     } catch (err) { showToastMsg('error', err?.response?.data?.message || 'Failed to approve.');
+    } finally { setActionLoading(null); }
+  };
+
+  const handleReset = async (ideaId) => {
+    if (!window.confirm('Reset this proposal to pending review? This allows you to re-review it.')) return;
+    setActionLoading(ideaId);
+    try {
+      await resetGroupIdea(ideaId);
+      showToastMsg('success', 'Proposal reset to pending review.');
+      fetchAll();
+    } catch (err) { showToastMsg('error', err?.response?.data?.message || 'Failed to reset.');
     } finally { setActionLoading(null); }
   };
 
@@ -125,8 +136,17 @@ const FacultyGroupProposals = () => {
                   <div className="flex flex-wrap gap-4 text-xs text-slate-500 mb-4">
                     <span>Proposed by <strong className="text-slate-700">{idea.submittedBy?.name || 'Unknown'}</strong></span>
                     <span>Votes: {idea.votes?.filter(v => v.decision === 'agree').length || 0}/{idea.votes?.length || 0} agreed</span>
-                    {idea.supervisorFeedback && <span className="text-slate-400">Feedback: {idea.supervisorFeedback}</span>}
-                  </div>
+                  {idea.supervisorFeedback && <span className="text-slate-400">Feedback: {idea.supervisorFeedback}</span>}
+                </div>
+
+                  {(idea.agreementStatus === 'supervisor_approved' || idea.agreementStatus === 'supervisor_rejected') && (
+                    <div className="border-t border-line pt-4 mt-2">
+                      <button onClick={() => handleReset(idea._id)} disabled={actionLoading === idea._id}
+                        className="flex items-center gap-1.5 px-4 py-2 bg-white text-slate-600 text-xs font-bold rounded-xl border border-line hover:bg-amber-50 hover:text-amber-600 hover:border-amber-200 transition-all disabled:opacity-50 cursor-pointer">
+                        {actionLoading === idea._id ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RotateCcw className="w-3.5 h-3.5" />} Reset to Pending
+                      </button>
+                    </div>
+                  )}
 
                   {idea.agreementStatus === 'agreed' && (
                     <div className="border-t border-line pt-4 mt-2 space-y-3">

@@ -67,6 +67,11 @@ export const deleteOfficeStudent = async (id) => {
   return res.data;
 };
 
+export const updateOfficeStudent = async (id, payload) => {
+  const res = await apiClient.put(OFFICE_STUDENTS_API_URL + '/' + id, payload);
+  return res.data;
+};
+
 export const createOfficeFaculty = async (payload) => {
   const res = await apiClient.post(OFFICE_CREATE_FACULTY_API_URL, payload);
   return res.data;

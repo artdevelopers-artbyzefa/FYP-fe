@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
-import { getOfficeStudents, createOfficeStudent, deleteOfficeStudent } from '../../services/office-assistant.service';
+import { getOfficeStudents, createOfficeStudent, deleteOfficeStudent, updateOfficeStudent } from '../../services/office-assistant.service';
 import { showToast, showAlert } from '../../components/AppToast';
 import { sendWelcomeEmail } from '../../services/email.service';
-import { Search, UserPlus, X, Send, Trash2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, UserPlus, X, Send, Trash2, Pencil, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const initialForm = { name: '', reg: '', email: '', semester: '7', fatherName: '', whatsappNumber: '', section: '', cgpa: '' };
 
@@ -29,6 +29,9 @@ const AssistantStudents = () => {
   const [submitting, setSubmitting] = useState(false);
   const submitLock = useRef(false);
   const [loading, setLoading] = useState(true);
+  const [editStudent, setEditStudent] = useState(null);
+  const [editForm, setEditForm] = useState(initialForm);
+  const [editErrors, setEditErrors] = useState({});
   const limit = 20;
 
   const loadStudents = useCallback((p) => {
@@ -122,6 +125,50 @@ const AssistantStudents = () => {
         }
       }
     });
+  };
+
+  const handleEdit = (student) => {
+    setEditStudent(student);
+    setEditForm({
+      name: student.name || '',
+      reg: student.regNo || '',
+      email: student.email || '',
+      semester: student.semester?.toString() || '7',
+      fatherName: student.fatherName || '',
+      whatsappNumber: student.whatsappNumber || '',
+      section: student.section || '',
+      cgpa: student.cgpa?.toString() || ''
+    });
+    setEditErrors({});
+  };
+
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+    if (submitting) return;
+    const errs = validateForm(editForm);
+    setEditErrors(errs);
+    if (Object.keys(errs).length) return;
+
+    setSubmitting(true);
+    try {
+      await updateOfficeStudent(editStudent.id, {
+        name: editForm.name.trim(),
+        regNo: editForm.reg,
+        email: editForm.email.trim(),
+        semester: editForm.semester,
+        fatherName: editForm.fatherName.trim(),
+        whatsappNumber: editForm.whatsappNumber.trim(),
+        section: editForm.section.trim().toUpperCase(),
+        cgpa: editForm.cgpa || undefined
+      });
+      showToast.success('Student updated successfully!');
+      setEditStudent(null);
+      loadStudents(page);
+    } catch (err) {
+      showToast.error(err?.response?.data?.message || 'Failed to update student.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleBulkSubmit = (e) => {
@@ -273,11 +320,16 @@ const AssistantStudents = () => {
                   </td>
                   <td className="py-4 px-6 text-gray-600 truncate max-w-[200px]" title={s.project}>{s.project || 'Not assigned'}</td>
                   <td className="py-4 px-6 text-right">
-                    {s.isactive !== false && (
-                      <button onClick={() => handleDelete(s)} className="px-3 py-1.5 rounded-lg bg-rose-50 text-rose-600 border border-rose-200 text-xs font-bold transition-all hover:bg-rose-100 cursor-pointer flex items-center gap-1.5 ml-auto">
-                        <Trash2 className="w-3 h-3" /> Deactivate
+                    <div className="flex justify-end gap-1.5">
+                      <button onClick={() => handleEdit(s)} className="px-3 py-1.5 rounded-lg bg-blue-50 text-blue-600 border border-blue-200 text-xs font-bold transition-all hover:bg-blue-100 cursor-pointer flex items-center gap-1.5">
+                        <Pencil className="w-3 h-3" /> Edit
                       </button>
-                    )}
+                      {s.isactive !== false && (
+                        <button onClick={() => handleDelete(s)} className="px-3 py-1.5 rounded-lg bg-rose-50 text-rose-600 border border-rose-200 text-xs font-bold transition-all hover:bg-rose-100 cursor-pointer flex items-center gap-1.5">
+                          <Trash2 className="w-3 h-3" /> Deactivate
+                        </button>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -306,6 +358,67 @@ const AssistantStudents = () => {
             <button onClick={() => goToPage(page + 1)} disabled={page >= totalPages} className="p-2 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer">
               <ChevronRight className="w-4 h-4" />
             </button>
+          </div>
+        </div>
+      )}
+
+      {editStudent && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[150] flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl w-full max-w-2xl p-6 sm:p-8 shadow-2xl border border-gray-100 max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-6 pb-3 border-b border-gray-100">
+              <h3 className="text-lg font-bold text-gray-800 tracking-tight">Edit Student</h3>
+              <button onClick={() => setEditStudent(null)} className="w-8 h-8 rounded-lg bg-gray-50 border-0 flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-600 cursor-pointer transition-all">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <form onSubmit={handleEditSubmit} className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div>
+                  <label className="block text-[10px] font-bold text-gray-500 mb-1.5 tracking-widest">Full Name *</label>
+                  <input type="text" value={editForm.name} onChange={e => setEditForm(f => ({ ...f, name: e.target.value }))} className={`w-full bg-white border ${editErrors.name ? 'border-rose-300' : 'border-gray-100'} rounded-xl px-4 py-2.5 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all`} />
+                  {editErrors.name && <p className="text-[10px] font-bold text-rose-500 mt-1">{editErrors.name}</p>}
+                </div>
+                <div>
+                  <label className="block text-[10px] font-bold text-gray-500 mb-1.5 tracking-widest">Registration Number *</label>
+                  <input type="text" value={editForm.reg} onChange={e => setEditForm(f => ({ ...f, reg: e.target.value }))} className={`w-full bg-white border ${editErrors.reg ? 'border-rose-300' : 'border-gray-100'} rounded-xl px-4 py-2.5 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all font-mono`} />
+                  {editErrors.reg && <p className="text-[10px] font-bold text-rose-500 mt-1">{editErrors.reg}</p>}
+                </div>
+                <div>
+                  <label className="block text-[10px] font-bold text-gray-500 mb-1.5 tracking-widest">Email *</label>
+                  <input type="email" value={editForm.email} onChange={e => setEditForm(f => ({ ...f, email: e.target.value }))} className={`w-full bg-white border ${editErrors.email ? 'border-rose-300' : 'border-gray-100'} rounded-xl px-4 py-2.5 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all`} />
+                  {editErrors.email && <p className="text-[10px] font-bold text-rose-500 mt-1">{editErrors.email}</p>}
+                </div>
+                <div>
+                  <label className="block text-[10px] font-bold text-gray-500 mb-1.5 tracking-widest">Semester</label>
+                  <select value={editForm.semester} onChange={e => setEditForm(f => ({ ...f, semester: e.target.value }))} className="w-full bg-white border border-gray-100 rounded-xl px-4 py-2.5 text-sm font-bold text-gray-700 outline-none focus:border-primary cursor-pointer">
+                    {['1', '2', '3', '4', '5', '6', '7', '8'].map(s => <option key={s} value={s}>Sem {s}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-[10px] font-bold text-gray-500 mb-1.5 tracking-widest">Father's Name</label>
+                  <input type="text" value={editForm.fatherName} onChange={e => setEditForm(f => ({ ...f, fatherName: e.target.value }))} className="w-full bg-white border border-gray-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-primary transition-all" />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-bold text-gray-500 mb-1.5 tracking-widest">WhatsApp Number</label>
+                  <input type="text" value={editForm.whatsappNumber} onChange={e => setEditForm(f => ({ ...f, whatsappNumber: e.target.value }))} className="w-full bg-white border border-gray-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-primary transition-all" />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-bold text-gray-500 mb-1.5 tracking-widest">Section (A/B/C/D)</label>
+                  <input type="text" value={editForm.section} onChange={e => setEditForm(f => ({ ...f, section: e.target.value }))} className="w-full bg-white border border-gray-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-primary transition-all" />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-bold text-gray-500 mb-1.5 tracking-widest">Current CGPA</label>
+                  <input type="text" inputMode="decimal" value={editForm.cgpa} onChange={e => setEditForm(f => ({ ...f, cgpa: e.target.value }))} className={`w-full bg-white border ${editErrors.cgpa ? 'border-rose-300' : 'border-gray-100'} rounded-xl px-4 py-2.5 text-sm outline-none focus:border-primary transition-all`} />
+                  {editErrors.cgpa && <p className="text-[10px] font-bold text-rose-500 mt-1">{editErrors.cgpa}</p>}
+                </div>
+              </div>
+              <div className="flex justify-end gap-3 pt-4 border-t border-gray-100">
+                <button type="button" onClick={() => setEditStudent(null)} className="px-5 py-2.5 rounded-xl text-xs font-bold text-gray-500 hover:bg-gray-50 transition-colors cursor-pointer">Cancel</button>
+                <button type="submit" disabled={submitting} className="px-6 py-2.5 bg-primary text-white rounded-xl text-xs font-bold shadow-sm hover:bg-navy-dark transition-all cursor-pointer disabled:opacity-50">
+                  {submitting ? 'Saving...' : 'Save Changes'}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

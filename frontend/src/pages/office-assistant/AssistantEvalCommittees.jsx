@@ -1,16 +1,55 @@
 import React, { useEffect, useState } from 'react';
 import { showToast } from '../../components/AppToast';
-import { Info, Lock } from 'lucide-react';
+import { Info, Lock, Loader2 } from 'lucide-react';
+import api from '../../services/api';
 
 const AssistantEvalCommittees = () => {
   const [loading, setLoading] = useState(true);
-  const [activeBoard, setActiveBoard] = useState('fyp1');
+  const [submitting, setSubmitting] = useState(false);
+  const [committees, setCommittees] = useState([]);
+  const [faculty, setFaculty] = useState([]);
 
-  useEffect(() => { setLoading(false); }, []);
+  const [form, setForm] = useState({
+    name: '',
+    head: '',
+    members: [],
+    type: 'evaluation',
+    milestone: ''
+  });
 
-  const handleCommitteeSubmit = (e) => {
+  useEffect(() => {
+    Promise.all([
+      api.get('/office-assistant/eval-committee'),
+      api.get('/office-assistant/faculty')
+    ]).then(([commRes, facRes]) => {
+      setCommittees(commRes.data?.data || []);
+      setFaculty(facRes.data?.data || []);
+    }).catch(console.error).finally(() => setLoading(false));
+  }, []);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    showToast.success('Committee configuration saved successfully!');
+    if (!form.name || !form.head || form.members.length === 0) {
+      showToast.error('Please fill in all required fields.');
+      return;
+    }
+    setSubmitting(true);
+    try {
+      await api.post('/committees', form);
+      showToast.success('Committee created successfully!');
+      setForm({ name: '', head: '', members: [], type: 'evaluation', milestone: '' });
+      const res = await api.get('/office-assistant/eval-committee');
+      setCommittees(res.data?.data || []);
+    } catch (err) {
+      showToast.error(err?.response?.data?.message || 'Failed to create committee.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleMembersChange = (e) => {
+    const opts = [...e.target.options].filter(o => o.selected).map(o => o.value);
+    setForm(f => ({ ...f, members: opts }));
   };
 
   return (
@@ -22,67 +61,37 @@ const AssistantEvalCommittees = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
         {loading ? (
-          <>
-            <div className="lg:col-span-2 bg-white rounded-2xl border border-line shadow-sm p-6 animate-pulse">
-              <div className="flex justify-between items-center mb-6 pb-3 border-b border-line">
-                <div className="skeleton h-5 w-48" />
-                <div className="flex gap-2">
-                  <div className="skeleton h-8 w-24 rounded-xl" />
-                  <div className="skeleton h-8 w-24 rounded-xl" />
-                </div>
-              </div>
-              <div className="space-y-5">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  <div className="space-y-2">
-                    <div className="skeleton h-3 w-24" />
-                    <div className="skeleton h-10 w-full rounded-xl" />
-                  </div>
-                  <div className="space-y-2">
-                    <div className="skeleton h-3 w-24" />
-                    <div className="skeleton h-10 w-full rounded-xl" />
-                  </div>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  <div className="space-y-2">
-                    <div className="skeleton h-3 w-32" />
-                    <div className="skeleton h-10 w-full rounded-xl" />
-                  </div>
-                  <div className="space-y-2">
-                    <div className="skeleton h-3 w-40" />
-                    <div className="skeleton h-24 w-full rounded-xl" />
-                  </div>
-                </div>
-                <div className="pt-4 border-t border-line flex justify-end">
-                  <div className="skeleton h-10 w-48 rounded-xl" />
-                </div>
-              </div>
-            </div>
-            <div className="bg-white rounded-2xl border border-line shadow-sm p-6 space-y-5 animate-pulse">
-              <div className="skeleton h-5 w-36 mb-3 pb-3" />
-              <div className="skeleton h-16 w-full rounded-2xl" />
-              <div className="skeleton h-16 w-full rounded-2xl" />
-            </div>
-          </>
+          <div className="lg:col-span-3 flex items-center justify-center py-20">
+            <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
+            <span className="ml-2 text-sm text-slate-900 font-medium">Loading...</span>
+          </div>
         ) : (
           <>
         <div className="lg:col-span-2 bg-white rounded-2xl border border-line shadow-sm p-6">
-          <div className="flex justify-between items-center mb-6 pb-3 border-b border-line">
-            <h3 className="text-base font-bold text-slate-900">Configure Evaluation Board</h3>
-            <div className="flex gap-2">
-              <button onClick={() => setActiveBoard('fyp1')} className={`px-4 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${activeBoard === 'fyp1' ? 'bg-blue-600 text-white shadow-md' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>FYP-1 Board</button>
-              <button onClick={() => setActiveBoard('fyp2')} className={`px-4 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${activeBoard === 'fyp2' ? 'bg-blue-600 text-white shadow-md' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>FYP-2 Board</button>
-            </div>
-          </div>
+          <h3 className="text-base font-bold text-slate-900 mb-6 pb-3 border-b border-line">Configure Evaluation Board</h3>
 
-          <form onSubmit={handleCommitteeSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
                 <label className="block text-xs font-bold text-slate-900 mb-1.5">Committee Name</label>
-                <input type="text" placeholder="e.g. FEC-FYP1-A" className="w-full bg-white border border-line rounded-xl px-4 py-2.5 text-sm outline-none focus:border-blue-500 focus:bg-white transition-all" required />
+                <input
+                  type="text"
+                  placeholder="e.g. FEC-FYP1-A"
+                  value={form.name}
+                  onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
+                  className="w-full bg-white border border-line rounded-xl px-4 py-2.5 text-sm outline-none focus:border-blue-500 focus:bg-white transition-all"
+                  required
+                />
               </div>
               <div>
                 <label className="block text-xs font-bold text-slate-900 mb-1.5">Milestone Window</label>
-                <select className="w-full bg-white border border-line rounded-xl px-4 py-2.5 text-sm font-bold text-slate-900 outline-none focus:border-blue-500 cursor-pointer" required>
+                <select
+                  value={form.milestone}
+                  onChange={e => setForm(f => ({ ...f, milestone: e.target.value }))}
+                  className="w-full bg-white border border-line rounded-xl px-4 py-2.5 text-sm font-bold text-slate-900 outline-none focus:border-blue-500 cursor-pointer"
+                  required
+                >
+                  <option value="">Select...</option>
                   <option value="10">10% Milestone</option>
                   <option value="30">30% Milestone</option>
                   <option value="60">60% Milestone</option>
@@ -96,56 +105,70 @@ const AssistantEvalCommittees = () => {
               <div>
                 <label className="block text-xs font-bold text-slate-900 mb-1.5 flex items-center gap-2">
                   <span>Assign Committee Head</span>
-                  <Info className="text-slate-900" />
+                  <Info className="text-slate-900 w-4 h-4" />
                 </label>
-                <select className="w-full bg-white border border-line rounded-xl px-4 py-2.5 text-sm font-bold text-slate-900 outline-none focus:border-blue-500 cursor-pointer" required>
-                  <option value="Dr. Ali Hassan">Dr. Ali Hassan</option>
-                  <option value="Dr. Sara Malik">Dr. Sara Malik</option>
+                <select
+                  value={form.head}
+                  onChange={e => setForm(f => ({ ...f, head: e.target.value }))}
+                  className="w-full bg-white border border-line rounded-xl px-4 py-2.5 text-sm font-bold text-slate-900 outline-none focus:border-blue-500 cursor-pointer"
+                  required
+                >
+                  <option value="">Select Head...</option>
+                  {faculty.map(f => (
+                    <option key={f.id || f._id} value={f.id || f._id}>{f.name}</option>
+                  ))}
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-bold text-slate-900 mb-1.5">Assign Members (Max 50% change for FYP-2)</label>
-                <select multiple className="w-full bg-white border border-line rounded-xl px-4 py-2 text-sm font-bold text-slate-900 outline-none focus:border-blue-500 cursor-pointer h-24" required defaultValue={['Dr. Ali Hassan', 'Dr. Sara Malik']}>
-                  <option value="Dr. Ali Hassan">Dr. Ali Hassan (Workload: 4)</option>
-                  <option value="Dr. Sara Malik">Dr. Sara Malik (Workload: 3)</option>
-                  <option value="Dr. Fatima Khan">Dr. Fatima Khan (Workload: 1)</option>
-                  <option value="Dr. Usman Qureshi">Dr. Usman Qureshi (Workload: 0)</option>
+                <label className="block text-xs font-bold text-slate-900 mb-1.5">Assign Members (Multi-select)</label>
+                <select
+                  multiple
+                  value={form.members}
+                  onChange={handleMembersChange}
+                  className="w-full bg-white border border-line rounded-xl px-4 py-2 text-sm font-bold text-slate-900 outline-none focus:border-blue-500 cursor-pointer h-24"
+                  required
+                >
+                  {faculty.map(f => (
+                    <option key={f.id || f._id} value={f.id || f._id}>{f.name}</option>
+                  ))}
                 </select>
+                <p className="text-[10px] text-slate-900 mt-1 font-bold">Hold Ctrl/Cmd to select multiple members</p>
               </div>
             </div>
 
             <div className="pt-4 border-t border-line flex justify-end">
-              <button type="submit" className="bg-white hover:bg-blue-600 text-white px-6 py-2.5 rounded-xl font-bold text-sm shadow-lg transition-all cursor-pointer">
-                Save Committee Configuration
+              <button
+                type="submit"
+                disabled={submitting}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-xl font-bold text-sm shadow-lg transition-all cursor-pointer disabled:opacity-50"
+              >
+                {submitting ? 'Saving...' : 'Save Committee Configuration'}
               </button>
             </div>
           </form>
         </div>
 
         <div className="bg-white rounded-2xl border border-line shadow-sm p-6 space-y-5">
-          <h3 className="text-base font-bold text-slate-900 pb-3 border-b border-line">Active Boards & Locking</h3>
-          
-          <div className="p-4 rounded-2xl bg-white border border-line flex items-center justify-between">
-            <div>
-              <div className="font-bold text-slate-900 text-sm mb-0.5 flex items-center gap-2">
-                <span>FEC-FYP1-A</span>
-                <Lock className="w-4 h-4 text-xs" title="Locked after evaluations began" />
+          <h3 className="text-base font-bold text-slate-900 pb-3 border-b border-line">Active Boards</h3>
+          {committees.length === 0 ? (
+            <p className="text-xs text-gray-400 font-medium text-center py-6">No evaluation boards configured yet.</p>
+          ) : (
+            committees.map(c => (
+              <div key={c.id} className="p-4 rounded-2xl bg-white border border-line flex items-center justify-between">
+                <div>
+                  <div className="font-bold text-slate-900 text-sm mb-0.5 flex items-center gap-2">
+                    <span>{c.name}</span>
+                    {c.status === 'locked' && <Lock className="w-4 h-4 text-xs" title="Locked" />}
+                  </div>
+                  <div className="text-xs text-slate-900 font-medium">Head: {c.head}</div>
+                  {c.schedule && <div className="text-[10px] text-gray-400 mt-0.5">{c.schedule}</div>}
+                </div>
+                <span className={`font-bold text-[10px] px-2.5 py-1 rounded-lg border ${c.status === 'active' ? 'bg-green-50 text-green-700 border-green-200' : 'bg-gray-100 text-gray-500 border-gray-200'}`}>
+                  {c.status === 'active' ? 'Active' : 'Locked'}
+                </span>
               </div>
-              <div className="text-xs text-slate-900 font-medium">Head: Dr. Ali Hassan</div>
-            </div>
-            <span className="bg-white text-slate-900 font-bold text-[10px] px-2.5 py-1 rounded-lg border border-line">Locked</span>
-          </div>
-
-          <div className="p-4 rounded-2xl bg-white border border-line flex items-center justify-between">
-            <div>
-              <div className="font-bold text-slate-900 text-sm mb-0.5 flex items-center gap-2">
-                <span>FEC-FYP2-B</span>
-                <Lock className="w-4 h-4 -open  text-xs" title="Unlocked. Evaluations have not reached the 10% threshold." />
-              </div>
-              <div className="text-xs text-slate-900 font-medium">Head: Dr. Sara Malik</div>
-            </div>
-            <span className="bg-white text-slate-900 font-bold text-[10px] px-2.5 py-1 rounded-lg border border-line">Active</span>
-          </div>
+            ))
+          )}
         </div>
         </>
         )}

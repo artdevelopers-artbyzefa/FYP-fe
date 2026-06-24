@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { FileText, CheckCircle2 } from 'lucide-react';
+import { FileText, CheckCircle } from 'lucide-react';
 
 export default function DownloadModal({ isOpen, onComplete }) {
   const [phase, setPhase] = useState('enter');
@@ -43,7 +43,7 @@ export default function DownloadModal({ isOpen, onComplete }) {
                 className="w-20 h-20 rounded-full flex items-center justify-center animate-scaleIn"
                 style={{ backgroundColor: '#ecfdf5' }}
               >
-                <CheckCircle2 size={36} style={{ color: '#059669' }} />
+                <CheckCircle size={36} style={{ color: '#059669' }} />
               </div>
             </div>
           ) : phase === 'generating' ? (

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { getHodDashboardStats, getGovernanceData } from '../../services/hod.service';
 import { getCurrentUser } from '../../services/auth.service';
-import { CheckCircle, ChevronRight, ClipboardList, Gavel, Landmark, LineChart, PieChart, Presentation, Shield, Users } from 'lucide-react';
+import { CheckCircle, ChevronRight, ClipboardList, Gavel, Landmark, LineChart, Lock, PieChart, Presentation, Shield, Users } from 'lucide-react';
 
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.06 } } };
 const item = { hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0 } };
@@ -115,15 +115,9 @@ const HodDashboard = () => {
         <div className="relative px-6 sm:px-8 py-6 sm:py-8">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
             <div className="text-white">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
-                  <Landmark size={16} className="text-white/90" />
-                </div>
-                <span className="text-[11px] font-semibold text-blue-200 tracking-widest">Executive Dashboard</span>
-              </div>
-              <h1 className="text-2xl sm:text-3xl font-bold mb-2 tracking-tight text-balance">Department Command Center</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold mb-2 tracking-tight text-balance">Head of the Department of Computer Science</h1>
               <p className="text-sm text-blue-200 font-medium max-w-2xl leading-relaxed">
-                Welcome back, <span className="text-white font-semibold">{user?.name || 'HOD'}</span> — review faculty workload, grievances, and phase progress.
+                Welcome back, <span className="text-white font-semibold">{user?.name || 'HOD'}</span> — Review faculty workload, grievances, and phase progress.
               </p>
             </div>
             <div className="flex items-center gap-3 flex-shrink-0">
@@ -174,8 +168,7 @@ const HodDashboard = () => {
         <div className="lg:col-span-2 bg-white rounded-2xl border border-line shadow-card p-6">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-0.5">Oversight</p>
-              <h3 className="text-lg font-semibold text-slate-900">Department Governance</h3>
+              <h3 className="text-lg font-semibold text-slate-900">Department overview</h3>
             </div>
             <span className="text-[11px] font-semibold text-blue-700 bg-blue-50 px-3 py-1.5 rounded-full whitespace-nowrap">
               Spring 2026
@@ -204,25 +197,30 @@ const HodDashboard = () => {
           <div className="space-y-2 flex-1">
             {[
               { label: 'Escalated Grievances', icon: Gavel, path: '/hod/escalations', desc: 'Resolve escalated issues' },
-              { label: 'Faculty Workload Oversight', icon: Presentation, path: '/hod/faculty-oversight', desc: 'Review supervision load' },
-              { label: 'Committee Governance', icon: Landmark, path: '/hod/governance', desc: 'Manage committees' },
-              { label: 'Analytics & Reports', icon: PieChart, path: '/hod/analytics', desc: 'View detailed insights' },
+              { label: 'Faculty Workload Oversight', icon: Presentation, path: '/hod/faculty-oversight', desc: 'Review supervision load', locked: true },
+              { label: 'Committee Governance', icon: Landmark, path: '/hod/governance', desc: 'Manage committees', locked: true },
+              { label: 'Analytics & Reports', icon: PieChart, path: '/hod/analytics', desc: 'View detailed insights', locked: true },
             ].map(link => (
               <div
                 key={link.label}
-                onClick={() => navigate(link.path)}
-                className="group flex items-center justify-between p-3.5 rounded-xl border border-line bg-white cursor-pointer transition-all duration-200 hover:bg-blue-50 hover:border-blue-200 hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-blue-500"
+                onClick={() => { if (!link.locked) navigate(link.path); }}
+                className={`group flex items-center justify-between p-3.5 rounded-xl border border-line bg-white transition-all duration-200 ${link.locked ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:bg-blue-50 hover:border-blue-200 hover:-translate-y-0.5'} focus-visible:ring-2 focus-visible:ring-blue-500`}
+                title={link.locked ? 'Locked during Phase 1' : link.desc}
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600 flex-shrink-0 group-hover:scale-105 transition-transform duration-200">
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-transform duration-200 ${link.locked ? 'bg-gray-100 text-gray-400' : 'bg-blue-100 text-blue-600 group-hover:scale-105'}`}>
                     <link.icon size={16} />
                   </div>
                   <div>
-                    <div className="text-sm font-semibold text-slate-900 group-hover:text-blue-700 transition-colors">{link.label}</div>
+                    <div className={`text-sm font-semibold transition-colors ${link.locked ? 'text-slate-400' : 'text-slate-900 group-hover:text-blue-700'}`}>{link.label}</div>
                     <div className="text-[11px] text-slate-400 font-medium">{link.desc}</div>
                   </div>
                 </div>
-                <ChevronRight size={16} className="text-slate-300 group-hover:text-blue-600 group-hover:translate-x-0.5 transition-all duration-200" />
+                {link.locked ? (
+                  <Lock size={14} className="text-slate-300 flex-shrink-0" />
+                ) : (
+                  <ChevronRight size={16} className="text-slate-300 group-hover:text-blue-600 group-hover:translate-x-0.5 transition-all duration-200" />
+                )}
               </div>
             ))}
           </div>

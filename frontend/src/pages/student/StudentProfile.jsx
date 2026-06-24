@@ -101,12 +101,12 @@ export default function Profile() {
     <motion.div variants={container} initial="hidden" animate="show" className="animate-in fade-in slide-in- duration-300">
       {/* Alert Banner for incomplete profile */}
       {!user.profileCompleted && (
-        <div className="bg-white border-l-4 border-blue-600 p-4 mb-6 rounded-r-2xl shadow-card">
-          <div className="flex">
-            <div className="flex-shrink-0"><AlertTriangle className="text-slate-900" /></div>
-            <div className="ml-3">
+        <div className="bg-blue-50 border border-blue-200 p-4 mb-6 rounded-2xl shadow-card">
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="text-blue-600 w-5 h-5 mt-0.5 flex-shrink-0" />
+            <div>
               <h3 className="text-sm font-bold text-slate-900">Complete Your Profile to Unlock the FYP Workflow</h3>
-              <div className="mt-1 text-xs text-slate-900">You must fill in your Father's Name, Section, Date of Birth, and upload a Profile Picture to proceed to the portal functionalities.</div>
+              <div className="mt-1 text-xs text-slate-600">You must fill in your Father's Name, Section, Date of Birth, and upload a Profile Picture to proceed to the portal functionalities.</div>
             </div>
           </div>
         </div>

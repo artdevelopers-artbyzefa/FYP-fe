@@ -13,11 +13,12 @@ import ForgotPassword from "../pages/ForgotPassword";
 import StudentLayout from "../pages/student/StudentLayout";
 import StudentDashboard from "../pages/student/StudentDashboard";
 import StudentProfile from "../pages/student/StudentProfile";
-import ApprovedIdeas from "../pages/student/ApprovedIdeas";
+
 import FYPGroup from "../pages/student/FYPGroup";
 import NewIdea from "../pages/student/NewIdea";
 import SupervisorSelection from "../pages/student/SupervisorSelection";
 import TaskManager from "../pages/student/TaskManager";
+import GroupIdeas from "../pages/student/GroupIdeas";
 import HodLayout from '../components/hod/HodLayout';
 import HodDashboard from '../pages/hod/HodDashboard';
 import HodEscalations from '../pages/hod/HodEscalations';
@@ -44,6 +45,7 @@ import FacultyDashboard from '../pages/faculty/FacultyDashboard';
 import FacultyProfile from '../pages/faculty/FacultyProfile';
 import FacultyAvailability from '../pages/faculty/FacultyAvailability';
 import FacultyProposals from '../pages/faculty/FacultyProposals';
+import FacultyGroupProposals from '../pages/faculty/FacultyGroupProposals';
 import FacultySupervision from '../pages/faculty/FacultySupervision';
 import FacultyMessaging from '../pages/faculty/FacultyMessaging';
 import FacultyEvaluations from '../pages/faculty/FacultyEvaluations';
@@ -96,7 +98,7 @@ const AppRoutes = () => {
                 <Route path="/fyp-group" element={<FYPGroup />} />
                 <Route path="/supervisor-selection" element={<SupervisorSelection />} />
                 <Route path="/project/new" element={<NewIdea />} />
-                <Route path="/project/approved" element={<ApprovedIdeas />} />
+                <Route path="/project/group-ideas" element={<GroupIdeas />} />
                 <Route path="/project/*" element={<ProjectIdea />} />
                 <Route path="/task-manager" element={<TaskManager />} />
             </Route>
@@ -137,6 +139,7 @@ const AppRoutes = () => {
                 <Route path="profile" element={<FacultyProfile />} />
                 <Route path="availability" element={<FacultyAvailability />} />
                 <Route path="proposals" element={<FacultyProposals />} />
+                <Route path="group-proposals" element={<FacultyGroupProposals />} />
                 <Route path="supervision" element={<FacultySupervision />} />
                 <Route path="messaging" element={<FacultyMessaging />} />
                 <Route path="evaluations" element={<FacultyEvaluations />} />

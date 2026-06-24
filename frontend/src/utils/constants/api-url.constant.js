@@ -32,9 +32,10 @@ export const STUDENT_GET_SUPERVISORS_URL = '/student/supervisors';
 export const STUDENT_REQUEST_SUPERVISOR_URL = '/student/supervisors/request';
 
 export const STUDENT_SUBMIT_IDEA_URL = '/student/ideas/submit';
-export const STUDENT_GET_APPROVED_IDEAS_URL = '/student/ideas/approved';
-export const STUDENT_SELECT_IDEA_URL = '/student/ideas/select';
 export const STUDENT_TASKS_API_URL = '/student/tasks';
+export const STUDENT_SUBMIT_GROUP_IDEA_URL = '/student/ideas/group/submit';
+export const STUDENT_GET_GROUP_IDEAS_URL = '/student/ideas/group';
+export const STUDENT_VOTE_GROUP_IDEA_URL = '/student/ideas/group';
 
 /**
  * HOD Endpoints

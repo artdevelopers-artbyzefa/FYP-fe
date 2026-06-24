@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useOutletContext, Link, Navigate } from 'react-router-dom';
 import { getStudentProfile } from '../../services/student.service';
-import { FolderOpen, IdCard, Inbox, Lightbulb, Loader, Lock, Mail, Send, User, Users, UserPlus, ArrowRight } from 'lucide-react';
+import { getGroupIdeas } from '../../services/student.service';
+import { FolderOpen, IdCard, Inbox, Lightbulb, Loader, Lock, Mail, Send, User, Users, UserPlus, ArrowRight, CheckCircle, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.04 } } };
@@ -13,6 +14,8 @@ export default function Dashboard() {
   const { user } = useOutletContext();
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [groupIdeas, setGroupIdeas] = useState([]);
+  const [ideasLoading, setIdeasLoading] = useState(true);
 
   useEffect(() => {
     localStorage.removeItem(PROFILE_CACHE_KEY);
@@ -22,6 +25,15 @@ export default function Dashboard() {
       try { localStorage.setItem(PROFILE_CACHE_KEY, JSON.stringify(data)); } catch {}
     }).catch(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+    if (profile?.group) {
+      getGroupIdeas().then(res => {
+        setGroupIdeas(res?.data || []);
+        setIdeasLoading(false);
+      }).catch(() => setIdeasLoading(false));
+    }
+  }, [profile]);
 
   if (loading) return <div className="flex items-center justify-center min-h-[60vh]"><Loader className="animate-spin text-slate-900 text-3xl" /></div>;
 
@@ -88,7 +100,7 @@ export default function Dashboard() {
             </div>
             <div>
               <h3 className="text-sm font-bold text-slate-900">Group Members</h3>
-              <p className="text-[10px] text-slate-400">{profile?.group?.name || 'Your FYP team'}</p>
+              <p className="text-[10px] text-slate-500">{profile?.group?.name || 'Your FYP team'}</p>
             </div>
           </div>
           {profile?.group?.members?.length > 0 ? (
@@ -100,7 +112,7 @@ export default function Dashboard() {
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="text-sm font-bold text-slate-900 truncate">{m.name || 'Unknown'}</div>
-                    <div className="text-[10px] text-slate-400 truncate">{m.email || ''}</div>
+                    <div className="text-[10px] text-slate-500 truncate">{m.email || ''}</div>
                   </div>
                 </div>
               ))}
@@ -111,7 +123,7 @@ export default function Dashboard() {
                 <UserPlus size={24} />
               </div>
               <p className="text-sm font-bold text-slate-900">No group yet</p>
-              <p className="text-xs text-slate-400 mt-1 mb-5 max-w-[200px]">Find partners to form your FYP group and start collaborating.</p>
+              <p className="text-xs text-slate-500 mt-1 mb-5 max-w-[200px]">Find partners to form your FYP group and start collaborating.</p>
               <Link to="/partners" className="btn-primary text-xs inline-flex items-center gap-1.5">
                 <UserPlus size={14} /> Find Partners
               </Link>
@@ -126,7 +138,7 @@ export default function Dashboard() {
             </div>
             <div>
               <h3 className="text-sm font-bold text-slate-900">Requests</h3>
-              <p className="text-[10px] text-slate-400">Partner invitations</p>
+              <p className="text-[10px] text-slate-500">Partner invitations</p>
             </div>
           </div>
           <div className="flex-1 flex flex-col items-center justify-center text-center py-6">
@@ -134,30 +146,64 @@ export default function Dashboard() {
               <Send size={24} />
             </div>
             <p className="text-sm font-bold text-slate-900">No pending requests</p>
-            <p className="text-xs text-slate-400 mt-1 mb-5 max-w-[200px]">Partner requests and invitations will appear here.</p>
+            <p className="text-xs text-slate-500 mt-1 mb-5 max-w-[200px]">Partner requests and invitations will appear here.</p>
             <Link to="/partners/requests" className="text-xs font-bold text-blue-600 hover:text-blue-700 hover:underline inline-flex items-center gap-1 bg-transparent border-0 cursor-pointer">
               View All <ArrowRight size={14} />
             </Link>
           </div>
         </motion.div>
 
-        <motion.div variants={item} className="card p-6 flex flex-col opacity-60 select-none">
+        <motion.div variants={item} className="card p-6 flex flex-col">
           <div className="flex items-center gap-3 mb-5 pb-4 border-b border-line">
-            <div className="w-10 h-10 rounded-xl bg-gray-100 flex-center text-gray-400">
+            <div className="w-10 h-10 rounded-xl bg-amber-50 flex-center text-amber-600">
               <Lightbulb size={18} />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-gray-400">Ideas</h3>
-              <p className="text-[10px] text-gray-400">Project proposals</p>
+              <h3 className="text-sm font-bold text-slate-900">Group Ideas</h3>
+              <p className="text-[10px] text-slate-500">Agreement-based proposals</p>
             </div>
           </div>
-          <div className="flex-1 flex flex-col items-center justify-center text-center py-6">
-            <div className="w-14 h-14 rounded-full bg-gray-50 flex-center text-gray-300 mb-4">
-              <Lock size={24} />
+          {ideasLoading ? (
+            <div className="flex-1 flex items-center justify-center py-6">
+              <Loader className="animate-spin text-slate-300" size={20} />
             </div>
-            <p className="text-sm font-bold text-gray-400">Locked — Phase 2</p>
-            <p className="text-xs text-gray-400 mt-1 max-w-[200px]">Idea submission will be available in the next phase.</p>
-          </div>
+          ) : groupIdeas.length > 0 ? (
+            <div className="flex-1 space-y-2">
+              {groupIdeas.slice(0, 3).map(idea => {
+                const totalVotes = profile?.group?.members?.length || 1;
+                const agreeCount = idea.votes?.filter(v => v.decision === 'agree').length || 0;
+                const isAgreed = idea.agreementStatus === 'agreed';
+                const isVoting = idea.agreementStatus === 'voting';
+                return (
+                  <Link key={idea._id} to="/project/group-ideas" className="flex items-center gap-3 p-3 rounded-xl bg-amber-50/50 border border-amber-100 hover:bg-amber-50 transition-colors no-underline">
+                    <div className={`w-9 h-9 rounded-lg flex-center text-xs font-bold flex-shrink-0 ${isAgreed ? 'bg-emerald-100 text-emerald-600' : isVoting ? 'bg-amber-100 text-amber-600' : 'bg-slate-100 text-slate-400'}`}>
+                      {isAgreed ? <CheckCircle size={16} /> : isVoting ? <Clock size={16} /> : <Lightbulb size={16} />}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="text-sm font-bold text-slate-900 truncate">{idea.title}</div>
+                      <div className="text-[10px] text-slate-500">{agreeCount}/{totalVotes} agreed</div>
+                    </div>
+                  </Link>
+                );
+              })}
+              {groupIdeas.length > 3 && (
+                <Link to="/project/group-ideas" className="block text-center text-xs font-bold text-blue-600 hover:text-blue-700 pt-2 no-underline">
+                  View all {groupIdeas.length} ideas
+                </Link>
+              )}
+            </div>
+          ) : (
+            <div className="flex-1 flex flex-col items-center justify-center text-center py-6">
+              <div className="w-14 h-14 rounded-full bg-gray-50 flex-center text-gray-300 mb-4">
+                <Lightbulb size={24} />
+              </div>
+              <p className="text-sm font-bold text-slate-900">No ideas yet</p>
+              <p className="text-xs text-slate-500 mt-1 mb-5 max-w-[200px]">Propose an idea and get agreement from all group members.</p>
+              <Link to="/project/group-ideas" className="btn-primary text-xs inline-flex items-center gap-1.5 no-underline">
+                <Lightbulb size={14} /> Propose Idea
+              </Link>
+            </div>
+          )}
         </motion.div>
 
       </div>

@@ -126,7 +126,7 @@ export default function NewRequest() {
               {results.length === 0 ? (
                 <div className="flex flex-col items-center py-8 text-slate-400">
                   <Users className="w-8 h-8 mb-2" />
-                  <p className="text-sm font-medium">No available students found</p>
+                    <p className="text-sm font-medium text-slate-500">No available students found</p>
                   <p className="text-xs mt-1">Try a different search term</p>
                 </div>
               ) : (

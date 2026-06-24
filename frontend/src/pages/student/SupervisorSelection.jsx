@@ -136,7 +136,7 @@ export default function SupervisorSelection() {
               {results.length === 0 ? (
                 <div className="flex flex-col items-center py-8 text-slate-400">
                   <GraduationCap className="w-8 h-8 mb-2" />
-                  <p className="text-sm font-medium">No faculty found</p>
+                  <p className="text-sm font-medium text-slate-500">No faculty found</p>
                 </div>
               ) : (
                 results.map(sup => (

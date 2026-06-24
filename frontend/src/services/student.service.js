@@ -9,8 +9,9 @@ import {
   STUDENT_GET_SUPERVISORS_URL,
   STUDENT_REQUEST_SUPERVISOR_URL,
   STUDENT_SUBMIT_IDEA_URL,
-  STUDENT_GET_APPROVED_IDEAS_URL,
-  STUDENT_SELECT_IDEA_URL
+  STUDENT_SUBMIT_GROUP_IDEA_URL,
+  STUDENT_GET_GROUP_IDEAS_URL,
+  STUDENT_VOTE_GROUP_IDEA_URL
 } from '../utils/constants/api-url.constant';
 
 export const getStudentProfile = async () => {
@@ -73,12 +74,22 @@ export const getStudentGroup = async () => {
   return res.data;
 };
 
-export const getApprovedIdeas = async () => {
-  const res = await apiClient.get(STUDENT_GET_APPROVED_IDEAS_URL);
+export const submitGroupIdea = async (payload) => {
+  const res = await apiClient.post(STUDENT_SUBMIT_GROUP_IDEA_URL, payload);
   return res.data;
 };
 
-export const selectApprovedIdea = async (ideaId) => {
-  const res = await apiClient.post(STUDENT_SELECT_IDEA_URL, { ideaId });
+export const getGroupIdeas = async () => {
+  const res = await apiClient.get(STUDENT_GET_GROUP_IDEAS_URL);
+  return res.data;
+};
+
+export const getGroupIdeaById = async (id) => {
+  const res = await apiClient.get(`${STUDENT_VOTE_GROUP_IDEA_URL}/${id}`);
+  return res.data;
+};
+
+export const voteOnGroupIdea = async (id, decision) => {
+  const res = await apiClient.post(`${STUDENT_VOTE_GROUP_IDEA_URL}/${id}/vote`, { decision });
   return res.data;
 };

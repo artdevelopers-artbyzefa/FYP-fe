@@ -66,6 +66,21 @@ export const rejectSupervisorRequest = async (groupId) => {
   return res.data;
 };
 
+export const getPendingGroupIdeas = async () => {
+  const res = await apiClient.get('/faculty/proposals/pending');
+  return res.data;
+};
+
+export const approveGroupIdea = async (ideaId, feedback) => {
+  const res = await apiClient.post(`/faculty/group-ideas/${ideaId}/review`, { decision: 'supervisor_approved', feedback });
+  return res.data;
+};
+
+export const rejectGroupIdea = async (ideaId, feedback) => {
+  const res = await apiClient.post(`/faculty/group-ideas/${ideaId}/review`, { decision: 'supervisor_rejected', feedback });
+  return res.data;
+};
+
 export const saveFacultyPreferences = async (preferences) => {
   const res = await apiClient.post('/faculty/profile/preferences', { preferences });
   return res.data;

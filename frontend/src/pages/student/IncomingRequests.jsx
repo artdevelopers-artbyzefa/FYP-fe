@@ -53,15 +53,15 @@ export default function IncomingRequests() {
               <div className="flex gap-2 sm:ml-auto">
                 <button 
                   onClick={() => handleRespond(req.id, 'accepted')}
-                  className="bg-white hover:bg-white text-white px-4 py-2 rounded-lg text-sm font-bold transition-colors flex-1 sm:flex-none"
+                  className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-bold transition-all border-0 cursor-pointer flex items-center gap-1.5 flex-1 sm:flex-none focus-visible:ring-2 focus-visible:ring-emerald-500"
                 >
-                  <Check className="w-4 h-4 mr-1.5" /> Accept
+                  <Check className="w-4 h-4" /> Accept
                 </button>
                 <button 
                   onClick={() => handleRespond(req.id, 'rejected')}
-                  className="bg-white hover:bg-white text-white px-4 py-2 rounded-lg text-sm font-bold transition-colors flex-1 sm:flex-none"
+                  className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-bold transition-all border-0 cursor-pointer flex items-center gap-1.5 flex-1 sm:flex-none focus-visible:ring-2 focus-visible:ring-red-500"
                 >
-                  <X className="w-4 h-4 mr-1.5" /> Reject
+                  <X className="w-4 h-4" /> Reject
                 </button>
               </div>
             </motion.div>

@@ -57,7 +57,7 @@ export default function DashboardLayout() {
     { section: 'Project Execution', items: [
       { id: 'group_ideas', label: 'Project Idea', icon: Lightbulb, isDropdown: true, subItems: [
         { id: '/project/new', label: 'New Idea' },
-        { id: '/project/approved', label: 'Approved Ideas' }
+        { id: '/project/group-ideas', label: 'Group Ideas' }
       ]},
       { id: '/task-manager', label: 'Task Manager', icon: ClipboardList }
     ]}
@@ -71,7 +71,7 @@ export default function DashboardLayout() {
   else if (path.includes('/partners/requests')) pageTitle = 'Incoming Requests';
   else if (path.includes('/supervisor-selection')) pageTitle = 'Supervisor Selection';
   else if (path.includes('/project/new')) pageTitle = 'New Idea';
-  else if (path.includes('/project/approved')) pageTitle = 'Approved Ideas';
+  else if (path.includes('/project/group-ideas')) pageTitle = 'Group Ideas';
   else if (path.includes('/task-manager')) pageTitle = 'Task Manager';
 
   return (
@@ -87,7 +87,7 @@ export default function DashboardLayout() {
           {!sidebarCollapsed && (
             <div className="overflow-hidden transition-all duration-300">
               <div className="text-slate-900 text-sm font-bold whitespace-nowrap">CUI DFYP</div>
-              <div className="text-slate-400 text-xs whitespace-nowrap leading-tight">Student Portal</div>
+              <div className="text-slate-500 text-xs whitespace-nowrap leading-tight">Student Portal</div>
             </div>
           )}
           <button onClick={() => setMobileSidebarOpen(false)} className="ml-auto lg:hidden bg-transparent border-0 text-slate-400 cursor-pointer p-1 rounded-lg hover:bg-slate-100 transition-colors absolute right-4">
@@ -106,7 +106,7 @@ export default function DashboardLayout() {
             return (
             <div key={idx} className={`mb-1 ${idx > 0 ? 'mt-4' : ''}`}>
               {!sidebarCollapsed && (
-                <div className="text-[0.6rem] font-bold uppercase tracking-widest text-slate-400 px-3 mb-1 truncate transition-all">
+                <div className="text-[0.6rem] font-bold uppercase tracking-widest text-slate-500 px-3 mb-1 truncate transition-all">
                   {group.section}
                 </div>
               )}
@@ -220,7 +220,7 @@ export default function DashboardLayout() {
               </div>
               <div className="text-left hidden sm:block">
                 <div className="text-xs font-semibold text-slate-900 leading-tight truncate max-w-28">{user.name}</div>
-                <div className="text-[10px] text-slate-400 leading-tight font-medium">{user.role}</div>
+                <div className="text-[10px] text-slate-500 leading-tight font-medium">{user.role}</div>
               </div>
               <ChevronDown size={10} className="text-slate-400 ml-0.5 hidden sm:block" />
             </Link>

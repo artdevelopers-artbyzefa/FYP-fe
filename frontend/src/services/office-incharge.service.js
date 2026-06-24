@@ -26,6 +26,16 @@ export const saveRubric = async (data) => {
   return res.data;
 };
 
+export const updateRubric = async (id, data) => {
+  const res = await apiClient.put(INCHARGE_RUBRICS_API_URL + '/' + id, data);
+  return res.data;
+};
+
+export const deleteRubric = async (id) => {
+  const res = await apiClient.delete(INCHARGE_RUBRICS_API_URL + '/' + id);
+  return res.data;
+};
+
 export const getInchargeSessions = async () => {
   const res = await apiClient.get(INCHARGE_SESSIONS_API_URL);
   return res.data;

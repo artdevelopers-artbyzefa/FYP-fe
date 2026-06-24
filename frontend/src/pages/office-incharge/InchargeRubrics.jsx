@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { getInchargeRubrics, saveRubric } from '../../services/office-incharge.service';
+import { getInchargeRubrics, saveRubric, updateRubric, deleteRubric } from '../../services/office-incharge.service';
 import { showToast } from '../../components/AppToast';
-import { Plus, Trash2, Loader2, CheckCircle, XCircle, AlertTriangle, BookOpen, FileText, ChevronDown, ChevronUp } from 'lucide-react';
+import { Plus, Trash2, Loader2, CheckCircle, XCircle, AlertTriangle, BookOpen, FileText, ChevronDown, ChevronUp, Pencil } from 'lucide-react';
 
 const EMPTY = () => ({ id: crypto.randomUUID(), name: '', clo: '', weight: '' });
 
@@ -57,6 +57,7 @@ export default function InchargeRubrics() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
   const [expanded, setExpanded] = useState(null);
+  const [editingId, setEditingId] = useState(null);
 
   useEffect(() => { fetchRubrics(); }, []);
 
@@ -85,25 +86,53 @@ export default function InchargeRubrics() {
   const updC = (id, f, v) => setCriteria(criteria.map(c => c.id === id ? { ...c, [f]: v } : c));
   const remC = (id) => { if (criteria.length > 1) setCriteria(criteria.filter(c => c.id !== id)); };
 
+  const loadRubric = (r) => {
+    setRubricName(r.name);
+    setCriteria(r.criteria.map(c => ({ ...c, id: crypto.randomUUID(), weight: c.weight?.toString() || '' })));
+    setEditingId(r.id);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!isValid || hasEmpty || submitting) return;
     setSubmitting(true);
     try {
-      await saveRubric({
+      const payload = {
         name: rubricName.trim(),
-        version: nextVer(),
-        type: 'custom',
         criteria: criteria.map(({ id, ...rest }) => ({ ...rest, weight: Number(rest.weight), maxScore: 100 })),
-        status: 'active', validation: 'valid',
-      });
-      showToast.success(`"${rubricName}" published as ${nextVer()}`);
+        status: 'active',
+      };
+      if (editingId) {
+        await updateRubric(editingId, payload);
+        showToast.success(`"${rubricName}" updated.`);
+      } else {
+        await saveRubric({
+          ...payload,
+          version: nextVer(),
+          type: 'custom',
+          validation: 'valid',
+        });
+        showToast.success(`"${rubricName}" published as ${nextVer()}`);
+      }
       setRubricName('');
       setCriteria([EMPTY()]);
+      setEditingId(null);
       fetchRubrics();
     } catch (err) {
-      showToast.error(err?.response?.data?.message || 'Failed to publish rubric');
+      showToast.error(err?.response?.data?.message || 'Failed to save rubric');
     } finally { setSubmitting(false); }
+  };
+
+  const handleDelete = async (id, name) => {
+    if (!window.confirm(`Delete "${name}"?`)) return;
+    try {
+      await deleteRubric(id);
+      showToast.success('Rubric deleted.');
+      fetchRubrics();
+    } catch (err) {
+      showToast.error(err?.response?.data?.message || 'Failed to delete.');
+    }
   };
 
   return (
@@ -212,7 +241,9 @@ export default function InchargeRubrics() {
                     <p className="text-xs font-bold truncate" style={{ color: TX.ink }}>{r.name || 'Untitled'}</p>
                     <p className="text-[11px] font-medium mt-0.5" style={{ color: TX.muted }}>{r.version || ''} · {r.criteria?.length || 0} criteria</p>
                   </div>
-                  <div className="flex items-center gap-2 flex-shrink-0">
+                  <div className="flex items-center gap-1 flex-shrink-0">
+                    <button type="button" onClick={(e) => { e.stopPropagation(); loadRubric(r); }} className="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 border-0 flex-center cursor-pointer hover:bg-blue-100 transition-all" title="Edit"><Pencil size={11} /></button>
+                    <button type="button" onClick={(e) => { e.stopPropagation(); handleDelete(r.id, r.name); }} className="w-7 h-7 rounded-lg bg-rose-50 text-rose-600 border-0 flex-center cursor-pointer hover:bg-rose-100 transition-all" title="Delete"><Trash2 size={11} /></button>
                     <Badge status={r.status} />
                     {isOpen ? <ChevronUp size={14} style={{ color: TX.muted }} /> : <ChevronDown size={14} style={{ color: TX.muted }} />}
                   </div>

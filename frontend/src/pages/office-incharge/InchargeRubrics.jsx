@@ -1,7 +1,13 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { getInchargeRubrics, saveRubric, updateRubric, deleteRubric } from '../../services/office-incharge.service';
 import { showToast } from '../../components/AppToast';
-import { Plus, Trash2, Loader2, CheckCircle, XCircle, AlertTriangle, BookOpen, FileText, ChevronDown, ChevronUp, Pencil } from 'lucide-react';
+import { Plus, Trash2, Loader2, CheckCircle, XCircle, AlertTriangle, BookOpen, FileText, ChevronDown, ChevronUp, Pencil, Download, Sparkles } from 'lucide-react';
+import {
+  generateStandardPdf, generateDetailedPdf, generateAcademicPdf,
+  generateMinimalPdf, generateScoringPdf, generateComprehensivePdf
+} from '../../components/office-incharge/RubricPdfTemplates';
+import RubricPreview from '../../components/office-incharge/RubricPreview';
+import DownloadModal from '../../components/office-incharge/DownloadModal';
 
 const EMPTY = () => ({ id: crypto.randomUUID(), name: '', clo: '', weight: '' });
 
@@ -58,6 +64,8 @@ export default function InchargeRubrics() {
   const [error, setError] = useState(null);
   const [expanded, setExpanded] = useState(null);
   const [editingId, setEditingId] = useState(null);
+  const [selectedTemplate, setSelectedTemplate] = useState('standard');
+  const [downloading, setDownloading] = useState(false);
 
   useEffect(() => { fetchRubrics(); }, []);
 
@@ -91,6 +99,33 @@ export default function InchargeRubrics() {
     setCriteria(r.criteria.map(c => ({ ...c, id: crypto.randomUUID(), weight: c.weight?.toString() || '' })));
     setEditingId(r.id);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const TEMPLATE_MAP = {
+    standard: { label: 'Standard', gen: generateStandardPdf },
+    detailed: { label: 'Detailed', gen: generateDetailedPdf },
+    academic: { label: 'Academic', gen: generateAcademicPdf },
+    minimal: { label: 'Minimal', gen: generateMinimalPdf },
+    scoring: { label: 'Scoring Card', gen: generateScoringPdf },
+    comprehensive: { label: 'Comprehensive', gen: generateComprehensivePdf },
+  };
+
+  const buildRubric = () => ({
+    name: rubricName || 'Evaluation Rubric',
+    criteria: criteria.filter(c => c.name.trim()).map(({ id, ...rest }) => ({ ...rest, weight: Number(rest.weight), maxScore: 100 })),
+  });
+
+  const handleDownload = () => {
+    const r = buildRubric();
+    if (!r.criteria.length) { showToast.error('Add at least one criterion'); return; }
+    const tpl = TEMPLATE_MAP[selectedTemplate];
+    try {
+      tpl.gen(r);
+      setDownloading(true);
+      showToast.success(`PDF downloaded (${tpl.label})`);
+    } catch (e) {
+      showToast.error('PDF generation failed.');
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -137,6 +172,7 @@ export default function InchargeRubrics() {
 
   return (
     <div className="animate-fadeSlideUp">
+      <DownloadModal isOpen={downloading} onComplete={() => setDownloading(false)} />
       <div className="mb-6 pb-4 border-b flex items-center justify-between" style={{ borderColor: TX.line }}>
         <div>
           <h2 className="text-xl font-bold" style={{ color: TX.ink }}>Rubric Builder</h2>
@@ -272,6 +308,45 @@ export default function InchargeRubrics() {
             </div>
             );
           })}
+        </div>
+      </div>
+
+      {/* Rubric Templates */}
+      <div className="rounded-2xl border shadow-sm overflow-hidden" style={{ borderColor: TX.line, backgroundColor: TX.white }}>
+        <div className="p-4 border-b" style={{ borderColor: TX.line, backgroundColor: TX.surface }}>
+          <div className="flex items-center gap-2">
+            <Sparkles size={16} style={{ color: TX.primary }} />
+            <h3 className="text-sm font-bold" style={{ color: TX.ink }}>Rubric Templates</h3>
+          </div>
+          <p className="text-xs font-medium mt-0.5" style={{ color: TX.muted }}>Choose a layout style and download your rubric as PDF</p>
+        </div>
+        <div className="p-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-4">
+            {Object.entries(TEMPLATE_MAP).map(([k, v]) => (
+              <div
+                key={k}
+                onClick={() => setSelectedTemplate(k)}
+                className={`p-3 rounded-xl border-2 cursor-pointer transition-all text-center ${
+                  selectedTemplate === k ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-blue-300'
+                }`}
+              >
+                <div className="text-xs font-bold" style={{ color: selectedTemplate === k ? TX.primary : TX.ink }}>{v.label}</div>
+                {selectedTemplate === k && <CheckCircle size={12} className="mx-auto mt-1" style={{ color: TX.accent }} />}
+              </div>
+            ))}
+          </div>
+          <div className="rounded-xl border mb-4 overflow-hidden" style={{ borderColor: TX.line, backgroundColor: TX.surface }}>
+            <div className="p-3">
+              <RubricPreview rubric={previewRubric} selectedTemplate={selectedTemplate} onTemplateChange={setSelectedTemplate} />
+            </div>
+          </div>
+          <div className="flex justify-end">
+            <button type="button" onClick={handleDownload} disabled={!previewRubric.criteria.length}
+              className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold shadow-sm transition-all cursor-pointer disabled:cursor-not-allowed border-0"
+              style={{ backgroundColor: previewRubric.criteria.length ? TX.primary : '#cbd5e1', color: TX.white }}>
+              <Download size={15} /> Download PDF
+            </button>
+          </div>
         </div>
       </div>
     </div>

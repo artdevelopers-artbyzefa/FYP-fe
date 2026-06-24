@@ -187,84 +187,87 @@ export default function InchargeRubrics() {
       </div>
 
       {showForm && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-8">
-          <form onSubmit={handleSubmit} className="rounded-2xl border shadow-sm overflow-hidden" style={{ borderColor: TX.line, backgroundColor: TX.white }}>
-            <div className="p-4 border-b" style={{ borderColor: TX.line, backgroundColor: TX.surface }}>
-              <div className="flex items-center gap-2">
-                <FileText size={16} style={{ color: TX.primary }} />
-                <h3 className="text-sm font-bold" style={{ color: TX.ink }}>{editingId ? 'Edit Rubric' : 'New Rubric'}</h3>
+        <div className="flex flex-col lg:flex-row gap-5 mb-8">
+          <div className="w-full lg:w-1/2">
+            <form onSubmit={handleSubmit} className="rounded-2xl border shadow-sm overflow-hidden h-full" style={{ borderColor: TX.line, backgroundColor: TX.white }}>
+              <div className="p-4 border-b" style={{ borderColor: TX.line, backgroundColor: TX.surface }}>
+                <div className="flex items-center gap-2">
+                  <FileText size={16} style={{ color: TX.primary }} />
+                  <h3 className="text-sm font-bold" style={{ color: TX.ink }}>{editingId ? 'Edit Rubric' : 'New Rubric'}</h3>
+                </div>
               </div>
-            </div>
-            <div className="p-4 space-y-4">
-              <div>
-                <label className="block text-xs font-bold mb-1.5" style={{ color: TX.ink }}>Rubric Title</label>
-                <input type="text" value={rubricName} onChange={(e) => setRubricName(e.target.value)}
-                  className="w-full border rounded-xl px-4 py-2.5 text-sm font-bold outline-none transition-all"
-                  style={{ borderColor: TX.line, color: TX.ink }} placeholder="e.g. FYP-1 Evaluation Rubric" required />
-              </div>
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold" style={{ color: TX.ink }}>Criteria</span>
-                  <button type="button" onClick={addC} className="flex items-center gap-1 text-xs font-bold transition-all cursor-pointer bg-transparent border-0" style={{ color: TX.accent }}>
-                    <Plus size={13} /> Add Criterion
-                  </button>
+              <div className="p-4 space-y-4">
+                <div>
+                  <label className="block text-xs font-bold mb-1.5" style={{ color: TX.ink }}>Rubric Title</label>
+                  <input type="text" value={rubricName} onChange={(e) => setRubricName(e.target.value)}
+                    className="w-full border rounded-xl px-4 py-2.5 text-sm font-bold outline-none transition-all"
+                    style={{ borderColor: TX.line, color: TX.ink }} placeholder="e.g. FYP-1 Evaluation Rubric" required />
                 </div>
                 <div className="space-y-2">
-                  {criteria.map(c => (
-                    <CriterionRow key={c.id} criterion={c} onChange={updC} onRemove={remC} canRemove={criteria.length > 1} />
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold" style={{ color: TX.ink }}>Criteria</span>
+                    <button type="button" onClick={addC} className="flex items-center gap-1 text-xs font-bold transition-all cursor-pointer bg-transparent border-0" style={{ color: TX.accent }}>
+                      <Plus size={13} /> Add Criterion
+                    </button>
+                  </div>
+                  <div className="space-y-2">
+                    {criteria.map(c => (
+                      <CriterionRow key={c.id} criterion={c} onChange={updC} onRemove={remC} canRemove={criteria.length > 1} />
+                    ))}
+                  </div>
+                </div>
+                <div className="p-3 rounded-xl border flex items-center justify-between" style={{ borderColor: isValid ? '#a7f3d0' : '#fecaca', backgroundColor: isValid ? '#f0fdf4' : '#fef2f2' }}>
+                  <div className="flex items-center gap-2">
+                    {isValid ? <CheckCircle size={14} style={{ color: TX.success }} /> : <XCircle size={14} style={{ color: TX.danger }} />}
+                    <span className="text-xs font-bold" style={{ color: isValid ? TX.success : TX.danger }}>Total: {totalW}%</span>
+                  </div>
+                  <span className="text-[10px] font-bold px-2 py-1 rounded-lg" style={{ backgroundColor: isValid ? '#d1fae5' : '#fee2e2', color: isValid ? '#065f46' : '#991b1b' }}>
+                    {isValid ? 'Valid' : `${100 - totalW}% off`}
+                  </span>
+                </div>
+              </div>
+              <div className="p-4 border-t flex justify-end" style={{ borderColor: TX.line, backgroundColor: TX.surface }}>
+                <button type="submit" disabled={!isValid || hasEmpty || submitting}
+                  className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold shadow-sm transition-all cursor-pointer disabled:cursor-not-allowed border-0"
+                  style={{ backgroundColor: !isValid || hasEmpty ? '#cbd5e1' : TX.primary, color: '#fff' }}>
+                  {submitting ? <><Loader2 size={14} className="animate-spin" /> Saving...</> : editingId ? 'Update Rubric' : 'Publish Rubric'}
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <div className="w-full lg:w-1/2">
+            <div className="rounded-2xl border shadow-sm overflow-hidden" style={{ borderColor: TX.line, backgroundColor: TX.white }}>
+              <div className="p-4 border-b" style={{ borderColor: TX.line, backgroundColor: TX.surface }}>
+                <div className="flex items-center gap-2">
+                  <Sparkles size={16} style={{ color: TX.primary }} />
+                  <h3 className="text-sm font-bold" style={{ color: TX.ink }}>Live Preview</h3>
+                </div>
+                <p className="text-xs font-medium mt-0.5" style={{ color: TX.muted }}>Choose a theme and see how your rubric will look</p>
+              </div>
+              <div className="p-4">
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {Object.entries(TEMPLATE_MAP).map(([k, v]) => (
+                    <div key={k} onClick={() => setSelectedTemplate(k)}
+                      className={`px-3 py-2 rounded-lg border-2 cursor-pointer transition-all text-center ${
+                        selectedTemplate === k ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-blue-300 bg-white'
+                      }`}>
+                      <div className="text-xs font-bold whitespace-nowrap" style={{ color: selectedTemplate === k ? TX.primary : TX.ink }}>{v.label}</div>
+                    </div>
                   ))}
                 </div>
-              </div>
-              <div className="p-3 rounded-xl border flex items-center justify-between" style={{ borderColor: isValid ? '#a7f3d0' : '#fecaca', backgroundColor: isValid ? '#f0fdf4' : '#fef2f2' }}>
-                <div className="flex items-center gap-2">
-                  {isValid ? <CheckCircle size={14} style={{ color: TX.success }} /> : <XCircle size={14} style={{ color: TX.danger }} />}
-                  <span className="text-xs font-bold" style={{ color: isValid ? TX.success : TX.danger }}>Total: {totalW}%</span>
-                </div>
-                <span className="text-[10px] font-bold px-2 py-1 rounded-lg" style={{ backgroundColor: isValid ? '#d1fae5' : '#fee2e2', color: isValid ? '#065f46' : '#991b1b' }}>
-                  {isValid ? 'Valid' : `${100 - totalW}% off`}
-                </span>
-              </div>
-            </div>
-            <div className="p-4 border-t flex justify-end" style={{ borderColor: TX.line, backgroundColor: TX.surface }}>
-              <button type="submit" disabled={!isValid || hasEmpty || submitting}
-                className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold shadow-sm transition-all cursor-pointer disabled:cursor-not-allowed border-0"
-                style={{ backgroundColor: !isValid || hasEmpty ? '#cbd5e1' : TX.primary, color: '#fff' }}>
-                {submitting ? <><Loader2 size={14} className="animate-spin" /> Saving...</> : editingId ? 'Update Rubric' : 'Publish Rubric'}
-              </button>
-            </div>
-          </form>
-
-          <div className="rounded-2xl border shadow-sm overflow-hidden" style={{ borderColor: TX.line, backgroundColor: TX.white }}>
-            <div className="p-4 border-b" style={{ borderColor: TX.line, backgroundColor: TX.surface }}>
-              <div className="flex items-center gap-2">
-                <Sparkles size={16} style={{ color: TX.primary }} />
-                <h3 className="text-sm font-bold" style={{ color: TX.ink }}>Live Preview</h3>
-              </div>
-              <p className="text-xs font-medium mt-0.5" style={{ color: TX.muted }}>Choose a theme and see how your rubric will look</p>
-            </div>
-            <div className="p-4">
-              <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 mb-4">
-                {Object.entries(TEMPLATE_MAP).map(([k, v]) => (
-                  <div key={k} onClick={() => setSelectedTemplate(k)}
-                    className={`p-2 rounded-lg border-2 cursor-pointer transition-all text-center ${
-                      selectedTemplate === k ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-blue-300'
-                    }`}>
-                    <div className="text-[10px] font-bold" style={{ color: selectedTemplate === k ? TX.primary : TX.ink }}>{v.label}</div>
-                    {selectedTemplate === k && <CheckCircle size={10} className="mx-auto mt-0.5" style={{ color: TX.accent }} />}
+                <div className="rounded-xl border overflow-hidden" style={{ borderColor: TX.line, backgroundColor: TX.surface }}>
+                  <div className="p-3">
+                    <RubricPreview rubric={buildRubric()} selectedTemplate={selectedTemplate} onTemplateChange={setSelectedTemplate} />
                   </div>
-                ))}
-              </div>
-              <div className="rounded-xl border overflow-hidden" style={{ borderColor: TX.line, backgroundColor: TX.surface }}>
-                <div className="p-3">
-                  <RubricPreview rubric={buildRubric()} selectedTemplate={selectedTemplate} onTemplateChange={setSelectedTemplate} />
                 </div>
-              </div>
-              <div className="flex justify-end mt-4">
-                <button type="button" onClick={handleDownload} disabled={!buildRubric().criteria.length}
-                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold shadow-sm transition-all cursor-pointer disabled:cursor-not-allowed border-0"
-                  style={{ backgroundColor: buildRubric().criteria.length ? TX.primary : '#cbd5e1', color: '#fff' }}>
-                  <Download size={14} /> Download PDF
-                </button>
+                <div className="flex justify-end mt-4">
+                  <button type="button" onClick={handleDownload} disabled={!buildRubric().criteria.length}
+                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold shadow-sm transition-all cursor-pointer disabled:cursor-not-allowed border-0"
+                    style={{ backgroundColor: buildRubric().criteria.length ? TX.primary : '#cbd5e1', color: '#fff' }}>
+                    <Download size={14} /> Download PDF
+                  </button>
+                </div>
               </div>
             </div>
           </div>

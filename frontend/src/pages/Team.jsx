@@ -71,9 +71,9 @@ const Team = () => {
         },
         {
           initials: "SR",
-          name: "Mudasir",
-          role: "UI/UX & Security Developer",
-          desc: "Specialized in Secuirty Audits & Desigining the Frontend Figma.",
+          name: "Mr.Mudasir Hussain",
+          role: "Frontend/Backend & Security Developer",
+          desc: "Specialized in Secuirty Audits & Desigining the Frontend and Backend.",
         },
       ],
     },

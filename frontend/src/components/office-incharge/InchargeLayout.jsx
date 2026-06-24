@@ -3,7 +3,7 @@ import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { PhaseProvider, usePhase } from '../../contexts/PhaseContext';
 import { showToast as toast } from '../AppToast';
 import { logoutUser, getCurrentUser } from '../../services/auth.service';
-import { AlertCircle, BarChart3, Bell, Calendar, ChevronLeft, ChevronRight, ClipboardList, GraduationCap, History, Home, LogOut, Menu, Scale, ToggleRight, UserPlus, Users, X } from 'lucide-react';
+import { AlertCircle, BarChart3, Bell, Calendar, ChevronLeft, ChevronRight, ClipboardList, GraduationCap, History, Home, Lock, LogOut, Menu, Scale, ToggleRight, UserPlus, Users, X } from 'lucide-react';
 
 const Sidebar = ({ isMobileOpen, setIsMobileOpen, isCollapsed, setIsCollapsed, user, roleLabel, navLinks, handleLogout }) => {
   const { currentPhase, loading } = usePhase();
@@ -44,6 +44,17 @@ const Sidebar = ({ isMobileOpen, setIsMobileOpen, isCollapsed, setIsCollapsed, u
                   {link.section}
                 </div>
               )}
+              {link.locked ? (
+                <div className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-300 cursor-not-allowed select-none ${isCollapsed ? 'justify-center w-[44px] h-[44px] mx-auto p-[10px]' : ''}`} title={`${link.label} — locked during Phase 1`}>
+                  {React.createElement(link.icon, { size: 16, className: "flex-shrink-0" })}
+                  {!isCollapsed && (
+                    <>
+                      <span className="text-sm font-medium whitespace-nowrap overflow-hidden flex-1">{link.label}</span>
+                      <Lock size={12} className="flex-shrink-0 text-slate-300" />
+                    </>
+                  )}
+                </div>
+              ) : (
               <NavLink
                 to={link.to}
                 onClick={() => setIsMobileOpen(false)}
@@ -52,6 +63,7 @@ const Sidebar = ({ isMobileOpen, setIsMobileOpen, isCollapsed, setIsCollapsed, u
                 {React.createElement(link.icon, { size: 16, className: "flex-shrink-0" })}
                 {!isCollapsed && <span className="text-sm font-medium whitespace-nowrap overflow-hidden flex-1">{link.label}</span>}
               </NavLink>
+              )}
             </React.Fragment>
           );
         })}
@@ -86,13 +98,13 @@ const LayoutInner = () => {
   const navLinks = [
     { to: '/office-incharge/dashboard', icon: Home, label: 'Dashboard', section: 'Overview' },
     { to: '/office-incharge/phases', icon: ToggleRight, label: 'Phase Control', section: 'Overview' },
+    { to: '/office-incharge/supervision-requests', icon: UserPlus, label: 'Supervision Requests', section: 'Overview', locked: true },
+    { to: '/office-incharge/committee-oversight', icon: Users, label: 'Committee Oversight', section: 'Overview', locked: true },
+    { to: '/office-incharge/faculty-reports', icon: BarChart3, label: 'Faculty Reports', section: 'Overview', locked: true },
+    { to: '/office-incharge/student-reports', icon: GraduationCap, label: 'Student Reports', section: 'Overview', locked: true },
+    { to: '/office-incharge/grievances', icon: Scale, label: 'Grievances & SLAs', section: 'Overview' },
     { to: '/office-incharge/rubrics', icon: ClipboardList, label: 'Rubric Builder', section: 'Curriculum & Sessions' },
     { to: '/office-incharge/sessions', icon: Calendar, label: 'Academic Sessions', section: 'Curriculum & Sessions' },
-    { to: '/office-incharge/supervision-requests', icon: UserPlus, label: 'Supervision Requests', section: 'Governance & Oversight' },
-    { to: '/office-incharge/committee-oversight', icon: Users, label: 'Committee Oversight', section: 'Governance & Oversight' },
-    { to: '/office-incharge/grievances', icon: Scale, label: 'Grievances & SLAs', section: 'Governance & Oversight' },
-    { to: '/office-incharge/faculty-reports', icon: BarChart3, label: 'Faculty Reports', section: 'Analytics & Logs' },
-    { to: '/office-incharge/student-reports', icon: GraduationCap, label: 'Student Reports', section: 'Analytics & Logs' },
     { to: '/office-incharge/audit-log', icon: History, label: 'System Audit Logs', section: 'Analytics & Logs' },
   ];
 

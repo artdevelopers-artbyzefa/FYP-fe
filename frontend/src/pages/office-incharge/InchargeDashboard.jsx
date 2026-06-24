@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { usePhase } from '../../contexts/PhaseContext';
 import { getInchargeDashboardStats } from '../../services/office-incharge.service';
-import { ArrowRight, Calendar, ClipboardList, GraduationCap, Scale, ToggleRight, UserPlus, Users } from 'lucide-react';
+import { ArrowRight, Calendar, ClipboardList, GraduationCap, Lock, Scale, ToggleRight, UserPlus, Users } from 'lucide-react';
 
 const InchargeDashboard = () => {
   const navigate = useNavigate();
@@ -22,8 +22,10 @@ const InchargeDashboard = () => {
     { onClick: () => navigate('/office-incharge/phases'), icon: ToggleRight, title: 'Phase Control', desc: 'Activate or switch academic phases. Registration, Proposal, Development, and more.' },
     { onClick: () => navigate('/office-incharge/rubrics'), icon: ClipboardList, title: 'Rubric Builder', desc: 'Design proposal & CLO evaluation rubrics with 100% weight validation.' },
     { onClick: () => navigate('/office-incharge/sessions'), icon: Calendar, title: 'Academic Sessions', desc: 'Configure milestone deadlines and handle FYP-1 repeat registrations.' },
-    { onClick: () => navigate('/office-incharge/committee-oversight'), icon: Users, title: 'Committee Oversight', desc: 'Monitor active boards, manage head change requests, and trigger re-evaluations.' },
     { onClick: () => navigate('/office-incharge/grievances'), icon: Scale, title: 'Grievance & SLAs', desc: 'Resolve student disputes, monitor SLA windows, and escalate critical issues.' },
+    { locked: true, icon: Users, title: 'Committee Oversight', desc: 'Monitor active boards, manage head change requests, and trigger re-evaluations.' },
+    { locked: true, icon: UserPlus, title: 'Supervision Requests', desc: 'Review and process faculty supervision requests.' },
+    { locked: true, icon: GraduationCap, title: 'Student Reports', desc: 'View detailed student academic reports.' },
   ];
 
   return (
@@ -52,12 +54,9 @@ const InchargeDashboard = () => {
       <div className="bg-white p-4 md:p-8 rounded-2xl shadow-sm border border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
           <h2 className="text-xl md:text-2xl font-black text-gray-800 tracking-tight">Welcome back, {user?.name || 'In-charge'}!</h2>
-          <p className="text-xs md:text-sm text-gray-500 font-medium mt-1">Here is the executive oversight panel for the current academic session. Monitor grievance SLAs, review supervision requests, and manage curriculum rubrics.</p>
+          <p className="text-xs md:text-sm text-gray-500 font-medium mt-1">Here is the executive oversight panel for the current academic session. Monitor grievance SLAs and manage curriculum rubrics.</p>
         </div>
         <div className="flex gap-3 flex-wrap">
-          <button onClick={() => navigate('/office-incharge/supervision-requests')} className="flex items-center gap-2 px-4 py-2.5 bg-primary text-white rounded-xl font-bold text-xs hover:bg-secondary transition-all cursor-pointer shadow-sm">
-            <UserPlus className="w-4 h-4" /> Pending ({stats?.pendingSupervisionReqs || 0})
-          </button>
           <button onClick={() => navigate('/office-incharge/grievances')} className="flex items-center gap-2 px-4 py-2.5 bg-primary text-white rounded-xl font-bold text-xs hover:bg-secondary transition-all cursor-pointer shadow-sm">
             <Scale className="w-4 h-4" /> Grievances ({stats?.openGrievances || 0})
           </button>
@@ -75,9 +74,9 @@ const InchargeDashboard = () => {
             <div className="text-2xl md:text-3xl font-black text-emerald-600 mb-1">{stats?.activeRubrics || 0}</div>
             <div className="text-[9px] md:text-[10px] font-bold text-emerald-400 uppercase tracking-widest leading-tight">Active Rubrics</div>
           </div>
-          <div className="bg-blue-50 rounded-2xl border border-blue-100 p-4 md:p-5 text-center lg:text-left">
-            <div className="text-2xl md:text-3xl font-black text-blue-600 mb-1">{stats?.pendingSupervisionReqs || 0}</div>
-            <div className="text-[9px] md:text-[10px] font-bold text-blue-400 uppercase tracking-widest leading-tight">Supervision Requests</div>
+          <div className="bg-gray-50 rounded-2xl border border-gray-200 p-4 md:p-5 text-center lg:text-left opacity-60">
+            <div className="text-2xl md:text-3xl font-black text-gray-400 mb-1">{stats?.pendingSupervisionReqs || 0}</div>
+            <div className="text-[9px] md:text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-tight flex items-center justify-center lg:justify-start gap-1">Supervision Requests <Lock size={10} /></div>
           </div>
           <div className="bg-rose-50 rounded-2xl border border-rose-100 p-4 md:p-5 text-center lg:text-left">
             <div className="text-2xl md:text-3xl font-black text-rose-600 mb-1">{stats?.openGrievances || 0}</div>
@@ -93,15 +92,15 @@ const InchargeDashboard = () => {
       {/* Quick Access Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {quickLinks.map((link, i) => (
-          <div key={i} onClick={link.onClick} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:border-secondary hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between">
+          <div key={i} onClick={() => { if (!link.locked) link.onClick?.(); }} className={`bg-white p-6 rounded-2xl shadow-sm border border-gray-100 transition-all group flex flex-col justify-between ${link.locked ? 'opacity-50 cursor-not-allowed' : 'hover:border-secondary hover:shadow-md cursor-pointer'}`} title={link.locked ? 'Locked during Phase 1' : link.title}>
             <div className="flex justify-between items-center mb-4">
-              <div className="w-10 h-10 bg-secondary/10 rounded-xl flex items-center justify-center text-secondary">
+              <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${link.locked ? 'bg-gray-100 text-gray-400' : 'bg-secondary/10 text-secondary'}`}>
                 <link.icon className="w-5 h-5" />
               </div>
-              <ArrowRight className="text-gray-300 group-hover:text-secondary group-hover:translate-x-1 transition-all w-5 h-5" />
+              {link.locked ? <Lock className="text-gray-300 w-5 h-5" /> : <ArrowRight className="text-gray-300 group-hover:text-secondary group-hover:translate-x-1 transition-all w-5 h-5" />}
             </div>
             <div>
-              <h3 className="font-bold text-gray-800 text-sm mb-1">{link.title}</h3>
+              <h3 className={`font-bold text-sm mb-1 ${link.locked ? 'text-gray-400' : 'text-gray-800'}`}>{link.title}</h3>
               <p className="text-xs text-gray-400 font-medium leading-relaxed">{link.desc}</p>
             </div>
           </div>

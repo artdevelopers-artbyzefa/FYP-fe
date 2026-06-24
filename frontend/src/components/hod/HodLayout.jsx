@@ -232,11 +232,11 @@ const HodLayout = () => {
                 onClick={() => setShowProfile(!showProfile)}
                 className="flex items-center gap-2 p-1 md:px-2.5 md:py-1.5 bg-blue-50 rounded-xl cursor-pointer hover:bg-blue-100 transition-colors"
               >
-                <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center text-blue-700 text-xs font-bold flex-shrink-0 overflow-hidden">
+                <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center text-blue-700 flex-shrink-0 overflow-hidden">
                   {user?.avatar ? (
                     <img src={user.avatar} alt="" className="w-full h-full object-cover" />
                   ) : (
-                    <span>{user?.name ? user.name.split(' ').filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase() : 'ZA'}</span>
+                    <User size={16} />
                   )}
                 </div>
                 <div className="text-left hidden sm:block">
@@ -289,11 +289,11 @@ const HodLayout = () => {
             </div>
 
             <div className="flex flex-col items-center mb-6">
-              <div className="relative w-20 h-20 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 text-xl font-bold overflow-hidden mb-3">
+              <div className="relative w-20 h-20 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 overflow-hidden mb-3">
                 {user?.avatar ? (
                   <img src={user.avatar} alt="" className="w-full h-full object-cover" />
                 ) : (
-                  <span>{user?.name ? user.name.split(' ').filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase() : '?'}</span>
+                  <User size={28} />
                 )}
                 <label className="absolute bottom-0 right-0 w-7 h-7 bg-blue-600 text-white rounded-full flex items-center justify-center cursor-pointer border-2 border-white hover:bg-blue-700 transition-colors">
                   {uploadingAvatar ? <Loader2 size={12} className="animate-spin" /> : <Camera size={12} />}

@@ -143,7 +143,7 @@ const FacultySupervision = () => {
                       <Mail size={12} />
                       <span className="font-medium">{g.leaderName} (Leader)</span>
                     </div>
-                    <span className="font-medium">Co-supervisor: {g.coSupervisor}</span>
+                    {g.coSupervisor && g.coSupervisor !== 'Not assigned' && <span className="font-medium">Co-supervisor: {g.coSupervisor}</span>}
                   </div>
                 </div>
               )}

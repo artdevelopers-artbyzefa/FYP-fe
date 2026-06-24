@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { getFacultyDashboardStats } from '../../services/faculty.service';
-import { ArrowRight, CalendarCheck, Crown, FileSignature, GitBranch, Landmark, Star, UserCheck } from 'lucide-react';
+import { ArrowRight, GitBranch, Landmark, Star, UserCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.04 } } };
 const item = { hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } };
@@ -58,10 +58,7 @@ const FacultyDashboard = () => {
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
             <div className="text-white">
               <div className="flex items-center gap-3 mb-2">
-                <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
-                  <Landmark size={16} className="text-white/90" />
-                </div>
-                <span className="text-[11px] font-semibold text-blue-200 tracking-widest uppercase">Faculty Portal</span>
+                <span className="text-[11px] font-semibold text-blue-200 tracking-widest e">Faculty Portal</span>
               </div>
               <h1 className="text-2xl sm:text-3xl font-bold mb-2 tracking-tight text-balance">Supervision & Committee Hub</h1>
               <p className="text-sm text-blue-200 font-medium max-w-2xl leading-relaxed">
@@ -88,58 +85,6 @@ const FacultyDashboard = () => {
           </div>
         </div>
       </motion.div>
-
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        <motion.div variants={item} className="group bg-white rounded-2xl border border-line p-6 shadow-card transition-all duration-300 hover:shadow-card-hover hover:-translate-y-0.5">
-          <div className="flex items-start justify-between mb-4">
-            <div className="w-12 h-12 rounded-2xl bg-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-105 transition-transform duration-300">
-              <GitBranch size={20} />
-            </div>
-            <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full whitespace-nowrap text-blue-700 bg-blue-50">
-              {stats ? `${stats.supervisedGroups}/${stats.supervisedCap || 8}` : '.../8'}
-            </span>
-          </div>
-          <div className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-0.5">Supervised Groups</div>
-          <div className="text-3xl font-extrabold text-slate-900 tabular-nums tracking-tight">{stats ? stats.supervisedGroups : '...'}</div>
-        </motion.div>
-        <motion.div variants={item} className="group bg-white rounded-2xl border border-line p-6 shadow-card transition-all duration-300 hover:shadow-card-hover hover:-translate-y-0.5">
-          <div className="flex items-start justify-between mb-4">
-            <div className="w-12 h-12 rounded-2xl bg-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-105 transition-transform duration-300">
-              <UserCheck size={20} />
-            </div>
-            <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full whitespace-nowrap text-amber-700 bg-amber-50">
-              Requires Review
-            </span>
-          </div>
-          <div className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-0.5">Supervision Requests</div>
-          <div className="text-3xl font-extrabold text-slate-900 tabular-nums tracking-tight">{stats ? stats.pendingRequests : '...'}</div>
-        </motion.div>
-        <motion.div variants={item} className="group bg-white rounded-2xl border border-line p-6 shadow-card transition-all duration-300 hover:shadow-card-hover hover:-translate-y-0.5">
-          <div className="flex items-start justify-between mb-4">
-            <div className="w-12 h-12 rounded-2xl bg-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-105 transition-transform duration-300">
-              <CalendarCheck size={20} />
-            </div>
-            <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full whitespace-nowrap text-emerald-700 bg-emerald-50">
-              Up to date
-            </span>
-          </div>
-          <div className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-0.5">Weekly Log Approvals</div>
-          <div className="text-3xl font-extrabold text-slate-900 tabular-nums tracking-tight">{stats ? stats.weeklyLogs : '...'}</div>
-        </motion.div>
-        <motion.div variants={item} className="group bg-white rounded-2xl border border-line p-6 shadow-card transition-all duration-300 hover:shadow-card-hover hover:-translate-y-0.5">
-          <div className="flex items-start justify-between mb-4">
-            <div className="w-12 h-12 rounded-2xl bg-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-105 transition-transform duration-300">
-              <Crown size={20} />
-            </div>
-            <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full whitespace-nowrap text-blue-700 bg-blue-50">
-              Active Head
-            </span>
-          </div>
-          <div className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-0.5">Committee Head Status</div>
-          <div className="text-3xl font-extrabold text-slate-900 tabular-nums tracking-tight">{stats ? stats.committeeHead : '...'}</div>
-        </motion.div>
-      </div>
 
       {/* Quick Access Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

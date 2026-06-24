@@ -31,6 +31,21 @@ export const getInchargeSessions = async () => {
   return res.data;
 };
 
+export const createInchargeSession = async (payload) => {
+  const res = await apiClient.post(INCHARGE_SESSIONS_API_URL, payload);
+  return res.data;
+};
+
+export const deleteInchargeSession = async (id) => {
+  const res = await apiClient.delete(INCHARGE_SESSIONS_API_URL + '/' + id);
+  return res.data;
+};
+
+export const activateInchargeSession = async (id) => {
+  const res = await apiClient.post(INCHARGE_SESSIONS_API_URL + '/' + id + '/activate');
+  return res.data;
+};
+
 export const getInchargeSupervisionReqs = async () => {
   const res = await apiClient.get(INCHARGE_SUPERVISION_REQS_API_URL);
   return res.data;

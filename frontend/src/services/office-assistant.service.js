@@ -27,8 +27,8 @@ export const getOfficeStudents = async (page = 1, limit = 20) => {
   return res.data;
 };
 
-export const getOfficeFaculty = async () => {
-  const res = await apiClient.get(OFFICE_FACULTY_API_URL);
+export const getOfficeFaculty = async (page = 1, limit = 20, search = '', type = '', status = '') => {
+  const res = await apiClient.get(OFFICE_FACULTY_API_URL, { params: { page, limit, search, type, status } });
   return res.data;
 };
 
@@ -79,6 +79,11 @@ export const updateOfficeStudent = async (id, payload) => {
 
 export const createOfficeFaculty = async (payload) => {
   const res = await apiClient.post(OFFICE_CREATE_FACULTY_API_URL, payload);
+  return res.data;
+};
+
+export const updateOfficeFaculty = async (id, payload) => {
+  const res = await apiClient.put(OFFICE_FACULTY_API_URL + '/' + id, payload);
   return res.data;
 };
 

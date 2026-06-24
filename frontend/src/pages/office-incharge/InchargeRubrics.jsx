@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { getInchargeRubrics, saveRubric } from '../../services/office-incharge.service';
 import { showToast } from '../../components/AppToast';
-import { Plus, Trash2, Loader2, CheckCircle, XCircle, AlertTriangle, BookOpen, FileText } from 'lucide-react';
+import { Plus, Trash2, Loader2, CheckCircle, XCircle, AlertTriangle, BookOpen, FileText, ChevronDown, ChevronUp } from 'lucide-react';
 
 const EMPTY = () => ({ id: crypto.randomUUID(), name: '', clo: '', weight: '' });
 
@@ -56,6 +56,7 @@ export default function InchargeRubrics() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
+  const [expanded, setExpanded] = useState(null);
 
   useEffect(() => { fetchRubrics(); }, []);
 
@@ -197,22 +198,49 @@ export default function InchargeRubrics() {
               <BookOpen size={24} className="mx-auto mb-2" style={{ color: TX.muted }} />
               <p className="text-xs font-medium" style={{ color: TX.muted }}>No rubrics published yet</p>
             </div>
-          ) : rubrics.map(r => (
-            <div key={r.id || r._id} className="p-3.5 rounded-xl border transition-all hover:shadow-sm" style={{ borderColor: TX.line }}>
-              <div className="flex items-start justify-between gap-2 mb-1.5">
-                <div className="min-w-0 flex-1">
-                  <p className="text-xs font-bold truncate" style={{ color: TX.ink }}>{r.name || 'Untitled'}</p>
-                  <p className="text-[11px] font-medium mt-0.5" style={{ color: TX.muted }}>{r.version || ''} · {r.criteria?.length || 0} criteria</p>
+          ) : rubrics.map(r => {
+            const isOpen = expanded === (r.id || r._id);
+            return (
+            <div key={r.id || r._id}>
+              <div
+                onClick={() => setExpanded(isOpen ? null : (r.id || r._id))}
+                className="p-3.5 rounded-xl border transition-all hover:shadow-sm cursor-pointer"
+                style={{ borderColor: TX.line, borderBottomLeftRadius: isOpen ? '0' : '', borderBottomRightRadius: isOpen ? '0' : '', borderBottom: isOpen ? 'none' : '' }}
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs font-bold truncate" style={{ color: TX.ink }}>{r.name || 'Untitled'}</p>
+                    <p className="text-[11px] font-medium mt-0.5" style={{ color: TX.muted }}>{r.version || ''} · {r.criteria?.length || 0} criteria</p>
+                  </div>
+                  <div className="flex items-center gap-2 flex-shrink-0">
+                    <Badge status={r.status} />
+                    {isOpen ? <ChevronUp size={14} style={{ color: TX.muted }} /> : <ChevronDown size={14} style={{ color: TX.muted }} />}
+                  </div>
                 </div>
-                <Badge status={r.status} />
+                {r.createdAt && (
+                  <p className="text-[10px] mt-1.5" style={{ color: TX.muted }}>
+                    {new Date(r.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                  </p>
+                )}
               </div>
-              {r.createdAt && (
-                <p className="text-[10px]" style={{ color: TX.muted }}>
-                  {new Date(r.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
-                </p>
+              {isOpen && (
+                <div className="p-3.5 rounded-b-xl border border-t-0 space-y-2" style={{ borderColor: TX.line, backgroundColor: TX.surface }}>
+                  {r.criteria?.length > 0 ? r.criteria.map((c, i) => (
+                    <div key={i} className="flex items-center justify-between p-2.5 rounded-lg bg-white border" style={{ borderColor: TX.line }}>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-xs font-bold truncate" style={{ color: TX.ink }}>{c.name}</p>
+                        <p className="text-[10px] font-medium" style={{ color: TX.muted }}>{c.clo || ''}</p>
+                      </div>
+                      <span className="text-xs font-bold px-2 py-1 rounded-lg" style={{ backgroundColor: '#eff6ff', color: TX.primary }}>{c.weight}%</span>
+                    </div>
+                  )) : (
+                    <p className="text-xs text-center py-4" style={{ color: TX.muted }}>No criteria defined.</p>
+                  )}
+                </div>
               )}
             </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>

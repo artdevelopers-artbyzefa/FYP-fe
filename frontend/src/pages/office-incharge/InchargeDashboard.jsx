@@ -50,13 +50,26 @@ const InchargeDashboard = () => {
         </div>
       )}
 
-      {/* Welcome Banner */}
-      <div className="bg-white p-4 md:p-8 rounded-2xl shadow-sm border border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-6">
-        <div>
-          <h2 className="text-xl md:text-2xl font-black text-gray-800 tracking-tight">Welcome back, {user?.name || 'In-charge'}!</h2>
-          <p className="text-xs md:text-sm text-gray-500 font-medium mt-1">Here is the executive oversight panel for the current academic session. Monitor grievance SLAs and manage curriculum rubrics.</p>
+      {/* User Info + Welcome */}
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 md:w-14 md:h-14 bg-primary/10 rounded-full flex items-center justify-center text-xl text-primary overflow-hidden border-2 border-primary/10 flex-shrink-0">
+            <GraduationCap className="w-6 h-6" />
+          </div>
+          <div>
+            <h2 className="text-lg md:text-xl font-bold text-gray-800">{user?.name || 'Dr. Sara Malik'}</h2>
+            <p className="text-xs md:text-sm text-gray-400 font-medium">FYP Office In-charge</p>
+          </div>
         </div>
-        <div className="flex gap-3 flex-wrap">
+        <div className="flex items-center gap-4 flex-wrap">
+          <div className="px-4 py-2 bg-primary/5 rounded-xl border border-primary/10">
+            <div className="text-[9px] font-bold text-primary uppercase tracking-widest">Designation</div>
+            <div className="text-xs font-bold text-gray-700">In-charge</div>
+          </div>
+          <div className="px-4 py-2 bg-secondary/5 rounded-xl border border-secondary/10">
+            <div className="text-[9px] font-bold text-secondary uppercase tracking-widest">Campus</div>
+            <div className="text-xs font-bold text-gray-700">CUI Abbottabad</div>
+          </div>
           <button onClick={() => navigate('/office-incharge/grievances')} className="flex items-center gap-2 px-4 py-2.5 bg-primary text-white rounded-xl font-bold text-xs hover:bg-secondary transition-all cursor-pointer shadow-sm">
             <Scale className="w-4 h-4" /> Grievances ({stats?.openGrievances || 0})
           </button>
@@ -117,28 +130,6 @@ const InchargeDashboard = () => {
         ))}
       </div>
 
-      {/* User Info Card */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-        <div className="flex items-center gap-4 mb-6">
-          <div className="w-12 h-12 md:w-16 md:h-16 bg-primary/10 rounded-full flex items-center justify-center text-xl md:text-2xl text-primary overflow-hidden border-2 border-primary/10">
-            <GraduationCap className="w-6 h-6 md:w-8 md:h-8" />
-          </div>
-          <div>
-            <h2 className="text-lg md:text-xl font-bold text-gray-800">{user?.name || 'Dr. Sara Malik'}</h2>
-            <p className="text-xs md:text-sm text-gray-400 font-medium">FYP Office In-charge</p>
-          </div>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="p-4 rounded-xl bg-primary/5 border border-primary/10">
-            <div className="text-[10px] font-bold text-primary mb-1 uppercase tracking-widest">Designation</div>
-            <div className="text-sm font-medium text-gray-700">In-charge</div>
-          </div>
-          <div className="p-4 rounded-xl bg-secondary/5 border border-secondary/10">
-            <div className="text-[10px] font-bold text-secondary mb-1 uppercase tracking-widest">Campus</div>
-            <div className="text-sm font-medium text-gray-700">CUI Abbottabad</div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };

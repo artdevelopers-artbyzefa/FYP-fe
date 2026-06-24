@@ -21,6 +21,11 @@ export const getInchargeRubrics = async () => {
   return res.data;
 };
 
+export const saveRubric = async (data) => {
+  const res = await apiClient.post(INCHARGE_RUBRICS_API_URL, data);
+  return res.data;
+};
+
 export const getInchargeSessions = async () => {
   const res = await apiClient.get(INCHARGE_SESSIONS_API_URL);
   return res.data;

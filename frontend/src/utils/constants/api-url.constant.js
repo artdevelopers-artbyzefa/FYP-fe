@@ -82,6 +82,7 @@ export const FACULTY_SUPERVISOR_REQUESTS_API_URL = '/faculty/supervisor-requests
  */
 export const INCHARGE_DASHBOARD_API_URL = '/office-incharge/dashboard';
 export const INCHARGE_RUBRICS_API_URL = '/office-incharge/rubrics';
+export const INCHARGE_RUBRICS_URL = '/office-incharge/rubrics';
 export const INCHARGE_SESSIONS_API_URL = '/office-incharge/sessions';
 export const INCHARGE_SUPERVISION_REQS_API_URL = '/office-incharge/supervision-requests';
 export const INCHARGE_COMMITTEE_OVERSIGHT_API_URL = '/office-incharge/committee-oversight';

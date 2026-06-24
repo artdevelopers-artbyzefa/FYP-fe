@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { usePhase } from '../../contexts/PhaseContext';
 import { getInchargeDashboardStats } from '../../services/office-incharge.service';
-import { ArrowRight, Calendar, ClipboardList, GraduationCap, Lock, Scale, ToggleRight, UserPlus, Users } from 'lucide-react';
+import { ArrowRight, Calendar, ClipboardList, GraduationCap, Lock, Scale, ToggleRight, UserPlus, Users, Loader2, CheckCircle } from 'lucide-react';
 
 const InchargeDashboard = () => {
   const navigate = useNavigate();
@@ -64,27 +64,37 @@ const InchargeDashboard = () => {
       </div>
 
       {/* Stats Grid */}
-      {loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-          {[1,2,3,4].map(i => <div key={i} className="skeleton h-32 w-full rounded-2xl" />)}
+      {/* Active Phase Display */}
+      {phaseLoading ? (
+        <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm flex items-center justify-center">
+          <Loader2 className="w-5 h-5 animate-spin text-blue-600" />
+        </div>
+      ) : currentPhase ? (
+        <div className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl shadow-sm p-6 md:p-8">
+          <div className="flex items-start justify-between">
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <CheckCircle className="w-5 h-5 text-blue-200" />
+                <span className="text-[10px] font-bold text-blue-200 uppercase tracking-widest">Active Phase</span>
+              </div>
+              <h3 className="text-2xl md:text-3xl font-black text-white mb-1">{currentPhase.name}</h3>
+              <p className="text-sm text-blue-200 font-medium max-w-xl">{currentPhase.description}</p>
+            </div>
+            <div className="hidden sm:flex items-center gap-2 px-4 py-2 bg-white/10 rounded-xl border border-white/10">
+              <span className="text-xs font-bold text-white">Phase {currentPhase.sequence}</span>
+            </div>
+          </div>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-          <div className="bg-emerald-50 rounded-2xl border border-emerald-100 p-4 md:p-5 text-center lg:text-left">
-            <div className="text-2xl md:text-3xl font-black text-emerald-600 mb-1">{stats?.activeRubrics || 0}</div>
-            <div className="text-[9px] md:text-[10px] font-bold text-emerald-400 uppercase tracking-widest leading-tight">Active Rubrics</div>
-          </div>
-          <div className="bg-gray-50 rounded-2xl border border-gray-200 p-4 md:p-5 text-center lg:text-left opacity-60">
-            <div className="text-2xl md:text-3xl font-black text-gray-400 mb-1">{stats?.pendingSupervisionReqs || 0}</div>
-            <div className="text-[9px] md:text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-tight flex items-center justify-center lg:justify-start gap-1">Supervision Requests <Lock size={10} /></div>
-          </div>
-          <div className="bg-rose-50 rounded-2xl border border-rose-100 p-4 md:p-5 text-center lg:text-left">
-            <div className="text-2xl md:text-3xl font-black text-rose-600 mb-1">{stats?.openGrievances || 0}</div>
-            <div className="text-[9px] md:text-[10px] font-bold text-rose-400 uppercase tracking-widest leading-tight">Open Grievances</div>
-          </div>
-          <div className="bg-indigo-50 rounded-2xl border border-indigo-100 p-4 md:p-5 text-center lg:text-left">
-            <div className="text-2xl md:text-3xl font-black text-indigo-600 mb-1">{stats?.activeSession || 'N/A'}</div>
-            <div className="text-[9px] md:text-[10px] font-bold text-indigo-400 uppercase tracking-widest leading-tight">Active Session</div>
+        <div className="bg-amber-50 rounded-2xl border border-amber-200 p-6 shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center text-amber-600">
+              <ToggleRight className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-amber-800">No Active Phase</h3>
+              <p className="text-xs text-amber-600 font-medium">Go to Phase Control to activate a phase.</p>
+            </div>
           </div>
         </div>
       )}

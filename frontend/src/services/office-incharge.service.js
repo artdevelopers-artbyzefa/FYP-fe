@@ -81,6 +81,16 @@ export const getInchargeStudentReports = async () => {
   return res.data;
 };
 
+export const getProposalReviews = async () => {
+  const res = await apiClient.get('/office-incharge/proposal-reviews');
+  return res.data;
+};
+
+export const processProposalReview = async (id, data) => {
+  const res = await apiClient.put('/office-incharge/proposal-reviews/' + id, data);
+  return res.data;
+};
+
 export const getInchargeAuditLogs = async () => {
   const res = await apiClient.get(INCHARGE_AUDIT_LOG_API_URL);
   return res.data;

@@ -6,7 +6,7 @@ import { Loader2, CheckCircle, Sparkles, Pencil, X } from 'lucide-react';
 const FIELDS = [
   'Web Development',
   'Game Development',
-  'Software Requirement Engineering',
+
   'Mobile App Development',
   'Machine Learning / AI',
   'Database Systems',

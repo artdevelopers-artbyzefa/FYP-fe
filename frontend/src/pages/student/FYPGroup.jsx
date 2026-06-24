@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { searchPartners, sendPartnerRequest, getSentRequests, getIncomingRequests, respondPartnerRequest, getStudentGroup, saveStudentGroupPreferences } from '../../services/student.service';
 import { showToast as toast } from '../../components/AppToast';
-import { Check, Clock, Crown, Loader, Search, Send, Sparkles, UserCheck, UserX, Users, X, CheckCircle } from 'lucide-react';
+import { Check, Clock, Crown, Loader, Pencil, Search, Send, Sparkles, UserCheck, UserX, Users, X, CheckCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const FIELDS = [
-  'Web Development', 'Game Development', 'Software Requirement Engineering',
+  'Web Development', 'Game Development',
   'Mobile App Development', 'Machine Learning / AI', 'Database Systems',
   'Cybersecurity', 'Deployment'
 ];
@@ -29,12 +29,14 @@ export default function FYPGroup() {
   const [group, setGroup] = useState(null);
   const [loadingData, setLoadingData] = useState(true);
   const [prefs, setPrefs] = useState([]);
+  const [savedPrefs, setSavedPrefs] = useState([]);
+  const [editingPrefs, setEditingPrefs] = useState(false);
   const [savingPrefs, setSavingPrefs] = useState(false);
   const debounceRef = useRef(null);
 
   useEffect(() => {
     Promise.all([
-      getStudentGroup().then(d => { const g = d?.data || null; setGroup(g); setPrefs(g?.preferences?.map(p => ({ field: p.field, priority: p.priority })) || []); }).catch(() => {}),
+      getStudentGroup().then(d => { const g = d?.data || null; setGroup(g); const p = g?.preferences?.map(p => ({ field: p.field, priority: p.priority })) || []; setPrefs(p); setSavedPrefs(p); setEditingPrefs(p.length === 0); }).catch(() => {}),
       getSentRequests().then(d => setSentRequests(Array.isArray(d) ? d : [])).catch(() => {}),
       getIncomingRequests().then(d => setIncomingRequests(Array.isArray(d) ? d : [])).catch(() => {})
     ]).finally(() => setLoadingData(false));
@@ -85,18 +87,17 @@ export default function FYPGroup() {
       getIncomingRequests().then(d => Array.isArray(d) ? d : []).catch(() => [])
     ]);
     setGroup(g);
-    setPrefs(g?.preferences?.map(p => ({ field: p.field, priority: p.priority })) || []);
+    const p = g?.preferences?.map(p => ({ field: p.field, priority: p.priority })) || [];
+    setPrefs(p);
+    setSavedPrefs(p);
+    setEditingPrefs(p.length === 0);
     setSentRequests(s);
     setIncomingRequests(i);
   };
 
-  const getPrefPriority = (field) => { const p = prefs.find(p => p.field === field); return p ? p.priority : null; };
-
-  const handlePrefSelect = (field) => {
-    const current = getPrefPriority(field);
-    if (current) { setPrefs(prefs.filter(p => p.field !== field)); return; }
-    if (prefs.length >= 3) { toast.error('Max 3 preferences.'); return; }
-    setPrefs([...prefs, { field, priority: prefs.length + 1 }]);
+  const handleCancelPrefs = () => {
+    setPrefs(savedPrefs);
+    setEditingPrefs(false);
   };
 
   const handleSavePrefs = async () => {
@@ -105,6 +106,8 @@ export default function FYPGroup() {
     try {
       await saveStudentGroupPreferences(prefs);
       toast.success('Preferences saved.');
+      setSavedPrefs(prefs);
+      setEditingPrefs(false);
     } catch (err) { toast.error(err?.response?.data?.message || 'Failed.'); }
     finally { setSavingPrefs(false); }
   };
@@ -154,45 +157,89 @@ export default function FYPGroup() {
 
         {group && group.members?.length > 0 && (
           <div className="mb-6 p-4 rounded-xl border border-line bg-white">
-            <div className="flex items-center gap-2 mb-3">
-              <Sparkles size={15} className="text-blue-600" />
-              <h3 className="text-xs font-bold text-slate-700">Committee Assignment Preferences</h3>
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <Sparkles size={15} className="text-blue-600" />
+                <h3 className="text-xs font-bold text-slate-700">Committee Assignment Preferences</h3>
+              </div>
+              {!editingPrefs && savedPrefs.length > 0 && (
+                <button onClick={() => { setPrefs(savedPrefs); setEditingPrefs(true); }} className="flex items-center gap-1 text-[10px] font-bold text-blue-600 hover:text-blue-700 bg-transparent border-0 cursor-pointer">
+                  <Pencil size={11} /> Edit
+                </button>
+              )}
             </div>
-            <p className="text-[10px] text-slate-400 mb-3">Select up to 3 fields ranked by preference. These determine which committee evaluates your group.</p>
-            <div className="flex items-center gap-3 mb-3 text-[10px]">
-              {[1, 2, 3].map(p => (
-                <div key={p} className="flex items-center gap-1">
-                  <div className={`w-2.5 h-2.5 rounded-full ${PRIORITY[p].dot}`} />
-                  <span className="font-medium text-slate-500">{PRIORITY[p].label} ({PRIORITY[p].weight})</span>
-                </div>
-              ))}
-            </div>
-            <div className="space-y-1.5 mb-3">
-              {FIELDS.map(field => {
-                const priority = getPrefPriority(field);
-                return (
-                  <div key={field} onClick={() => handlePrefSelect(field)}
-                    className={`p-2.5 rounded-xl border-2 cursor-pointer transition-all flex items-center justify-between ${
-                      priority ? (priority === 1 ? 'bg-emerald-50 border-emerald-400' : priority === 2 ? 'bg-blue-50 border-blue-400' : 'bg-amber-50 border-amber-400') : 'bg-white border-gray-200 hover:border-blue-300'
-                    }`}>
+
+            {!editingPrefs && savedPrefs.length > 0 ? (
+              <div className="space-y-1.5">
+                {savedPrefs.sort((a, b) => a.priority - b.priority).map(p => (
+                  <div key={p.field} className={`p-2.5 rounded-xl border-2 flex items-center justify-between ${
+                    p.priority === 1 ? 'bg-emerald-50 border-emerald-400' : p.priority === 2 ? 'bg-blue-50 border-blue-400' : 'bg-amber-50 border-amber-400'
+                  }`}>
                     <div>
-                      <div className={`text-xs font-bold ${priority ? (priority === 1 ? 'text-emerald-700' : priority === 2 ? 'text-blue-700' : 'text-amber-700') : 'text-slate-900'}`}>{field}</div>
-                      {priority && <div className={`text-[9px] font-bold mt-0.5 ${priority === 1 ? 'text-emerald-600' : priority === 2 ? 'text-blue-600' : 'text-amber-600'}`}>{PRIORITY[priority].label} · Weight: {PRIORITY[priority].weight}</div>}
+                      <div className={`text-xs font-bold ${p.priority === 1 ? 'text-emerald-700' : p.priority === 2 ? 'text-blue-700' : 'text-amber-700'}`}>{p.field}</div>
+                      <div className={`text-[9px] font-bold mt-0.5 ${p.priority === 1 ? 'text-emerald-600' : p.priority === 2 ? 'text-blue-600' : 'text-amber-600'}`}>
+                        {PRIORITY[p.priority].label} · Weight: {PRIORITY[p.priority].weight}
+                      </div>
                     </div>
                     <div className={`w-6 h-6 rounded-full flex-center flex-shrink-0 ${
-                      priority ? (priority === 1 ? 'bg-emerald-500 text-white' : priority === 2 ? 'bg-blue-500 text-white' : 'bg-amber-500 text-white') : 'bg-gray-100 text-gray-400'
+                      p.priority === 1 ? 'bg-emerald-500 text-white' : p.priority === 2 ? 'bg-blue-500 text-white' : 'bg-amber-500 text-white'
                     }`}>
-                      {priority ? <CheckCircle size={11} /> : <span className="text-[10px] font-bold">+</span>}
+                      <CheckCircle size={11} />
                     </div>
                   </div>
-                );
-              })}
-            </div>
-            <button onClick={handleSavePrefs} disabled={savingPrefs || prefs.length === 0}
-              className="w-full py-2 bg-blue-600 text-white rounded-xl text-xs font-bold hover:bg-blue-700 transition-all cursor-pointer disabled:opacity-50 border-0 flex-center gap-2">
-              {savingPrefs && <Loader size={11} className="animate-spin" />}
-              {savingPrefs ? 'Saving...' : 'Save Preferences'}
-            </button>
+                ))}
+              </div>
+            ) : (
+              <>
+                <p className="text-[10px] text-slate-400 mb-3">Select up to 3 fields ranked by preference. These determine which committee evaluates your group.</p>
+                <div className="flex items-center gap-3 mb-3 text-[10px]">
+                  {[1, 2, 3].map(p => (
+                    <div key={p} className="flex items-center gap-1">
+                      <div className={`w-2.5 h-2.5 rounded-full ${PRIORITY[p].dot}`} />
+                      <span className="font-medium text-slate-500">{PRIORITY[p].label} ({PRIORITY[p].weight})</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="space-y-1.5 mb-3">
+                  {FIELDS.map(field => {
+                    const priority = prefs.find(p => p.field === field)?.priority;
+                    return (
+                      <div key={field} onClick={() => {
+                        const current = prefs.find(p => p.field === field);
+                        if (current) { setPrefs(prefs.filter(p => p.field !== field)); return; }
+                        if (prefs.length >= 3) { toast.error('Max 3 preferences.'); return; }
+                        setPrefs([...prefs, { field, priority: prefs.length + 1 }]);
+                      }}
+                        className={`p-2.5 rounded-xl border-2 cursor-pointer transition-all flex items-center justify-between ${
+                          priority ? (priority === 1 ? 'bg-emerald-50 border-emerald-400' : priority === 2 ? 'bg-blue-50 border-blue-400' : 'bg-amber-50 border-amber-400') : 'bg-white border-gray-200 hover:border-blue-300'
+                        }`}>
+                        <div>
+                          <div className={`text-xs font-bold ${priority ? (priority === 1 ? 'text-emerald-700' : priority === 2 ? 'text-blue-700' : 'text-amber-700') : 'text-slate-900'}`}>{field}</div>
+                          {priority && <div className={`text-[9px] font-bold mt-0.5 ${priority === 1 ? 'text-emerald-600' : priority === 2 ? 'text-blue-600' : 'text-amber-600'}`}>{PRIORITY[priority].label} · Weight: {PRIORITY[priority].weight}</div>}
+                        </div>
+                        <div className={`w-6 h-6 rounded-full flex-center flex-shrink-0 ${
+                          priority ? (priority === 1 ? 'bg-emerald-500 text-white' : priority === 2 ? 'bg-blue-500 text-white' : 'bg-amber-500 text-white') : 'bg-gray-100 text-gray-400'
+                        }`}>
+                          {priority ? <CheckCircle size={11} /> : <span className="text-[10px] font-bold">+</span>}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+                <div className="flex gap-2">
+                  <button onClick={handleSavePrefs} disabled={savingPrefs || prefs.length === 0}
+                    className="flex-1 py-2 bg-blue-600 text-white rounded-xl text-xs font-bold hover:bg-blue-700 transition-all cursor-pointer disabled:opacity-50 border-0 flex-center gap-2">
+                    {savingPrefs && <Loader size={11} className="animate-spin" />}
+                    {savingPrefs ? 'Saving...' : 'Save Preferences'}
+                  </button>
+                  {savedPrefs.length > 0 && (
+                    <button onClick={handleCancelPrefs} className="px-4 py-2 bg-white text-slate-600 rounded-xl text-xs font-bold border border-gray-200 hover:bg-gray-50 transition-all cursor-pointer">
+                      Cancel
+                    </button>
+                  )}
+                </div>
+              </>
+            )}
           </div>
         )}
 

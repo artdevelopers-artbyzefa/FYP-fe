@@ -17,8 +17,8 @@ export const getOfficeDashboardStats = async () => {
   return res.data;
 };
 
-export const getOfficeUsers = async (page = 1, limit = 20) => {
-  const res = await apiClient.get(OFFICE_USERS_API_URL, { params: { page, limit } });
+export const getOfficeUsers = async (page = 1, limit = 20, search = '', status = '') => {
+  const res = await apiClient.get(OFFICE_USERS_API_URL, { params: { page, limit, search, status } });
   return res.data;
 };
 
@@ -59,6 +59,11 @@ export const createOfficeStudent = async (payload) => {
 
 export const deleteOfficeUser = async (id) => {
   const res = await apiClient.delete(OFFICE_USERS_API_URL + '/' + id);
+  return res.data;
+};
+
+export const updateOfficeUser = async (id, payload) => {
+  const res = await apiClient.put(OFFICE_USERS_API_URL + '/' + id, payload);
   return res.data;
 };
 

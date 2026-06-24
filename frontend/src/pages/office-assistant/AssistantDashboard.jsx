@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { getOfficeDashboardStats } from '../../services/office-assistant.service';
-import { ArrowRight, CalendarCheck, FileUp, GitBranch, GraduationCap, Layers, UserPen, UserPlus, Users, FileSignature, Star, Loader2 } from 'lucide-react';
+import { ArrowRight, CalendarCheck, FileUp, GitBranch, GraduationCap, Layers, UserPen, UserPlus, Users, FileSignature, Star } from 'lucide-react';
 
 const iconMap = {
   FileUp, UserPen, UserPlus, FileSignature, CalendarCheck, Star
@@ -196,8 +196,7 @@ const AssistantDashboard = () => {
           <div className="space-y-4">
             {actions.length === 0 ? (
               <div className="text-center py-8 text-gray-400">
-                <Loader2 className="w-6 h-6 mx-auto mb-2 animate-spin" />
-                <p className="text-xs font-medium">No recent activity yet.</p>
+                <p className="text-xs font-medium">No recent activity yet. Actions will appear here as users interact with the system.</p>
               </div>
             ) : (
               actions.map((a, i) => {

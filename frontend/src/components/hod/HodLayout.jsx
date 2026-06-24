@@ -97,14 +97,14 @@ const HodLayout = () => {
     try {
       const formData = new FormData();
       formData.append('avatar', file);
-      await api.post('/user/profile', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
-      toast.success('Profile picture updated.');
-      const updated = await api.get('/auth/refresh-token');
-      if (updated.data?.token) {
+      const res = await api.post('/user/profile', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
+      const picUrl = res.data?.data?.profilepicture;
+      if (picUrl) {
         const stored = JSON.parse(localStorage.getItem('user') || '{}');
-        stored.avatar = URL.createObjectURL(file);
+        stored.profilepicture = picUrl;
         localStorage.setItem('user', JSON.stringify(stored));
       }
+      toast.success('Profile picture updated.');
       window.location.reload();
     } catch (err) {
       toast.error(err?.response?.data?.message || 'Failed to upload picture.');
@@ -233,8 +233,8 @@ const HodLayout = () => {
                 className="flex items-center gap-2 p-1 md:px-2.5 md:py-1.5 bg-blue-50 rounded-xl cursor-pointer hover:bg-blue-100 transition-colors"
               >
                 <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center text-blue-700 flex-shrink-0 overflow-hidden">
-                  {user?.avatar ? (
-                    <img src={user.avatar} alt="" className="w-full h-full object-cover" />
+                  {user?.profilepicture ? (
+                    <img src={user.profilepicture} alt="" className="w-full h-full object-cover" />
                   ) : (
                     <User size={16} />
                   )}
@@ -290,8 +290,8 @@ const HodLayout = () => {
 
             <div className="flex flex-col items-center mb-6">
               <div className="relative w-20 h-20 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 overflow-hidden mb-3">
-                {user?.avatar ? (
-                  <img src={user.avatar} alt="" className="w-full h-full object-cover" />
+                {user?.profilepicture ? (
+                  <img src={user.profilepicture} alt="" className="w-full h-full object-cover" />
                 ) : (
                   <User size={28} />
                 )}

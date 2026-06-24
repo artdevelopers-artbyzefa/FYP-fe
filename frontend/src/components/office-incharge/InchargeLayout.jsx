@@ -102,9 +102,9 @@ const LayoutInner = () => {
     { to: '/office-incharge/committee-oversight', icon: Users, label: 'Committee Oversight', section: 'Overview', locked: true },
     { to: '/office-incharge/faculty-reports', icon: BarChart3, label: 'Faculty Reports', section: 'Overview', locked: true },
     { to: '/office-incharge/student-reports', icon: GraduationCap, label: 'Student Reports', section: 'Overview', locked: true },
-    { to: '/office-incharge/grievances', icon: Scale, label: 'Grievances & SLAs', section: 'Overview' },
     { to: '/office-incharge/rubrics', icon: ClipboardList, label: 'Rubric Builder', section: 'Curriculum & Sessions' },
     { to: '/office-incharge/sessions', icon: Calendar, label: 'Academic Sessions', section: 'Curriculum & Sessions' },
+    { to: '/office-incharge/grievances', icon: Scale, label: 'Grievances & SLAs', section: 'Analytics & Logs' },
     { to: '/office-incharge/audit-log', icon: History, label: 'System Audit Logs', section: 'Analytics & Logs' },
   ];
 

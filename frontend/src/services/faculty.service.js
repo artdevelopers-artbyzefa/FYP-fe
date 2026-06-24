@@ -65,3 +65,8 @@ export const rejectSupervisorRequest = async (groupId) => {
   const res = await apiClient.post(`/faculty/supervisor-requests/${groupId}/reject`);
   return res.data;
 };
+
+export const saveFacultyPreferences = async (preferences) => {
+  const res = await apiClient.post('/faculty/profile/preferences', { preferences });
+  return res.data;
+};

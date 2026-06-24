@@ -3,7 +3,7 @@ import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { showToast as toast } from '../AppToast';
 import { logoutUser, getCurrentUser } from '../../services/auth.service';
 import api from '../../services/api';
-import { Bell, ChevronLeft, ChevronRight, Crown, Gavel, Landmark, LineChart, Lock, LogOut, Menu, PieChart, Presentation, Shield, User, UserCheck, Users, X, Camera, Loader2 } from 'lucide-react';
+import { Bell, ChevronLeft, ChevronRight, Crown, Gavel, Landmark, LineChart, Lock, LogOut, Menu, PieChart, Presentation, Shield, User, UserCheck, Users, X, Camera, Loader2, Mail, KeyRound } from 'lucide-react';
 
 const HodLayout = () => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -11,8 +11,10 @@ const HodLayout = () => {
   const [showNotif, setShowNotif] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
-  const [passForm, setPassForm] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
+  const [passStep, setPassStep] = useState('email'); // email | code
+  const [passForm, setPassForm] = useState({ email: '', code: '', newPassword: '', confirmPassword: '' });
   const [passSubmitting, setPassSubmitting] = useState(false);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const profileRef = useRef(null);
   const navigate = useNavigate();
 
@@ -45,6 +47,21 @@ const HodLayout = () => {
     { to: '/hod/analytics', icon: LineChart, label: 'FYP Analytics', section: 'Department Oversight', locked: true },
   ];
 
+  const handleSendCode = async (e) => {
+    e.preventDefault();
+    if (!passForm.email.trim()) { toast.error('Email is required.'); return; }
+    setPassSubmitting(true);
+    try {
+      await api.post('/auth/forgot-password', { email: passForm.email.trim() });
+      toast.success('Verification code sent to your email.');
+      setPassStep('code');
+    } catch (err) {
+      toast.error(err?.response?.data?.message || 'Failed to send code.');
+    } finally {
+      setPassSubmitting(false);
+    }
+  };
+
   const handlePasswordSubmit = async (e) => {
     e.preventDefault();
     if (passForm.newPassword !== passForm.confirmPassword) {
@@ -57,17 +74,42 @@ const HodLayout = () => {
     }
     setPassSubmitting(true);
     try {
-      await api.post('/auth/change-password', {
-        currentPassword: passForm.currentPassword,
-        newPassword: passForm.newPassword
+      await api.post('/auth/reset-password', {
+        email: passForm.email.trim(),
+        code: passForm.code.trim(),
+        password: passForm.newPassword
       });
       toast.success('Password changed successfully.');
       setShowProfileModal(false);
-      setPassForm({ currentPassword: '', newPassword: '', confirmPassword: '' });
+      setPassStep('email');
+      setPassForm({ email: '', code: '', newPassword: '', confirmPassword: '' });
     } catch (err) {
       toast.error(err?.response?.data?.message || 'Failed to change password.');
     } finally {
       setPassSubmitting(false);
+    }
+  };
+
+  const handleAvatarUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingAvatar(true);
+    try {
+      const formData = new FormData();
+      formData.append('avatar', file);
+      await api.post('/user/profile', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
+      toast.success('Profile picture updated.');
+      const updated = await api.get('/auth/refresh-token');
+      if (updated.data?.token) {
+        const stored = JSON.parse(localStorage.getItem('user') || '{}');
+        stored.avatar = URL.createObjectURL(file);
+        localStorage.setItem('user', JSON.stringify(stored));
+      }
+      window.location.reload();
+    } catch (err) {
+      toast.error(err?.response?.data?.message || 'Failed to upload picture.');
+    } finally {
+      setUploadingAvatar(false);
     }
   };
 
@@ -241,7 +283,7 @@ const HodLayout = () => {
           <div className="bg-white rounded-2xl w-full max-w-md p-6 sm:p-8 shadow-2xl border border-gray-100">
             <div className="flex justify-between items-center mb-6 pb-3 border-b border-gray-100">
               <h3 className="text-lg font-bold text-gray-800">My Profile</h3>
-              <button onClick={() => { setShowProfileModal(false); setPassForm({ currentPassword: '', newPassword: '', confirmPassword: '' }); }} className="w-8 h-8 rounded-lg bg-gray-50 border-0 flex items-center justify-center text-gray-400 hover:bg-gray-100 cursor-pointer transition-all">
+              <button onClick={() => { setShowProfileModal(false); setPassStep('email'); setPassForm({ email: '', code: '', newPassword: '', confirmPassword: '' }); }} className="w-8 h-8 rounded-lg bg-gray-50 border-0 flex items-center justify-center text-gray-400 hover:bg-gray-100 cursor-pointer transition-all">
                 <X className="w-4 h-4" />
               </button>
             </div>
@@ -253,36 +295,57 @@ const HodLayout = () => {
                 ) : (
                   <span>{user?.name ? user.name.split(' ').filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase() : '?'}</span>
                 )}
-                <button className="absolute bottom-0 right-0 w-7 h-7 bg-blue-600 text-white rounded-full flex items-center justify-center cursor-pointer border-2 border-white hover:bg-blue-700 transition-colors">
-                  <Camera size={12} />
-                </button>
+                <label className="absolute bottom-0 right-0 w-7 h-7 bg-blue-600 text-white rounded-full flex items-center justify-center cursor-pointer border-2 border-white hover:bg-blue-700 transition-colors">
+                  {uploadingAvatar ? <Loader2 size={12} className="animate-spin" /> : <Camera size={12} />}
+                  <input type="file" accept="image/*" onChange={handleAvatarUpload} className="hidden" />
+                </label>
               </div>
               <div className="text-sm font-bold text-gray-800">{user?.name || 'HOD'}</div>
               <div className="text-xs text-gray-400">{user?.email || ''}</div>
             </div>
 
             <div className="border-t border-gray-100 pt-5">
-              <h4 className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">Change Password</h4>
-              <form onSubmit={handlePasswordSubmit} className="space-y-4">
-                <div>
-                  <label className="block text-[10px] font-bold text-gray-500 mb-1.5 uppercase tracking-widest">Current Password</label>
-                  <input type="password" value={passForm.currentPassword} onChange={e => setPassForm(f => ({ ...f, currentPassword: e.target.value }))} className="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-primary transition-all" required />
-                </div>
-                <div>
-                  <label className="block text-[10px] font-bold text-gray-500 mb-1.5 uppercase tracking-widest">New Password</label>
-                  <input type="password" value={passForm.newPassword} onChange={e => setPassForm(f => ({ ...f, newPassword: e.target.value }))} className="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-primary transition-all" required />
-                </div>
-                <div>
-                  <label className="block text-[10px] font-bold text-gray-500 mb-1.5 uppercase tracking-widest">Confirm New Password</label>
-                  <input type="password" value={passForm.confirmPassword} onChange={e => setPassForm(f => ({ ...f, confirmPassword: e.target.value }))} className="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-primary transition-all" required />
-                </div>
-                <div className="flex justify-end pt-2">
-                  <button type="submit" disabled={passSubmitting} className="px-6 py-2.5 bg-blue-600 text-white rounded-xl text-xs font-bold shadow-sm hover:bg-blue-700 transition-all cursor-pointer border-0 disabled:opacity-50 flex items-center gap-2">
-                    {passSubmitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
-                    {passSubmitting ? 'Changing...' : 'Update Password'}
-                  </button>
-                </div>
-              </form>
+              <h4 className="text-xs font-bold text-gray-500 mb-4 flex items-center gap-2"><KeyRound size={14} /> Change Password</h4>
+
+              {passStep === 'email' ? (
+                <form onSubmit={handleSendCode} className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-600 mb-1.5">Email Address</label>
+                    <div className="relative">
+                      <Mail size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
+                      <input type="email" value={passForm.email} onChange={e => setPassForm(f => ({ ...f, email: e.target.value }))} placeholder="Enter your email" className="w-full bg-gray-50 border border-gray-100 rounded-xl pl-10 pr-4 py-2.5 text-sm outline-none focus:border-blue-500 transition-all" required />
+                    </div>
+                  </div>
+                  <div className="flex justify-end pt-2">
+                    <button type="submit" disabled={passSubmitting} className="px-6 py-2.5 bg-blue-600 text-white rounded-xl text-xs font-bold shadow-sm hover:bg-blue-700 transition-all cursor-pointer border-0 disabled:opacity-50 flex items-center gap-2">
+                      {passSubmitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+                      {passSubmitting ? 'Sending...' : 'Send Verification Code'}
+                    </button>
+                  </div>
+                </form>
+              ) : (
+                <form onSubmit={handlePasswordSubmit} className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-600 mb-1.5">Verification Code</label>
+                    <input type="text" value={passForm.code} onChange={e => setPassForm(f => ({ ...f, code: e.target.value }))} placeholder="6-digit code from email" className="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-blue-500 transition-all font-mono tracking-widest text-center" required />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-600 mb-1.5">New Password</label>
+                    <input type="password" value={passForm.newPassword} onChange={e => setPassForm(f => ({ ...f, newPassword: e.target.value }))} placeholder="At least 6 characters" className="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-blue-500 transition-all" required />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-600 mb-1.5">Confirm New Password</label>
+                    <input type="password" value={passForm.confirmPassword} onChange={e => setPassForm(f => ({ ...f, confirmPassword: e.target.value }))} placeholder="Re-enter new password" className="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-blue-500 transition-all" required />
+                  </div>
+                  <div className="flex items-center justify-between pt-2">
+                    <button type="button" onClick={() => setPassStep('email')} className="text-xs text-gray-500 hover:text-gray-700 font-medium bg-transparent border-0 cursor-pointer">Back</button>
+                    <button type="submit" disabled={passSubmitting} className="px-6 py-2.5 bg-blue-600 text-white rounded-xl text-xs font-bold shadow-sm hover:bg-blue-700 transition-all cursor-pointer border-0 disabled:opacity-50 flex items-center gap-2">
+                      {passSubmitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+                      {passSubmitting ? 'Changing...' : 'Change Password'}
+                    </button>
+                  </div>
+                </form>
+              )}
             </div>
           </div>
         </div>

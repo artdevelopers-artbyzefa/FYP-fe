@@ -56,7 +56,7 @@ export default function DashboardLayout() {
     ]},
     { section: 'Project Execution', items: [
       { id: 'group_ideas', label: 'Project Idea', icon: Lightbulb, isDropdown: true, subItems: [
-        { id: '/project/new', label: 'New Idea' },
+        { id: '/project/new', label: 'Group Ideas' },
         { id: '/project/group-ideas', label: 'Group Ideas' }
       ]},
       { id: '/task-manager', label: 'Task Manager', icon: ClipboardList }
@@ -70,8 +70,7 @@ export default function DashboardLayout() {
   else if (path.includes('/partners/new')) pageTitle = 'New Request';
   else if (path.includes('/partners/requests')) pageTitle = 'Incoming Requests';
   else if (path.includes('/supervisor-selection')) pageTitle = 'FYP Supervisor';
-  else if (path.includes('/project/new')) pageTitle = 'New Idea';
-  else if (path.includes('/project/group-ideas')) pageTitle = 'Group Ideas';
+  else if (path.includes('/project/new')) pageTitle = 'Group Ideas';
   else if (path.includes('/task-manager')) pageTitle = 'Task Manager';
 
   return (

@@ -175,7 +175,7 @@ export default function Dashboard() {
                 const isAgreed = idea.agreementStatus === 'agreed';
                 const isVoting = idea.agreementStatus === 'voting';
                 return (
-                  <Link key={idea._id} to="/project/group-ideas" className="flex items-center gap-3 p-3 rounded-xl bg-amber-50/50 border border-amber-100 hover:bg-amber-50 transition-colors no-underline">
+                  <Link key={idea._id} to="/project/new" className="flex items-center gap-3 p-3 rounded-xl bg-amber-50/50 border border-amber-100 hover:bg-amber-50 transition-colors no-underline">
                     <div className={`w-9 h-9 rounded-lg flex-center text-xs font-bold flex-shrink-0 ${isAgreed ? 'bg-emerald-100 text-emerald-600' : isVoting ? 'bg-amber-100 text-amber-600' : 'bg-slate-100 text-slate-400'}`}>
                       {isAgreed ? <CheckCircle size={16} /> : isVoting ? <Clock size={16} /> : <Lightbulb size={16} />}
                     </div>
@@ -187,7 +187,7 @@ export default function Dashboard() {
                 );
               })}
               {groupIdeas.length > 3 && (
-                <Link to="/project/group-ideas" className="block text-center text-xs font-bold text-blue-600 hover:text-blue-700 pt-2 no-underline">
+                <Link to="/project/new" className="block text-center text-xs font-bold text-blue-600 hover:text-blue-700 pt-2 no-underline">
                   View all {groupIdeas.length} ideas
                 </Link>
               )}
@@ -199,7 +199,7 @@ export default function Dashboard() {
               </div>
               <p className="text-sm font-bold text-slate-900">No ideas yet</p>
               <p className="text-xs text-slate-500 mt-1 mb-5 max-w-[200px]">Propose an idea and get agreement from all group members.</p>
-              <Link to="/project/group-ideas" className="btn-primary text-xs inline-flex items-center gap-1.5 no-underline">
+              <Link to="/project/new" className="btn-primary text-xs inline-flex items-center gap-1.5 no-underline">
                 <Lightbulb size={14} /> Propose Idea
               </Link>
             </div>

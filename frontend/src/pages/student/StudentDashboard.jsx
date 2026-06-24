@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useOutletContext, Link, Navigate } from 'react-router-dom';
 import { getStudentProfile } from '../../services/student.service';
 import { getGroupIdeas } from '../../services/student.service';
-import { FolderOpen, IdCard, Inbox, Lightbulb, Loader, Lock, Mail, Send, User, Users, UserPlus, ArrowRight, CheckCircle, Clock } from 'lucide-react';
+import { FolderOpen, IdCard, Lightbulb, Loader, Mail, User, Users, UserPlus, ArrowRight, CheckCircle, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.04 } } };
@@ -91,7 +91,7 @@ export default function Dashboard() {
       </motion.div>
 
       {/* Dashboard Widgets Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 items-stretch">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-stretch">
         
         <motion.div variants={item} className="card p-6 flex flex-col">
           <div className="flex items-center gap-3 mb-5 pb-4 border-b border-line">
@@ -129,28 +129,6 @@ export default function Dashboard() {
               </Link>
             </div>
           )}
-        </motion.div>
-
-        <motion.div variants={item} className="card p-6 flex flex-col">
-          <div className="flex items-center gap-3 mb-5 pb-4 border-b border-line">
-            <div className="w-10 h-10 rounded-xl bg-amber-50 flex-center text-amber-600">
-              <Inbox size={18} />
-            </div>
-            <div>
-              <h3 className="text-sm font-bold text-slate-900">Requests</h3>
-              <p className="text-[10px] text-slate-500">Partner invitations</p>
-            </div>
-          </div>
-          <div className="flex-1 flex flex-col items-center justify-center text-center py-6">
-            <div className="w-14 h-14 rounded-full bg-amber-50 flex-center text-amber-400 mb-4">
-              <Send size={24} />
-            </div>
-            <p className="text-sm font-bold text-slate-900">No pending requests</p>
-            <p className="text-xs text-slate-500 mt-1 mb-5 max-w-[200px]">Partner requests and invitations will appear here.</p>
-            <Link to="/partners/requests" className="text-xs font-bold text-blue-600 hover:text-blue-700 hover:underline inline-flex items-center gap-1 bg-transparent border-0 cursor-pointer">
-              View All <ArrowRight size={14} />
-            </Link>
-          </div>
         </motion.div>
 
         <motion.div variants={item} className="card p-6 flex flex-col">

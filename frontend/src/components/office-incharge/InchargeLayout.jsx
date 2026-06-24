@@ -98,9 +98,9 @@ const LayoutInner = () => {
   const navLinks = [
     { to: '/office-incharge/dashboard', icon: Home, label: 'Dashboard', section: 'Overview' },
     { to: '/office-incharge/phases', icon: ToggleRight, label: 'Phase Control', section: 'Overview' },
-    { to: '/office-incharge/supervision-requests', icon: UserPlus, label: 'Supervision Requests', section: 'Overview', locked: true },
-    { to: '/office-incharge/committee-oversight', icon: Users, label: 'Committee Oversight', section: 'Overview', locked: true },
-    { to: '/office-incharge/faculty-reports', icon: BarChart3, label: 'Faculty Reports', section: 'Overview', locked: true },
+    { to: '/office-incharge/supervision-requests', icon: UserPlus, label: 'Supervision Requests', section: 'Overview' },
+    { to: '/office-incharge/committee-oversight', icon: Users, label: 'Committee Oversight', section: 'Overview' },
+    { to: '/office-incharge/faculty-reports', icon: BarChart3, label: 'Faculty Overview', section: 'Overview' },
     { to: '/office-incharge/student-reports', icon: GraduationCap, label: 'Student Reports', section: 'Overview', locked: true },
     { to: '/office-incharge/rubrics', icon: ClipboardList, label: 'Rubric Builder', section: 'Curriculum & Sessions' },
     { to: '/office-incharge/sessions', icon: Calendar, label: 'Academic Sessions', section: 'Curriculum & Sessions' },

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { usePhase } from '../../contexts/PhaseContext';
 import { getInchargeDashboardStats } from '../../services/office-incharge.service';
-import { ArrowRight, Calendar, ClipboardList, GraduationCap, Lock, Scale, ToggleRight, UserPlus, Users, Loader2, CheckCircle } from 'lucide-react';
+import { ArrowRight, BarChart3, Calendar, ClipboardList, GraduationCap, Lock, Scale, ToggleRight, UserPlus, Users, Loader2, CheckCircle } from 'lucide-react';
 
 const InchargeDashboard = () => {
   const navigate = useNavigate();
@@ -19,13 +19,14 @@ const InchargeDashboard = () => {
   }, []);
 
   const quickLinks = [
-    { onClick: () => navigate('/office-incharge/phases'), icon: ToggleRight, title: 'Phase Control', desc: 'Activate or switch academic phases. Registration, Proposal, Development, and more.' },
-    { onClick: () => navigate('/office-incharge/rubrics'), icon: ClipboardList, title: 'Rubric Builder', desc: 'Design proposal & CLO evaluation rubrics with 100% weight validation.' },
-    { onClick: () => navigate('/office-incharge/sessions'), icon: Calendar, title: 'Academic Sessions', desc: 'Configure milestone deadlines and handle FYP-1 repeat registrations.' },
-    { onClick: () => navigate('/office-incharge/grievances'), icon: Scale, title: 'Grievance & SLAs', desc: 'Resolve student disputes, monitor SLA windows, and escalate critical issues.' },
-    { locked: true, icon: Users, title: 'Committee Oversight', desc: 'Monitor active boards, manage head change requests, and trigger re-evaluations.' },
-    { locked: true, icon: UserPlus, title: 'Supervision Requests', desc: 'Review and process faculty supervision requests.' },
-    { locked: true, icon: GraduationCap, title: 'Student Reports', desc: 'View detailed student academic reports.' },
+    { onClick: () => navigate('/office-incharge/phases'), icon: ToggleRight, title: 'Phase Control', desc: 'Activate or switch academic phases.' },
+    { onClick: () => navigate('/office-incharge/rubrics'), icon: ClipboardList, title: 'Rubric Builder', desc: 'Design proposal & CLO evaluation rubrics.' },
+    { onClick: () => navigate('/office-incharge/sessions'), icon: Calendar, title: 'Academic Sessions', desc: 'Configure milestone deadlines.' },
+    { onClick: () => navigate('/office-incharge/supervision-requests'), icon: UserPlus, title: 'Supervision Requests', desc: 'Review and process faculty supervision requests.' },
+    { onClick: () => navigate('/office-incharge/committee-oversight'), icon: Users, title: 'Committee Oversight', desc: 'Monitor active boards and manage head change requests.' },
+    { onClick: () => navigate('/office-incharge/faculty-reports'), icon: BarChart3, title: 'Faculty Overview', desc: 'View faculty reports and performance.' },
+    { onClick: () => navigate('/office-incharge/grievances'), icon: Scale, title: 'Grievance & SLAs', desc: 'Resolve student disputes and monitor SLA windows.' },
+    { locked: true, icon: GraduationCap, title: 'Student Reports', desc: 'Locked during Phase 2.' },
   ];
 
   return (

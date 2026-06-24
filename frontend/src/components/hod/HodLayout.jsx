@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { showToast as toast } from '../AppToast';
 import { logoutUser, getCurrentUser } from '../../services/auth.service';
-import { Bell, ChevronLeft, ChevronRight, Crown, Gavel, Landmark, LineChart, LogOut, Menu, PieChart, Presentation, Shield, Users, UserCheck, X } from 'lucide-react';
+import { Bell, ChevronLeft, ChevronRight, Crown, Gavel, Landmark, LineChart, Lock, LogOut, Menu, PieChart, Presentation, Shield, Users, UserCheck, X } from 'lucide-react';
 
 const HodLayout = () => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -23,12 +23,12 @@ const HodLayout = () => {
   const navLinks = [
     { to: '/hod/dashboard', icon: PieChart, label: 'Dashboard', section: 'Executive' },
     { to: '/hod/escalations', icon: Gavel, label: 'Escalated Grievances', section: 'Grievance & Escalations' },
-    { to: '/hod/faculty-oversight', icon: Presentation, label: 'Faculty Workload', section: 'Department Oversight' },
-    { to: '/hod/governance', icon: Landmark, label: 'Governance Oversight', section: 'Department Oversight' },
+    { to: '/hod/faculty-oversight', icon: Presentation, label: 'Faculty Workload', section: 'Department Oversight', locked: true },
+    { to: '/hod/governance', icon: Landmark, label: 'Oversight', section: 'Department Oversight', locked: true },
     { to: '/hod/students', icon: Users, label: 'Students', section: 'Department Oversight' },
-    { to: '/hod/committees', icon: Shield, label: 'FYP Committees', section: 'Department Oversight' },
+    { to: '/hod/committees', icon: Shield, label: 'FYP Committees', section: 'Department Oversight', locked: true },
     { to: '/hod/faculty', icon: UserCheck, label: 'Faculty', section: 'Department Oversight' },
-    { to: '/hod/analytics', icon: LineChart, label: 'FYP Analytics', section: 'Department Oversight' },
+    { to: '/hod/analytics', icon: LineChart, label: 'FYP Analytics', section: 'Department Oversight', locked: true },
   ];
 
   return (
@@ -64,6 +64,17 @@ const HodLayout = () => {
                     {link.section}
                   </div>
                 )}
+                {link.locked ? (
+                  <div className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-300 cursor-not-allowed select-none ${isCollapsed ? 'justify-center w-[44px] h-[44px] mx-auto p-[10px]' : ''}`} title={`${link.label} — locked during Phase 1`}>
+                    {React.createElement(link.icon, { size: 16, className: "flex-shrink-0" })}
+                    {!isCollapsed && (
+                      <>
+                        <span className="text-sm font-medium whitespace-nowrap overflow-hidden flex-1">{link.label}</span>
+                        <Lock size={12} className="flex-shrink-0 text-slate-300" />
+                      </>
+                    )}
+                  </div>
+                ) : (
                 <NavLink 
                   to={link.to} 
                   onClick={() => setIsMobileOpen(false)}
@@ -72,6 +83,7 @@ const HodLayout = () => {
                   {React.createElement(link.icon, { size: 16, className: "flex-shrink-0" })}
                   {!isCollapsed && <span className="text-sm font-medium whitespace-nowrap overflow-hidden flex-1">{link.label}</span>}
                 </NavLink>
+                )}
               </React.Fragment>
             );
           })}

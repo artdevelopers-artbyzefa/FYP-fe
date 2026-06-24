@@ -59,3 +59,13 @@ export const updateHodFaculty = async (id, payload) => {
   const res = await apiClient.put(`/hod/faculty/${id}`, payload);
   return res.data;
 };
+
+export const updateHodStudent = async (id, payload) => {
+  const res = await apiClient.put(`/hod/students/${id}`, payload);
+  return res.data;
+};
+
+export const deleteHodStudent = async (id) => {
+  const res = await apiClient.delete(`/hod/students/${id}`);
+  return res.data;
+};

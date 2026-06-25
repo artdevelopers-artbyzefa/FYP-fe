@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getFacultySupervisedGroups } from '../../services/faculty.service';
-import { Users, FileText, TrendingUp, Loader2, AlertCircle, ArrowLeft } from 'lucide-react';
+import { Users, FileText, TrendingUp, Loader2, AlertCircle, ArrowLeft, Lightbulb, ThumbsUp, MessageSquare } from 'lucide-react';
 
 const STATUS_MAP = {
   pending_approval: 'Pending Approval', approved: 'Approved', active: 'Active',
@@ -60,6 +60,35 @@ const FacultySupervision = () => {
                   </div>
                 ))}
               </div>
+
+              {g.acceptedIdea && (
+                <div>
+                  <h3 className="text-sm font-bold text-slate-900 mb-2 flex items-center gap-2"><Lightbulb size={15} /> Accepted Project Idea</h3>
+                  <div className="p-4 rounded-xl border border-emerald-200 bg-emerald-50/50 space-y-2">
+                    <div className="flex items-center gap-2">
+                      <ThumbsUp size={14} className="text-emerald-600" />
+                      <p className="text-sm font-bold text-slate-900">{g.acceptedIdea.title}</p>
+                    </div>
+                    {g.acceptedIdea.description && <p className="text-xs text-slate-600 leading-relaxed">{g.acceptedIdea.description}</p>}
+                    {g.acceptedIdea.techStack && (
+                      <div className="flex flex-wrap gap-1.5">
+                        {g.acceptedIdea.techStack.split(',').map((t, i) => (
+                          <span key={i} className="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-emerald-100 text-emerald-700 border border-emerald-200">{t.trim()}</span>
+                        ))}
+                      </div>
+                    )}
+                    {g.acceptedIdea.supervisorFeedback && (
+                      <div className="p-2.5 rounded-lg bg-blue-50 border border-blue-100 flex items-start gap-2">
+                        <MessageSquare size={12} className="text-blue-600 mt-0.5 shrink-0" />
+                        <div>
+                          <p className="text-[10px] font-bold text-blue-700 mb-0.5">Your Feedback:</p>
+                          <p className="text-xs text-slate-700">{g.acceptedIdea.supervisorFeedback}</p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
 
               {g.recentLogs?.length > 0 && (
                 <div>

@@ -1,14 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { getAvailableSupervisors, requestSupervisor, cancelSupervisorRequest, getStudentGroup } from '../../services/student.service';
+import { getAvailableSupervisors, requestSupervisor, cancelSupervisorRequest, getStudentGroup, getGroupIdeas } from '../../services/student.service';
 import { showToast as toast } from '../../components/AppToast';
-import { Check, GraduationCap, Loader, MessageSquare, Search, Send, Trash2, UserCheck, X, ThumbsUp, ThumbsDown, Clock } from 'lucide-react';
+import { Check, GraduationCap, Loader, MessageSquare, Search, Send, Trash2, UserCheck, X, ThumbsUp, ThumbsDown, Clock, Lightbulb, CheckCircle, AlertCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.04 } } };
 const item = { hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } };
 
 const STATUS_MAP = {
+  voting: { label: 'In Voting', color: 'bg-blue-50 text-blue-700 border-blue-200', icon: ThumbsUp },
   agreed: { label: 'Pending Review', color: 'bg-amber-50 text-amber-700 border-amber-200', icon: Clock },
+  voting_rejected: { label: 'Voting Rejected', color: 'bg-gray-50 text-gray-500 border-gray-200', icon: X },
   supervisor_approved: { label: 'Approved', color: 'bg-emerald-50 text-emerald-700 border-emerald-200', icon: ThumbsUp },
   supervisor_rejected: { label: 'Rejected', color: 'bg-rose-50 text-rose-600 border-rose-200', icon: ThumbsDown },
 };
@@ -20,12 +22,15 @@ export default function SupervisorSelection() {
   const [requesting, setRequesting] = useState({});
   const [group, setGroup] = useState(null);
   const [loadingData, setLoadingData] = useState(true);
+  const [ideas, setIdeas] = useState([]);
+  const [filter, setFilter] = useState('all');
   const debounceRef = useRef(null);
 
   useEffect(() => {
     Promise.all([
       getStudentGroup().then(d => setGroup(d?.data || null)).catch(() => {}),
-      getAvailableSupervisors('').then(d => setResults(Array.isArray(d) ? d : [])).catch(() => {})
+      getAvailableSupervisors('').then(d => setResults(Array.isArray(d) ? d : [])).catch(() => {}),
+      getGroupIdeas().then(r => setIdeas(r?.data || [])).catch(() => {})
     ]).finally(() => setLoadingData(false));
   }, []);
 
@@ -101,36 +106,6 @@ export default function SupervisorSelection() {
                 </div>
               </div>
             </div>
-
-            {idea && (
-              <div className="p-4 rounded-xl border border-line bg-white">
-                <div className="flex items-center gap-2 mb-3">
-                  <MessageSquare size={15} className="text-blue-600" />
-                  <h3 className="text-xs font-bold text-slate-700">Supervisor Idea Remarks</h3>
-                </div>
-                <div className="mb-2">
-                  <p className="text-sm font-bold text-slate-900">{idea.title}</p>
-                  {idea.description && <p className="text-xs text-slate-500 mt-1">{idea.description}</p>}
-                </div>
-                {idea.agreementStatus && (
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className={`flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-lg border ${(STATUS_MAP[idea.agreementStatus] || {}).color || 'bg-gray-50 text-gray-500 border-gray-200'}`}>
-                      {(STATUS_MAP[idea.agreementStatus] || {}).icon && React.createElement((STATUS_MAP[idea.agreementStatus] || {}).icon, { size: 11 })}
-                      {(STATUS_MAP[idea.agreementStatus] || {}).label || idea.agreementStatus}
-                    </span>
-                  </div>
-                )}
-                {idea.supervisorFeedback && (
-                  <div className="p-3 rounded-lg bg-blue-50/50 border border-blue-100">
-                    <p className="text-[10px] font-bold text-blue-700 mb-1">Supervisor Feedback:</p>
-                    <p className="text-xs text-slate-700">{idea.supervisorFeedback}</p>
-                  </div>
-                )}
-                {!idea.supervisorFeedback && idea.agreementStatus === 'supervisor_approved' && (
-                  <p className="text-xs text-slate-400 italic">No additional remarks from supervisor.</p>
-                )}
-              </div>
-            )}
           </>
         )}
 
@@ -195,6 +170,58 @@ export default function SupervisorSelection() {
               )}
             </div>
           </>
+        )}
+
+        {ideas.length > 0 && (
+          <div className="mt-6 pt-6 border-t border-line">
+            <h3 className="text-sm font-bold text-slate-900 mb-3">All Group Ideas</h3>
+            {(() => {
+              const filtered = filter === 'all' ? ideas : ideas.filter(i => i.agreementStatus === filter);
+              return (<>
+              <div className="flex gap-2 flex-wrap mb-4">
+                {[
+                  { key: 'all', label: `All (${ideas.length})` },
+                  ...Object.entries(STATUS_MAP).map(([k, v]) => ({ key: k, label: `${v.label} (${ideas.filter(i => i.agreementStatus === k).length || 0})` }))
+                ].map(f => (
+                  <button key={f.key} onClick={() => setFilter(f.key)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer border ${
+                      filter === f.key ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-slate-600 border-gray-200 hover:bg-blue-50'
+                    }`}>{f.label}</button>
+                ))}
+              </div>
+              {filtered.length === 0 ? (
+                <div className="text-center py-6">
+                  <Lightbulb className="w-8 h-8 mx-auto mb-2 text-slate-300" />
+                  <p className="text-xs text-slate-500">No ideas in this category.</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {filtered.map(ideaItem => {
+                  const sm = STATUS_MAP[ideaItem.agreementStatus] || STATUS_MAP.agreed;
+                  const Icon = sm.icon;
+                  return (
+                    <div key={ideaItem._id} className="p-4 rounded-xl border border-line bg-white">
+                      <div className="flex items-start justify-between gap-3 mb-2">
+                        <p className="text-sm font-bold text-slate-900">{ideaItem.title}</p>
+                        <span className={`flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-lg border shrink-0 ${sm.color}`}>
+                          <Icon size={11} /> {sm.label}
+                        </span>
+                      </div>
+                      {ideaItem.description && <p className="text-xs text-slate-500 mb-2">{ideaItem.description}</p>}
+                      {ideaItem.supervisorFeedback && (
+                        <div className="p-2 rounded-lg bg-blue-50/50 border border-blue-100">
+                          <p className="text-[10px] font-bold text-blue-700 mb-0.5">Supervisor Feedback:</p>
+                          <p className="text-xs text-slate-700">{ideaItem.supervisorFeedback}</p>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+            </>);
+            })()}
+          </div>
         )}
       </motion.div>
     </motion.div>

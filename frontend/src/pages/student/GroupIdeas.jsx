@@ -20,11 +20,13 @@ export default function GroupIdeas() {
   const [group, setGroup] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
-  const [newIdea, setNewIdea] = useState({ title: '', description: '', techStack: '' });
+  const [newIdea, setNewIdea] = useState({ title: '', description: '', techStack: [] });
+  const [techInput, setTechInput] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [voting, setVoting] = useState({});
   const [generating, setGenerating] = useState(false);
   const [aiRemaining, setAiRemaining] = useState(null);
+  const [filter, setFilter] = useState('all');
   const formRef = useRef(null);
 
   useEffect(() => {
@@ -52,9 +54,14 @@ export default function GroupIdeas() {
     if (!newIdea.title.trim()) return;
     setSubmitting(true);
     try {
-      const res = await submitGroupIdea(newIdea);
+      const formData = new FormData();
+      formData.append('title', newIdea.title);
+      formData.append('description', newIdea.description);
+      formData.append('techStack', newIdea.techStack.join(', '));
+      if (newIdea.documentFile) formData.append('document', newIdea.documentFile);
+      const res = await submitGroupIdea(formData);
       toast.success(res.message);
-      setNewIdea({ title: '', description: '', techStack: '' });
+      setNewIdea({ title: '', description: '', techStack: [], documentFile: null });
       setShowForm(false);
       const ideasRes = await getGroupIdeas();
       setIdeas(ideasRes?.data || []);
@@ -183,13 +190,46 @@ export default function GroupIdeas() {
             </div>
             <div>
               <label className="block text-sm font-bold text-slate-900 mb-1.5">Technology Stack</label>
-              <input
-                type="text"
-                value={newIdea.techStack}
-                onChange={e => setNewIdea({ ...newIdea, techStack: e.target.value })}
-                className="w-full bg-white border border-line rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600/20"
-                placeholder="e.g., React, Node.js, MongoDB"
-              />
+              <div className="flex flex-wrap gap-1.5 mb-2">
+                {newIdea.techStack.map((tag, i) => (
+                  <span key={i} className="flex items-center gap-1 bg-blue-100 text-blue-700 text-xs font-bold px-2.5 py-1 rounded-lg border border-blue-200">
+                    {tag}
+                    <button type="button" onClick={() => setNewIdea({ ...newIdea, techStack: newIdea.techStack.filter((_, j) => j !== i) })}
+                      className="bg-transparent border-0 p-0 text-blue-500 hover:text-blue-700 cursor-pointer text-xs">×</button>
+                  </span>
+                ))}
+              </div>
+              <div className="flex gap-2">
+                <input type="text" value={techInput} onChange={e => setTechInput(e.target.value)}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter' || e.key === ',') {
+                      e.preventDefault();
+                      const val = techInput.trim();
+                      if (val && !newIdea.techStack.includes(val)) {
+                        setNewIdea({ ...newIdea, techStack: [...newIdea.techStack, val] });
+                      }
+                      setTechInput('');
+                    }
+                  }}
+                  className="flex-1 bg-white border border-line rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600/20"
+                  placeholder="Type a technology and press Enter or comma to add..." />
+                <button type="button" onClick={() => {
+                    const val = techInput.trim();
+                    if (val && !newIdea.techStack.includes(val)) {
+                      setNewIdea({ ...newIdea, techStack: [...newIdea.techStack, val] });
+                    }
+                    setTechInput('');
+                  }} disabled={!techInput.trim()}
+                  className="px-4 py-2.5 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700 transition-all cursor-pointer disabled:opacity-50 border-0">Add</button>
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-bold text-slate-900 mb-1.5">Proposal Document (PDF)</label>
+              <input type="file" accept=".pdf" onChange={e => {
+                const file = e.target.files?.[0];
+                if (file && file.size > 10 * 1024 * 1024) { toast.error('File too large (max 10MB).'); return; }
+                setNewIdea({ ...newIdea, documentFile: file });
+              }} className="w-full bg-white border border-line rounded-xl px-4 py-2.5 text-sm file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-blue-50 file:text-blue-700 file:text-xs file:font-bold cursor-pointer" />
             </div>
             <div className="flex justify-end gap-3 pt-2">
               <button
@@ -212,17 +252,29 @@ export default function GroupIdeas() {
         </motion.div>
       )}
 
-      {ideas.length === 0 ? (
+      <div className="flex gap-2 flex-wrap">
+        {[
+          { key: 'all', label: `All (${ideas.length})`, color: 'bg-slate-500' },
+          ...Object.entries(statusConfig).map(([k, v]) => ({ key: k, label: `${v.label} (${ideas.filter(i => i.agreementStatus === k).length || 0})`, color: v.class.split(' ')[0] }))
+        ].map(f => (
+          <button key={f.key} onClick={() => setFilter(f.key)}
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer border ${
+              filter === f.key ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-slate-600 border-gray-200 hover:bg-blue-50'
+            }`}>{f.label}</button>
+        ))}
+      </div>
+
+      {(filter === 'all' ? ideas : ideas.filter(i => i.agreementStatus === filter)).length === 0 ? (
         <motion.div variants={item} className="bg-white rounded-2xl border border-line shadow-card p-10 text-center">
           <div className="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
             <Lightbulb className="text-slate-300" size={28} />
           </div>
-          <h3 className="text-lg font-bold text-slate-900 mb-2">No Ideas Yet</h3>
+          <h3 className="text-lg font-bold text-slate-900 mb-2">No {filter === 'all' ? '' : `${statusConfig[filter]?.label || ''} `}Ideas</h3>
           <p className="text-sm text-slate-500 max-w-sm mx-auto">Propose the first idea for your group. All members must agree before it goes to your supervisor.</p>
         </motion.div>
       ) : (
         <div className="space-y-4">
-          {ideas.map(idea => {
+          {(filter === 'all' ? ideas : ideas.filter(i => i.agreementStatus === filter)).map(idea => {
             const StatusIcon = statusConfig[idea.agreementStatus]?.icon || Clock;
             const agreeCount = idea.votes?.filter(v => v.decision === 'agree').length || 0;
             const disagreeCount = idea.votes?.filter(v => v.decision === 'disagree').length || 0;

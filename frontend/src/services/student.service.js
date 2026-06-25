@@ -103,3 +103,18 @@ export const voteOnGroupIdea = async (id, decision) => {
   const res = await apiClient.post(`${STUDENT_VOTE_GROUP_IDEA_URL}/${id}/vote`, { decision });
   return res.data;
 };
+
+export const getStudentPastProjects = async (page = 1, limit = 20, search = '', session = '', domain = '', tech = '') => {
+  const res = await apiClient.get('/student/past-projects', { params: { page, limit, search, session, domain, tech } });
+  return res.data;
+};
+
+export const getStudentSuggestions = async () => {
+  const res = await apiClient.get('/student/suggestions');
+  return res.data;
+};
+
+export const respondToSuggestion = async (id, action) => {
+  const res = await apiClient.post(`/student/suggestions/${id}/respond`, { action });
+  return res.data;
+};

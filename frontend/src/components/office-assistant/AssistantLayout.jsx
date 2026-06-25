@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { showToast as toast } from '../AppToast';
 import { logoutUser, getCurrentUser } from '../../services/auth.service';
-import { Award, Bell, ChevronLeft, ChevronRight, File, GitBranch, GraduationCap, Home, Layers, Lock, LogOut, Megaphone, Menu, Presentation, Shield, User, UserCog, Users, X } from 'lucide-react';
+import { Archive, Award, Bell, ChevronLeft, ChevronRight, File, GitBranch, GraduationCap, Home, Layers, Lock, LogOut, Megaphone, Menu, Presentation, Shield, User, UserCog, Users, X } from 'lucide-react';
 
 const AssistantLayout = () => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -27,6 +27,7 @@ const AssistantLayout = () => {
     { to: '/office-assistant/faculty', icon: Presentation, label: 'Faculty Profiles', section: 'User & Account' },
     { to: '/office-assistant/projects', icon: GitBranch, label: 'Project Directory', section: 'FYP Workflow', locked: true },
     { to: '/office-assistant/content', icon: File, label: 'Content & Templates', section: 'FYP Workflow', locked: true },
+    { to: '/office-assistant/past-projects', icon: Archive, label: 'Past FYP Projects', section: 'FYP Workflow' },
     { to: '/office-assistant/proposal-committee', icon: Users, label: 'Proposal Committees', section: 'Committees & Evaluators', locked: true },
     { to: '/office-assistant/eval-committee', icon: Layers, label: 'Evaluation Committees', section: 'Committees & Evaluators', locked: true },
     { to: '/office-assistant/external', icon: User, label: 'Industry Supervisors', section: 'Committees & Evaluators', locked: true },

@@ -19,6 +19,8 @@ import FYPGroup from "../pages/student/FYPGroup";
 import SupervisorSelection from "../pages/student/SupervisorSelection";
 import TaskManager from "../pages/student/TaskManager";
 import GroupIdeas from "../pages/student/GroupIdeas";
+import StudentPastProjects from "../pages/student/StudentPastProjects";
+import StudentSuggestions from "../pages/student/StudentSuggestions";
 import HodLayout from '../components/hod/HodLayout';
 import HodDashboard from '../pages/hod/HodDashboard';
 import HodEscalations from '../pages/hod/HodEscalations';
@@ -40,6 +42,7 @@ import AssistantProposalCommittees from '../pages/office-assistant/AssistantProp
 import AssistantEvalCommittees from '../pages/office-assistant/AssistantEvalCommittees';
 import AssistantExternal from '../pages/office-assistant/AssistantExternal';
 import AssistantResults from '../pages/office-assistant/AssistantResults';
+import AssistantPastProjects from '../pages/office-assistant/AssistantPastProjects';
 import FacultyLayout from '../components/faculty/FacultyLayout';
 import FacultyDashboard from '../pages/faculty/FacultyDashboard';
 import FacultyProfile from '../pages/faculty/FacultyProfile';
@@ -50,6 +53,7 @@ import FacultySupervision from '../pages/faculty/FacultySupervision';
 import FacultyMessaging from '../pages/faculty/FacultyMessaging';
 import FacultyEvaluations from '../pages/faculty/FacultyEvaluations';
 import FacultyHeadDuties from '../pages/faculty/FacultyHeadDuties';
+import FacultySuggestions from '../pages/faculty/FacultySuggestions';
 import InchargeLayout from '../components/office-incharge/InchargeLayout';
 import InchargeDashboard from '../pages/office-incharge/InchargeDashboard';
 import InchargePhaseControl from '../pages/office-incharge/InchargePhaseControl';
@@ -99,6 +103,8 @@ const AppRoutes = () => {
                 <Route path="/supervisor-selection" element={<SupervisorSelection />} />
                 <Route path="/project/new" element={<GroupIdeas />} />
                 <Route path="/task-manager" element={<TaskManager />} />
+                <Route path="/past-projects" element={<StudentPastProjects />} />
+                <Route path="/suggestions" element={<StudentSuggestions />} />
             </Route>
 
             {/* HOD Portal Routes */}
@@ -128,6 +134,7 @@ const AppRoutes = () => {
                 <Route path="eval-committee" element={<AssistantEvalCommittees />} />
                 <Route path="external" element={<AssistantExternal />} />
                 <Route path="results" element={<AssistantResults />} />
+                <Route path="past-projects" element={<AssistantPastProjects />} />
             </Route>
 
             {/* Faculty Supervisor Layout Routes */}
@@ -142,6 +149,7 @@ const AppRoutes = () => {
                 <Route path="messaging" element={<FacultyMessaging />} />
                 <Route path="evaluations" element={<FacultyEvaluations />} />
                 <Route path="head-duties" element={<FacultyHeadDuties />} />
+                <Route path="suggestions" element={<FacultySuggestions />} />
             </Route>
 
             {/* FYP Office In-charge Layout Routes */}

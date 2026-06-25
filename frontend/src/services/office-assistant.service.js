@@ -9,7 +9,8 @@ import {
   OFFICE_EXTERNAL_API_URL,
   OFFICE_RESULTS_API_URL,
   OFFICE_CREATE_STUDENT_API_URL,
-  OFFICE_CREATE_FACULTY_API_URL
+  OFFICE_CREATE_FACULTY_API_URL,
+  OFFICE_PAST_PROJECTS_API_URL
 } from '../utils/constants/api-url.constant';
 
 export const getOfficeDashboardStats = async () => {
@@ -94,5 +95,25 @@ export const sendFacultyInvite = async (id) => {
 
 export const deleteOfficeFaculty = async (id) => {
   const res = await apiClient.delete(OFFICE_FACULTY_API_URL + '/' + id);
+  return res.data;
+};
+
+export const getPastProjects = async (page = 1, limit = 20, search = '', session = '', domain = '') => {
+  const res = await apiClient.get(OFFICE_PAST_PROJECTS_API_URL, { params: { page, limit, search, session, domain } });
+  return res.data;
+};
+
+export const createPastProject = async (payload) => {
+  const res = await apiClient.post(OFFICE_PAST_PROJECTS_API_URL, payload);
+  return res.data;
+};
+
+export const updatePastProject = async (id, payload) => {
+  const res = await apiClient.put(OFFICE_PAST_PROJECTS_API_URL + '/' + id, payload);
+  return res.data;
+};
+
+export const deletePastProject = async (id) => {
+  const res = await apiClient.delete(OFFICE_PAST_PROJECTS_API_URL + '/' + id);
   return res.data;
 };

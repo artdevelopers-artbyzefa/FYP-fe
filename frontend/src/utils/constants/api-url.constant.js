@@ -33,6 +33,8 @@ export const STUDENT_REQUEST_SUPERVISOR_URL = '/student/supervisors/request';
 
 export const STUDENT_SUBMIT_IDEA_URL = '/student/ideas/submit';
 export const STUDENT_TASKS_API_URL = '/student/tasks';
+export const STUDENT_PAST_PROJECTS_API_URL = '/student/past-projects';
+export const STUDENT_SUGGESTIONS_API_URL = '/student/suggestions';
 export const STUDENT_SUBMIT_GROUP_IDEA_URL = '/student/ideas/group/submit';
 export const STUDENT_GET_GROUP_IDEAS_URL = '/student/ideas/group';
 export const STUDENT_VOTE_GROUP_IDEA_URL = '/student/ideas/group';
@@ -64,6 +66,7 @@ export const OFFICE_EXTERNAL_API_URL = '/office-assistant/external';
 export const OFFICE_RESULTS_API_URL = '/office-assistant/results';
 export const OFFICE_CREATE_STUDENT_API_URL = '/office-assistant/students';
 export const OFFICE_CREATE_FACULTY_API_URL = '/office-assistant/faculty';
+export const OFFICE_PAST_PROJECTS_API_URL = '/office-assistant/past-projects';
 
 /**
  * Faculty Supervisor Endpoints
@@ -77,6 +80,8 @@ export const FACULTY_MESSAGING_API_URL = '/faculty/messaging';
 export const FACULTY_EVALUATIONS_API_URL = '/faculty/evaluations';
 export const FACULTY_HEAD_DUTIES_API_URL = '/faculty/head-duties';
 export const FACULTY_SUPERVISOR_REQUESTS_API_URL = '/faculty/supervisor-requests';
+export const FACULTY_SUGGEST_IDEA_API_URL = '/faculty/suggest-idea';
+export const FACULTY_SUGGESTIONS_API_URL = '/faculty/suggestions';
 
 /**
  * FYP Office In-charge Endpoints

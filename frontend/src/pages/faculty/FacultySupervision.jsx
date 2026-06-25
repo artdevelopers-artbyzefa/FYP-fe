@@ -109,28 +109,33 @@ const FacultySupervision = () => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {groups.map(g => (
-            <div key={g.groupId} onClick={() => openDetail(g)} className="card p-5 cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-bold text-slate-900 text-base truncate">{g.name || `Group ${g.groupId?.toString().substring(0, 4)}`}</h3>
-                  <p className="text-xs text-slate-500 truncate mt-0.5">{g.title}</p>
+            <div key={g.groupId} className="card p-5 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+              <div onClick={() => openDetail(g)} className="cursor-pointer">
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-bold text-slate-900 text-base truncate">{g.name || `Group ${g.groupId?.toString().substring(0, 4)}`}</h3>
+                    <p className="text-xs text-slate-500 truncate mt-0.5">{g.title}</p>
+                  </div>
+                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-lg border ml-2 ${
+                    g.status === 'active' ? 'badge-emerald' : g.status === 'approved' ? 'badge-blue' : g.status === 'completed' ? 'bg-purple-50 text-purple-700 border-purple-200' : 'badge-slate'
+                  }`}>{STATUS_MAP[g.status] || g.status}</span>
                 </div>
-                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-lg border ml-2 ${
-                  g.status === 'active' ? 'badge-emerald' : g.status === 'approved' ? 'badge-blue' : g.status === 'completed' ? 'bg-purple-50 text-purple-700 border-purple-200' : 'badge-slate'
-                }`}>{STATUS_MAP[g.status] || g.status}</span>
+                <div className="flex items-center gap-3 text-xs text-slate-500">
+                  <span className="flex items-center gap-1"><Users size={12} /> {g.members.length}</span>
+                  <span className="flex items-center gap-1"><TrendingUp size={12} /> {g.progress}%</span>
+                  <span className="flex items-center gap-1"><FileText size={12} /> {g.approvedLogs}/{g.totalLogs}</span>
+                </div>
+                <div className="w-full bg-slate-100 rounded-full h-1.5 mt-3">
+                  <div className="bg-blue-600 h-1.5 rounded-full transition-all" style={{ width: `${g.progress}%` }} />
+                </div>
               </div>
-              <div className="flex items-center gap-3 text-xs text-slate-500">
-                <span className="flex items-center gap-1"><Users size={12} /> {g.members.length}</span>
-                <span className="flex items-center gap-1"><TrendingUp size={12} /> {g.progress}%</span>
-                <span className="flex items-center gap-1"><FileText size={12} /> {g.approvedLogs}/{g.totalLogs}</span>
-              </div>
-              <div className="w-full bg-slate-100 rounded-full h-1.5 mt-3">
-                <div className="bg-blue-600 h-1.5 rounded-full transition-all" style={{ width: `${g.progress}%` }} />
-              </div>
+
             </div>
           ))}
         </div>
       )}
+
+
     </div>
   );
 };

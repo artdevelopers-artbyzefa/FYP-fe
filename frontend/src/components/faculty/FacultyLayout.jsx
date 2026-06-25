@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { showToast as toast } from '../AppToast';
 import { logoutUser, getCurrentUser } from '../../services/auth.service';
-import { Bell, Calendar, ChevronLeft, ChevronRight, Crown, FileSignature, GitBranch, Landmark, Lightbulb, Lock, LogOut, Menu, Presentation, Star, Tags, X } from 'lucide-react';
+import { Bell, Calendar, ChevronLeft, ChevronRight, Crown, FileSignature, GitBranch, Landmark, Lightbulb, Lightbulb as IdeaIcon, Lock, LogOut, Menu, Presentation, Star, Tags, X } from 'lucide-react';
 
 const FacultyLayout = () => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -27,6 +27,7 @@ const FacultyLayout = () => {
     { to: '/faculty/proposals', icon: FileSignature, label: 'Supervision Requests', section: 'FYP Management' },
     { to: '/faculty/group-proposals', icon: Lightbulb, label: 'Group Proposals', section: 'FYP Management' },
     { to: '/faculty/supervision', icon: GitBranch, label: 'Supervised Groups', section: 'FYP Management' },
+    { to: '/faculty/suggestions', icon: IdeaIcon, label: 'Suggested Ideas', section: 'FYP Management' },
     { to: '/faculty/evaluations', icon: Star, label: 'Committee Evaluations', section: 'FYP Management', locked: true },
     { to: '/faculty/head-duties', icon: Crown, label: 'Head Management', section: 'FYP Management', locked: true },
   ];

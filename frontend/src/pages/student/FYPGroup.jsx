@@ -1,8 +1,9 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import { searchPartners, sendPartnerRequest, getSentRequests, getIncomingRequests, respondPartnerRequest, getStudentGroup, saveStudentGroupPreferences } from '../../services/student.service';
 import { showToast as toast } from '../../components/AppToast';
-import { Check, Clock, Crown, Loader, Pencil, Search, Send, Sparkles, UserCheck, UserX, Users, X, CheckCircle } from 'lucide-react';
+import { Check, Clock, Crown, Loader, Pencil, Search, Send, Sparkles, UserCheck, UserX, Users, X, CheckCircle, ShieldBan } from 'lucide-react';
 import { motion } from 'framer-motion';
+import PhaseContext from '../../contexts/PhaseContext';
 
 const FIELDS = [
   'Web Development', 'Game Development',
@@ -114,6 +115,9 @@ export default function FYPGroup() {
 
   if (loadingData) return <div className="flex items-center justify-center min-h-[60vh]"><Loader className="animate-spin text-slate-900 text-3xl" /></div>;
 
+  const phaseCtx = useContext(PhaseContext);
+  const currentPhase = phaseCtx?.currentPhase;
+  const isPhase2OrLater = currentPhase && (currentPhase.key === 'phase2_development' || currentPhase.key === 'phase2_defense');
   const isFull = group && group.members?.length >= 3;
 
   const statusBadge = (s) => {
@@ -133,7 +137,7 @@ export default function FYPGroup() {
       <motion.div variants={item} className="bg-white rounded-2xl border border-line shadow-card p-6">
         <h2 className="text-xl font-bold text-slate-900 mb-2">FYP Group</h2>
         <p className="text-sm text-slate-900 mb-6">
-          {isFull ? 'Your group is complete.' : 'Search for students to build your FYP group. Maximum 3 members per group.'}
+          {isFull ? 'Your group is complete.' : isPhase2OrLater ? 'Group formation is closed for this phase.' : 'Search for students to build your FYP group. Maximum 3 members per group.'}
         </p>
 
         {group && group.members?.length > 0 && (
@@ -243,7 +247,15 @@ export default function FYPGroup() {
           </div>
         )}
 
-        {!isFull && (
+        {isPhase2OrLater ? (
+          <div className="p-4 rounded-xl border border-amber-200 bg-amber-50">
+            <div className="flex items-center gap-2 mb-1">
+              <ShieldBan className="w-4 h-4 text-amber-600" />
+              <p className="text-sm font-bold text-amber-800">Group Formation Closed</p>
+            </div>
+            <p className="text-xs text-amber-700">The registration and group formation phase has ended. No new members can be added at this stage.</p>
+          </div>
+        ) : !isFull && (
           <>
             <div className="flex items-center gap-2 bg-white border border-line rounded-xl px-4 py-2.5 focus-within:border-blue-600 focus-within:ring-2 focus-within:ring-blue-100 transition-all">
               <Search className="w-4 h-4 text-slate-400 flex-shrink-0" />
@@ -287,7 +299,7 @@ export default function FYPGroup() {
         )}
       </motion.div>
 
-      {incomingRequests.length > 0 && !isFull && (
+      {incomingRequests.length > 0 && !isFull && !isPhase2OrLater && (
         <motion.div variants={item} className="bg-white rounded-2xl border border-line shadow-card p-6">
           <h3 className="text-sm font-bold text-slate-700 mb-4">Incoming Requests ({incomingRequests.length})</h3>
           <div className="space-y-3">

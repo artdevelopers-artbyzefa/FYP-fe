@@ -1,17 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { getSupervisorRequests, approveSupervisorRequest, rejectSupervisorRequest } from '../../services/faculty.service';
-import { X, Check, Loader2, CheckCircle, AlertCircle, UserCheck } from 'lucide-react';
+import { X, Check, Loader2, CheckCircle, AlertCircle, UserCheck, ShieldBan } from 'lucide-react';
 import { motion } from 'framer-motion';
+import PhaseContext from '../../contexts/PhaseContext';
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.04 } } };
 const item = { hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } };
 
 const FacultyProposals = () => {
+  const phaseCtx = useContext(PhaseContext);
+  const currentPhase = phaseCtx?.currentPhase;
+  const isPhase2OrLater = currentPhase && (currentPhase.key === 'phase2_development' || currentPhase.key === 'phase2_defense');
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(null);
   const [toast, setToast] = useState({ show: false, type: '', message: '' });
 
-  useEffect(() => { fetchRequests(); }, []);
+  useEffect(() => { if (!isPhase2OrLater) fetchRequests(); }, [isPhase2OrLater]);
 
   const fetchRequests = async () => {
     try {
@@ -46,6 +50,20 @@ const FacultyProposals = () => {
     } catch { showToastMsg('error', 'Failed to reject request.');
     } finally { setActionLoading(null); }
   };
+
+  if (isPhase2OrLater) return (
+    <motion.div variants={container} initial="hidden" animate="show" className="space-y-6">
+      <motion.div variants={item} className="border-b border-line pb-4 mb-6">
+        <h2 className="text-xl font-bold text-slate-900">Supervision Requests</h2>
+        <p className="text-xs text-slate-500 mt-0.5 font-medium">Review incoming student requests to be your supervisee.</p>
+      </motion.div>
+      <motion.div variants={item} className="bg-white rounded-2xl border border-amber-200 p-8 text-center shadow-card bg-amber-50">
+        <ShieldBan className="w-10 h-10 mx-auto mb-3 text-amber-500" />
+        <p className="font-bold text-amber-800">Supervision Requests Closed</p>
+        <p className="text-xs text-amber-700 mt-1">The registration and group formation phase has ended. No new supervision requests can be processed at this stage.</p>
+      </motion.div>
+    </motion.div>
+  );
 
   if (loading) return <div className="flex items-center justify-center py-20"><Loader2 className="w-6 h-6 text-blue-600 animate-spin" /><span className="ml-2 text-sm text-slate-500 font-medium">Loading requests...</span></div>;
 

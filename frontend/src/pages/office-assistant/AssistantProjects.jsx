@@ -52,8 +52,13 @@ const AssistantProjects = () => {
                   <td className="py-4 px-6 text-slate-900">{p.leader}</td>
                   <td className="py-4 px-6 text-slate-900">{p.supervisor}</td>
                   <td className="py-4 px-6">
-                    <span className={`font-bold text-xs px-2.5 py-1 rounded-lg border ${p.status === 'Approved' ? 'bg-success/10 text-success border-success/20' : 'bg-white'}`}>
-                      {p.status}
+                    <span className={`font-bold text-xs px-2.5 py-1 rounded-lg border ${
+                      p.status === 'Approved' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' :
+                      p.status === 'active' ? 'bg-blue-50 text-blue-700 border-blue-200' :
+                      p.status === 'completed' ? 'bg-purple-50 text-purple-700 border-purple-200' :
+                      'bg-slate-50 text-slate-600 border-slate-200'
+                    }`}>
+                      {p.status === 'Approved' ? 'Approved' : p.status}
                     </span>
                   </td>
                   <td className="py-4 px-6 text-right">
@@ -81,6 +86,8 @@ const AssistantProjects = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-white p-4 rounded-2xl border border-line text-xs">
                 <div><span className="text-slate-900 font-bold tracking-wider block mb-1">Group Leader</span><span className="font-bold text-slate-900 text-sm">{selectedProject.leader}</span></div>
                 <div><span className="text-slate-900 font-bold tracking-wider block mb-1">Assigned Supervisor</span><span className="font-bold text-slate-900 text-sm">{selectedProject.supervisor}</span></div>
+                <div><span className="text-slate-900 font-bold tracking-wider block mb-1">Group ID</span><span className="font-bold text-slate-900 text-sm">{selectedProject.id}</span></div>
+                <div><span className="text-slate-900 font-bold tracking-wider block mb-1">Current Status</span><span className="font-bold text-slate-900 text-sm">{selectedProject.status === 'Approved' ? 'Approved' : selectedProject.status}</span></div>
               </div>
               <div>
                 <h5 className="text-xs font-bold text-slate-900 tracking-wider mb-2">Technology Stack</h5>

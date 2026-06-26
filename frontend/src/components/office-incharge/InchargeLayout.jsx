@@ -3,7 +3,7 @@ import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { PhaseProvider, usePhase } from '../../contexts/PhaseContext';
 import { showToast as toast } from '../AppToast';
 import { logoutUser, getCurrentUser } from '../../services/auth.service';
-import { AlertCircle, BarChart3, Bell, Calendar, ChevronLeft, ChevronRight, ClipboardList, GraduationCap, History, Home, Lock, LogOut, Menu, Scale, ToggleRight, UserPlus, Users, X } from 'lucide-react';
+import { AlertCircle, BarChart3, Bell, Calendar, CheckCircle, ChevronLeft, ChevronRight, ClipboardList, GraduationCap, History, Home, Lock, LogOut, Menu, Scale, ToggleRight, UserPlus, Users, X } from 'lucide-react';
 
 const Sidebar = ({ isMobileOpen, setIsMobileOpen, isCollapsed, setIsCollapsed, user, roleLabel, navLinks, handleLogout }) => {
   const { currentPhase, loading } = usePhase();
@@ -101,6 +101,7 @@ const LayoutInner = () => {
     { to: '/office-incharge/supervision-requests', icon: UserPlus, label: 'Supervision Requests', section: 'Overview' },
     { to: '/office-incharge/committee-oversight', icon: Users, label: 'Committee Oversight', section: 'Overview' },
     { to: '/office-incharge/faculty-reports', icon: BarChart3, label: 'Faculty Overview', section: 'Overview' },
+    { to: '/office-incharge/project-approvals', icon: CheckCircle, label: 'Project Approvals', section: 'Overview' },
     { to: '/office-incharge/student-reports', icon: GraduationCap, label: 'Student Reports', section: 'Overview', locked: true },
     { to: '/office-incharge/rubrics', icon: ClipboardList, label: 'Rubric Builder', section: 'Curriculum & Sessions' },
     { to: '/office-incharge/sessions', icon: Calendar, label: 'Academic Sessions', section: 'Curriculum & Sessions' },

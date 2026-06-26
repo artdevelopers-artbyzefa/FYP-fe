@@ -7,8 +7,10 @@ const item = { hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } };
 
 const STATUS_MAP = {
   agreed: { label: 'Pending Review', color: 'bg-amber-50 text-amber-700 border-amber-200', icon: Clock },
-  supervisor_approved: { label: 'Accepted', color: 'bg-emerald-50 text-emerald-700 border-emerald-200', icon: CheckCircle },
+  supervisor_approved: { label: 'Pending Office Approval', color: 'bg-purple-50 text-purple-700 border-purple-200', icon: Clock },
   supervisor_rejected: { label: 'Rejected', color: 'bg-rose-50 text-rose-600 border-rose-200', icon: ThumbsDown },
+  fyp_office_approved: { label: 'Fully Approved', color: 'bg-emerald-50 text-emerald-700 border-emerald-200', icon: CheckCircle },
+  fyp_office_rejected: { label: 'Office Rejected', color: 'bg-rose-50 text-rose-600 border-rose-200', icon: ThumbsDown },
 };
 
 const FacultyGroupProposals = () => {
@@ -137,7 +139,24 @@ const FacultyGroupProposals = () => {
                   {idea.supervisorFeedback && <span className="text-slate-400">Feedback: {idea.supervisorFeedback}</span>}
                 </div>
 
-                  {(idea.agreementStatus === 'supervisor_approved' || idea.agreementStatus === 'supervisor_rejected') && (
+                  {idea.agreementStatus === 'supervisor_approved' && (
+                    <div className="mb-4 p-3 bg-purple-50 rounded-xl border border-purple-200">
+                      <p className="text-xs font-bold text-purple-500">Sent for FYP Office Approval</p>
+                      <p className="text-sm text-purple-700 mt-0.5">This project has been sent to the FYP Office for final approval. Waiting for the Office Assistant or FYP In-charge to review.</p>
+                    </div>
+                  )}
+
+                  {idea.fypOfficeFeedback && (
+                    <div className={`mb-4 p-3 rounded-xl border ${idea.agreementStatus === 'fyp_office_rejected' ? 'bg-red-50 border-red-200' : 'bg-emerald-50 border-emerald-200'}`}>
+                      <p className={`text-xs font-bold mb-1 ${idea.agreementStatus === 'fyp_office_rejected' ? 'text-red-500' : 'text-emerald-500'}`}>
+                        {idea.agreementStatus === 'fyp_office_rejected' ? 'Rejected by ' : 'Approved by '}
+                        {idea.fypOfficeReviewedByRole || 'FYP Office'}
+                      </p>
+                      <p className={`text-sm ${idea.agreementStatus === 'fyp_office_rejected' ? 'text-red-700' : 'text-emerald-700'}`}>{idea.fypOfficeFeedback}</p>
+                    </div>
+                  )}
+
+                  {(idea.agreementStatus === 'supervisor_approved' || idea.agreementStatus === 'supervisor_rejected' || idea.agreementStatus === 'fyp_office_rejected') && (
                     <div className="border-t border-line pt-4 mt-2">
                       <button onClick={() => handleReset(idea._id)} disabled={actionLoading === idea._id}
                         className="flex items-center gap-1.5 px-4 py-2 bg-white text-slate-600 text-xs font-bold rounded-xl border border-line hover:bg-amber-50 hover:text-amber-600 hover:border-amber-200 transition-all disabled:opacity-50 cursor-pointer">

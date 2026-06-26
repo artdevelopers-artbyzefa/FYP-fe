@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { submitGroupIdea, getGroupIdeas, voteOnGroupIdea, getStudentGroup, generateAIDescription } from '../../services/student.service';
 import { showToast as toast } from '../../components/AppToast';
-import { Check, ChevronDown, ChevronUp, Clock, Lightbulb, Loader, Plus, Sparkles, ThumbsDown, ThumbsUp, Upload, X } from 'lucide-react';
+import { getUserInfo } from '../../utils/app.utils';
+import { Check, Clock, Lightbulb, Loader, Plus, Sparkles, ThumbsDown, ThumbsUp, Upload, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.04 } } };
@@ -12,7 +13,9 @@ const statusConfig = {
   agreed: { label: 'Agreed', class: 'bg-emerald-50 text-emerald-700 border-emerald-200', icon: ThumbsUp },
   voting_rejected: { label: 'Rejected by Group', class: 'bg-red-50 text-red-600 border-red-200', icon: ThumbsDown },
   supervisor_approved: { label: 'Supervisor Approved', class: 'bg-blue-50 text-blue-700 border-blue-200', icon: Check },
-  supervisor_rejected: { label: 'Supervisor Rejected', class: 'bg-rose-50 text-rose-600 border-rose-200', icon: X }
+  supervisor_rejected: { label: 'Supervisor Rejected', class: 'bg-rose-50 text-rose-600 border-rose-200', icon: X },
+  fyp_office_approved: { label: 'Fully Approved', class: 'bg-emerald-50 text-emerald-700 border-emerald-200', icon: Check },
+  fyp_office_rejected: { label: 'Rejected by Office', class: 'bg-red-50 text-red-600 border-red-200', icon: X }
 };
 
 export default function GroupIdeas() {
@@ -102,16 +105,13 @@ export default function GroupIdeas() {
     }
   };
 
-  const currentStudentId = group?.members?.[0]?._id || '';
+  const currentUser = getUserInfo();
+  const currentUserId = currentUser?._id || currentUser?.id || '';
 
   const getMyVote = (idea) => {
-    if (!currentStudentId) return null;
-    const vote = idea.votes?.find(v => v.member?._id === currentStudentId);
+    if (!currentUserId) return null;
+    const vote = idea.votes?.find(v => v.member?.user?._id === currentUserId);
     return vote?.decision || null;
-  };
-
-  const getMemberName = (member) => {
-    return member?.user?.name || member?.name || 'Unknown';
   };
 
   if (loading) {
@@ -279,7 +279,8 @@ export default function GroupIdeas() {
             const agreeCount = idea.votes?.filter(v => v.decision === 'agree').length || 0;
             const disagreeCount = idea.votes?.filter(v => v.decision === 'disagree').length || 0;
             const myVote = getMyVote(idea);
-            const canVote = idea.agreementStatus === 'voting' && !myVote;
+            const allowedForVoting = ['voting', 'agreed', 'voting_rejected'];
+            const canVote = allowedForVoting.includes(idea.agreementStatus) && !myVote;
 
             return (
               <motion.div key={idea._id} variants={item} className="bg-white rounded-2xl border border-line shadow-card p-6">
@@ -317,12 +318,22 @@ export default function GroupIdeas() {
                   </div>
                 )}
 
+                {idea.fypOfficeFeedback && (
+                  <div className={`mb-4 p-3 rounded-xl border ${idea.agreementStatus === 'fyp_office_rejected' ? 'bg-red-50 border-red-200' : 'bg-emerald-50 border-emerald-200'}`}>
+                    <p className={`text-xs font-bold mb-1 ${idea.agreementStatus === 'fyp_office_rejected' ? 'text-red-500' : 'text-emerald-500'}`}>
+                      {idea.agreementStatus === 'fyp_office_rejected' ? 'Rejected by ' : 'Approved by '}
+                      {idea.fypOfficeReviewedByRole || 'FYP Office'}
+                    </p>
+                    <p className={`text-sm ${idea.agreementStatus === 'fyp_office_rejected' ? 'text-red-700' : 'text-emerald-700'}`}>{idea.fypOfficeFeedback}</p>
+                  </div>
+                )}
+
                 <div className="border-t border-line pt-4">
                   <div className="flex items-center justify-between mb-3">
                     <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">
                       Agreement Status &mdash; {agreeCount}/{totalMembers} agreed
                     </p>
-                    {idea.agreementStatus === 'voting' && (
+                    {allowedForVoting.includes(idea.agreementStatus) && (
                       <span className="text-xs font-bold text-slate-500">{totalMembers - (agreeCount + disagreeCount)} remaining</span>
                     )}
                   </div>
@@ -339,13 +350,15 @@ export default function GroupIdeas() {
 
                   <div className="flex flex-wrap gap-2 mb-4">
                     {group.members.map(member => {
-                      const memberVote = idea.votes?.find(v => v.member?._id === member._id);
+                      const memberUserId = member?.user?._id || '';
+                      const memberVote = idea.votes?.find(v => v.member?.user?._id === memberUserId);
+                      const memberName = member?.user?.name || member?.name || 'Unknown';
                       return (
                         <div key={member._id} className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold border ${memberVote?.decision === 'agree' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : memberVote?.decision === 'disagree' ? 'bg-red-50 text-red-600 border-red-200' : 'bg-slate-50 text-slate-500 border-slate-200'}`}>
                           <span className="w-5 h-5 rounded-full bg-inherit flex items-center justify-center text-[10px] font-bold">
-                            {getMemberName(member).charAt(0).toUpperCase()}
+                            {memberName.charAt(0).toUpperCase()}
                           </span>
-                          <span className="truncate max-w-[80px]">{getMemberName(member).split(' ')[0]}</span>
+                          <span className="truncate max-w-[80px]">{memberName.split(' ')[0]}</span>
                           {memberVote?.decision === 'agree' && <ThumbsUp size={12} />}
                           {memberVote?.decision === 'disagree' && <ThumbsDown size={12} />}
                           {!memberVote && <Clock size={12} />}
@@ -375,7 +388,7 @@ export default function GroupIdeas() {
                     </div>
                   )}
 
-                  {myVote && idea.agreementStatus === 'voting' && (
+                  {myVote && allowedForVoting.includes(idea.agreementStatus) && (
                     <div className="flex items-center gap-2 text-sm text-slate-500">
                       <Check size={16} className="text-emerald-500" />
                       You voted <span className="font-bold">{myVote}</span>

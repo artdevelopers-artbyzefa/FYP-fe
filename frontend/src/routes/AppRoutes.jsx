@@ -43,6 +43,7 @@ import AssistantEvalCommittees from '../pages/office-assistant/AssistantEvalComm
 import AssistantExternal from '../pages/office-assistant/AssistantExternal';
 import AssistantResults from '../pages/office-assistant/AssistantResults';
 import AssistantPastProjects from '../pages/office-assistant/AssistantPastProjects';
+import OfficeApprovals from '../pages/office-approvals/OfficeApprovals';
 import FacultyLayout from '../components/faculty/FacultyLayout';
 import FacultyDashboard from '../pages/faculty/FacultyDashboard';
 import FacultyProfile from '../pages/faculty/FacultyProfile';
@@ -129,6 +130,7 @@ const AppRoutes = () => {
                 <Route path="faculty" element={<AssistantFaculty />} />
                 <Route path="faculty/:id" element={<SupervisorDetail />} />
                 <Route path="projects" element={<AssistantProjects />} />
+                <Route path="project-approvals" element={<OfficeApprovals />} />
                 <Route path="content" element={<AssistantContent />} />
                 <Route path="proposal-committee" element={<AssistantProposalCommittees />} />
                 <Route path="eval-committee" element={<AssistantEvalCommittees />} />
@@ -160,6 +162,7 @@ const AppRoutes = () => {
                 <Route path="rubrics" element={<InchargeRubrics />} />
                 <Route path="sessions" element={<InchargeSessions />} />
                 <Route path="supervision-requests" element={<InchargeSupervisionRequests />} />
+                <Route path="project-approvals" element={<OfficeApprovals />} />
                 <Route path="committee-oversight" element={<InchargeCommitteeOversight />} />
                 <Route path="grievances" element={<InchargeGrievances />} />
                 <Route path="faculty-reports" element={<InchargeFacultyReports />} />

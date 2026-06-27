@@ -86,8 +86,8 @@ const LayoutInner = () => {
   const navigate = useNavigate();
   const user = getCurrentUser() ?? null;
   const { currentPhase, loading } = usePhase();
-  const phase1And2Keys = ['registration', 'proposal_submission', 'proposal_defense', 'phase1_development', 'phase1_evaluation', 'phase2_development', 'phase2_defense'];
-  const isPhase1Or2 = currentPhase && phase1And2Keys.includes(currentPhase.key);
+  const phase1Keys = ['registration', 'proposal_submission'];
+  const isPhase1 = currentPhase && phase1Keys.includes(currentPhase.key);
 
   const handleLogout = () => {
     logoutUser();
@@ -101,7 +101,7 @@ const LayoutInner = () => {
     { to: '/office-incharge/dashboard', icon: Home, label: 'Dashboard', section: 'Overview' },
     { to: '/office-incharge/phases', icon: ToggleRight, label: 'Phase Control', section: 'Overview' },
     { to: '/office-incharge/forwarded-proposals', icon: ArrowRight, label: 'Forwarded Proposals', section: 'Overview' },
-    { to: '/office-incharge/committee-oversight', icon: Users, label: 'Committee Oversight', section: 'Overview', locked: isPhase1Or2 },
+    { to: '/office-incharge/committee-oversight', icon: Users, label: 'Committee Oversight', section: 'Overview', locked: isPhase1 },
     { to: '/office-incharge/faculty-reports', icon: BarChart3, label: 'Faculty Overview', section: 'Overview' },
     { to: '/office-incharge/eval-committee', icon: Layers, label: 'Evaluation Committees', section: 'Overview' },
     { to: '/office-incharge/projects', icon: GitBranch, label: 'Project Directory', section: 'Overview' },

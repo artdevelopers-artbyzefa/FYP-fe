@@ -5,7 +5,7 @@ const apiUrl = import.meta.env.VITE_API_BASE_URL || '/api';
 
 const apiClient = axios.create({
   baseURL: apiUrl,
-  timeout: 15000,
+  timeout: 15002,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -62,11 +62,11 @@ apiClient.interceptors.response.use(
         window.location.href = '/login';
       }
     }
-    
+
     const { title, message } = mapErrorToMessage(error);
     // Attach mapped error for use in components
     error.mappedError = { title, message };
-    
+
     return Promise.reject(error);
   }
 );

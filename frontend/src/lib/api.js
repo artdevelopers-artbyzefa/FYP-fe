@@ -3,13 +3,13 @@ import { ApiError, AuthError, ValidationError, ErrorHandler } from './error-hand
 
 const api = axios.create({
   /**
-   * Kindly Create an .env file with VITE_API_URL=https://localhost:5000/api
+   * Kindly Create an .env file with VITE_API_URL=https://localhost:5002/api
    * Then i ll delete the localhost part from the line below since we have to prevent
    * CORS-Based Login errors(Cross Origin Resource Sharing)
    * This is also majoirily going to be influenced when i ll connect the backend & frontend
    * Arslan Rathore
    */
-  
+
 
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
   headers: {

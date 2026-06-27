@@ -3,7 +3,7 @@ import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { PhaseProvider, usePhase } from '../../contexts/PhaseContext';
 import { showToast as toast } from '../AppToast';
 import { logoutUser, getCurrentUser } from '../../services/auth.service';
-import { AlertCircle, ArrowRight, BarChart3, Bell, Calendar, ChevronLeft, ChevronRight, ClipboardList, GraduationCap, History, Home, LogOut, Menu, Scale, ToggleRight, Users, X } from 'lucide-react';
+import { AlertCircle, ArrowRight, BarChart3, Bell, Calendar, ChevronLeft, ChevronRight, ClipboardList, GraduationCap, History, Home, Lock, LogOut, Menu, Scale, ToggleRight, Users, X } from 'lucide-react';
 
 const Sidebar = ({ isMobileOpen, setIsMobileOpen, isCollapsed, setIsCollapsed, user, roleLabel, navLinks, handleLogout }) => {
   const { currentPhase, loading } = usePhase();

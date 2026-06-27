@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Loader2, Users, User, Mail, Calendar, ArrowLeft, ChevronRight, ChevronLeft, BookOpen, Code, FileText, BarChart3, Send, GraduationCap, CheckCircle, AlertTriangle, X, AlertCircle, Check } from 'lucide-react';
 import { getForwardedProposals, processForwardedProposal } from '../../services/office-incharge.service';
 import { GROUP_STATUS_MAP, IDEA_STATUS_MAP } from '../../utils/constants/status.constant';
-alls
+
 const ITEMS_PER_PAGE = 12;
 
 export default function InchargeForwardedProposals() {

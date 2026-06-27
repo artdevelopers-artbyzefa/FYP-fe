@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { submitGroupIdea, getGroupIdeas, voteOnGroupIdea, getStudentGroup, generateAIDescription } from '../../services/student.service';
 import { showToast as toast } from '../../components/AppToast';
 import { IDEA_STATUS_MAP as statusConfig } from '../../utils/constants/status.constant';
+import { getUserInfo } from '../../utils/app.utils';
 import { Check, ChevronDown, ChevronUp, Clock, Lightbulb, Loader, Plus, Sparkles, ThumbsDown, ThumbsUp, Upload, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -248,7 +249,7 @@ export default function GroupIdeas() {
       <div className="flex gap-2 flex-wrap">
         {[
           { key: 'all', label: `All (${ideas.length})`, color: 'bg-slate-500' },
-          ...Object.entries(statusConfig).map(([k, v]) => ({ key: k, label: `${v.label} (${ideas.filter(i => i.agreementStatus === k).length || 0})`, color: v.class.split(' ')[0] }))
+          ...Object.entries(statusConfig).map(([k, v]) => ({ key: k, label: `${v.label} (${ideas.filter(i => i.agreementStatus === k).length || 0})`, color: v.color.split(' ')[0] }))
         ].map(f => (
           <button key={f.key} onClick={() => setFilter(f.key)}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer border ${

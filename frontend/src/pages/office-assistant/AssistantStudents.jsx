@@ -2,8 +2,9 @@ import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { getOfficeStudents, createOfficeStudent, deleteOfficeStudent, updateOfficeStudent } from '../../services/office-assistant.service';
 import { showToast, showAlert } from '../../components/AppToast';
 import { sendWelcomeEmail } from '../../services/email.service';
-import { Search, UserPlus, X, Send, Trash2, Pencil, ArrowLeft, ArrowRight, ChevronRight, Users, Mail, BookOpen, Code, Loader2, GraduationCap, User, ChevronDown } from 'lucide-react';
+import { Search, UserPlus, X, Send, Trash2, Pencil, ArrowLeft, ArrowRight, ChevronRight, Users, Mail, BookOpen, Code, GraduationCap, User, ChevronDown } from 'lucide-react';
 import { GROUP_STATUS_MAP } from '../../utils/constants/status.constant';
+import { StudentRecordsSkeleton } from '../../components/Skeleton';
 
 const initialForm = { name: '', reg: '', email: '', semester: '7', fatherName: '', whatsappNumber: '', section: '', cgpa: '' };
 
@@ -75,12 +76,7 @@ export default function AssistantStudents() {
         </div>
       </div>
 
-      {loading ? (
-        <div className="flex items-center justify-center py-20">
-          <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
-          <span className="ml-2 text-sm text-slate-500 font-medium">Loading students...</span>
-        </div>
-      ) : filtered.length === 0 ? (
+      {loading ? <StudentRecordsSkeleton /> : filtered.length === 0 ? (
         <div className="flex flex-col items-center gap-3 py-20 text-slate-400">
           <GraduationCap className="w-10 h-10" />
           <p className="text-sm font-bold">No students found</p>

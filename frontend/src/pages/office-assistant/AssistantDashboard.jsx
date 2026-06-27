@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { getOfficeDashboardStats } from '../../services/office-assistant.service';
-import { ArrowRight, FileUp, GitBranch, GraduationCap, Layers, UserPen, UserPlus, Users, FileSignature, CalendarCheck, Star, Loader2 } from 'lucide-react';
+import { ArrowRight, FileUp, GitBranch, GraduationCap, Layers, UserPen, UserPlus, Users, FileSignature, CalendarCheck, Star } from 'lucide-react';
 import PhaseContext from '../../contexts/PhaseContext';
+import { DashboardSkeleton } from '../../components/Skeleton';
 
 const iconMap = {
   FileUp, UserPen, UserPlus, FileSignature, CalendarCheck, Star
@@ -34,6 +35,8 @@ const AssistantDashboard = () => {
   };
 
   const actions = stats?.recentActions || [];
+
+  if (loading) return <DashboardSkeleton />;
 
   return (
     <div className="space-y-6">

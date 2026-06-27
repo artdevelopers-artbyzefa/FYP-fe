@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { getPhases, updateActivePhase } from '../../services/office-incharge.service';
 import { showToast, showAlert } from '../../components/AppToast';
+import { PhaseControlSkeleton } from '../../components/Skeleton';
 
 const STATUS_CFG = {
   pending: { label: 'Pending', bg: 'bg-gray-100', text: 'text-gray-500', border: 'border-gray-200', dot: 'bg-gray-300' },
@@ -230,13 +231,7 @@ const InchargePhaseControl = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center py-24">
-        <div className="w-10 h-10 border-4 border-gray-100 border-t-primary rounded-full animate-spin" />
-      </div>
-    );
-  }
+  if (loading) return <PhaseControlSkeleton />;
 
   return (
     <div className="space-y-6">

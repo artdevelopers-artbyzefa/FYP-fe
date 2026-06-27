@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { getInchargeStudentReports } from '../../services/office-incharge.service';
-import { ArrowLeft, Users, User, Mail, BookOpen, Code, Loader2, GraduationCap, ChevronRight, Search, FileText, BarChart3, CheckCircle, X, Clock } from 'lucide-react';
+import { ArrowLeft, Users, User, Mail, BookOpen, Code, GraduationCap, ChevronRight, Search, FileText, BarChart3, CheckCircle, X, Clock } from 'lucide-react';
 import { IDEA_STATUS_MAP } from '../../utils/constants/status.constant';
+import { StudentRecordsSkeleton } from '../../components/Skeleton';
 
 const fypStatusConfig = {
   not_started: { label: 'Not Started', color: 'bg-gray-50 text-gray-500 border-gray-200' },
@@ -255,12 +256,7 @@ export default function InchargeStudentRecords() {
         </div>
       </div>
 
-      {loading ? (
-        <div className="flex items-center justify-center py-20">
-          <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
-          <span className="ml-2 text-sm text-slate-500 font-medium">Loading student records...</span>
-        </div>
-      ) : filtered.length === 0 ? (
+      {loading ? <StudentRecordsSkeleton /> : filtered.length === 0 ? (
         <div className="flex flex-col items-center gap-3 py-20 text-slate-400">
           <GraduationCap className="w-10 h-10" />
           <p className="text-sm font-bold">No students found</p>

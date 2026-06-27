@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { showToast } from '../../components/AppToast';
-import { Users, Loader2, Check, X, ArrowLeft, ChevronRight, Search, BookOpen, Star } from 'lucide-react';
+import { Users, Check, X, ArrowLeft, ChevronRight, Search, BookOpen, Star } from 'lucide-react';
 import api from '../../services/api';
+import { CommitteeOversightSkeleton } from '../../components/Skeleton';
 
 var PRIORITY_COLORS = {
   1: { bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200', badge: 'bg-emerald-500' },
@@ -137,12 +138,7 @@ export default function InchargeCommitteeOversight() {
     finally { setSavingId(null); }
   }
 
-  if (loading) {
-    return React.createElement('div', { className: 'flex items-center justify-center py-20' },
-      React.createElement(Loader2, { className: 'w-6 h-6 animate-spin text-blue-600' }),
-      React.createElement('span', { className: 'ml-2 text-sm text-slate-500 font-medium' }, 'Loading...')
-    );
-  }
+  if (loading) return React.createElement(CommitteeOversightSkeleton, null);
 
   return React.createElement('div', { className: 'space-y-6' },
     React.createElement('div', { className: 'border-b border-line pb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4' },

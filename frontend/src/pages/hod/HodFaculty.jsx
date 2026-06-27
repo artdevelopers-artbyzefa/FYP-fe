@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { getHodFacultyList, updateHodFaculty } from '../../services/hod.service';
+import apiClient from '../../api/apiClient';
 import { showToast } from '../../components/AppToast';
 import { ArrowLeft, ChevronLeft, ChevronRight, Loader2, Users, User, Mail, Pencil, ChevronRight as ChevronRightIcon, CheckCircle, XCircle, BookOpen, Code, FileText, GraduationCap, Clock, Check, X } from 'lucide-react';
 import { GROUP_STATUS_MAP, IDEA_STATUS_MAP } from '../../utils/constants/status.constant';
@@ -54,14 +55,18 @@ const HodFaculty = () => {
               {loading ? Array.from({ length: 8 }, (_, i) => <SkeletonRow key={i} cols={7} />) : faculty.length === 0 ? (
                 <tr><td colSpan={7} className="py-12 text-center"><div className="flex flex-col items-center gap-2"><Users size={32} className="text-slate-300" /><p className="text-sm font-bold text-slate-400">No faculty found</p></div></td></tr>
               ) : faculty.map(f => (
-                <tr key={f.id} onClick={() => { setSelected(f); setView('detail'); }} className="hover:bg-blue-50/30 transition-colors cursor-pointer">
+                <tr key={f.id} className="hover:bg-blue-50/30 transition-colors">
                   <td className="py-4 px-6 font-bold text-slate-900">{f.name}</td>
                   <td className="py-4 px-6 text-slate-500 text-xs">{f.email || '-'}</td>
                   <td className="py-4 px-6 text-slate-500 text-xs">{f.phone || '-'}</td>
                   <td className="py-4 px-6"><span className={`font-bold text-xs px-2.5 py-1 rounded-lg border tracking-wider ${TYPE_COLORS[f.facultyType] || 'bg-slate-50 text-slate-500 border-slate-200'}`}>{f.facultyType}</span></td>
                   <td className="py-4 px-6 text-slate-500 text-xs font-bold">{f.supervisionLoad} group{f.supervisionLoad !== 1 ? 's' : ''}</td>
                   <td className="py-4 px-6"><span className={`font-bold text-xs px-2.5 py-1 rounded-lg border tracking-wider ${f.isactive ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-rose-50 text-rose-600 border-rose-200'}`}>{f.isactive ? 'Active' : 'Inactive'}</span></td>
-                  <td className="py-4 px-6 text-right"><ChevronRightIcon size={14} className="text-slate-300" /></td>
+                  <td className="py-4 px-6 text-right">
+                    <button onClick={() => { setSelected(f); setView('detail'); }} className="px-3 py-1.5 rounded-lg bg-blue-600 text-white text-[10px] font-bold hover:bg-blue-700 transition-all cursor-pointer border-0 flex items-center gap-1 ml-auto">
+                      <User size={11} /> View Profile
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -84,10 +89,18 @@ const HodFaculty = () => {
 };
 
 function FacultyDetail({ faculty, onBack, onUpdate }) {
+  const [detail, setDetail] = useState(faculty);
+  const [detailLoading, setDetailLoading] = useState(true);
   const [editing, setEditing] = useState(false);
   const [editForm, setEditForm] = useState({ name: faculty.name || '', email: faculty.email || '', facultyType: faculty.facultyType || 'supervisor' });
   const [submitting, setSubmitting] = useState(false);
   const [selectedGroup, setSelectedGroup] = useState(null);
+
+  useEffect(() => {
+    apiClient.get(`/hod/faculty/${faculty.id}`).then(res => {
+      if (res.data?.data) { setDetail(res.data.data); setEditForm({ name: res.data.data.name || '', email: res.data.data.email || '', facultyType: res.data.data.facultyType || 'supervisor' }); }
+    }).catch(() => {}).finally(() => setDetailLoading(false));
+  }, [faculty.id]);
 
   const handleSave = async (e) => {
     e.preventDefault();
@@ -108,13 +121,13 @@ function FacultyDetail({ faculty, onBack, onUpdate }) {
       <motion.div variants={item} className="border-b border-line pb-4">
         <button onClick={onBack} className="flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-slate-900 transition-colors cursor-pointer mb-3"><ArrowLeft size={14} /> Back to Faculty</button>
         <div className="flex items-center gap-4">
-          <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-xl font-black shrink-0 ${faculty.isactive ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-500'}`}>{faculty.name?.split(' ').filter(Boolean).slice(0, 2).map(w => w[0]).join('') || '?'}</div>
+          <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-xl font-black shrink-0 ${detail.isactive ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-500'}`}>{detail.name?.split(' ').filter(Boolean).slice(0, 2).map(w => w[0]).join('') || '?'}</div>
           <div className="flex-1">
-            <h2 className="text-xl font-bold text-slate-900">{faculty.name}</h2>
+            <h2 className="text-xl font-bold text-slate-900">{detail.name}</h2>
             <div className="flex items-center gap-3 mt-1 text-xs text-slate-500 flex-wrap">
-              <span className="flex items-center gap-1"><Mail size={12} /> {faculty.email}</span>
-              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-lg border ${TYPE_COLORS[faculty.facultyType] || 'bg-gray-50 text-gray-500 border-gray-200'}`}>{faculty.facultyType}</span>
-              {faculty.isactive ? <span className="flex items-center gap-1 text-emerald-600"><CheckCircle size={12} /> Active</span> : <span className="flex items-center gap-1 text-slate-400"><XCircle size={12} /> Inactive</span>}
+              <span className="flex items-center gap-1"><Mail size={12} /> {detail.email}</span>
+              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-lg border ${TYPE_COLORS[detail.facultyType] || 'bg-gray-50 text-gray-500 border-gray-200'}`}>{detail.facultyType}</span>
+              {detail.isactive ? <span className="flex items-center gap-1 text-emerald-600"><CheckCircle size={12} /> Active</span> : <span className="flex items-center gap-1 text-slate-400"><XCircle size={12} /> Inactive</span>}
             </div>
           </div>
           <button onClick={() => setEditing(!editing)} className="px-4 py-2 bg-blue-600 text-white text-xs font-bold rounded-xl hover:bg-blue-700 transition-all cursor-pointer border-0 flex items-center gap-1.5"><Pencil size={12} /> {editing ? 'Cancel' : 'Edit'}</button>
@@ -138,10 +151,10 @@ function FacultyDetail({ faculty, onBack, onUpdate }) {
         <motion.div variants={item} className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-5">
             <div className="bg-white rounded-2xl border border-line p-6 shadow-sm">
-              <h5 className="text-xs font-bold text-slate-900 tracking-wider mb-4 flex items-center gap-1.5"><Users size={13} /> Supervised Groups ({faculty.groups?.length || 0})</h5>
-              {faculty.groups?.length > 0 ? (
+              <h5 className="text-xs font-bold text-slate-900 tracking-wider mb-4 flex items-center gap-1.5"><Users size={13} /> Supervised Groups ({detail.groups?.length || 0})</h5>
+              {detail.groups?.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {faculty.groups.map(g => (
+                  {detail.groups.map(g => (
                     <div key={g.id} onClick={() => setSelectedGroup(g)} className="p-4 rounded-xl border border-line cursor-pointer hover:border-blue-200 hover:bg-blue-50/20 transition-all">
                       <div className="flex items-start justify-between gap-2 mb-2">
                         <span className="font-bold text-slate-900 text-sm truncate">{g.title}</span>
@@ -162,10 +175,10 @@ function FacultyDetail({ faculty, onBack, onUpdate }) {
             <div className="bg-white rounded-2xl border border-line p-6 shadow-sm">
               <h5 className="text-xs font-bold text-slate-900 tracking-wider mb-4">Contact & Status</h5>
               <div className="space-y-3 text-xs">
-                <div className="flex justify-between"><span className="text-slate-400">Email</span><span className="font-bold text-slate-900">{faculty.email}</span></div>
-                <div className="flex justify-between"><span className="text-slate-400">Phone</span><span className="font-bold text-slate-900">{faculty.phone || 'N/A'}</span></div>
-                <div className="flex justify-between"><span className="text-slate-400">Type</span><span className={`font-bold px-2 py-0.5 rounded-lg border ${TYPE_COLORS[faculty.facultyType] || 'bg-gray-50 text-gray-500 border-gray-200'}`}>{faculty.facultyType}</span></div>
-                <div className="flex justify-between"><span className="text-slate-400">Status</span>{faculty.isactive ? <span className="font-bold text-emerald-600 flex items-center gap-1"><CheckCircle size={12} /> Active</span> : <span className="font-bold text-slate-400 flex items-center gap-1"><XCircle size={12} /> Inactive</span>}</div>
+                <div className="flex justify-between"><span className="text-slate-400">Email</span><span className="font-bold text-slate-900">{detail.email}</span></div>
+                <div className="flex justify-between"><span className="text-slate-400">Phone</span><span className="font-bold text-slate-900">{detail.phone || 'N/A'}</span></div>
+                <div className="flex justify-between"><span className="text-slate-400">Type</span><span className={`font-bold px-2 py-0.5 rounded-lg border ${TYPE_COLORS[detail.facultyType] || 'bg-gray-50 text-gray-500 border-gray-200'}`}>{detail.facultyType}</span></div>
+                <div className="flex justify-between"><span className="text-slate-400">Status</span>{detail.isactive ? <span className="font-bold text-emerald-600 flex items-center gap-1"><CheckCircle size={12} /> Active</span> : <span className="font-bold text-slate-400 flex items-center gap-1"><XCircle size={12} /> Inactive</span>}</div>
               </div>
             </div>
           </div>

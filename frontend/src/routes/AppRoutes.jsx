@@ -5,6 +5,7 @@ import About from "../pages/About";
 import Contact from "../pages/Contact";
 import FAQ from "../pages/FAQ";
 import Team from "../pages/Team";
+import StudentPortal from "../pages/StudentPortal";
 import Guidelines from "../pages/Guidelines";
 import Eligibility from "../pages/Eligibility";
 import Login from "../pages/Login";
@@ -37,7 +38,6 @@ import AssistantStudents from '../pages/office-assistant/AssistantStudents';
 import AssistantFaculty from '../pages/office-assistant/AssistantFaculty';
 import SupervisorDetail from '../pages/office-assistant/SupervisorDetail';
 import AssistantProjects from '../pages/office-assistant/AssistantProjects';
-import AssistantContent from '../pages/office-assistant/AssistantContent';
 import AssistantProposalCommittees from '../pages/office-assistant/AssistantProposalCommittees';
 import AssistantEvalCommittees from '../pages/office-assistant/AssistantEvalCommittees';
 import AssistantExternal from '../pages/office-assistant/AssistantExternal';
@@ -59,12 +59,12 @@ import InchargeDashboard from '../pages/office-incharge/InchargeDashboard';
 import InchargePhaseControl from '../pages/office-incharge/InchargePhaseControl';
 import InchargeRubrics from '../pages/office-incharge/InchargeRubrics';
 import InchargeSessions from '../pages/office-incharge/InchargeSessions';
-import InchargeSupervisionRequests from '../pages/office-incharge/InchargeSupervisionRequests';
 import InchargeCommitteeOversight from '../pages/office-incharge/InchargeCommitteeOversight';
 import InchargeGrievances from '../pages/office-incharge/InchargeGrievances';
 import InchargeFacultyReports from '../pages/office-incharge/InchargeFacultyReports';
 import InchargeStudentReports from '../pages/office-incharge/InchargeStudentReports';
 import InchargeAuditLog from '../pages/office-incharge/InchargeAuditLog';
+import InchargeForwardedProposals from '../pages/office-incharge/InchargeForwardedProposals';
 
 // Placeholder components
 
@@ -92,6 +92,7 @@ const AppRoutes = () => {
             <Route path="/guidelines" element={<Guidelines />} />
             <Route path="/eligibility" element={<Eligibility />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/student-portal" element={<StudentPortal />} />
             <Route path="/set-password" element={<SetPassword />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
 
@@ -129,7 +130,6 @@ const AppRoutes = () => {
                 <Route path="faculty" element={<AssistantFaculty />} />
                 <Route path="faculty/:id" element={<SupervisorDetail />} />
                 <Route path="projects" element={<AssistantProjects />} />
-                <Route path="content" element={<AssistantContent />} />
                 <Route path="proposal-committee" element={<AssistantProposalCommittees />} />
                 <Route path="eval-committee" element={<AssistantEvalCommittees />} />
                 <Route path="external" element={<AssistantExternal />} />
@@ -159,12 +159,12 @@ const AppRoutes = () => {
                 <Route path="phases" element={<InchargePhaseControl />} />
                 <Route path="rubrics" element={<InchargeRubrics />} />
                 <Route path="sessions" element={<InchargeSessions />} />
-                <Route path="supervision-requests" element={<InchargeSupervisionRequests />} />
-                <Route path="committee-oversight" element={<InchargeCommitteeOversight />} />
+    <Route path="committee-oversight" element={<InchargeCommitteeOversight />} />
                 <Route path="grievances" element={<InchargeGrievances />} />
                 <Route path="faculty-reports" element={<InchargeFacultyReports />} />
                 <Route path="student-reports" element={<InchargeStudentReports />} />
                 <Route path="audit-log" element={<InchargeAuditLog />} />
+                <Route path="forwarded-proposals" element={<InchargeForwardedProposals />} />
             </Route>
 
             {/* Catch-all */}

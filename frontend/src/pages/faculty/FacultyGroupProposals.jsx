@@ -1,23 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { getPendingGroupIdeas, approveGroupIdea, rejectGroupIdea, resetGroupIdea } from '../../services/faculty.service';
-import { X, Check, Loader2, CheckCircle, AlertCircle, Lightbulb, Users, ThumbsUp, ThumbsDown, Clock, RotateCcw } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { getPendingGroupIdeas, approveGroupIdea, rejectGroupIdea, resetGroupIdea, forwardGroupIdea } from '../../services/faculty.service';
+import { STATUS_MAP } from '../../utils/constants/status.constant';
+import { X, Check, Loader2, CheckCircle, AlertCircle, Lightbulb, Users, ThumbsUp, RotateCcw, Send, AlertTriangle } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.04 } } };
 const item = { hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } };
-
-const STATUS_MAP = {
-  agreed: { label: 'Pending Review', color: 'bg-amber-50 text-amber-700 border-amber-200', icon: Clock },
-  supervisor_approved: { label: 'Accepted', color: 'bg-emerald-50 text-emerald-700 border-emerald-200', icon: CheckCircle },
-  supervisor_rejected: { label: 'Rejected', color: 'bg-rose-50 text-rose-600 border-rose-200', icon: ThumbsDown },
-};
 
 const FacultyGroupProposals = () => {
   const [allIdeas, setAllIdeas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(null);
   const [feedback, setFeedback] = useState({});
-  const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState('supervisor_approved');
   const [toast, setToast] = useState({ show: false, type: '', message: '' });
+  const [confirm, setConfirm] = useState({ show: false, title: '', message: '', action: null });
 
   useEffect(() => { fetchAll(); }, []);
 
@@ -32,6 +28,16 @@ const FacultyGroupProposals = () => {
   const showToastMsg = (type, message) => {
     setToast({ show: true, type, message });
     setTimeout(() => setToast({ show: false, type: '', message: '' }), 4000);
+  };
+
+  const showConfirm = (title, message, action) => {
+    setConfirm({ show: true, title, message, action });
+  };
+
+  const handleConfirm = async () => {
+    if (!confirm.action) return;
+    setConfirm({ show: false, title: '', message: '', action: null });
+    await confirm.action();
   };
 
   const filtered = filter === 'all' ? allIdeas : allIdeas.filter(i => i.agreementStatus === filter);
@@ -49,7 +55,6 @@ const FacultyGroupProposals = () => {
   };
 
   const handleReset = async (ideaId) => {
-    if (!window.confirm('Reset this proposal to pending review? This allows you to re-review it.')) return;
     setActionLoading(ideaId);
     try {
       await resetGroupIdea(ideaId);
@@ -68,6 +73,16 @@ const FacultyGroupProposals = () => {
       showToastMsg('success', 'Proposal rejected.');
       fetchAll();
     } catch (err) { showToastMsg('error', err?.response?.data?.message || 'Failed to reject.');
+    } finally { setActionLoading(null); }
+  };
+
+  const handleForward = async (groupId) => {
+    setActionLoading('forward_' + groupId);
+    try {
+      await forwardGroupIdea(groupId);
+      showToastMsg('success', 'Group forwarded to FYP Office successfully.');
+      fetchAll();
+    } catch (err) { showToastMsg('error', err?.response?.data?.message || 'Failed to forward.');
     } finally { setActionLoading(null); }
   };
 
@@ -108,7 +123,14 @@ const FacultyGroupProposals = () => {
             const sm = STATUS_MAP[idea.agreementStatus] || STATUS_MAP.agreed;
             const Icon = sm.icon;
             return (
-              <motion.div key={idea._id} variants={item} className="card overflow-hidden">
+              <motion.div key={idea._id} variants={item} className={`card overflow-hidden relative ${idea.group?.forwardedToFypOffice ? 'ring-2 ring-emerald-400 ring-offset-1' : ''}`}>
+                {idea.group?.forwardedToFypOffice && (
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+                    <div className="text-emerald-600 text-lg font-black tracking-wider uppercase border-[3px] border-emerald-600 rounded-lg px-4 py-2 rotate-[-15deg] opacity-80">
+                      Forwarded
+                    </div>
+                  </div>
+                )}
                 <div className="p-5 md:p-6">
                   <div className="flex items-start justify-between gap-4 mb-3">
                     <div className="min-w-0 flex-1">
@@ -137,12 +159,18 @@ const FacultyGroupProposals = () => {
                   {idea.supervisorFeedback && <span className="text-slate-400">Feedback: {idea.supervisorFeedback}</span>}
                 </div>
 
-                  {(idea.agreementStatus === 'supervisor_approved' || idea.agreementStatus === 'supervisor_rejected') && (
-                    <div className="border-t border-line pt-4 mt-2">
-                      <button onClick={() => handleReset(idea._id)} disabled={actionLoading === idea._id}
+                  {!idea.group?.forwardedToFypOffice && (idea.agreementStatus === 'supervisor_approved' || idea.agreementStatus === 'supervisor_rejected') && (
+                    <div className="border-t border-line pt-4 mt-2 flex items-center gap-2">
+                      <button onClick={() => showConfirm('Reset Proposal', 'Reset this proposal to pending review? This allows you to re-review it.', () => handleReset(idea._id))}
                         className="flex items-center gap-1.5 px-4 py-2 bg-white text-slate-600 text-xs font-bold rounded-xl border border-line hover:bg-amber-50 hover:text-amber-600 hover:border-amber-200 transition-all disabled:opacity-50 cursor-pointer">
-                        {actionLoading === idea._id ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RotateCcw className="w-3.5 h-3.5" />} Reset to Pending
+                        <RotateCcw className="w-3.5 h-3.5" /> Reset to Pending
                       </button>
+                      {idea.agreementStatus === 'supervisor_approved' && (
+                        <button onClick={() => showConfirm('Forward to FYP Office', 'Forward this group to FYP Office for further review?', () => handleForward(idea.group?._id || idea.group))}
+                          className="flex items-center gap-1.5 px-4 py-2 bg-blue-600 text-white text-xs font-bold rounded-xl hover:bg-blue-700 transition-all cursor-pointer border-0">
+                          <Send className="w-3.5 h-3.5" /> Forward to FYP Office
+                        </button>
+                      )}
                     </div>
                   )}
 
@@ -181,6 +209,34 @@ const FacultyGroupProposals = () => {
           </div>
         </div>
       )}
+
+      <AnimatePresence>
+        {confirm.show && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-blue-600/20 backdrop-blur-sm">
+            <motion.div initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }} className="bg-white rounded-2xl shadow-2xl border border-line w-full max-w-sm p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center">
+                  <AlertTriangle className="w-5 h-5 text-amber-600" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-slate-900">{confirm.title}</h3>
+                  <p className="text-xs text-slate-500 mt-0.5">{confirm.message}</p>
+                </div>
+              </div>
+              <div className="flex justify-end gap-2">
+                <button onClick={() => setConfirm({ show: false, title: '', message: '', action: null })}
+                  className="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 border border-line hover:bg-gray-50 transition-all cursor-pointer">
+                  Cancel
+                </button>
+                <button onClick={handleConfirm}
+                  className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 transition-all cursor-pointer border-0">
+                  Confirm
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 };

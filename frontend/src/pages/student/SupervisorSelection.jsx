@@ -1,19 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { getAvailableSupervisors, requestSupervisor, cancelSupervisorRequest, getStudentGroup, getGroupIdeas } from '../../services/student.service';
 import { showToast as toast } from '../../components/AppToast';
-import { Check, GraduationCap, Loader, MessageSquare, Search, Send, Trash2, UserCheck, X, ThumbsUp, ThumbsDown, Clock, Lightbulb, CheckCircle, AlertCircle } from 'lucide-react';
+import { STATUS_MAP } from '../../utils/constants/status.constant';
+import { Check, GraduationCap, Loader, Search, Send, Trash2, UserCheck, X, Lightbulb } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.04 } } };
 const item = { hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } };
-
-const STATUS_MAP = {
-  voting: { label: 'In Voting', color: 'bg-blue-50 text-blue-700 border-blue-200', icon: ThumbsUp },
-  agreed: { label: 'Pending Review', color: 'bg-amber-50 text-amber-700 border-amber-200', icon: Clock },
-  voting_rejected: { label: 'Voting Rejected', color: 'bg-gray-50 text-gray-500 border-gray-200', icon: X },
-  supervisor_approved: { label: 'Approved', color: 'bg-emerald-50 text-emerald-700 border-emerald-200', icon: ThumbsUp },
-  supervisor_rejected: { label: 'Rejected', color: 'bg-rose-50 text-rose-600 border-rose-200', icon: ThumbsDown },
-};
 
 export default function SupervisorSelection() {
   const [query, setQuery] = useState('');

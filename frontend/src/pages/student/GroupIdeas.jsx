@@ -1,19 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { submitGroupIdea, getGroupIdeas, voteOnGroupIdea, getStudentGroup, generateAIDescription } from '../../services/student.service';
 import { showToast as toast } from '../../components/AppToast';
-import { Check, ChevronDown, ChevronUp, Clock, Lightbulb, Loader, Plus, Sparkles, ThumbsDown, ThumbsUp, Upload, X } from 'lucide-react';
+import { IDEA_STATUS_MAP as statusConfig } from '../../utils/constants/status.constant';
+import { Check, ChevronDown, ChevronUp, Clock, Lightbulb, Loader, Plus, Sparkles, ThumbsDown, ThumbsUp, Upload } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.04 } } };
 const item = { hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } };
-
-const statusConfig = {
-  voting: { label: 'Voting', class: 'bg-amber-50 text-amber-700 border-amber-200', icon: Clock },
-  agreed: { label: 'Agreed', class: 'bg-emerald-50 text-emerald-700 border-emerald-200', icon: ThumbsUp },
-  voting_rejected: { label: 'Rejected by Group', class: 'bg-red-50 text-red-600 border-red-200', icon: ThumbsDown },
-  supervisor_approved: { label: 'Supervisor Approved', class: 'bg-blue-50 text-blue-700 border-blue-200', icon: Check },
-  supervisor_rejected: { label: 'Supervisor Rejected', class: 'bg-rose-50 text-rose-600 border-rose-200', icon: X }
-};
 
 export default function GroupIdeas() {
   const [ideas, setIdeas] = useState([]);
@@ -26,7 +19,7 @@ export default function GroupIdeas() {
   const [voting, setVoting] = useState({});
   const [generating, setGenerating] = useState(false);
   const [aiRemaining, setAiRemaining] = useState(null);
-  const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState('supervisor_approved');
   const formRef = useRef(null);
 
   useEffect(() => {
@@ -148,13 +141,15 @@ export default function GroupIdeas() {
             {group.name || 'Your group'} &bull; {totalMembers} member{totalMembers !== 1 ? 's' : ''}
           </p>
         </div>
-        <button
-          onClick={() => setShowForm(!showForm)}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-xl text-sm font-bold transition-all border-0 cursor-pointer flex items-center gap-2 focus-visible:ring-2 focus-visible:ring-blue-500"
-        >
-          <Plus size={16} />
-          {showForm ? 'Cancel' : 'New Idea'}
-        </button>
+        {!ideas.some(i => i.agreementStatus === 'supervisor_approved') && (
+          <button
+            onClick={() => setShowForm(!showForm)}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-xl text-sm font-bold transition-all border-0 cursor-pointer flex items-center gap-2 focus-visible:ring-2 focus-visible:ring-blue-500"
+          >
+            <Plus size={16} />
+            {showForm ? 'Cancel' : 'New Idea'}
+          </button>
+        )}
       </motion.div>
 
       {showForm && (

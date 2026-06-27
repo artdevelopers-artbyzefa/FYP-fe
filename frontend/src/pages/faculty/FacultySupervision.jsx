@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getFacultySupervisedGroups } from '../../services/faculty.service';
+import { STATUS_MAP } from '../../utils/constants/status.constant';
 import { Users, FileText, TrendingUp, Loader2, AlertCircle, ArrowLeft, Lightbulb, ThumbsUp, MessageSquare } from 'lucide-react';
-
-const STATUS_MAP = {
-  pending_approval: 'Pending Approval', approved: 'Approved', active: 'Active',
-  completed: 'Completed', rejected: 'Rejected', forming: 'Forming'
-};
 
 const FacultySupervision = () => {
   const [groups, setGroups] = useState([]);

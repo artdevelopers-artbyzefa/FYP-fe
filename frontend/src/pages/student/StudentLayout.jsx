@@ -32,7 +32,7 @@ export default function DashboardLayout() {
   const phaseVisible = (itemId) => {
     const lookup = {
       '/dashboard': 1, '/profile': 1, '/fyp-group': 1, '/supervisor-selection': 1,
-      '/task-manager': 4, '/past-projects': 1, '/suggestions': 1
+      '/task-manager': 1, '/past-projects': 1, '/suggestions': 1
     };
     const match = Object.entries(lookup).find(([key]) => itemId.startsWith(key));
     const min = match ? match[1] : (itemId.startsWith('/project') ? 2 : 1);

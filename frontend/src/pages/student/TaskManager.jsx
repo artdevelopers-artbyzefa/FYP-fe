@@ -1,248 +1,593 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useOutletContext } from 'react-router-dom';
-import { 
-  ResponsiveContainer, 
-  PieChart, 
-  Pie, 
-  Cell, 
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip 
-} from 'recharts';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import {
-  Bell,
-  ChevronDown,
-  LayoutDashboard,
-  KanbanSquare,
-  Users,
-  LineChart,
-  CalendarDays,
-  GraduationCap,
-  Plus,
-  ClipboardList,
-  CheckCircle2,
-  Zap,
-  Hourglass,
-  Clock,
-  Search,
-  Eye,
-  Tag,
-  X,
-  Check,
-  Calendar
+  Plus, X, Check, Calendar, Clock,
+  List, Columns, CalendarDays, Trash2,
+  User, Tag, AlignLeft, AlertCircle, Bell, ChevronDown, Pencil
 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import apiClient from '../../api/apiClient';
 import { STUDENT_TASKS_API_URL } from '../../utils/constants/api-url.constant';
+import { getStudentGroup } from '../../services/student.service';
 import { logger } from '../../utils/logger';
-import { motion } from 'framer-motion';
 
-/**
- * Fix 1: Task Response Normalizer
- * Handles both response shapes from the backend:
- *   - Flat array:    [{ id, title, status: 'todo' | 'in-progress' | 'review' | 'done' }]
- *   - Grouped obj:  { 'Not Started': [...], 'In Progress': [...], ... }
- */
+const COLUMNS = ['Not Started', 'In Progress', 'Review', 'Completed'];
+
+const COLUMN_META = {
+  'Not Started': { dot: 'bg-slate-400' },
+  'In Progress': { dot: 'bg-blue-500' },
+  'Review': { dot: 'bg-amber-500' },
+  'Completed': { dot: 'bg-emerald-500' },
+};
+
+const REVERSE_STATUS = {
+  not_started: 'Not Started',
+  'not-started': 'Not Started',
+  todo: 'Not Started',
+  in_progress: 'In Progress',
+  'in-progress': 'In Progress',
+  review: 'Review',
+  done: 'Completed',
+  completed: 'Completed',
+};
+
+const PRIORITY_STYLES = {
+  high: { dot: 'bg-red-500', label: 'text-red-600', bg: 'bg-red-50', border: 'border-red-200' },
+  medium: { dot: 'bg-amber-500', label: 'text-amber-600', bg: 'bg-amber-50', border: 'border-amber-200' },
+  low: { dot: 'bg-emerald-500', label: 'text-emerald-600', bg: 'bg-emerald-50', border: 'border-emerald-200' },
+};
+
+const formatDate = (d) => {
+  if (!d) return '';
+  const date = typeof d === 'string' ? new Date(d) : d;
+  if (isNaN(date.getTime())) return d;
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+};
+
 const normalizeTasksResponse = (data) => {
   if (!data) return null;
-
-  // Already grouped object — use as-is
   if (!Array.isArray(data) && data['Not Started'] !== undefined) return data;
-
-  // Flat array — group by status
   if (Array.isArray(data)) {
     return {
-      'Not Started': data.filter(t => t.status === 'todo' || t.status === 'not-started'),
-      'In Progress': data.filter(t => t.status === 'in-progress'),
-      'Review':      data.filter(t => t.status === 'review'),
-      'Completed':   data.filter(t => t.status === 'done' || t.status === 'completed'),
+      'Not Started': data.filter(t => t.status === 'todo' || t.status === 'not-started' || t.status === 'not_started'),
+      'In Progress': data.filter(t => t.status === 'in-progress' || t.status === 'in_progress'),
+      'Review': data.filter(t => t.status === 'review'),
+      'Completed': data.filter(t => t.status === 'done' || t.status === 'completed'),
     };
   }
-
-  return null; // unknown shape
+  return null;
 };
 
 const taskBoardData = {
   'Not Started': [
-    { id: 1, title: 'Supervisor Meeting Slides – S3', categories: ['Documentation'], priority: 'medium', date: 'Feb 22', overdue: true, assignee: 'AR' },
-    { id: 2, title: 'Performance Optimization', categories: ['Backend'], priority: 'low', date: 'Feb 28', overdue: true, assignee: 'UA' },
-    { id: 3, title: 'User Acceptance Testing', categories: ['Testing'], priority: 'high', date: 'Mar 3', overdue: true, assignee: 'AR' },
-    { id: 4, title: 'ML Model Integration', categories: ['ML', 'Backend'], priority: 'high', date: 'Mar 1', overdue: true, assignee: 'AM' },
-    { id: 5, title: 'Security Audit', categories: ['Security'], priority: 'medium', date: 'Mar 6', overdue: true, assignee: 'UA' },
-    { id: 6, title: 'Final Documentation', categories: ['Documentation'], priority: 'high', date: 'Mar 10', overdue: true, assignee: 'AR' },
-    { id: 7, title: 'Deployment & CI/CD Setup', categories: ['DevOps'], priority: 'medium', date: 'Mar 8', overdue: true, assignee: 'UA' },
+    { id: 1, title: 'Supervisor Meeting Slides – S3', categories: ['Documentation'], priority: 'medium', dueDate: '2026-02-22', overdue: true, assignee: 'AR', progress: 0, description: '' },
+    { id: 2, title: 'Performance Optimization', categories: ['Backend'], priority: 'low', dueDate: '2026-02-28', overdue: true, assignee: 'UA', progress: 0, description: '' },
+    { id: 3, title: 'User Acceptance Testing', categories: ['Testing'], priority: 'high', dueDate: '2026-03-03', overdue: true, assignee: 'AR', progress: 0, description: '' },
   ],
   'In Progress': [
-    { id: 8, title: 'Frontend Auth & Routing', categories: ['Frontend'], priority: 'high', date: 'Feb 15', overdue: true, progress: 75, assignee: 'FK' },
-    { id: 9, title: 'REST API Development', categories: ['Backend'], priority: 'high', date: 'Feb 18', overdue: true, progress: 60, assignee: 'UA' },
-    { id: 10, title: 'ML Model Training — Phase 1', categories: ['ML'], priority: 'high', date: 'Feb 20', overdue: true, progress: 45, assignee: 'AM' },
-    { id: 11, title: 'Dashboard UI Components', categories: ['Frontend'], priority: 'medium', date: 'Feb 17', overdue: true, progress: 80, assignee: 'FK' },
-    { id: 12, title: 'Code Review & Refactoring', categories: ['Quality'], priority: 'medium', date: 'Feb 16', overdue: true, progress: 30, assignee: 'AR' },
+    { id: 8, title: 'Frontend Auth & Routing', categories: ['Frontend'], priority: 'high', dueDate: '2026-02-15', overdue: true, assignee: 'FK', progress: 75, description: '' },
+    { id: 9, title: 'REST API Development', categories: ['Backend'], priority: 'high', dueDate: '2026-02-18', overdue: true, assignee: 'UA', progress: 60, description: '' },
   ],
   'Review': [
-    { id: 13, title: 'API Integration Testing', categories: ['Testing'], priority: 'medium', date: 'Feb 14', overdue: true, progress: 92, assignee: 'UA' },
-    { id: 14, title: 'Mobile Responsiveness', categories: ['Frontend'], priority: 'medium', date: 'Feb 13', overdue: true, progress: 88, assignee: 'FK' },
-    { id: 15, title: 'Data Preprocessing Pipeline', categories: ['ML'], priority: 'high', date: 'Feb 12', overdue: true, progress: 95, assignee: 'AM' },
+    { id: 13, title: 'API Integration Testing', categories: ['Testing'], priority: 'medium', dueDate: '2026-02-14', overdue: true, assignee: 'UA', progress: 92, description: '' },
   ],
   'Completed': [
-    { id: 16, title: 'Project Proposal Document', categories: ['Documentation'], priority: 'high', date: 'Dec 1', overdue: false, progress: 100, assignee: 'AR' },
-    { id: 17, title: 'Literature Review', categories: ['Research'], priority: 'high', date: 'Dec 15', overdue: false, progress: 100, assignee: 'FK' },
-    { id: 18, title: 'System Architecture Design', categories: ['Design'], priority: 'high', date: 'Jan 5', overdue: false, progress: 100, assignee: 'AR' },
-    { id: 19, title: 'Database Schema Design', categories: ['Backend'], priority: 'medium', date: 'Jan 10', overdue: false, progress: 100, assignee: 'UA' },
-    { id: 20, title: 'UI/UX Wireframes', categories: ['Design'], priority: 'medium', date: 'Jan 15', overdue: false, progress: 100, assignee: 'FK' },
+    { id: 16, title: 'Project Proposal Document', categories: ['Documentation'], priority: 'high', dueDate: '2025-12-01', overdue: false, progress: 100, assignee: 'AR', description: '' },
   ]
 };
 
-const TaskCard = ({ task, onDelete, onEdit }) => {
-  const priorityStyle = {
-    'high': 'text-[#dc2626] bg-[#fee2e2]',
-    'medium': 'text-[#d97706] bg-[#fef3c7]',
-    'low': 'text-[#16a34a] bg-[#dcfce7]'
-  }[task.priority];
+function getAssigneeOptions(members) {
+  if (!members?.length) return [];
+  return members.map(m => ({
+    value: m?.user?.name ? m.user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : '?',
+    label: m?.user?.name || 'Unknown Member',
+  }));
+}
+
+function InlineTitleEdit({ value, onSave, onCancel }) {
+  const [text, setText] = useState(value);
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    inputRef.current?.focus();
+    inputRef.current?.select();
+  }, []);
+
+  const commit = () => {
+    if (text.trim() && text.trim() !== value) {
+      onSave(text.trim());
+    } else {
+      onCancel();
+    }
+  };
 
   return (
-    <div className="bg-white rounded-[16px] p-5 shadow-card border border-line hover:shadow-md hover:border-blue-500 transition-all cursor-pointer">
-      <div className="flex flex-wrap items-center gap-2 mb-3">
-        {task.categories.map((cat, i) => (
-          <span key={i} className="bg-blue-50 text-[#2563eb] font-bold text-[11px] px-2.5 py-1 rounded-full uppercase">
-            {cat}
-          </span>
-        ))}
-      </div>
+    <input
+      ref={inputRef}
+      value={text}
+      onChange={(e) => setText(e.target.value)}
+      onBlur={commit}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') commit();
+        if (e.key === 'Escape') onCancel();
+      }}
+      className="w-full text-[13px] font-semibold text-slate-800 bg-blue-50 border border-blue-300 rounded px-1.5 py-0.5 outline-none focus:ring-2 focus:ring-blue-500/30"
+    />
+  );
+}
 
-      <h4 className="text-[15px] font-bold text-[#1e293b] leading-tight mb-4">{task.title}</h4>
+function TaskCard({ task, onSelect }) {
+  const [editing, setEditing] = useState(false);
 
-      <div className="flex items-center justify-between mb-4">
-        <span className={`text-[12px] font-bold px-2.5 py-1 rounded-full capitalize ${priorityStyle}`}>
-          {task.priority}
-        </span>
-        <div className="flex items-center gap-1.5">
-          <CalendarDays className="w-3.5 h-3.5 text-slate-900" />
-          <span className="text-[12px] font-bold text-slate-900">{task.date}</span>
-          {task.overdue && (
-            <svg className="w-4 h-4 text-[#dc2626]" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
-            </svg>
-          )}
+  const handleInlineSave = async (title) => {
+    setEditing(false);
+    try {
+      await apiClient.put(`${STUDENT_TASKS_API_URL}/${task.id || task._id}`, { title });
+    } catch (err) {
+      logger('Error updating task title:', err);
+    }
+  };
+
+  return (
+    <div className="group relative">
+      <div
+        onClick={() => !editing && onSelect(task)}
+        className="bg-white rounded-lg border border-slate-200 px-3.5 py-3 cursor-pointer hover:border-blue-300 hover:bg-blue-50/30 transition-all duration-150"
+      >
+        <div className="flex items-start gap-2">
+          <div className="flex-1 min-w-0" onDoubleClick={(e) => { e.stopPropagation(); setEditing(true); }}>
+            {editing ? (
+              <InlineTitleEdit
+                value={task.title}
+                onSave={handleInlineSave}
+                onCancel={() => setEditing(false)}
+              />
+            ) : (
+              <h4 className="text-[13px] font-semibold text-slate-800 leading-snug line-clamp-2">{task.title}</h4>
+            )}
+            <div className="flex items-center gap-2.5 mt-2.5">
+              {task.priority && (
+                <span className="flex items-center gap-1 text-[11px] font-medium text-slate-500">
+                  <span className={`w-2 h-2 rounded-full ${PRIORITY_STYLES[task.priority]?.dot || 'bg-slate-400'}`} />
+                  {task.priority}
+                </span>
+              )}
+              {task.dueDate && (
+                <span className={`flex items-center gap-1 text-[11px] font-medium ${task.overdue ? 'text-red-500' : 'text-slate-500'}`}>
+                  <Calendar size={11} />
+                  {formatDate(task.dueDate)}
+                </span>
+              )}
+              {task.assignee && (
+                <span className="ml-auto flex items-center justify-center w-5 h-5 rounded-full bg-slate-200 text-[9px] font-bold text-slate-600">
+                  {task.assignee.substring(0, 2).toUpperCase()}
+                </span>
+              )}
+            </div>
+            {task.progress > 0 && task.progress < 100 && (
+              <div className="mt-2.5 h-1 w-full bg-slate-100 rounded-full overflow-hidden">
+                <div className="h-full bg-blue-500 rounded-full transition-all" style={{ width: `${task.progress}%` }} />
+              </div>
+            )}
+          </div>
         </div>
       </div>
+      <button
+        onClick={(e) => { e.stopPropagation(); setEditing(true); }}
+        className="absolute top-2 right-2 p-1 rounded-md bg-white border border-slate-200 shadow-sm opacity-0 group-hover:opacity-100 transition-opacity text-slate-400 hover:text-blue-600 cursor-pointer"
+        title="Rename"
+      >
+        <Pencil size={12} strokeWidth={2} />
+      </button>
+    </div>
+  );
+}
 
-      {task.progress !== undefined && (
-        <div className="mb-4">
-          <div className="flex items-center justify-between mb-1.5">
-            <span className="text-[12px] font-semibold text-slate-900">Progress</span>
-            <span className="text-[12px] font-bold text-[#1e293b]">{task.progress}%</span>
+function BoardView({ tasks, onSelectTask }) {
+  return (
+    <div className="flex gap-4 overflow-x-auto pb-2 -mx-1 px-1" style={{ scrollbarWidth: 'thin' }}>
+      {COLUMNS.map(col => {
+        const meta = COLUMN_META[col];
+        const colTasks = tasks[col] || [];
+        return (
+          <div key={col} className="flex-1 min-w-[260px] max-w-[320px] bg-slate-50/80 rounded-xl border border-slate-200">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200">
+              <div className="flex items-center gap-2">
+                <span className={`w-2 h-2 rounded-full ${meta.dot}`} />
+                <h3 className="text-[13px] font-semibold text-slate-700">{col}</h3>
+                <span className="text-[11px] font-medium text-slate-400 ml-1">{colTasks.length}</span>
+              </div>
+            </div>
+            <div className="p-2.5 space-y-2 min-h-[120px]">
+              {colTasks.map(task => (
+                <TaskCard key={task.id || task._id} task={task} onSelect={onSelectTask} />
+              ))}
+              {colTasks.length === 0 && (
+                <div className="flex items-center justify-center h-20 text-[12px] text-slate-400 font-medium">
+                  No tasks
+                </div>
+              )}
+            </div>
           </div>
-          <div className="h-1.5 w-full bg-white rounded-full overflow-hidden">
-            <div
-              className={`h-full rounded-full ${task.progress === 100 ? 'bg-[#16a34a]' : 'bg-[#2563eb]'}`}
-              style={{ width: `${task.progress}%` }}
-            ></div>
+        );
+      })}
+    </div>
+  );
+}
+
+function TableView({ tasks, onSelectTask }) {
+  const allTasks = Object.values(tasks).flat();
+  if (allTasks.length === 0) {
+    return <div className="flex items-center justify-center h-48 text-sm text-slate-400 font-medium">No tasks yet</div>;
+  }
+  return (
+    <div className="overflow-x-auto rounded-xl border border-slate-200" style={{ scrollbarWidth: 'thin' }}>
+      <table className="w-full text-left">
+        <thead>
+          <tr className="border-b border-slate-200 bg-slate-50/80">
+            <th className="px-4 py-3 text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Task</th>
+            <th className="px-4 py-3 text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Status</th>
+            <th className="px-4 py-3 text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Priority</th>
+            <th className="px-4 py-3 text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Due</th>
+            <th className="px-4 py-3 text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Assignee</th>
+          </tr>
+        </thead>
+        <tbody>
+          {allTasks.map((task, i) => (
+            <tr
+              key={task.id || task._id || i}
+              onClick={() => onSelectTask(task)}
+              className="border-b border-slate-100 hover:bg-blue-50/40 cursor-pointer transition-colors last:border-0"
+            >
+              <td className="px-4 py-3">
+                <div className="flex items-center gap-2">
+                  <span className={`w-1.5 h-1.5 rounded-full ${PRIORITY_STYLES[task.priority]?.dot || 'bg-slate-400'} flex-shrink-0`} />
+                  <span className="text-[13px] font-medium text-slate-800 line-clamp-1">{task.title}</span>
+                </div>
+              </td>
+              <td className="px-4 py-3">
+                <span className="inline-flex items-center gap-1.5 text-[12px] font-medium text-slate-600">
+                  <span className={`w-1.5 h-1.5 rounded-full ${COLUMN_META[REVERSE_STATUS[task.status]]?.dot || 'bg-slate-400'}`} />
+                  {REVERSE_STATUS[task.status] || task.status}
+                </span>
+              </td>
+              <td className="px-4 py-3">
+                <span className={`text-[12px] font-medium ${PRIORITY_STYLES[task.priority]?.label || 'text-slate-500'}`}>{task.priority}</span>
+              </td>
+              <td className="px-4 py-3">
+                <span className={`text-[12px] font-medium ${task.overdue ? 'text-red-500' : 'text-slate-500'}`}>
+                  {formatDate(task.dueDate) || '—'}
+                </span>
+              </td>
+              <td className="px-4 py-3">
+                {task.assignee ? (
+                  <span className="inline-flex items-center gap-1.5 text-[12px] font-medium text-slate-600">
+                    <span className="flex items-center justify-center w-5 h-5 rounded-full bg-slate-200 text-[9px] font-bold text-slate-600">
+                      {task.assignee.substring(0, 2).toUpperCase()}
+                    </span>
+                    {task.assignee}
+                  </span>
+                ) : <span className="text-[12px] text-slate-400">—</span>}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function CalendarView({ tasks }) {
+  const allTasks = Object.values(tasks).flat();
+  const withDates = allTasks.filter(t => t.dueDate).sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+  if (withDates.length === 0) {
+    return <div className="flex items-center justify-center h-48 text-sm text-slate-400 font-medium">No tasks with due dates</div>;
+  }
+  const grouped = {};
+  withDates.forEach(t => {
+    const key = formatDate(t.dueDate);
+    if (!grouped[key]) grouped[key] = [];
+    grouped[key].push(t);
+  });
+  return (
+    <div className="space-y-3">
+      {Object.entries(grouped).map(([date, dateTasks]) => (
+        <div key={date} className="rounded-xl border border-slate-200 overflow-hidden">
+          <div className="px-4 py-2.5 bg-slate-50/80 border-b border-slate-200">
+            <span className="text-[12px] font-semibold text-slate-600">{date}</span>
+            <span className="text-[11px] text-slate-400 ml-2">{dateTasks.length} task{dateTasks.length > 1 ? 's' : ''}</span>
+          </div>
+          <div className="divide-y divide-slate-100">
+            {dateTasks.map((task, i) => (
+              <div key={task.id || task._id || i} className="px-4 py-2.5 flex items-center gap-3 hover:bg-blue-50/30 transition-colors">
+                <span className={`w-1.5 h-1.5 rounded-full ${PRIORITY_STYLES[task.priority]?.dot || 'bg-slate-400'} flex-shrink-0`} />
+                <span className="flex-1 text-[13px] font-medium text-slate-800 line-clamp-1">{task.title}</span>
+                {task.overdue && <span className="text-[10px] font-semibold text-red-500 uppercase">Overdue</span>}
+                <span className="text-[11px] font-medium text-slate-400">{task.assignee}</span>
+              </div>
+            ))}
           </div>
         </div>
+      ))}
+    </div>
+  );
+}
+
+function TaskSidePanel({ task, onClose, onSave, onDelete, visible, assigneeOptions }) {
+  const [edit, setEdit] = useState(task ? { ...task } : null);
+  const [saving, setSaving] = useState(false);
+  const [confirmClose, setConfirmClose] = useState(false);
+
+  const prevTaskKeyRef = useRef(task?.id || task?._id);
+  if ((task?.id || task?._id) !== prevTaskKeyRef.current) {
+    prevTaskKeyRef.current = task?.id || task?._id;
+    setEdit(task ? { ...task } : null);
+    setConfirmClose(false);
+  }
+
+  const isDirty = useCallback(() => {
+    if (!task || !edit) return false;
+    return JSON.stringify(task) !== JSON.stringify(edit);
+  }, [task, edit]);
+
+  const handleClose = () => {
+    if (isDirty() && !confirmClose) {
+      setConfirmClose(true);
+      return;
+    }
+    setConfirmClose(false);
+    onClose();
+  };
+
+  const handleSave = async () => {
+    if (!edit) return;
+    setSaving(true);
+    try {
+      await onSave(edit);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const dirty = isDirty();
+
+  if (!edit) return null;
+
+  return (
+    <AnimatePresence>
+      {visible && (
+        <>
+          <motion.div
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+            className="fixed inset-0 bg-black/10 z-40" onClick={handleClose}
+          />
+          <motion.div
+            initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }}
+            transition={{ type: 'spring', damping: 30, stiffness: 300, mass: 0.8 }}
+            className="fixed right-0 top-0 h-full w-full max-w-[420px] bg-white border-l border-slate-200 z-50 shadow-xl flex flex-col overflow-hidden"
+          >
+            <div className="flex items-center justify-between px-5 py-4 border-b border-slate-200">
+              <div className="flex items-center gap-2">
+                <button onClick={handleClose} className="p-1 hover:bg-slate-100 rounded-md transition-colors text-slate-400 hover:text-slate-600 cursor-pointer">
+                  <X size={18} />
+                </button>
+                {dirty && <span className="text-[11px] font-medium text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">Unsaved</span>}
+              </div>
+              <button
+                onClick={() => onDelete(edit.id || edit._id)}
+                className="p-1.5 hover:bg-red-50 rounded-md transition-colors text-slate-400 hover:text-red-500 cursor-pointer"
+                title="Delete task"
+              >
+                <Trash2 size={16} />
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto px-5 py-5 space-y-6" style={{ scrollbarWidth: 'thin' }}>
+              <div>
+                <input
+                  type="text"
+                  value={edit.title}
+                  onChange={(e) => setEdit({ ...edit, title: e.target.value })}
+                  className="w-full text-[18px] font-bold text-slate-900 bg-transparent border-none outline-none focus:ring-0 p-0"
+                  placeholder="Task title"
+                />
+              </div>
+              <div className="space-y-3">
+                <PropertyRow icon={List} label="Status">
+                  <select
+                    value={edit.status || 'not_started'}
+                    onChange={(e) => setEdit({ ...edit, status: e.target.value })}
+                    className="text-[13px] font-medium text-slate-700 bg-slate-50 border border-slate-200 rounded-md px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500/30 cursor-pointer"
+                  >
+                    <option value="not_started">Not Started</option>
+                    <option value="in_progress">In Progress</option>
+                    <option value="review">Review</option>
+                    <option value="completed">Completed</option>
+                  </select>
+                </PropertyRow>
+                <PropertyRow icon={Tag} label="Priority">
+                  <div className="flex gap-1.5">
+                    {['low', 'medium', 'high'].map(p => {
+                      const ps = PRIORITY_STYLES[p];
+                      return (
+                        <button
+                          key={p}
+                          onClick={() => setEdit({ ...edit, priority: p })}
+                          className={`px-2.5 py-1 rounded-md text-[11px] font-semibold capitalize transition-all cursor-pointer ${
+                            edit.priority === p
+                              ? `${ps.bg} ${ps.label} ring-1 ring-slate-300`
+                              : 'text-slate-500 hover:bg-slate-100'
+                          }`}
+                        >
+                          {p}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </PropertyRow>
+                <PropertyRow icon={User} label="Assignee">
+                  <select
+                    value={edit.assignee || ''}
+                    onChange={(e) => setEdit({ ...edit, assignee: e.target.value })}
+                    className="text-[13px] font-medium text-slate-700 bg-slate-50 border border-slate-200 rounded-md px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500/30 w-full cursor-pointer"
+                  >
+                    <option value="">Unassigned</option>
+                    {assigneeOptions.map(opt => (
+                      <option key={opt.value} value={opt.value}>{opt.label}</option>
+                    ))}
+                  </select>
+                </PropertyRow>
+                <PropertyRow icon={Calendar} label="Due date">
+                  <input
+                    type="date"
+                    value={edit.dueDate ? (typeof edit.dueDate === 'string' ? edit.dueDate : edit.dueDate.toISOString().split('T')[0]) : ''}
+                    onChange={(e) => setEdit({ ...edit, dueDate: e.target.value ? new Date(e.target.value) : null })}
+                    className="text-[13px] font-medium text-slate-700 bg-slate-50 border border-slate-200 rounded-md px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500/30"
+                  />
+                </PropertyRow>
+                <PropertyRow icon={Clock} label="Progress">
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="range" min="0" max="100"
+                      value={edit.progress || 0}
+                      onChange={(e) => setEdit({ ...edit, progress: parseInt(e.target.value) })}
+                      className="w-32 h-1.5 bg-slate-200 rounded-full appearance-none cursor-pointer accent-blue-600"
+                    />
+                    <span className="text-[12px] font-semibold text-slate-600 w-8">{edit.progress || 0}%</span>
+                  </div>
+                </PropertyRow>
+                <PropertyRow icon={AlignLeft} label="Description">
+                  <textarea
+                    value={edit.description || ''}
+                    onChange={(e) => setEdit({ ...edit, description: e.target.value })}
+                    placeholder="Add a description..."
+                    rows={3}
+                    className="w-full text-[13px] text-slate-700 bg-slate-50 border border-slate-200 rounded-md px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500/30 resize-none"
+                  />
+                </PropertyRow>
+              </div>
+              {edit.createdAt && (
+                <div className="pt-4 border-t border-slate-200">
+                  <h4 className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-2">Activity</h4>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 text-[12px] text-slate-500">
+                      <span className="w-1.5 h-1.5 rounded-full bg-slate-300 flex-shrink-0" />
+                      Created {new Date(edit.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                    </div>
+                    {edit.updatedAt && edit.updatedAt !== edit.createdAt && (
+                      <div className="flex items-center gap-2 text-[12px] text-slate-500">
+                        <span className="w-1.5 h-1.5 rounded-full bg-slate-300 flex-shrink-0" />
+                        Updated {new Date(edit.updatedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Footer with save */}
+            <div className="border-t border-slate-200 px-5 py-4">
+              {confirmClose ? (
+                <div className="flex items-center gap-2">
+                  <span className="text-[12px] text-slate-600 flex-1">Discard changes?</span>
+                  <button
+                    onClick={() => { setConfirmClose(false); onClose(); }}
+                    className="px-3 py-1.5 text-[12px] font-semibold text-red-600 hover:bg-red-50 rounded-md transition-colors cursor-pointer"
+                  >
+                    Discard
+                  </button>
+                  <button
+                    onClick={() => setConfirmClose(false)}
+                    className="px-3 py-1.5 text-[12px] font-semibold text-slate-600 hover:bg-slate-100 rounded-md transition-colors cursor-pointer"
+                  >
+                    Keep editing
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={handleSave}
+                  disabled={!dirty || saving}
+                  className={`w-full py-2.5 rounded-lg text-[13px] font-semibold transition-all cursor-pointer ${
+                    dirty && !saving
+                      ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                      : 'bg-slate-100 text-slate-400 cursor-not-allowed'
+                  }`}
+                >
+                  {saving ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      Saving...
+                    </span>
+                  ) : dirty ? (
+                    'Save Changes'
+                  ) : (
+                    <span className="flex items-center justify-center gap-2">
+                      <Check size={14} />
+                      Saved
+                    </span>
+                  )}
+                </button>
+              )}
+            </div>
+          </motion.div>
+        </>
       )}
-
-      <div className="flex items-center justify-between mt-1 pt-2 border-t border-line">
-        <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-[12px] font-bold shadow-card ring-2 ring-white">
-          {task.assignee}
-        </div>
-        <div className="flex items-center gap-2">
-          <button
-            onClick={(e) => { e.stopPropagation(); onEdit(task); }}
-            className="w-[30px] h-[30px] rounded-[8px] bg-blue-50 text-[#2563eb] flex items-center justify-center hover:bg-white transition-colors"
-          >
-            <svg className="w-[14px] h-[14px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-            </svg>
-          </button>
-          <button
-            onClick={(e) => { e.stopPropagation(); onDelete(task.id); }}
-            className="w-[30px] h-[30px] rounded-[8px] bg-[#fef2f2] text-[#dc2626] flex items-center justify-center hover:bg-white transition-colors"
-          >
-            <svg className="w-[14px] h-[14px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-            </svg>
-          </button>
-        </div>
-      </div>
-    </div>
+    </AnimatePresence>
   );
-};
+}
 
-const BoardColumn = ({ title, icon: Icon, count, tasks, onDelete, onEdit }) => {
-  const bgColors = {
-    'Not Started': 'bg-[#f8fafc]',
-    'In Progress': 'bg-blue-50',
-    'Review': 'bg-[#fffbeb]',
-    'Completed': 'bg-[#f0fdf4]'
-  };
-
-  const textColors = {
-    'Not Started': 'text-[#475569]',
-    'In Progress': 'text-[#2563eb]',
-    'Review': 'text-[#d97706]',
-    'Completed': 'text-[#16a34a]'
-  };
-
-  const countBgs = {
-    'Not Started': 'bg-[#475569]',
-    'In Progress': 'bg-[#2563eb]',
-    'Review': 'bg-[#d97706]',
-    'Completed': 'bg-[#16a34a]'
-  };
-
+function PropertyRow({ icon: Icon, label, children }) {
   return (
-    <div className={`flex-1 min-w-[320px] max-w-[340px] rounded-[24px] ${bgColors[title]} p-5 flex flex-col`}>
-      <div className="flex items-center justify-between mb-5 px-1">
-        <div className={`flex items-center gap-2.5 ${textColors[title]}`}>
-          <Icon className="w-5 h-5 stroke-[2.5]" />
-          <h3 className="font-extrabold text-[16px]">{title}</h3>
-        </div>
-        <div className={`w-6 h-6 rounded-full ${countBgs[title]} text-white flex items-center justify-center text-[12px] font-bold shadow-card`}>
-          {count}
-        </div>
+    <div className="flex items-start gap-3">
+      <div className="flex items-center gap-2 w-28 flex-shrink-0 pt-1">
+        <Icon size={14} className="text-slate-400" strokeWidth={1.5} />
+        <span className="text-[12px] font-medium text-slate-500">{label}</span>
       </div>
-      <div className="flex flex-col gap-4">
-        {tasks.map(task => <TaskCard key={task.id} task={task} onDelete={onDelete} onEdit={onEdit} />)}
-      </div>
+      <div className="flex-1">{children}</div>
     </div>
   );
-};
+}
 
-const container = { hidden: {}, show: { transition: { staggerChildren: 0.04 } } };
-const item = { hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } };
-const TaskManager = () => {
-  const navigate = useNavigate();
-  const { user } = useOutletContext();
-  const [activeTab, setActiveTab] = useState('Task Board');
-
-  // Custom interactive states
-  const [tasks, setTasks] = useState(taskBoardData);
-  const [showAddTaskModal, setShowAddTaskModal] = useState(false);
-  const [showEditTaskModal, setShowEditTaskModal] = useState(false);
+export default function TaskManager() {
+  const [view, setView] = useState('board');
+  const [tasks, setTasks] = useState({ 'Not Started': [], 'In Progress': [], 'Review': [], 'Completed': [] });
+  const [group, setGroup] = useState(null);
   const [selectedTask, setSelectedTask] = useState(null);
-  const [showNotifications, setShowNotifications] = useState(false);
+  const [showPanel, setShowPanel] = useState(false);
+  const [showQuickAdd, setShowQuickAdd] = useState(false);
+  const [quickTitle, setQuickTitle] = useState('');
+  const [showQuickOptions, setShowQuickOptions] = useState(false);
+  const [quickPriority, setQuickPriority] = useState('medium');
+  const [quickDueDate, setQuickDueDate] = useState('');
+  const [quickAssignee, setQuickAssignee] = useState('');
+  const [notifications, setNotifications] = useState([]);
+  const [showNotifs, setShowNotifs] = useState(false);
   const [toast, setToast] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [fetchError, setFetchError] = useState(null); // Fix 3
+  const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState(null);
+
+  const quickInputRef = useRef(null);
+  const notifRef = useRef(null);
+
+  const showToast = useCallback((msg) => {
+    setToast(msg);
+    setTimeout(() => setToast(null), 3000);
+  }, []);
 
   useEffect(() => {
     const fetchTasks = async () => {
       setLoading(true);
       setFetchError(null);
       try {
-        const response = await apiClient.get(STUDENT_TASKS_API_URL);
-        // Fix 1: normalize response — works with both flat array and grouped object
-        const normalized = normalizeTasksResponse(response.data);
+        const res = await apiClient.get(STUDENT_TASKS_API_URL);
+        const normalized = normalizeTasksResponse(res.data);
         if (normalized) setTasks(normalized);
       } catch (err) {
-        // Fix 3: dev gets silent fallback; production shows visible error
         if (import.meta.env.DEV) {
-          logger("[DEV] Failed to load tasks from backend, using mocked fallback.", err);
+          logger('[DEV] Tasks API failed, using mock fallback.', err);
+          setTasks(taskBoardData);
         } else {
-          setFetchError("Unable to load tasks. Please refresh or contact support.");
+          setFetchError('Unable to load tasks.');
         }
       } finally {
         setLoading(false);
@@ -251,1182 +596,418 @@ const TaskManager = () => {
     fetchTasks();
   }, []);
 
-  // Form states for Add Task Modal
-  const [newTaskTitle, setNewTaskTitle] = useState('');
-  const [newTaskCategories, setNewTaskCategories] = useState(['Frontend']);
-  const [newTaskPriority, setNewTaskPriority] = useState('medium');
-  const [newTaskDueDate, setNewTaskDueDate] = useState('');
-  const [newTaskAssignee, setNewTaskAssignee] = useState('AR');
+  useEffect(() => {
+    getStudentGroup()
+      .then(res => {
+        const data = res?.data || res;
+        setGroup(data);
+      })
+      .catch(() => {});
+  }, []);
 
-  // Interactive Supervisor State
-  const [requestedSupervisors, setRequestedSupervisors] = useState({});
+  useEffect(() => {
+    if (showQuickAdd && quickInputRef.current) {
+      quickInputRef.current.focus();
+    }
+  }, [showQuickAdd]);
 
-  // Notification lists state (with 3 unread count)
-  const [notifications, setNotifications] = useState([
-    { id: 1, sender: 'Dr. Tariq Hassan', action: 'assigned you a new task:', target: 'ML Model Training — Phase 1', time: '10m ago', unread: true },
-    { id: 2, sender: 'Fatima Khan', action: 'moved to Review', target: 'Mobile Responsiveness', time: '1h ago', unread: true },
-    { id: 3, sender: 'Ahmed Raza', action: 'added a comment on', target: 'Supervisor Meeting Slides — S3', time: '3h ago', unread: true }
-  ]);
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (notifRef.current && !notifRef.current.contains(e.target)) {
+        setShowNotifs(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
-  const showToastMessage = (message) => {
-    setToast(message);
-    setTimeout(() => {
-      setToast(null);
-    }, 4000);
+  const allTasks = Object.values(tasks).flat();
+  const completedCount = (tasks['Completed'] || []).length;
+  const inProgressCount = (tasks['In Progress'] || []).length;
+  const reviewCount = (tasks['Review'] || []).length;
+  const totalTasks = allTasks.length;
+  const completionRate = totalTasks > 0 ? Math.round((completedCount / totalTasks) * 100) : 0;
+
+  const groupMembers = group?.members || [];
+  const assigneeOptions = getAssigneeOptions(groupMembers);
+
+  const addNotification = useCallback((message) => {
+    const id = Date.now();
+    setNotifications(prev => [{ id, message, time: new Date(), unread: true }, ...prev].slice(0, 20));
+  }, []);
+
+  const markNotifsRead = () => {
+    setNotifications(prev => prev.map(n => ({ ...n, unread: false })));
+  };
+
+  const handleSelectTask = (task) => {
+    setSelectedTask(task);
+    setShowPanel(true);
+  };
+
+  const handleSaveTask = async (updated) => {
+    const col = REVERSE_STATUS[updated.status] || 'Not Started';
+    try {
+      await apiClient.put(`${STUDENT_TASKS_API_URL}/${updated.id || updated._id}`, updated);
+    } catch (err) {
+      logger('Error updating task:', err);
+    }
+    setTasks(prev => {
+      const next = {};
+      Object.keys(prev).forEach(c => {
+        next[c] = prev[c].map(t => (t.id === updated.id || t._id === updated._id ? updated : t));
+      });
+      const newCol = REVERSE_STATUS[updated.status] || 'Not Started';
+      if (newCol !== col) {
+        const item = next[col]?.find(t => t.id === updated.id || t._id === updated._id);
+        if (item) {
+          next[col] = next[col].filter(t => t.id !== updated.id && t._id !== updated._id);
+          next[newCol] = [...(next[newCol] || []), item];
+        }
+      }
+      return next;
+    });
+    setSelectedTask(updated);
+    showToast('Task saved');
   };
 
   const handleDeleteTask = async (id) => {
-    setLoading(true);
     try {
       await apiClient.delete(`${STUDENT_TASKS_API_URL}/${id}`);
     } catch (err) {
-      if (import.meta.env.DEV) {
-        logger("[DEV] Error deleting task (applied locally):", err);
-      } else {
-        showToastMessage('Failed to delete task. Please try again.');
-      }
-    } finally {
-      setLoading(false);
+      logger('Error deleting task:', err);
     }
-    const updatedTasks = {};
-    Object.keys(tasks).forEach(col => {
-      updatedTasks[col] = tasks[col].filter(t => t.id !== id);
+    setTasks(prev => {
+      const next = {};
+      Object.keys(prev).forEach(c => {
+        next[c] = prev[c].filter(t => t.id !== id && t._id !== id);
+      });
+      return next;
     });
-    setTasks(updatedTasks);
-    showToastMessage('Task deleted successfully!');
+    setShowPanel(false);
+    setSelectedTask(null);
+    showToast('Task deleted');
   };
 
-  const handleCreateTask = async (e) => {
-    e.preventDefault();
-    if (!newTaskTitle.trim()) return;
-
+  const handleCreateTask = async () => {
+    const title = quickTitle.trim();
+    if (!title) return;
     const newTask = {
       id: Date.now(),
-      title: newTaskTitle,
-      categories: newTaskCategories,
-      priority: newTaskPriority,
-      date: newTaskDueDate || 'Feb 22',
-      overdue: true,
-      assignee: newTaskAssignee
+      title,
+      categories: [],
+      priority: quickPriority,
+      dueDate: quickDueDate ? new Date(quickDueDate) : null,
+      assignee: quickAssignee,
+      progress: 0,
+      status: 'not_started',
+      description: '',
+      overdue: quickDueDate ? new Date(quickDueDate) < new Date() : false,
     };
-
-    setLoading(true);
     try {
       await apiClient.post(STUDENT_TASKS_API_URL, newTask);
     } catch (err) {
-      logger("Error creating task:", err);
-      logger("Created task locally", newTask);
-    } finally {
-      setLoading(false);
+      logger('Error creating task:', err);
     }
+    setTasks(prev => ({
+      ...prev,
+      'Not Started': [...prev['Not Started'], newTask],
+    }));
 
-    setTasks({
-      ...tasks,
-      'Not Started': [...tasks['Not Started'], newTask]
-    });
-
-    // Reset Form
-    setNewTaskTitle('');
-    setNewTaskCategories(['Frontend']);
-    setNewTaskPriority('medium');
-    setNewTaskDueDate('');
-    setNewTaskAssignee('AR');
-    setShowAddTaskModal(false);
-
-    showToastMessage('New task created successfully!');
-  };
-
-  const handleUpdateTask = async (e) => {
-    e.preventDefault();
-    if (!selectedTask || !selectedTask.title.trim()) return;
-
-    setLoading(true);
-    try {
-      await apiClient.put(`${STUDENT_TASKS_API_URL}/${selectedTask.id}`, selectedTask);
-    } catch (err) {
-      logger("Error updating task:", err);
-      logger("Updated task locally", selectedTask);
-    } finally {
-      setLoading(false);
+    if (quickAssignee) {
+      const assignedName = assigneeOptions.find(o => o.value === quickAssignee)?.label || quickAssignee;
+      addNotification(`"${title}" assigned to ${assignedName}`);
     }
+    addNotification(`"${title}" created`);
 
-    const updatedTasks = {};
-    Object.keys(tasks).forEach(col => {
-      updatedTasks[col] = tasks[col].map(t => {
-        if (t.id === selectedTask.id) {
-          return selectedTask;
-        }
-        return t;
-      });
-    });
-
-    setTasks(updatedTasks);
-    setShowEditTaskModal(false);
-    setSelectedTask(null);
-    showToastMessage('Task updated successfully!');
+    setQuickTitle('');
+    setQuickPriority('medium');
+    setQuickDueDate('');
+    setQuickAssignee('');
+    setShowQuickOptions(false);
+    setShowQuickAdd(false);
+    showToast('Task created');
   };
 
-  const handleMarkAllNotificationsRead = () => {
-    setNotifications(notifications.map(n => ({ ...n, unread: false })));
-    showToastMessage('All notifications marked as read!');
+  const handleQuickKeyDown = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleCreateTask();
+    }
+    if (e.key === 'Escape') {
+      setShowQuickAdd(false);
+      setQuickTitle('');
+      setShowQuickOptions(false);
+    }
   };
 
-  const handleRequestSupervisor = (id, name) => {
-    setRequestedSupervisors({
-      ...requestedSupervisors,
-      [id]: true
-    });
-    showToastMessage(`Request successfully sent to ${name}! Status: Pending Approval.`);
-  };
-
-  const tabs = [
-    { id: 'Dashboard', icon: LayoutDashboard },
-    { id: 'Task Board', icon: KanbanSquare },
-    { id: 'Team', icon: Users },
-    { id: 'Analytics', icon: LineChart },
-    { id: 'Calendar', icon: CalendarDays },
-    { id: 'Supervisor', icon: GraduationCap }
+  const views = [
+    { id: 'board', icon: Columns, label: 'Board' },
+    { id: 'table', icon: List, label: 'Table' },
+    { id: 'calendar', icon: CalendarDays, label: 'Calendar' },
   ];
 
+  const unreadCount = notifications.filter(n => n.unread).length;
+
   return (
-    <motion.div variants={container} initial="hidden" animate="show" className="flex-1 flex flex-col min-w-0 min-h-screen bg-[#f4f7fe] font-poppins antialiased">
-      {/* Fix 3: Production error banner — only shown when backend is unreachable in prod */}
+    <div className="flex-1 flex flex-col min-w-0 font-sans antialiased text-slate-800">
+      <AnimatePresence>
+        {toast && (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            className="fixed top-4 right-4 z-50 bg-slate-900 text-white text-[13px] font-medium px-4 py-2.5 rounded-lg shadow-lg flex items-center gap-2"
+          >
+            <Check size={14} />
+            {toast}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {fetchError && (
-        <div className="mx-6 mt-4 flex items-center gap-3 bg-white border border-line text-slate-900 px-5 py-3.5 rounded-2xl text-[13px] font-semibold shadow-card">
-          <svg className="w-4 h-4 shrink-0 text-slate-900" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-          </svg>
+        <div className="mx-4 mt-4 flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 px-4 py-2.5 rounded-lg text-[13px] font-medium">
+          <AlertCircle size={15} />
           {fetchError}
         </div>
       )}
-      {/* Main Content Padding Wrapper */}
-      <div className="p-6 md:p-8 max-w-[1400px] w-full mx-auto space-y-8">
 
-        {/* 2. Navigation Tabs & Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="flex flex-col md:flex-row md:items-center gap-6">
-            <h2 className="text-[28px] font-extrabold text-[#1e293b] tracking-tight">
-              {activeTab === 'Team' ? 'Team Overview' : activeTab}
-            </h2>
-
-            {/* Tabs */}
-            <div className="hidden md:flex items-center gap-1 bg-white px-1.5 py-1.5 rounded-2xl shadow-card border border-line overflow-x-auto">
-              {tabs.map(tab => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[14px] transition-colors relative whitespace-nowrap ${activeTab === tab.id
-                    ? 'bg-[#f4f7fe] text-[#2563eb] font-bold'
-                    : 'text-slate-500 hover:text-slate-900 font-semibold hover:bg-slate-50'
-                    }`}
-                >
-                  <tab.icon className="w-4 h-4" />
-                  {tab.id}
-                  {activeTab === tab.id && (
-                    <div className="absolute -bottom-[6px] left-1/2 -translate-x-1/2 w-8 h-[3px] bg-[#2563eb] rounded-t-full"></div>
-                  )}
-                </button>
-              ))}
-            </div>
+      {/* Header */}
+      <div className="px-4 md:px-6 pt-4 md:pt-5 pb-3 border-b border-slate-200">
+        <div className="flex items-center justify-between mb-3">
+          <div>
+            <h1 className="text-[20px] font-bold text-slate-900 tracking-tight">Tasks</h1>
+            <p className="text-[12px] text-slate-500 mt-0.5">{totalTasks} task{totalTasks !== 1 ? 's' : ''}</p>
           </div>
-
-          <div className="flex items-center gap-3 relative">
-            <button
-              onClick={() => setShowAddTaskModal(true)}
-              className="flex items-center gap-2 bg-[#2563eb] hover:bg-[#1d4ed8] text-white px-5 py-2.5 rounded-xl font-bold text-[14px] shadow-lg transition-all cursor-pointer animate-pulse-subtle"
-            >
-              <Plus className="w-4 h-4 stroke-[3]" /> Add Task
-            </button>
-            <button
-              onClick={() => setShowNotifications(!showNotifications)}
-              className="w-10 h-10 rounded-xl bg-white border border-line shadow-card flex items-center justify-center text-slate-900 relative hover:bg-white transition-colors cursor-pointer"
-            >
-              <Bell className="w-5 h-5" />
-              {notifications.filter(n => n.unread).length > 0 && (
-                <div className="absolute -top-1.5 -right-1.5 bg-[#f23c3c] text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white shadow-card">
-                  {notifications.filter(n => n.unread).length}
+          <div className="flex items-center gap-2">
+            <div className="relative" ref={notifRef}>
+              <button
+                onClick={() => setShowNotifs(!showNotifs)}
+                className="relative p-2 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer text-slate-500"
+              >
+                <Bell size={18} strokeWidth={1.5} />
+                {unreadCount > 0 && (
+                  <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center">
+                    {unreadCount}
+                  </span>
+                )}
+              </button>
+              {showNotifs && (
+                <div className="absolute right-0 top-10 w-80 bg-white rounded-xl border border-slate-200 shadow-lg z-50 overflow-hidden">
+                  <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100">
+                    <span className="text-[12px] font-bold text-slate-700">Notifications</span>
+                    {unreadCount > 0 && (
+                      <button onClick={markNotifsRead} className="text-[11px] font-semibold text-blue-600 hover:text-blue-700 cursor-pointer">
+                        Mark all read
+                      </button>
+                    )}
+                  </div>
+                  <div className="max-h-72 overflow-y-auto" style={{ scrollbarWidth: 'thin' }}>
+                    {notifications.length === 0 ? (
+                      <div className="px-4 py-6 text-center text-[12px] text-slate-400 font-medium">No notifications</div>
+                    ) : (
+                      notifications.map(n => (
+                        <div key={n.id} className={`px-4 py-2.5 border-b border-slate-50 last:border-0 ${n.unread ? 'bg-blue-50/40' : ''}`}>
+                          <div className="flex items-start gap-2">
+                            {n.unread && <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5 flex-shrink-0" />}
+                            <div className={n.unread ? '' : 'ml-[14px]'}>
+                              <p className="text-[12px] text-slate-700 font-medium leading-snug">{n.message}</p>
+                              <span className="text-[10px] text-slate-400 mt-0.5 block">
+                                {n.time.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
                 </div>
               )}
+            </div>
+            <button
+              onClick={() => setShowQuickAdd(true)}
+              className="flex items-center gap-1.5 px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-[13px] font-semibold rounded-lg transition-colors cursor-pointer"
+            >
+              <Plus size={16} strokeWidth={2} />
+              New Task
             </button>
-
-            {/* Notification Dropdown */}
-            {showNotifications && (
-              <div className="absolute right-0 top-[52px] w-80 bg-white rounded-[24px] border border-line shadow-xl py-4 z-50 animate-in fade-in slide-in- duration-200">
-                <div className="px-4 pb-3 border-b border-line flex items-center justify-between">
-                  <span className="text-[13px] font-extrabold text-slate-900 tracking-tight">Notifications</span>
-                  {notifications.filter(n => n.unread).length > 0 && (
-                    <button
-                      onClick={handleMarkAllNotificationsRead}
-                      className="text-[11px] font-bold text-slate-900 hover:text-blue-600 transition-colors cursor-pointer"
-                    >
-                      Mark all as read
-                    </button>
-                  )}
-                </div>
-                <div className="max-h-[280px] overflow-y-auto">
-                  {notifications.map((n) => (
-                    <div
-                      key={n.id}
-                      className={`px-4 py-3 hover:bg-slate-50 transition-colors border-b border-slate-50 last:border-0 relative ${n.unread ? 'bg-blue-50/20' : ''}`}
-                    >
-                      {n.unread && (
-                        <span className="absolute left-1.5 top-4 w-1.5 h-1.5 bg-blue-600 rounded-full"></span>
-                      )}
-                      <p className="text-[12px] text-slate-900 font-medium leading-normal pl-1.5">
-                        <span className="font-bold text-slate-900">{n.sender}</span> {n.action} <span className="font-semibold text-slate-900">{n.target}</span>
-                      </p>
-                      <span className="text-[10px] text-slate-900 font-semibold block mt-1 pl-1.5">{n.time}</span>
-                    </div>
-                  ))}
-                </div>
-                <div className="px-4 pt-3 border-t border-line text-center">
-                  <span className="text-[11px] font-extrabold text-slate-900 hover:underline cursor-pointer">
-                    View all notifications
-                  </span>
-                </div>
-              </div>
-            )}
           </div>
         </div>
 
-        {/* Tab Content */}
-        {loading ? (
-          <div className="space-y-4">
-            <div className="skeleton h-10 w-48" />
-            {[1,2,3,4].map(i => <div key={i} className="skeleton h-24 w-full rounded-2xl" />)}
-          </div>
-        ) : activeTab === 'Task Board' ? (
-          <div>
-            {/* Filter Bar */}
-            <div className="flex flex-wrap items-center gap-4 mb-8">
-              <div className="relative w-full sm:w-[280px]">
-                <Search className="w-4 h-4 text-slate-900 absolute left-4 top-1/2 -translate-y-1/2" />
-                <input
-                  type="text"
-                  placeholder="Search tasks..."
-                  className="w-full pl-11 pr-4 py-2.5 bg-white border border-line rounded-xl text-[14px] font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all shadow-card placeholder:text-slate-400"
-                />
-              </div>
-
-              <div className="relative">
-                <select className="appearance-none bg-white border border-line rounded-xl pl-4 pr-10 py-2.5 text-[14px] font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all shadow-card cursor-pointer min-w-[150px]">
-                  <option>All Priorities</option>
-                  <option>High</option>
-                  <option>Medium</option>
-                  <option>Low</option>
-                </select>
-                <ChevronDown className="w-4 h-4 absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-900 pointer-events-none" />
-              </div>
-
-              <div className="relative">
-                <select className="appearance-none bg-white border border-line rounded-xl pl-4 pr-10 py-2.5 text-[14px] font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all shadow-card cursor-pointer min-w-[150px]">
-                  <option>All Members</option>
-                  <option>Ahmed Raza</option>
-                  <option>Fatima Khan</option>
-                  <option>Usman Ali</option>
-                  <option>Ayesha Malik</option>
-                </select>
-                <ChevronDown className="w-4 h-4 absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-900 pointer-events-none" />
-              </div>
+        {/* Stats row */}
+        <div className="flex items-center gap-4 md:gap-6">
+          {[
+            { label: 'Total', count: totalTasks, color: 'text-slate-900' },
+            { label: 'In Progress', count: inProgressCount, color: 'text-blue-600' },
+            { label: 'Review', count: reviewCount, color: 'text-amber-600' },
+            { label: 'Completed', count: completedCount, color: 'text-emerald-600' },
+          ].map(stat => (
+            <div key={stat.label} className="flex items-center gap-1.5">
+              <span className={`text-[15px] font-bold ${stat.color}`}>{stat.count}</span>
+              <span className="text-[11px] font-medium text-slate-400">{stat.label}</span>
             </div>
-
-            {/* Board Columns */}
-            <div className="flex gap-6 overflow-x-auto pb-6 -mx-6 px-6 md:mx-0 md:px-0">
-              <BoardColumn title="Not Started" icon={ClipboardList} count={taskBoardData['Not Started'].length} tasks={taskBoardData['Not Started']} />
-              <BoardColumn title="In Progress" icon={Zap} count={taskBoardData['In Progress'].length} tasks={taskBoardData['In Progress']} />
-              <BoardColumn title="Review" icon={Eye} count={taskBoardData['Review'].length} tasks={taskBoardData['Review']} />
-              <BoardColumn title="Completed" icon={CheckCircle2} count={taskBoardData['Completed'].length} tasks={taskBoardData['Completed']} />
+          ))}
+          {totalTasks > 0 && (
+            <div className="flex items-center gap-1.5 ml-auto">
+              <div className="h-1.5 w-20 bg-slate-200 rounded-full overflow-hidden">
+                <div className="h-full bg-blue-500 rounded-full transition-all" style={{ width: `${completionRate}%` }} />
+              </div>
+              <span className="text-[11px] font-medium text-slate-400">{completionRate}%</span>
             </div>
-          </div>
-        ) : activeTab === 'Dashboard' ? (
-          <div className="space-y-8">
-            {/* 3. Project Progress Overview (Blue Card) */}
-            <div className="bg-gradient- from-[#1e3a8a] to-[#2563eb] rounded-[24px] p-8 text-white relative overflow-hidden shadow-xl">
-              {/* Faded FYP text background */}
-              <div className="absolute right-8 md:right-16 top-1/2 -translate-y-1/2 text-[100px] md:text-[140px] font-black text-white/10 pointer-events-none tracking-tighter select-none">
-                FYP
-              </div>
+          )}
+        </div>
 
-              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8 relative z-10">
-                <div className="flex items-start gap-5">
-                  <div className="w-14 h-14 bg-white/10 border border-white/20 rounded-2xl flex items-center justify-center font-bold text-[20px] backdrop-blur-sm shrink-0">
-                    {user?.avatar || 'ST'}
-                  </div>
-                  <div className="flex flex-col">
-                    <h3 className="text-[28px] font-extrabold flex items-center gap-2">
-                      Welcome back, {user?.name || 'Student'}!
-                    </h3>
-                    <p className="text-slate-500 font-medium text-[15px] mt-1">
-                      AI-Powered Recommendation System - Sprint 2 of 4
-                    </p>
+        {/* View switcher */}
+        <div className="flex items-center gap-1 mt-3 bg-slate-100 rounded-lg p-0.5 w-fit">
+          {views.map(v => (
+            <button
+              key={v.id}
+              onClick={() => setView(v.id)}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[12px] font-medium transition-all cursor-pointer ${
+                view === v.id ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-500 hover:text-slate-700'
+              }`}
+            >
+              <v.icon size={14} strokeWidth={1.5} />
+              {v.label}
+            </button>
+          ))}
+        </div>
+      </div>
 
-                    <div className="mt-8 flex items-center gap-6">
-                      <div className="flex flex-col">
-                        <span className="text-[11px] font-bold tracking-wider text-slate-500 mb-2">Overall Progress</span>
-                        <span className="text-[42px] font-black leading-none tracking-tight">25%</span>
-                      </div>
-
-                      <div className="flex flex-col justify-end w-full max-w-[320px] min-w-[240px] mb-1">
-                        <div className="h-2.5 w-full bg-white/10 rounded-full overflow-hidden border border-white/10">
-                          <div className="h-full bg-white w-1/4 rounded-full"></div>
-                        </div>
-                        <span className="text-[12px] text-slate-500 font-medium mt-2">5 of 20 tasks completed</span>
-                      </div>
-                    </div>
-                  </div>
+      {/* Quick add bar */}
+      <AnimatePresence>
+        {showQuickAdd && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.15 }}
+            className="overflow-hidden border-b border-slate-200 bg-slate-50/60"
+          >
+            <div className="px-4 md:px-6 py-3">
+              <div className="flex items-center gap-2">
+                <div className="flex-1 relative">
+                  <input
+                    ref={quickInputRef}
+                    type="text"
+                    value={quickTitle}
+                    onChange={(e) => setQuickTitle(e.target.value)}
+                    onKeyDown={handleQuickKeyDown}
+                    placeholder="Add a task, press Enter to save..."
+                    className="w-full px-3.5 py-2.5 text-[14px] bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 placeholder:text-slate-400 font-medium text-slate-800"
+                  />
                 </div>
-
-                {/* Quick Stats inside blue card */}
-                <div className="flex items-center justify-center gap-8 lg:mr-16 w-full lg:w-auto">
-                  <div className="flex flex-col items-center">
-                    <Zap className="w-6 h-6 text-white mb-2" fill="currentColor" />
-                    <span className="text-[26px] font-black leading-none">5</span>
-                    <span className="text-[12px] text-slate-900 font-semibold mt-1">Active</span>
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <svg className="w-6 h-6 text-white mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" /><circle cx="12" cy="12" r="3" />
-                    </svg>
-                    <span className="text-[26px] font-black leading-none">3</span>
-                    <span className="text-[12px] text-slate-900 font-semibold mt-1">Review</span>
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <ClipboardList className="w-6 h-6 text-white mb-2" />
-                    <span className="text-[26px] font-black leading-none">7</span>
-                    <span className="text-[12px] text-slate-900 font-semibold mt-1">Pending</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* 4. Stats Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="bg-white rounded-[20px] p-6 shadow-card border border-line flex items-center justify-between">
-                <div className="flex flex-col">
-                  <span className="text-[14px] font-bold text-slate-900 mb-1">Total Tasks</span>
-                  <span className="text-[32px] font-black text-[#1e293b] leading-none mb-2">20</span>
-                  <span className="text-[12px] font-medium text-slate-900">All tasks in project</span>
-                </div>
-                <div className="w-[52px] h-[52px] rounded-[14px] bg-white flex items-center justify-center">
-                  <ClipboardList className="w-6 h-6 text-[#2563eb]" />
-                </div>
-              </div>
-
-              <div className="bg-white rounded-[20px] p-6 shadow-card border border-line flex items-center justify-between">
-                <div className="flex flex-col">
-                  <span className="text-[14px] font-bold text-slate-900 mb-1">Completed</span>
-                  <span className="text-[32px] font-black text-[#16a34a] leading-none mb-2">5</span>
-                  <span className="text-[12px] font-medium text-slate-900">25% completion rate</span>
-                </div>
-                <div className="w-[52px] h-[52px] rounded-[14px] bg-white flex items-center justify-center">
-                  <CheckCircle2 className="w-6 h-6 text-[#16a34a]" fill="currentColor" />
-                </div>
-              </div>
-
-              <div className="bg-white rounded-[20px] p-6 shadow-card border border-line flex items-center justify-between">
-                <div className="flex flex-col">
-                  <span className="text-[14px] font-bold text-slate-900 mb-1">In Progress</span>
-                  <span className="text-[32px] font-black text-[#2563eb] leading-none mb-2">5</span>
-                  <span className="text-[12px] font-medium text-slate-900">Currently active</span>
-                </div>
-                <div className="w-[52px] h-[52px] rounded-[14px] bg-white flex items-center justify-center">
-                  <Zap className="w-6 h-6 text-[#2563eb]" fill="currentColor" />
-                </div>
-              </div>
-
-              <div className="bg-white rounded-[20px] p-6 shadow-card border border-line flex items-center justify-between">
-                <div className="flex flex-col">
-                  <span className="text-[14px] font-bold text-slate-900 mb-1">Pending</span>
-                  <span className="text-[32px] font-black text-[#ea580c] leading-none mb-2">7</span>
-                  <span className="text-[12px] font-medium text-slate-900">3 in review</span>
-                </div>
-                <div className="w-[52px] h-[52px] rounded-[14px] bg-white flex items-center justify-center">
-                  <Hourglass className="w-6 h-6 text-[#ea580c]" />
-                </div>
-              </div>
-            </div>
-
-            {/* 5. Main Layout Grid (Deadlines & Activity) */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-
-              {/* Left: Upcoming Deadlines */}
-              <div className="lg:col-span-2 space-y-4">
-                <div className="flex items-center gap-2 mb-6">
-                  <Clock className="w-5 h-5 text-[#1e3a8a] stroke-[2.5]" />
-                  <h3 className="text-[20px] font-extrabold text-[#1e293b]">Upcoming Deadlines</h3>
-                </div>
-
-                <div className="space-y-3">
-                  {[
-                    { title: 'Data Preprocessing Pipeline', priority: 'high', assignee: 'Ayesha Malik', date: 'Feb 12', overdue: true },
-                    { title: 'Mobile Responsiveness', priority: 'medium', assignee: 'Fatima Khan', date: 'Feb 13', overdue: true },
-                    { title: 'API Integration Testing', priority: 'medium', assignee: 'Usman Ali', date: 'Feb 14', overdue: true },
-                    { title: 'Frontend Auth & Routing', priority: 'high', assignee: 'Fatima Khan', date: 'Feb 15', overdue: true },
-                    { title: 'Code Review & Refactoring', priority: null, assignee: '', date: 'Feb 16', overdue: false }
-                  ].map((task, idx) => (
-                    <div key={idx} className="bg-white rounded-[16px] p-5 shadow-card border border-line flex items-center justify-between group hover:border-[#2563eb]/30 transition-colors cursor-pointer relative overflow-hidden">
-                      {/* Left priority border highlight */}
-                      {task.priority === 'high' && <div className="absolute left-0 top-0 bottom-0 w-[4px] bg-[#dc2626]"></div>}
-                      {task.priority === 'medium' && <div className="absolute left-0 top-0 bottom-0 w-[4px] bg-[#eab308]"></div>}
-
-                      <div className="flex flex-col gap-1.5 ml-1">
-                        <span className="font-bold text-[#1e293b] text-[15px]">{task.title}</span>
-                        {(task.priority || task.assignee) && (
-                          <div className="flex items-center gap-3">
-                            {task.priority && (
-                              <span className={`text-[12px] font-bold tracking-wider ${task.priority === 'high' ? 'text-[#dc2626]' : 'text-[#eab308]'}`}>
-                                {task.priority}
-                              </span>
-                            )}
-                            {task.assignee && (
-                              <span className="text-[13px] font-semibold text-slate-900 flex items-center gap-1.5">
-                                <span className="w-1.5 h-1.5 rounded-full bg-white"></span>
-                                {task.assignee}
-                              </span>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                      <div className="flex flex-col items-end gap-1">
-                        <span className={`font-bold text-[14px] ${task.overdue ? 'text-[#dc2626]' : 'text-[#1e293b]'}`}>
-                          {task.date}
-                        </span>
-                        {task.overdue && (
-                          <span className="text-[12px] font-bold text-[#dc2626]">
-                            Overdue
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Right: Recent Activity */}
-              <div className="bg-white rounded-[24px] p-8 shadow-card border border-line lg:h-max">
-                <div className="flex items-center gap-2 mb-8">
-                  <svg className="w-5 h-5 text-[#1e3a8a] stroke-[2.5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <h3 className="text-[20px] font-extrabold text-[#1e293b]">Recent Activity</h3>
-                </div>
-
-                <div className="relative">
-                  {/* Vertical Line */}
-                  <div className="absolute top-4 bottom-4 left-[19px] w-0.5 bg-white"></div>
-
-                  <div className="space-y-8 relative z-10">
-                    <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-[13px] shrink-0 border-4 border-white shadow-card ring-1 ring-gray-100">
-                        AR
-                      </div>
-                      <div className="flex flex-col mt-1">
-                        <p className="text-[14px] text-slate-900 font-medium leading-relaxed">
-                          <span className="font-bold text-[#1e293b]">Ahmed Raza</span> completed <span className="text-[#2563eb] font-semibold">"System Architecture Design"</span>
-                        </p>
-                        <span className="text-[12px] font-semibold text-slate-900 mt-1">2 h ago</span>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 rounded-full bg-white text-white flex items-center justify-center font-bold text-[13px] shrink-0 border-4 border-white shadow-card ring-1 ring-gray-100">
-                        FK
-                      </div>
-                      <div className="flex flex-col mt-1">
-                        <p className="text-[14px] text-slate-900 font-medium leading-relaxed">
-                          <span className="font-bold text-[#1e293b]">Fatima Khan</span> moved to Review <span className="text-[#2563eb] font-semibold">"Mobile Responsiveness"</span>
-                        </p>
-                        <span className="text-[12px] font-semibold text-slate-900 mt-1">3 h ago</span>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 rounded-full bg-[#2563eb] text-white flex items-center justify-center font-bold text-[13px] shrink-0 border-4 border-white shadow-card ring-1 ring-gray-100">
-                        AM
-                      </div>
-                      <div className="flex flex-col mt-1">
-                        <p className="text-[14px] text-slate-900 font-medium leading-relaxed">
-                          <span className="font-bold text-[#1e293b]">Ayesha Malik</span> updated progress <span className="text-[#2563eb] font-semibold">"ML Model Training - Phase 1"</span>
-                        </p>
-                        <span className="text-[12px] font-semibold text-slate-900 mt-1">4 h ago</span>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 rounded-full bg-[#2563eb] text-white flex items-center justify-center font-bold text-[13px] shrink-0 border-4 border-white shadow-card ring-1 ring-gray-100">
-                        UA
-                      </div>
-                      <div className="flex flex-col mt-1">
-                        <p className="text-[14px] text-slate-900 font-medium leading-relaxed">
-                          <span className="font-bold text-[#1e293b]">Usman Ali</span> submitted review <span className="text-[#2563eb] font-semibold">"API Integration Testing"</span>
-                        </p>
-                        <span className="text-[12px] font-semibold text-slate-900 mt-1">5 h ago</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        ) : activeTab === 'Team' ? (
-          <div className="space-y-8">
-            {/* Team Members Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[
-                { name: 'Ahmed Raza', role: 'Team Lead', avatar: 'AR', assigned: 6, done: 2, active: 1, productivity: 33, color: 'bg-[#1e3a8a]' },
-                { name: 'Fatima Khan', role: 'Frontend Dev', avatar: 'FK', assigned: 5, done: 2, active: 2, productivity: 40, color: 'bg-[#334155]' },
-                { name: 'Usman Ali', role: 'Backend Dev', avatar: 'UA', assigned: 6, done: 1, active: 1, productivity: 17, color: 'bg-[#2563eb]' },
-                { name: 'Ayesha Malik', role: 'ML Engineer', avatar: 'AM', assigned: 3, done: 0, active: 1, productivity: 0, color: 'bg-[#1d4ed8]' }
-              ].map((member, idx) => (
-                <div key={idx} className="bg-white border border-line rounded-[24px] p-6 shadow-card hover:shadow-md transition-all group">
-                  <div className="flex items-center gap-4">
-                    <div className={`w-14 h-14 ${member.color} text-white rounded-2xl flex items-center justify-center text-[18px] font-bold border border-white shadow-card ring-1 ring-gray-100 shrink-0`}>
-                      {member.avatar}
-                    </div>
-                    <div className="flex flex-col">
-                      <h3 className="text-[16px] font-extrabold text-[#1e293b] hover:text-[#2563eb] transition-colors cursor-pointer leading-tight">
-                        {member.name}
-                      </h3>
-                      <p className="text-[12px] text-slate-900 font-semibold mt-0.5">{member.role}</p>
-                    </div>
-                  </div>
-
-                  {/* Stats Row */}
-                  <div className="grid grid-cols-3 gap-3 my-6">
-                    <div className="bg-blue-50 border border-line rounded-xl p-2.5 flex flex-col items-center justify-center">
-                      <span className="text-[16px] font-black text-[#1e3a8a] leading-none">{member.assigned}</span>
-                      <span className="text-[9px] font-bold text-slate-900 tracking-wider mt-1.5">Assigned</span>
-                    </div>
-                    <div className="bg-white border border-line rounded-xl p-2.5 flex flex-col items-center justify-center">
-                      <span className="text-[16px] font-bold text-slate-900 leading-none">{member.done}</span>
-                      <span className="text-[9px] font-bold text-slate-900 tracking-wider mt-1.5">Done</span>
-                    </div>
-                    <div className="bg-white border border-line rounded-xl p-2.5 flex flex-col items-center justify-center">
-                      <span className="text-[16px] font-bold text-slate-900 leading-none">{member.active}</span>
-                      <span className="text-[9px] font-bold text-slate-900 tracking-wider mt-1.5">Active</span>
-                    </div>
-                  </div>
-
-                  {/* Productivity */}
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[12px] font-bold text-slate-900">Productivity</span>
-                      <span className="text-[13px] font-black text-[#1e293b]">{member.productivity}%</span>
-                    </div>
-                    <div className="h-1.5 w-full bg-white rounded-full overflow-hidden">
-                      <div
-                        className="h-full rounded-full bg-[#1e3a8a] transition-all duration-500"
-                        style={{ width: `${member.productivity}%` }}
-                      ></div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Project Supervisor Section */}
-            <div className="bg-white border border-line rounded-[24px] p-6 shadow-card">
-              <div className="flex items-center gap-2 mb-4">
-                <GraduationCap className="w-5 h-5 text-[#1e3a8a] stroke-[2.5]" />
-                <h3 className="text-[15px] font-bold text-[#1e293b]">Project Supervisor</h3>
-              </div>
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center text-[16px] font-bold shrink-0 shadow-card border border-line">
-                  TH
-                </div>
-                <div className="flex flex-col">
-                  <h4 className="text-[16px] font-bold text-[#1e293b] leading-tight">Dr. Tariq Hassan</h4>
-                  <p className="text-[13px] text-slate-900 font-semibold mt-0.5">
-                    Associate Professor <span className="text-slate-900 mx-1.5">•</span> Department of Computer Science
-                  </p>
-                  <p className="text-[13px] text-slate-900 font-semibold mt-0.5">
-                    tariq.hassan@cuiatd.edu.pk <span className="text-slate-900 mx-1.5">•</span> Office Hours: Mon/Wed 2-4 PM
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        ) : activeTab === 'Analytics' ? (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 px-6 pb-6 bg-white/50 mt-2">
-            {/* Task Status Doughnut Chart */}
-            <div className="bg-white border border-line rounded-[24px] p-8 shadow-[0_4px_20px_rgba(0,0,0,0.02)] flex flex-col items-center">
-              <h3 className="text-[16px] font-bold text-[#1e293b] self-start mb-6">Task Status</h3>
-              <div className="relative w-[220px] h-[220px] flex items-center justify-center font-poppins">
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={[
-                        { name: 'Completed', value: 5, color: '#16a34a' },
-                        { name: 'In Progress', value: 5, color: '#2563eb' },
-                        { name: 'Review', value: 3, color: '#d97706' },
-                        { name: 'Not Started', value: 7, color: '#cbd5e1' }
-                      ]}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={65}
-                      outerRadius={85}
-                      paddingAngle={0}
-                      dataKey="value"
-                      startAngle={90}
-                      endAngle={-270}
-                      isAnimationActive={true}
-                      animationDuration={1500}
-                      animationEasing="ease-out"
-                    >
-                      {[
-                        { name: 'Completed', value: 5, color: '#16a34a' },
-                        { name: 'In Progress', value: 5, color: '#2563eb' },
-                        { name: 'Review', value: 3, color: '#d97706' },
-                        { name: 'Not Started', value: 7, color: '#cbd5e1' }
-                      ].map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} stroke="none" />
-                      ))}
-                    </Pie>
-                  </PieChart>
-                </ResponsiveContainer>
-
-                {/* Inner label */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
-                  <span className="text-[26px] font-bold text-slate-900 leading-none">20</span>
-                  <span className="text-[11px] font-bold text-slate-900 tracking-wider mt-1">Total Tasks</span>
-                </div>
-              </div>
-
-              {/* Chart Legend */}
-              <div className="grid grid-cols-2 gap-4 mt-8 w-full">
-                {[
-                  { label: 'Not Started', count: 7, color: 'bg-[#cbd5e1]' },
-                  { label: 'In Progress', count: 5, color: 'bg-[#2563eb]' },
-                  { label: 'Review', count: 3, color: 'bg-[#d97706]' },
-                  { label: 'Completed', count: 5, color: 'bg-[#16a34a]' }
-                ].map((item, idx) => (
-                  <div key={idx} className="flex items-center gap-2.5 px-3 py-2 bg-white border border-line rounded-xl">
-                    <span className={`w-3 h-3 rounded-full ${item.color} shrink-0`}></span>
-                    <div className="flex flex-col">
-                      <span className="text-[12px] font-extrabold text-slate-900 leading-tight">{item.label}</span>
-                      <span className="text-[10px] font-bold text-slate-900 mt-0.5">{item.count} tasks</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Member Contribution Bar Chart */}
-            <div className="lg:col-span-2 bg-white border border-line rounded-[24px] p-8 shadow-[0_4px_20px_rgba(0,0,0,0.02)] flex flex-col">
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-[16px] font-bold text-[#1e293b]">Member Contribution</h3>
-                
-                {/* Legend */}
-                <div className="flex items-center gap-4">
-                  <div className="flex items-center gap-2">
-                    <span className="w-3.5 h-3.5 rounded bg-[#e2e8f0]"></span>
-                    <span className="text-[12px] font-bold text-slate-900">Assigned</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="w-3.5 h-3.5 rounded bg-[#1e3a8a]"></span>
-                    <span className="text-[12px] font-bold text-slate-900">Completed</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Recharts Bar Chart */}
-              <div className="relative flex-grow h-[280px] mt-6 w-full pr-4 font-poppins">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart
-                    data={[
-                      { name: 'Ahmed', assigned: 6, completed: 2 },
-                      { name: 'Fatima', assigned: 5, completed: 2 },
-                      { name: 'Usman', assigned: 6, completed: 1 },
-                      { name: 'Ayesha', assigned: 3, completed: 0 }
-                    ]}
-                    margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
-                    barGap={10}
-                  >
-                    <CartesianGrid vertical={false} stroke="#f1f5f9" />
-                    <XAxis 
-                      dataKey="name" 
-                      axisLine={false} 
-                      tickLine={false} 
-                      tick={{ fill: '#64748b', fontSize: 13, fontWeight: 700 }}
-                      dy={10}
-                    />
-                    <YAxis 
-                      axisLine={false} 
-                      tickLine={false} 
-                      tick={{ fill: '#94a3b8', fontSize: 12, fontWeight: 700 }}
-                      domain={[0, 6]}
-                      ticks={[0, 1, 2, 3, 4, 5, 6]}
-                    />
-                    <Tooltip 
-                      cursor={{ fill: 'rgba(241, 245, 249, 0.4)' }}
-                      content={({ active, payload }) => {
-                        if (active && payload && payload.length) {
-                          return (
-                            <div className="bg-white text-white text-[11px] font-bold px-3 py-2 rounded-xl shadow-lg border border-line flex flex-col gap-1">
-                              <p className="text-slate-900 font-extrabold text-[12px] mb-0.5">{payload[0].payload.name}</p>
-                              <p className="text-[#93c5fd]">{payload[0].value} Assigned</p>
-                              {payload[1] && <p className="text-[#34d399]">{payload[1].value} Completed</p>}
-                            </div>
-                          );
-                        }
-                        return null;
-                      }}
-                    />
-                    <Bar 
-                      dataKey="assigned" 
-                      fill="#e2e8f0" 
-                      radius={[6, 6, 0, 0]} 
-                      maxBarSize={32}
-                      isAnimationActive={true}
-                      animationDuration={1200}
-                      animationEasing="ease-out"
-                    />
-                    <Bar 
-                      dataKey="completed" 
-                      fill="#1e3a8a" 
-                      radius={[6, 6, 0, 0]} 
-                      maxBarSize={32}
-                      isAnimationActive={true}
-                      animationDuration={1200}
-                      animationEasing="ease-out"
-                    />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-          </div>
-        ) : activeTab === 'Calendar' ? (
-          <div className="bg-white border border-line rounded-[24px] p-6 shadow-[0_8px_30px_rgb(0,0,0,0.02)] mt-2 mx-6 mb-6">
-            <div className="flex items-center gap-2 mb-6 text-slate-900 font-bold text-base">
-              <Calendar className="text-[#0f2c59] w-4.5 h-4.5" />
-              <h3 className="tracking-wide">Deadlines List</h3>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              {[
-                { day: '12', month: 'Feb', title: 'Data Preprocessing Pipeline', priority: 'high' },
-                { day: '13', month: 'Feb', title: 'Mobile Responsiveness', priority: 'medium' },
-                { day: '14', month: 'Feb', title: 'API Integration Testing', priority: 'medium' },
-                { day: '15', month: 'Feb', title: 'Frontend Auth & Routing', priority: 'high' },
-                { day: '16', month: 'Feb', title: 'Code Review & Refactoring', priority: 'medium' },
-                { day: '17', month: 'Feb', title: 'Dashboard UI Components', priority: 'medium' },
-                { day: '18', month: 'Feb', title: 'REST API Development', priority: 'high' },
-                { day: '20', month: 'Feb', title: 'ML Model Training — Phase 1', priority: 'high' },
-                { day: '22', month: 'Feb', title: 'Supervisor Meeting Slides - S3', priority: 'medium' },
-                { day: '28', month: 'Feb', title: 'Performance Optimization', priority: 'low' }
-              ].map((deadline, idx) => {
-                const priorityStyles = {
-                  high: 'bg-white',
-                  medium: 'bg-white',
-                  low: 'bg-white'
-                }[deadline.priority];
-
-                return (
-                  <div key={idx} className="bg-[#fef2f2] border-l-4 border-blue-600 rounded-r-xl px-4 py-3 flex items-center justify-between shadow-[0_2px_8px_rgba(0,0,0,0.01)] w-full group hover:shadow-card transition-all duration-200">
-                    <div className="flex items-center">
-                      {/* Left Date Block */}
-                      <div className="bg-white/50 w-12 h-12 rounded-xl flex flex-col items-center justify-center shrink-0 mr-3.5">
-                        <span className="text-slate-900 font-bold text-base leading-none">{deadline.day}</span>
-                        <span className="text-slate-900 text-[10px] font-bold uppercase mt-0.5">{deadline.month}</span>
-                      </div>
-
-                      {/* Middle Info */}
-                      <div className="flex-1 flex flex-col min-w-0 mr-4">
-                        <span className="text-slate-900 font-bold text-sm truncate">
-                          {deadline.title}
-                        </span>
-                        <span className={`mt-1 self-start inline-flex items-center px-2 py-0.5 rounded-full border text-[10px] font-bold tracking-wider ${priorityStyles}`}>
-                          {deadline.priority}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Right Overdue Tag */}
-                    <span className="bg-white/60 text-slate-900 text-[10px] font-extrabold px-3 py-1 rounded-full border border-line tracking-wider shrink-0 uppercase">
-                      OVERDUE
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        ) : (
-          <div className="px-6 pb-6 bg-white/50 space-y-8 mt-2">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[
-                {
-                  id: 1,
-                  name: 'Dr. Ali Hassan',
-                  designation: 'Associate Professor',
-                  expertise: 'AI, Machine Learning, Computer Vision',
-                  avatar: 'AH'
-                },
-                {
-                  id: 2,
-                  name: 'Dr. Zeeshan Ali',
-                  designation: 'Assistant Professor',
-                  expertise: 'Web Technologies, Cloud Computing',
-                  avatar: 'ZA'
-                },
-                {
-                  id: 3,
-                  name: 'Ms. Sana Malik',
-                  designation: 'Lecturer',
-                  expertise: 'IoT, Embedded Systems, Robotics',
-                  avatar: 'SM'
-                }
-              ].map((supervisor) => (
-                <div
-                  key={supervisor.id}
-                  className="bg-white border border-line rounded-[24px] p-6 shadow-[0_4px_20px_rgba(0,0,0,0.02)] transition-all hover:shadow-[0_8px_30px_rgba(0,0,0,0.04)] hover:-translate-y-0.5 group"
+                <button
+                  onClick={() => setShowQuickOptions(!showQuickOptions)}
+                  className={`p-2.5 rounded-lg border transition-colors cursor-pointer ${
+                    showQuickOptions ? 'bg-blue-50 border-blue-300 text-blue-600' : 'bg-white border-slate-300 text-slate-500 hover:bg-slate-100'
+                  }`}
+                  title="More options"
                 >
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className="w-14 h-14 bg-white text-slate-900 rounded-2xl flex items-center justify-center text-[18px] font-bold border border-line shrink-0">
-                      {supervisor.avatar}
-                    </div>
-                    <div className="flex flex-col">
-                      <h3 className="text-[18px] font-bold text-[#1e293b] tracking-tight">{supervisor.name}</h3>
-                      <p className="text-[13px] text-slate-900 font-medium">{supervisor.designation}</p>
-                    </div>
-                  </div>
+                  <ChevronDown size={16} strokeWidth={1.5} className={`transition-transform ${showQuickOptions ? 'rotate-180' : ''}`} />
+                </button>
+                <button
+                  onClick={handleCreateTask}
+                  disabled={!quickTitle.trim()}
+                  className="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white text-[13px] font-semibold rounded-lg transition-colors cursor-pointer"
+                >
+                  Add
+                </button>
+                <button
+                  onClick={() => { setShowQuickAdd(false); setQuickTitle(''); setShowQuickOptions(false); }}
+                  className="p-2.5 hover:bg-slate-200 rounded-lg transition-colors text-slate-400 cursor-pointer"
+                >
+                  <X size={16} strokeWidth={1.5} />
+                </button>
+              </div>
 
-                  <div className="flex items-center gap-2.5 text-[#1e293b] font-semibold text-[13px] mb-8 leading-snug">
-                    <Tag className="w-4 h-4 text-slate-900 shrink-0" />
-                    {supervisor.expertise}
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <button
-                      onClick={() => handleRequestSupervisor(supervisor.id, supervisor.name)}
-                      className={`flex-1 py-3.5 rounded-xl font-bold text-[14px] tracking-wide shadow-lg transition-all active:scale-[0.98] ${
-                        requestedSupervisors[supervisor.id]
-                          ? 'bg-white'
-                          : 'bg-[#1e3a8a] hover:bg-[#172554] text-white shadow-blue-900/10 cursor-pointer'
-                      }`}
-                    >
-                      {requestedSupervisors[supervisor.id] ? 'Requested (Pending)' : 'Request Supervisor'}
-                    </button>
-                    <button className="w-[52px] h-[52px] border border-line rounded-xl flex items-center justify-center text-slate-900 hover:bg-white transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500">
-                      <Users className="w-5 h-5" />
-                    </button>
-                  </div>
-                </div>
-              ))}
+              <AnimatePresence>
+                {showQuickOptions && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.12 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="flex flex-wrap items-center gap-3 mt-3 pt-3 border-t border-slate-200">
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-[11px] font-medium text-slate-500">Priority</span>
+                        <div className="flex gap-1">
+                          {['low', 'medium', 'high'].map(p => (
+                            <button
+                              key={p}
+                              onClick={() => setQuickPriority(p)}
+                              className={`px-2.5 py-1 rounded-md text-[11px] font-semibold capitalize transition-all cursor-pointer ${
+                                quickPriority === p
+                                  ? `${PRIORITY_STYLES[p].bg} ${PRIORITY_STYLES[p].label} ring-1 ring-slate-300`
+                                  : 'text-slate-500 hover:bg-slate-100 bg-white border border-slate-200'
+                              }`}
+                            >
+                              {p}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-[11px] font-medium text-slate-500">Due</span>
+                        <input
+                          type="date"
+                          value={quickDueDate}
+                          onChange={(e) => setQuickDueDate(e.target.value)}
+                          className="px-2.5 py-1 text-[12px] bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/30 text-slate-700"
+                        />
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-[11px] font-medium text-slate-500">Assignee</span>
+                        <select
+                          value={quickAssignee}
+                          onChange={(e) => setQuickAssignee(e.target.value)}
+                          className="px-2.5 py-1 text-[12px] bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/30 text-slate-700 cursor-pointer"
+                        >
+                          <option value="">Unassigned</option>
+                          {assigneeOptions.map(opt => (
+                            <option key={opt.value} value={opt.value}>{opt.label}</option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Content */}
+      <div className="flex-1 overflow-y-auto px-4 md:px-6 py-4" style={{ scrollbarWidth: 'thin' }}>
+        {loading ? (
+          <div className="flex gap-4">
+            {COLUMNS.map(c => (
+              <div key={c} className="flex-1 min-w-[260px] max-w-[320px] space-y-2.5">
+                <div className="skeleton h-5 w-24 rounded" />
+                {[1, 2].map(i => <div key={i} className="skeleton h-24 w-full rounded-lg" />)}
+              </div>
+            ))}
           </div>
+        ) : view === 'board' ? (
+          <BoardView tasks={tasks} onSelectTask={handleSelectTask} />
+        ) : view === 'table' ? (
+          <TableView tasks={tasks} onSelectTask={handleSelectTask} />
+        ) : (
+          <CalendarView tasks={tasks} />
         )}
       </div>
 
-      {/* Add Task Modal */}
-      {showAddTaskModal && (
-        <div className="fixed inset-0 bg-white/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
-          <form
-            onSubmit={handleCreateTask}
-            className="bg-white rounded-[28px] max-w-md w-full p-6 border border-line shadow-2xl relative flex flex-col gap-5 animate-in slide-in- duration-300"
-          >
-            <div className="flex items-center justify-between">
-              <h3 className="text-[18px] font-bold text-slate-900 tracking-tight flex items-center gap-2">
-                <Plus className="w-5 h-5 text-slate-900" /> Create New Task
-              </h3>
-              <button
-                type="button"
-                onClick={() => setShowAddTaskModal(false)}
-                className="w-8 h-8 rounded-full hover:bg-white flex items-center justify-center text-slate-900 hover:text-blue-600 transition-colors cursor-pointer"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="space-y-4">
-              <div className="flex flex-col gap-1.5">
-                <label className="text-[11px] font-bold text-slate-900 tracking-wider">Task Title</label>
-                <input
-                  type="text"
-                  required
-                  placeholder="Enter task title..."
-                  value={newTaskTitle}
-                  onChange={(e) => setNewTaskTitle(e.target.value)}
-                  className="w-full px-4 py-2.5 bg-white border border-line rounded-xl text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-slate-900"
-                />
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                <label className="text-[11px] font-bold text-slate-900 tracking-wider">Priority</label>
-                <div className="grid grid-cols-3 gap-2.5">
-                  {['low', 'medium', 'high'].map((p) => {
-                    const colors = {
-                      low: 'border-line',
-                      medium: 'border-line',
-                      high: 'border-line'
-                    }[p];
-                    const activeColors = {
-                      low: 'bg-white',
-                      medium: 'bg-white',
-                      high: 'bg-white'
-                    }[p];
-                    return (
-                      <button
-                        type="button"
-                        key={p}
-                        onClick={() => setNewTaskPriority(p)}
-                        className={`py-2 rounded-xl text-xs font-bold border capitalize transition-all cursor-pointer ${
-                          newTaskPriority === p ? activeColors : colors
-                        }`}
-                      >
-                        {p}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                <label className="text-[11px] font-bold text-slate-900 tracking-wider font-semibold">Categories</label>
-                <div className="flex flex-wrap gap-2">
-                  {['Frontend', 'Backend', 'Documentation', 'ML', 'Testing', 'Research', 'Design'].map((cat) => {
-                    const isActive = newTaskCategories.includes(cat);
-                    return (
-                      <button
-                        type="button"
-                        key={cat}
-                        onClick={() => {
-                          if (isActive) {
-                            setNewTaskCategories(newTaskCategories.filter(c => c !== cat));
-                          } else {
-                            setNewTaskCategories([...newTaskCategories, cat]);
-                          }
-                        }}
-                        className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all cursor-pointer ${
-                          isActive
-                            ? 'bg-blue-600 border-blue-600 text-white shadow-card shadow-blue-500/20'
-                            : 'bg-slate-50 border-slate-200 text-slate-600 hover:border-slate-300'
-                        }`}
-                      >
-                        {cat}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-[11px] font-bold text-slate-900 tracking-wider font-semibold">Due Date</label>
-                  <input
-                    type="text"
-                    placeholder="e.g. Feb 22"
-                    value={newTaskDueDate}
-                    onChange={(e) => setNewTaskDueDate(e.target.value)}
-                    className="w-full px-4 py-2.5 bg-white border border-line rounded-xl text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-slate-900"
-                  />
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-[11px] font-bold text-slate-900 tracking-wider font-semibold">Assignee</label>
-                  <select
-                    value={newTaskAssignee}
-                    onChange={(e) => setNewTaskAssignee(e.target.value)}
-                    className="w-full px-4 py-2.5 bg-white border border-line rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-semibold text-slate-900 cursor-pointer"
-                  >
-                    <option value="AR">AR - Ahmed Raza</option>
-                    <option value="FK">FK - Fatima Khan</option>
-                    <option value="UA">UA - Usman Ali</option>
-                    <option value="AM">AM - Ayesha Malik</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3 mt-4">
-              <button
-                type="button"
-                onClick={() => setShowAddTaskModal(false)}
-                className="flex-1 py-3 bg-white text-slate-900 rounded-xl font-bold text-xs hover:bg-white transition-colors cursor-pointer"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="flex-1 py-3 bg-[#2563eb] text-white rounded-xl font-bold text-xs hover:bg-blue-600 transition-colors shadow-lg cursor-pointer"
-              >
-                Create Task
-              </button>
-            </div>
-          </form>
-        </div>
-      )}
-
-      {/* Edit Task Modal */}
-      {showEditTaskModal && selectedTask && (
-        <div className="fixed inset-0 bg-white/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
-          <form
-            onSubmit={handleUpdateTask}
-            className="bg-white rounded-[28px] max-w-md w-full p-6 border border-line shadow-2xl relative flex flex-col gap-5 animate-in slide-in- duration-300"
-          >
-            <div className="flex items-center justify-between">
-              <h3 className="text-[18px] font-bold text-slate-900 tracking-tight flex items-center gap-2">
-                Edit Task Details
-              </h3>
-              <button
-                type="button"
-                onClick={() => setShowEditTaskModal(false)}
-                className="w-8 h-8 rounded-full hover:bg-white flex items-center justify-center text-slate-900 hover:text-blue-600 transition-colors cursor-pointer"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="space-y-4">
-              <div className="flex flex-col gap-1.5">
-                <label className="text-[11px] font-bold text-slate-900 tracking-wider font-semibold">Task Title</label>
-                <input
-                  type="text"
-                  required
-                  placeholder="Enter task title..."
-                  value={selectedTask.title}
-                  onChange={(e) => setSelectedTask({ ...selectedTask, title: e.target.value })}
-                  className="w-full px-4 py-2.5 bg-white border border-line rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-slate-900"
-                />
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                <label className="text-[11px] font-bold text-slate-900 tracking-wider font-semibold">Priority</label>
-                <div className="grid grid-cols-3 gap-2.5">
-                  {['low', 'medium', 'high'].map((p) => {
-                    const colors = {
-                      low: 'border-line',
-                      medium: 'border-line',
-                      high: 'border-line'
-                    }[p];
-                    const activeColors = {
-                      low: 'bg-white',
-                      medium: 'bg-white',
-                      high: 'bg-white'
-                    }[p];
-                    return (
-                      <button
-                        type="button"
-                        key={p}
-                        onClick={() => setSelectedTask({ ...selectedTask, priority: p })}
-                        className={`py-2 rounded-xl text-xs font-bold border capitalize transition-all cursor-pointer ${
-                          selectedTask.priority === p ? activeColors : colors
-                        }`}
-                      >
-                        {p}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                <label className="text-[11px] font-bold text-slate-900 tracking-wider font-semibold">Categories</label>
-                <div className="flex flex-wrap gap-2">
-                  {['Frontend', 'Backend', 'Documentation', 'ML', 'Testing', 'Research', 'Design'].map((cat) => {
-                    const isActive = selectedTask.categories.includes(cat);
-                    return (
-                      <button
-                        type="button"
-                        key={cat}
-                        onClick={() => {
-                          if (isActive) {
-                            setSelectedTask({
-                              ...selectedTask,
-                              categories: selectedTask.categories.filter(c => c !== cat)
-                            });
-                          } else {
-                            setSelectedTask({
-                              ...selectedTask,
-                              categories: [...selectedTask.categories, cat]
-                            });
-                          }
-                        }}
-                        className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all cursor-pointer ${
-                          isActive
-                            ? 'bg-blue-600 border-blue-600 text-white shadow-card shadow-blue-500/20'
-                            : 'bg-slate-50 border-slate-200 text-slate-600 hover:border-slate-300'
-                        }`}
-                      >
-                        {cat}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-[11px] font-bold text-slate-900 tracking-wider font-semibold">Due Date</label>
-                  <input
-                    type="text"
-                    value={selectedTask.date}
-                    onChange={(e) => setSelectedTask({ ...selectedTask, date: e.target.value })}
-                    className="w-full px-4 py-2.5 bg-white border border-line rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-slate-900"
-                  />
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-[11px] font-bold text-slate-900 tracking-wider font-semibold">Assignee</label>
-                  <select
-                    value={selectedTask.assignee}
-                    onChange={(e) => setSelectedTask({ ...selectedTask, assignee: e.target.value })}
-                    className="w-full px-4 py-2.5 bg-white border border-line rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-semibold text-slate-900 cursor-pointer"
-                  >
-                    <option value="AR">AR - Ahmed Raza</option>
-                    <option value="FK">FK - Fatima Khan</option>
-                    <option value="UA">UA - Usman Ali</option>
-                    <option value="AM">AM - Ayesha Malik</option>
-                  </select>
-                </div>
-              </div>
-
-              {selectedTask.progress !== undefined && (
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-[11px] font-bold text-slate-900 tracking-wider font-semibold">Progress ({selectedTask.progress}%)</label>
-                  <input
-                    type="range"
-                    min="0"
-                    max="100"
-                    value={selectedTask.progress}
-                    onChange={(e) => setSelectedTask({ ...selectedTask, progress: parseInt(e.target.value) })}
-                    className="w-full h-1.5 bg-white rounded-lg appearance-none cursor-pointer accent-blue-600 mt-2"
-                  />
-                </div>
-              )}
-            </div>
-
-            <div className="flex items-center gap-3 mt-4">
-              <button
-                type="button"
-                onClick={() => setShowEditTaskModal(false)}
-                className="flex-1 py-3 bg-white text-slate-900 rounded-xl font-bold text-xs hover:bg-white transition-colors cursor-pointer"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="flex-1 py-3 bg-[#2563eb] text-white rounded-xl font-bold text-xs hover:bg-blue-600 transition-colors shadow-lg cursor-pointer"
-              >
-                Save Changes
-              </button>
-            </div>
-          </form>
-        </div>
-      )}
-
-      {/* Interactive Success Toast Overlay */}
-      {toast && (
-        <div className="fixed bottom-6 right-6 bg-white text-white rounded-2xl px-5 py-3.5 shadow-xl flex items-center gap-3 z-50 animate-in slide-in- duration-300">
-          <div className="w-5 h-5 bg-white rounded-full flex items-center justify-center shrink-0">
-            <Check className="w-3.5 h-3.5 text-white stroke-[3.5]" />
-          </div>
-          <span className="text-xs font-bold tracking-tight pr-1">{toast}</span>
-        </div>
-      )}
-    </motion.div>
+      <TaskSidePanel
+        task={selectedTask}
+        visible={showPanel}
+        onClose={() => { setShowPanel(false); setSelectedTask(null); }}
+        onSave={handleSaveTask}
+        onDelete={handleDeleteTask}
+        assigneeOptions={assigneeOptions}
+      />
+    </div>
   );
-};
-
-export default TaskManager;
-
-
+}

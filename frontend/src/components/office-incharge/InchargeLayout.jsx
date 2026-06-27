@@ -101,8 +101,7 @@ const LayoutInner = () => {
     { to: '/office-incharge/dashboard', icon: Home, label: 'Dashboard', section: 'Overview' },
     { to: '/office-incharge/phases', icon: ToggleRight, label: 'Phase Control', section: 'Overview' },
     { to: '/office-incharge/forwarded-proposals', icon: ArrowRight, label: 'Forwarded Proposals', section: 'Overview' },
-    { to: '/office-incharge/committee-oversight', icon: Users, label: 'Committee Oversight', section: 'Overview', locked: isPhase1 },
-    { to: '/office-incharge/faculty-reports', icon: BarChart3, label: 'Faculty Overview', section: 'Overview' },
+
     { to: '/office-incharge/eval-committee', icon: Layers, label: 'Evaluation Committees', section: 'Overview' },
     { to: '/office-incharge/projects', icon: GitBranch, label: 'Project Directory', section: 'Overview' },
     { to: '/office-incharge/project-approvals', icon: CheckCircle, label: 'Project Approvals', section: 'Overview' },

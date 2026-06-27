@@ -45,7 +45,7 @@ const Sidebar = ({ isMobileOpen, setIsMobileOpen, isCollapsed, setIsCollapsed, u
                 </div>
               )}
               {link.locked ? (
-                <div className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-300 cursor-not-allowed select-none ${isCollapsed ? 'justify-center w-[44px] h-[44px] mx-auto p-[10px]' : ''}`} title={`${link.label} — locked during Phase 1`}>
+                <div className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-300 cursor-not-allowed select-none ${isCollapsed ? 'justify-center w-[44px] h-[44px] mx-auto p-[10px]' : ''}`} title={`${link.label} — locked`}>
                   {React.createElement(link.icon, { size: 16, className: "flex-shrink-0" })}
                   {!isCollapsed && (
                     <>
@@ -86,6 +86,8 @@ const LayoutInner = () => {
   const navigate = useNavigate();
   const user = getCurrentUser() ?? null;
   const { currentPhase, loading } = usePhase();
+  const phase1And2Keys = ['registration', 'proposal_submission', 'proposal_defense', 'phase1_development', 'phase1_evaluation', 'phase2_development', 'phase2_defense'];
+  const isPhase1Or2 = currentPhase && phase1And2Keys.includes(currentPhase.key);
 
   const handleLogout = () => {
     logoutUser();
@@ -99,7 +101,7 @@ const LayoutInner = () => {
     { to: '/office-incharge/dashboard', icon: Home, label: 'Dashboard', section: 'Overview' },
     { to: '/office-incharge/phases', icon: ToggleRight, label: 'Phase Control', section: 'Overview' },
     { to: '/office-incharge/forwarded-proposals', icon: ArrowRight, label: 'Forwarded Proposals', section: 'Overview' },
-    { to: '/office-incharge/committee-oversight', icon: Users, label: 'Committee Oversight', section: 'Overview' },
+    { to: '/office-incharge/committee-oversight', icon: Users, label: 'Committee Oversight', section: 'Overview', locked: isPhase1Or2 },
     { to: '/office-incharge/faculty-reports', icon: BarChart3, label: 'Faculty Overview', section: 'Overview' },
     { to: '/office-incharge/student-reports', icon: GraduationCap, label: 'Student Records', section: 'Overview' },
     { to: '/office-incharge/rubrics', icon: ClipboardList, label: 'Rubric Builder', section: 'Curriculum & Sessions' },

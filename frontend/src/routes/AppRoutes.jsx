@@ -135,6 +135,7 @@ const AppRoutes = () => {
                 <Route path="external" element={<AssistantExternal />} />
                 <Route path="results" element={<AssistantResults />} />
                 <Route path="past-projects" element={<AssistantPastProjects />} />
+                <Route path="forwarded-proposals" element={<InchargeForwardedProposals />} />
             </Route>
 
             {/* Faculty Supervisor Layout Routes */}

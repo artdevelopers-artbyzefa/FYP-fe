@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { showToast as toast } from '../AppToast';
 import { logoutUser, getCurrentUser } from '../../services/auth.service';
-import { Archive, Award, Bell, ChevronLeft, ChevronRight, GitBranch, GraduationCap, Home, Layers, Lock, LogOut, Megaphone, Menu, Presentation, Shield, User, UserCog, Users, X } from 'lucide-react';
+import { Archive, ArrowRight, Award, Bell, ChevronLeft, ChevronRight, GitBranch, GraduationCap, Home, Layers, Lock, LogOut, Megaphone, Menu, Presentation, Shield, User, UserCog, Users, X } from 'lucide-react';
 import PhaseContext from '../../contexts/PhaseContext';
 
 const AssistantLayout = () => {
@@ -30,6 +30,7 @@ const AssistantLayout = () => {
     { to: '/office-assistant/users', icon: Users, label: 'User Management', section: 'User & Account' },
     { to: '/office-assistant/students', icon: GraduationCap, label: 'Student Records', section: 'User & Account' },
     { to: '/office-assistant/faculty', icon: Presentation, label: 'Faculty Profiles', section: 'User & Account' },
+    { to: '/office-assistant/forwarded-proposals', icon: ArrowRight, label: 'Forwarded Proposals', section: 'FYP Workflow' },
     { to: '/office-assistant/projects', icon: GitBranch, label: 'Project Directory', section: 'FYP Workflow', locked: isPhase1 },
     { to: '/office-assistant/past-projects', icon: Archive, label: 'Past FYP Projects', section: 'FYP Workflow' },
     { to: '/office-assistant/proposal-committee', icon: Users, label: 'Proposal Committees', section: 'Committees & Evaluators', locked: true },

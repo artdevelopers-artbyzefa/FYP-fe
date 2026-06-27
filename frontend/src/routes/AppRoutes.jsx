@@ -31,6 +31,7 @@ import HodAnalytics from '../pages/hod/HodAnalytics';
 import HodStudents from '../pages/hod/HodStudents';
 import HodCommittees from '../pages/hod/HodCommittees';
 import HodFaculty from '../pages/hod/HodFaculty';
+import HodProjects from '../pages/hod/HodProjects';
 import AssistantLayout from '../components/office-assistant/AssistantLayout';
 import AssistantDashboard from '../pages/office-assistant/AssistantDashboard';
 import AssistantUsers from '../pages/office-assistant/AssistantUsers';
@@ -119,6 +120,7 @@ const AppRoutes = () => {
                 <Route path="students" element={<HodStudents />} />
                 <Route path="committees" element={<HodCommittees />} />
                 <Route path="faculty" element={<HodFaculty />} />
+                <Route path="projects" element={<HodProjects />} />
             </Route>
 
             {/* Office Assistant Layout Routes */}

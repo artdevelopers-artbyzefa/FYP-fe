@@ -3,7 +3,7 @@ import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { showToast as toast } from '../AppToast';
 import { logoutUser, getCurrentUser } from '../../services/auth.service';
 import api from '../../services/api';
-import { Bell, ChevronLeft, ChevronRight, Crown, Gavel, Landmark, LineChart, Lock, LogOut, Menu, PieChart, Presentation, Shield, User, UserCheck, Users, X, Camera, Loader2, Mail, KeyRound } from 'lucide-react';
+import { Bell, ChevronLeft, ChevronRight, Crown, Gavel, GitBranch, Landmark, LineChart, Lock, LogOut, Menu, PieChart, Presentation, Shield, User, UserCheck, Users, X, Camera, Loader2, Mail, KeyRound } from 'lucide-react';
 
 const HodLayout = () => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -41,6 +41,7 @@ const HodLayout = () => {
     { to: '/hod/escalations', icon: Gavel, label: 'Escalated Grievances', section: 'Grievance & Escalations' },
     { to: '/hod/students', icon: Users, label: 'Students', section: 'Department Oversight' },
     { to: '/hod/faculty', icon: UserCheck, label: 'Faculty', section: 'Department Oversight' },
+    { to: '/hod/projects', icon: GitBranch, label: 'Project Directory', section: 'Department Oversight' },
     { to: '/hod/faculty-oversight', icon: Presentation, label: 'Faculty Workload', section: 'Department Oversight', locked: true },
     { to: '/hod/governance', icon: Landmark, label: 'Oversight', section: 'Department Oversight', locked: true },
     { to: '/hod/committees', icon: Shield, label: 'FYP Committees', section: 'Department Oversight', locked: true },

@@ -35,7 +35,7 @@ const AssistantLayout = () => {
     { to: '/office-assistant/content', icon: File, label: 'Content & Templates', section: 'FYP Workflow', locked: true },
     { to: '/office-assistant/project-approvals', icon: CheckCircle, label: 'Project Approvals', section: 'FYP Workflow', showIn: ['proposal_submission'] },
     { to: '/office-assistant/past-projects', icon: Archive, label: 'Past FYP Projects', section: 'FYP Workflow' },
-    { to: '/office-assistant/proposal-committee', icon: Users, label: 'Proposal Committees', section: 'Committees & Evaluators', locked: true },
+    { to: '/office-assistant/proposal-committee', icon: Users, label: 'Proposal Committees', section: 'Committees & Evaluators', locked: false },
     { to: '/office-assistant/eval-committee', icon: Layers, label: 'Evaluation Committees', section: 'Committees & Evaluators', locked: isPhase1 },
     { to: '/office-assistant/external', icon: User, label: 'Industry Supervisors', section: 'Committees & Evaluators', locked: true },
     { to: '/office-assistant/results', icon: Award, label: 'Results & Printing', section: 'Outcomes', locked: true },

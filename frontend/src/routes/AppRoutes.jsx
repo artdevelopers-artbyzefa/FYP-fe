@@ -164,6 +164,8 @@ const AppRoutes = () => {
                 <Route path="phases" element={<InchargePhaseControl />} />
                 <Route path="rubrics" element={<InchargeRubrics />} />
                 <Route path="sessions" element={<InchargeSessions />} />
+                <Route path="projects" element={<AssistantProjects />} />
+                <Route path="eval-committee" element={<AssistantEvalCommittees />} />
                 <Route path="project-approvals" element={<OfficeApprovals />} />
                 <Route path="committee-oversight" element={<InchargeCommitteeOversight />} />
                 <Route path="grievances" element={<InchargeGrievances />} />

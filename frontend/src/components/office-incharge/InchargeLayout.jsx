@@ -3,7 +3,7 @@ import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { PhaseProvider, usePhase } from '../../contexts/PhaseContext';
 import { showToast as toast } from '../AppToast';
 import { logoutUser, getCurrentUser } from '../../services/auth.service';
-import { AlertCircle, ArrowRight, BarChart3, Bell, Calendar, CheckCircle, ChevronLeft, ChevronRight, ClipboardList, GraduationCap, History, Home, Lock, LogOut, Menu, Scale, ToggleRight, UserPlus, Users, X } from 'lucide-react';
+import { AlertCircle, ArrowRight, BarChart3, Bell, Calendar, CheckCircle, ChevronLeft, ChevronRight, ClipboardList, GraduationCap, GitBranch, History, Home, Layers, Lock, LogOut, Menu, Scale, ToggleRight, UserPlus, Users, X } from 'lucide-react';
 
 const Sidebar = ({ isMobileOpen, setIsMobileOpen, isCollapsed, setIsCollapsed, user, roleLabel, navLinks, handleLogout }) => {
   const { currentPhase, loading } = usePhase();
@@ -103,6 +103,8 @@ const LayoutInner = () => {
     { to: '/office-incharge/forwarded-proposals', icon: ArrowRight, label: 'Forwarded Proposals', section: 'Overview' },
     { to: '/office-incharge/committee-oversight', icon: Users, label: 'Committee Oversight', section: 'Overview', locked: isPhase1Or2 },
     { to: '/office-incharge/faculty-reports', icon: BarChart3, label: 'Faculty Overview', section: 'Overview' },
+    { to: '/office-incharge/eval-committee', icon: Layers, label: 'Evaluation Committees', section: 'Overview' },
+    { to: '/office-incharge/projects', icon: GitBranch, label: 'Project Directory', section: 'Overview' },
     { to: '/office-incharge/project-approvals', icon: CheckCircle, label: 'Project Approvals', section: 'Overview' },
     { to: '/office-incharge/student-reports', icon: GraduationCap, label: 'Student Records', section: 'Overview' },
     { to: '/office-incharge/rubrics', icon: ClipboardList, label: 'Rubric Builder', section: 'Curriculum & Sessions' },

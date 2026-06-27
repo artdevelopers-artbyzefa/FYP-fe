@@ -2,7 +2,9 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { getHodFacultyList, updateHodFaculty } from '../../services/hod.service';
 import { showToast } from '../../components/AppToast';
-import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, Loader2, Users, Mail, Pencil, Trash2, ChevronRight as ChevronRightIcon, CheckCircle, XCircle } from 'lucide-react';
+import { ArrowLeft, ChevronLeft, ChevronRight, Loader2, Users, User, Mail, Pencil, ChevronRight as ChevronRightIcon, CheckCircle, XCircle, BookOpen, Code, FileText, GraduationCap, Clock, Check, X } from 'lucide-react';
+import { GROUP_STATUS_MAP, IDEA_STATUS_MAP } from '../../utils/constants/status.constant';
+import { Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.04 } } };
 const item = { hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } };
@@ -47,17 +49,7 @@ const HodFaculty = () => {
       <motion.div variants={item} className="bg-white rounded-2xl border border-line shadow-card overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="bg-blue-50 text-[11px] font-bold text-slate-500 tracking-wider">
-                <th className="py-3.5 px-6">Name</th>
-                <th className="py-3.5 px-6">Email</th>
-                <th className="py-3.5 px-6">Phone</th>
-                <th className="py-3.5 px-6">Faculty Type</th>
-                <th className="py-3.5 px-6">Supervision Load</th>
-                <th className="py-3.5 px-6">Status</th>
-                <th className="py-3.5 px-6 text-right"></th>
-              </tr>
-            </thead>
+            <thead><tr className="bg-blue-50 text-[11px] font-bold text-slate-500 tracking-wider"><th className="py-3.5 px-6">Name</th><th className="py-3.5 px-6">Email</th><th className="py-3.5 px-6">Phone</th><th className="py-3.5 px-6">Faculty Type</th><th className="py-3.5 px-6">Supervision Load</th><th className="py-3.5 px-6">Status</th><th className="py-3.5 px-6 text-right"></th></tr></thead>
             <tbody className="divide-y divide-slate-50 text-sm font-medium text-slate-700">
               {loading ? Array.from({ length: 8 }, (_, i) => <SkeletonRow key={i} cols={7} />) : faculty.length === 0 ? (
                 <tr><td colSpan={7} className="py-12 text-center"><div className="flex flex-col items-center gap-2"><Users size={32} className="text-slate-300" /><p className="text-sm font-bold text-slate-400">No faculty found</p></div></td></tr>
@@ -95,18 +87,21 @@ function FacultyDetail({ faculty, onBack, onUpdate }) {
   const [editing, setEditing] = useState(false);
   const [editForm, setEditForm] = useState({ name: faculty.name || '', email: faculty.email || '', facultyType: faculty.facultyType || 'supervisor' });
   const [submitting, setSubmitting] = useState(false);
+  const [selectedGroup, setSelectedGroup] = useState(null);
 
   const handleSave = async (e) => {
     e.preventDefault();
     setSubmitting(true);
     try {
       await updateHodFaculty(faculty.id, { name: editForm.name.trim(), email: editForm.email.trim(), facultyType: editForm.facultyType });
-      showToast.success('Faculty updated successfully.');
-      setEditing(false);
-      onUpdate();
+      showToast.success('Faculty updated successfully.'); setEditing(false); onUpdate();
     } catch (err) { showToast.error(err?.response?.data?.message || 'Failed to update.'); }
     finally { setSubmitting(false); }
   };
+
+  if (selectedGroup) {
+    return <GroupDetail group={selectedGroup} onBack={() => setSelectedGroup(null)} />;
+  }
 
   return (
     <motion.div variants={container} initial="hidden" animate="show" className="space-y-6">
@@ -143,13 +138,24 @@ function FacultyDetail({ faculty, onBack, onUpdate }) {
         <motion.div variants={item} className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-5">
             <div className="bg-white rounded-2xl border border-line p-6 shadow-sm">
-              <h5 className="text-xs font-bold text-slate-900 tracking-wider mb-4 flex items-center gap-1.5"><Users size={13} /> Supervision</h5>
-              <div className="p-4 rounded-xl border border-line">
-                <div className="flex items-center justify-between">
-                  <span className="font-bold text-slate-900 text-sm">Supervised Groups</span>
-                  <span className="text-lg font-black text-blue-600">{faculty.supervisionLoad || 0}</span>
+              <h5 className="text-xs font-bold text-slate-900 tracking-wider mb-4 flex items-center gap-1.5"><Users size={13} /> Supervised Groups ({faculty.groups?.length || 0})</h5>
+              {faculty.groups?.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {faculty.groups.map(g => (
+                    <div key={g.id} onClick={() => setSelectedGroup(g)} className="p-4 rounded-xl border border-line cursor-pointer hover:border-blue-200 hover:bg-blue-50/20 transition-all">
+                      <div className="flex items-start justify-between gap-2 mb-2">
+                        <span className="font-bold text-slate-900 text-sm truncate">{g.title}</span>
+                        <span className={`text-[9px] font-bold px-2 py-0.5 rounded-lg border whitespace-nowrap ${GROUP_STATUS_MAP[g.status]?.color || 'bg-gray-50 text-gray-500 border-gray-200'}`}>{GROUP_STATUS_MAP[g.status]?.label || g.status}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-[10px] text-slate-400">
+                        <span>Leader: {g.leader}</span>
+                        {g.memberCount > 0 && <><span>|</span> <Users size={10} /> {g.memberCount} members</>}
+                      </div>
+                      {g.progress > 0 && <div className="mt-2 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full bg-blue-600 rounded-full" style={{ width: `${g.progress}%` }} /></div>}
+                    </div>
+                  ))}
                 </div>
-              </div>
+              ) : <p className="text-xs text-slate-400 py-4 text-center">No groups assigned yet</p>}
             </div>
           </div>
           <div className="space-y-5">
@@ -165,6 +171,97 @@ function FacultyDetail({ faculty, onBack, onUpdate }) {
           </div>
         </motion.div>
       )}
+    </motion.div>
+  );
+}
+
+function GroupDetail({ group, onBack }) {
+  const evaluationData = [
+    { name: 'Phase 1 (10%)', value: 10, fill: '#e2e8f0' },
+    { name: 'Phase 2 (30%)', value: 30, fill: '#e2e8f0' },
+    { name: 'Phase 3 (60%)', value: 60, fill: '#e2e8f0' },
+    { name: 'Phase 4 (100%)', value: 100, fill: '#e2e8f0' },
+  ];
+
+  return (
+    <motion.div variants={container} initial="hidden" animate="show" className="space-y-6">
+      <motion.div variants={item} className="border-b border-line pb-4">
+        <button onClick={onBack} className="flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-slate-900 transition-colors cursor-pointer mb-3"><ArrowLeft size={14} /> Back to Faculty</button>
+        <h2 className="text-xl font-bold text-slate-900">{group.title || group.name || 'Group Detail'}</h2>
+        <div className="flex gap-2 mt-2 flex-wrap">
+          <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-lg border ${GROUP_STATUS_MAP[group.status]?.color || 'bg-gray-50 text-gray-500 border-gray-200'}`}>{GROUP_STATUS_MAP[group.status]?.label || group.status}</span>
+          {group.leader && <span className="bg-blue-50 text-blue-700 font-bold text-xs px-2.5 py-0.5 rounded-lg border border-blue-200">Leader: {group.leader}</span>}
+        </div>
+      </motion.div>
+
+      <motion.div variants={item} className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2 space-y-5">
+          {group.description && (
+            <div className="bg-white rounded-2xl border border-line p-6 shadow-sm">
+              <h5 className="text-xs font-bold text-slate-900 tracking-wider mb-3 flex items-center gap-1.5"><BookOpen size={13} /> Description</h5>
+              <p className="text-sm text-slate-700 leading-relaxed">{group.description}</p>
+            </div>
+          )}
+          {group.techStack && (
+            <div className="bg-white rounded-2xl border border-line p-6 shadow-sm">
+              <h5 className="text-xs font-bold text-slate-900 tracking-wider mb-3 flex items-center gap-1.5"><Code size={13} /> Technology Stack</h5>
+              <div className="flex flex-wrap gap-2">{group.techStack.split(',').map((t, i) => <span key={i} className="bg-gray-50 text-slate-900 font-bold text-xs px-3 py-1.5 rounded-lg border border-line">{t.trim()}</span>)}</div>
+            </div>
+          )}
+          {group.ideas?.length > 0 && (
+            <div className="bg-white rounded-2xl border border-line p-6 shadow-sm">
+              <h5 className="text-xs font-bold text-slate-900 tracking-wider mb-4 flex items-center gap-1.5"><FileText size={13} /> Project Ideas</h5>
+              <div className="space-y-3">{group.ideas.map((idea, i) => (
+                <div key={i} className="p-4 rounded-xl border border-line">
+                  <div className="flex items-start justify-between gap-2 mb-2">
+                    <span className="font-bold text-slate-900 text-sm">{idea.title}</span>
+                    <span className={`text-[9px] font-bold px-2 py-0.5 rounded-lg border ${IDEA_STATUS_MAP[idea.status]?.color || 'bg-gray-50 text-gray-500 border-gray-200'}`}>{IDEA_STATUS_MAP[idea.status]?.label || idea.status}</span>
+                  </div>
+                  <p className="text-[10px] text-slate-400">Submitted by {idea.submittedBy}</p>
+                  {idea.feedback && <p className="text-xs text-slate-500 mt-1">Feedback: {idea.feedback}</p>}
+                </div>
+              ))}</div>
+            </div>
+          )}
+        </div>
+
+        <div className="space-y-5">
+          <div className="bg-white rounded-2xl border border-line p-6 shadow-sm">
+            <h5 className="text-xs font-bold text-slate-900 tracking-wider mb-4">Evaluation Phases</h5>
+            <ResponsiveContainer width="100%" height={180}>
+              <PieChart>
+                <Pie data={evaluationData} cx="50%" cy="50%" innerRadius={45} outerRadius={70} dataKey="value" startAngle={90} endAngle={-270}>
+                  {evaluationData.map((_, i) => <Cell key={i} fill="#e2e8f0" stroke="#cbd5e1" />)}
+                </Pie>
+                <Tooltip contentStyle={{ fontSize: 12, borderRadius: 8, border: '1px solid #e2e8f0' }} />
+              </PieChart>
+            </ResponsiveContainer>
+            <div className="space-y-2 mt-3">
+              {[{p:'Phase 1',w:'10%'},{p:'Phase 2',w:'30%'},{p:'Phase 3',w:'60%'},{p:'Phase 4',w:'100%'}].map((ph,i) => (
+                <div key={i} className="flex items-center justify-between px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200">
+                  <span className="text-[10px] font-bold text-slate-600">{ph.p}</span>
+                  <span className="text-[10px] font-bold text-slate-400">{ph.w}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-white rounded-2xl border border-line p-6 shadow-sm">
+            <h5 className="text-xs font-bold text-slate-900 tracking-wider mb-4 flex items-center gap-1.5"><Users size={13} /> Team Members ({group.memberCount})</h5>
+            <div className="space-y-2">{group.members?.map((m, i) => (
+              <div key={i} className="flex items-center gap-3 p-2.5 rounded-xl border border-line">
+                <div className="w-8 h-8 rounded-lg bg-blue-100 text-blue-700 text-xs font-bold flex items-center justify-center shrink-0">{m.name?.charAt(0)}</div>
+                <div className="min-w-0"><div className="text-sm font-bold text-slate-900 truncate">{m.name}</div><div className="text-[10px] text-gray-400 truncate">{m.regNo || m.email}</div></div>
+              </div>
+            ))}</div>
+          </div>
+
+          <div className="bg-white rounded-2xl border border-line p-6 shadow-sm">
+            <h5 className="text-xs font-bold text-slate-900 tracking-wider mb-4">Progress</h5>
+            <div className="flex items-center gap-3"><div className="flex-1 h-2.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full bg-blue-600 rounded-full" style={{ width: `${group.progress || 0}%` }} /></div><span className="text-sm font-black text-slate-900">{group.progress || 0}%</span></div>
+          </div>
+        </div>
+      </motion.div>
     </motion.div>
   );
 }

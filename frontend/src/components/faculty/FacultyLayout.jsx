@@ -28,7 +28,7 @@ const FacultyLayout = () => {
     { to: '/faculty/group-proposals', icon: Lightbulb, label: 'Group Proposals', section: 'FYP Management' },
     { to: '/faculty/supervision', icon: GitBranch, label: 'Supervised Groups', section: 'FYP Management' },
     { to: '/faculty/suggestions', icon: IdeaIcon, label: 'Suggested Ideas', section: 'FYP Management' },
-    { to: '/faculty/evaluations', icon: Star, label: 'Committee Evaluations', section: 'FYP Management', locked: true },
+    { to: '/faculty/evaluations', icon: Star, label: 'Committee Evaluations', section: 'FYP Management' },
     { to: '/faculty/head-duties', icon: Crown, label: 'Head Management', section: 'FYP Management', locked: true },
   ];
 

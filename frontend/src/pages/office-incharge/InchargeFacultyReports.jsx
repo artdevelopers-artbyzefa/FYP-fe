@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { getInchargeFacultyReports, getInchargeFacultyDetail, getInchargeFacultyGroupDetail } from '../../services/office-incharge.service';
-import { Search, ArrowLeft, Users, BookOpen, Code, Mail, User, Loader2, GraduationCap, ChevronRight, ExternalLink, Send, FileText, BarChart3, Lock } from 'lucide-react';
+import { Search, ArrowLeft, Users, BookOpen, Code, Mail, User, Loader2, GraduationCap, ChevronRight, ExternalLink, Send, FileText, BarChart3, Lock, Star, ChevronDown, ChevronUp, Clock } from 'lucide-react';
 import { Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { GROUP_STATUS_MAP, IDEA_STATUS_MAP } from '../../utils/constants/status.constant';
+import api from '../../services/api';
 
 
 
@@ -15,13 +16,35 @@ const InchargeFacultyReports = () => {
   const [loading, setLoading] = useState(true);
   const [facultyLoading, setFacultyLoading] = useState(false);
   const [groupLoading, setGroupLoading] = useState(false);
+  const [committees, setCommittees] = useState([]);
+  const [showCommDetails, setShowCommDetails] = useState(false);
 
   useEffect(() => {
-    getInchargeFacultyReports()
-      .then(res => setFaculties(res.data || []))
-      .catch(console.error)
-      .finally(() => setLoading(false));
+    setLoading(true);
+    Promise.all([
+      getInchargeFacultyReports(),
+      api.get('/office-assistant/eval-committee')
+    ]).then(([reports, commRes]) => {
+      setFaculties(reports.data || []);
+      setCommittees(commRes.data?.data || []);
+    }).catch(console.error).finally(() => setLoading(false));
   }, []);
+
+  const getFacultyCommittees = (facultyId, facultyName) => {
+    const matched = [];
+    (committees || []).forEach(c => {
+      const members = c.members || [];
+      const isMember = members.some(m => {
+        if (typeof m === 'string') return m === facultyId;
+        return (m.id === facultyId || m._id === facultyId || m.name === facultyName);
+      });
+      const isHead = c.headId === facultyId || c.head === facultyName;
+      if (isMember || isHead) {
+        matched.push({ ...c, role: isHead ? 'Head' : 'Member' });
+      }
+    });
+    return matched;
+  };
 
   const openFaculty = async (id) => {
     setFacultyLoading(true);
@@ -72,6 +95,7 @@ const InchargeFacultyReports = () => {
   }
 
   if (view === 'faculty' && faculty) {
+    const facultyComms = getFacultyCommittees(faculty._id, faculty.name);
     return (
       <div className="space-y-6">
         <div className="border-b border-line pb-4">
@@ -87,11 +111,72 @@ const InchargeFacultyReports = () => {
               <div className="flex items-center gap-3 mt-1 text-xs text-slate-500">
                 <span className="flex items-center gap-1"><Mail size={12} /> {faculty.email}</span>
                 <span className="flex items-center gap-1"><GraduationCap size={12} /> {faculty.dept}</span>
-                <span className="flex items-center gap-1"><BarChart3 size={12} /> Avg Eval: {faculty.evalScore}</span>
               </div>
             </div>
           </div>
         </div>
+
+        {facultyComms.length > 0 && (
+          <div className="bg-white rounded-2xl border border-line shadow-sm overflow-hidden">
+            <button
+              onClick={() => setShowCommDetails(!showCommDetails)}
+              className="w-full flex items-center justify-between px-6 py-4 hover:bg-slate-50 transition-colors cursor-pointer border-0 bg-transparent text-left"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center text-amber-700">
+                  <Star size={16} />
+                </div>
+                <div>
+                  <h5 className="text-sm font-bold text-slate-900">Committee Assignment</h5>
+                  <p className="text-[10px] text-slate-500 font-medium">
+                    {facultyComms.length === 1
+                      ? `${facultyComms[0].role} of ${facultyComms[0].name}`
+                      : `Member of ${facultyComms.length} committees`}
+                  </p>
+                </div>
+              </div>
+              {showCommDetails ? <ChevronUp size={16} className="text-slate-400" /> : <ChevronDown size={16} className="text-slate-400" />}
+            </button>
+            {showCommDetails && (
+              <div className="border-t border-line divide-y divide-line">
+                {facultyComms.map(c => (
+                  <div key={c.id || c.name} className="px-6 py-4 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-bold text-slate-900">{c.name}</span>
+                        <span className={`text-[9px] font-bold px-2 py-0.5 rounded-lg border ${c.role === 'Head' ? 'bg-purple-50 text-purple-700 border-purple-200' : 'bg-blue-50 text-blue-700 border-blue-200'}`}>
+                          {c.role}
+                        </span>
+                      </div>
+                      <span className={`text-[9px] font-bold px-2 py-0.5 rounded-lg border ${c.status === 'active' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-gray-100 text-gray-500 border-gray-200'}`}>
+                        {c.status === 'active' ? 'Active' : c.status || 'N/A'}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                      <div>
+                        <span className="text-slate-400 font-semibold block mb-0.5">Committee Head</span>
+                        <span className="font-bold text-slate-900">{c.head || 'Not assigned'}</span>
+                      </div>
+                      <div>
+                        <span className="text-slate-400 font-semibold block mb-0.5">Members ({c.members?.length || 0})</span>
+                        <div className="flex flex-wrap gap-1">
+                          {(c.members || []).map((m, i) => {
+                            const mName = typeof m === 'string' ? m : (m.name || '');
+                            return (
+                              <span key={i} className="text-[9px] font-bold bg-slate-100 text-slate-700 px-1.5 py-0.5 rounded border border-slate-200">
+                                {mName}
+                              </span>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
 
         <div className="bg-white rounded-2xl border border-line p-6 shadow-sm">
           <h5 className="text-xs font-bold text-slate-900 tracking-wider mb-4">Evaluation Phases</h5>
@@ -381,39 +466,46 @@ const InchargeFacultyReports = () => {
                   <th className="py-3.5 px-6">Email</th>
                   <th className="py-3.5 px-6">Department</th>
                   <th className="py-3.5 px-6 text-center">Supervised Groups</th>
-                  <th className="py-3.5 px-6 text-center">Workload</th>
-                  <th className="py-3.5 px-6 text-center">Avg Eval Score</th>
+                  <th className="py-3.5 px-6 text-center">Committee</th>
                   <th className="py-3.5 px-6 text-center">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-50 text-sm font-medium text-slate-900">
-                {faculties.map((r, idx) => (
-                  <tr key={r._id || idx} className="hover:bg-blue-50/30 transition-colors">
-                    <td className="py-4 px-6">
-                      <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-xl bg-blue-100 text-blue-700 text-xs font-bold flex items-center justify-center shrink-0">
-                          {r.name?.charAt(0)}
+                {faculties.map((r, idx) => {
+                  const facComms = getFacultyCommittees(r._id, r.name);
+                  return (
+                    <tr key={r._id || idx} className="hover:bg-blue-50/30 transition-colors">
+                      <td className="py-4 px-6">
+                        <div className="flex items-center gap-3">
+                          <div className="w-9 h-9 rounded-xl bg-blue-100 text-blue-700 text-xs font-bold flex items-center justify-center shrink-0">
+                            {r.name?.charAt(0)}
+                          </div>
+                          <span className="font-bold text-slate-900">{r.name}</span>
                         </div>
-                        <span className="font-bold text-slate-900">{r.name}</span>
-                      </div>
-                    </td>
-                    <td className="py-4 px-6 text-slate-500 text-xs">{r.email}</td>
-                    <td className="py-4 px-6 text-slate-900">{r.dept}</td>
-                    <td className="py-4 px-6 text-center">
-                      <span className="font-bold text-slate-900">{r.groups}</span>
-                    </td>
-                    <td className="py-4 px-6 text-center">
-                      <span className="text-xs font-bold text-slate-900 bg-white px-2 py-0.5 rounded-lg border border-line">{r.workload}</span>
-                    </td>
-                    <td className="py-4 px-6 text-center font-bold text-slate-900">{r.evalScore}</td>
-                    <td className="py-4 px-6 text-center">
-                      <button onClick={() => openFaculty(r._id)}
-                        className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-blue-600 text-white text-xs font-bold rounded-xl hover:bg-blue-700 transition-all cursor-pointer border-0">
-                        <User size={12} /> View Profile
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                      </td>
+                      <td className="py-4 px-6 text-slate-500 text-xs">{r.email}</td>
+                      <td className="py-4 px-6 text-slate-900">{r.dept}</td>
+                      <td className="py-4 px-6 text-center">
+                        <span className="font-bold text-slate-900">{r.groups}</span>
+                      </td>
+                      <td className="py-4 px-6 text-center">
+                        {facComms.length > 0 ? (
+                          <span className="text-xs font-bold text-slate-900 bg-blue-50 px-2 py-0.5 rounded-lg border border-blue-200">
+                            {facComms.map(c => c.name).join(', ')}
+                          </span>
+                        ) : (
+                          <span className="text-xs text-slate-400 italic">N/A</span>
+                        )}
+                      </td>
+                      <td className="py-4 px-6 text-center">
+                        <button onClick={() => openFaculty(r._id)}
+                          className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-blue-600 text-white text-xs font-bold rounded-xl hover:bg-blue-700 transition-all cursor-pointer border-0">
+                          <User size={12} /> View Profile
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

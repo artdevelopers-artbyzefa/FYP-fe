@@ -54,7 +54,7 @@ const FacultySidebar = ({ isOpen, onClose }) => {
       items: [
         { to: '/faculty/proposals', label: 'Supervision Requests', icon: ProposalsIcon },
         { to: '/faculty/groups', label: 'Supervised Groups', icon: GroupsIcon },
-        { to: '/faculty/evaluations', label: 'Committee Evaluations', icon: EvaluationsIcon, locked: true },
+        { to: '/faculty/evaluations', label: 'Committee Evaluations', icon: EvaluationsIcon },
         { to: '/faculty/head-management', label: 'Head Management', icon: HeadManagementIcon, locked: true }
       ]
     }

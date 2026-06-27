@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Outlet, useNavigate, useLocation, Link } from 'react-router-dom';
 import { getUserInfo, logout } from '../../utils/app.utils';
 import apiClient from '../../api/apiClient';
-import { Archive, Bell, ChevronDown, ChevronLeft, ChevronRight, Circle, ClipboardList, GraduationCap, Home, Lightbulb, Lock, LogOut, Menu, User, UserCircle, Users, X } from 'lucide-react';
+import { Archive, Bell, ChevronDown, ChevronLeft, ChevronRight, Circle, ClipboardList, GraduationCap, Home, Lightbulb, Lock, LogOut, Menu, Shield, User, UserCircle, Users, X } from 'lucide-react';
 
 export default function DashboardLayout() {
   const navigate = useNavigate();
@@ -32,7 +32,7 @@ export default function DashboardLayout() {
   const phaseVisible = (itemId) => {
     const lookup = {
       '/dashboard': 1, '/profile': 1, '/fyp-group': 1, '/supervisor-selection': 1,
-      '/task-manager': 1, '/past-projects': 1, '/suggestions': 1
+      '/task-manager': 1, '/past-projects': 1, '/suggestions': 1, '/committee': 1
     };
     const match = Object.entries(lookup).find(([key]) => itemId.startsWith(key));
     const min = match ? match[1] : (itemId.startsWith('/project') ? 2 : 1);
@@ -52,7 +52,8 @@ export default function DashboardLayout() {
     ]},
     { section: 'Group & Supervisor', items: [
       { id: '/fyp-group', label: 'FYP Group', icon: Users },
-      { id: '/supervisor-selection', label: 'FYP Supervisor', icon: User }
+      { id: '/supervisor-selection', label: 'FYP Supervisor', icon: User },
+      { id: '/committee', label: 'My Committee', icon: Shield }
     ]},
     { section: 'Project Execution', items: [
       { id: '/project/new', label: 'Group Ideas', icon: Lightbulb },
@@ -73,6 +74,7 @@ export default function DashboardLayout() {
   else if (path.includes('/task-manager')) pageTitle = 'Task Manager';
   else if (path.includes('/past-projects')) pageTitle = 'Past FYP Projects';
   else if (path.includes('/suggestions')) pageTitle = 'Supervisor Suggestions';
+  else if (path.includes('/committee')) pageTitle = 'My Committee';
 
   return (
     <div className="flex h-screen overflow-hidden relative bg-surface selection:bg-blue-100 selection:text-blue-900 font-poppins">

@@ -22,6 +22,7 @@ import TaskManager from "../pages/student/TaskManager";
 import GroupIdeas from "../pages/student/GroupIdeas";
 import StudentPastProjects from "../pages/student/StudentPastProjects";
 import StudentSuggestions from "../pages/student/StudentSuggestions";
+import StudentCommittee from "../pages/student/StudentCommittee";
 import HodLayout from '../components/hod/HodLayout';
 import HodDashboard from '../pages/hod/HodDashboard';
 import HodEscalations from '../pages/hod/HodEscalations';
@@ -108,6 +109,7 @@ const AppRoutes = () => {
                 <Route path="/task-manager" element={<TaskManager />} />
                 <Route path="/past-projects" element={<StudentPastProjects />} />
                 <Route path="/suggestions" element={<StudentSuggestions />} />
+                <Route path="/committee" element={<StudentCommittee />} />
             </Route>
 
             {/* HOD Portal Routes */}

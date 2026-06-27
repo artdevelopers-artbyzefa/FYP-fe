@@ -37,23 +37,23 @@ export default function IndustryLayout() {
   return (
     <div className="flex h-screen overflow-hidden bg-surface selection:bg-blue-100 selection:text-blue-900 font-poppins">
       <aside
-        className={`bg-white border-r border-line flex flex-col flex-shrink-0 transition-all duration-300 overflow-hidden z-50 h-full
-          fixed lg:relative ${mobileSidebarOpen ? 'translate-x-0 w-64 shadow-2xl' : '-translate-x-full lg:translate-x-0'} ${sidebarCollapsed ? 'lg:w-[68px]' : 'w-64 lg:w-64'}`}
+        className={`bg-[#1a237e] border-r border-white/10 flex flex-col flex-shrink-0 transition-all duration-300 overflow-hidden z-50 h-full
+          fixed lg:relative ${mobileSidebarOpen ? 'translate-x-0 w-64 shadow-2xl' : '-translate-x-full lg:translate-x-0'} ${sidebarCollapsed ? 'lg:w-[68px]' : 'w-64 lg:w-64'}
       >
-        <div className="flex items-center gap-3 px-4 py-5 border-b border-line flex-shrink-0">
-          <div className="w-9 h-9 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
-            <Landmark className="text-blue-600" size={16} />
+        <div className="flex items-center gap-3 px-4 py-5 border-b border-white/10 flex-shrink-0">
+          <div className="w-9 h-9 bg-white/15 rounded-xl flex items-center justify-center flex-shrink-0">
+            <Landmark className="text-white" size={16} />
           </div>
           {!sidebarCollapsed && (
             <div className="overflow-hidden">
-              <div className="text-slate-900 text-sm font-bold whitespace-nowrap">CUI DIMS</div>
-              <div className="text-slate-400 text-xs whitespace-nowrap leading-tight">Industry Supervisor</div>
+              <div className="text-white text-sm font-bold whitespace-nowrap">CUI DIMS</div>
+              <div className="text-blue-300 text-xs whitespace-nowrap leading-tight">Industry Supervisor</div>
             </div>
           )}
-          <button onClick={() => setSidebarCollapsed(!sidebarCollapsed)} className="ml-auto hidden lg:flex bg-transparent border-0 text-slate-300 cursor-pointer flex-shrink-0 p-1 rounded-lg hover:bg-slate-100 transition-colors">
+          <button onClick={() => setSidebarCollapsed(!sidebarCollapsed)} className="ml-auto hidden lg:flex bg-transparent border-0 text-blue-200 cursor-pointer flex-shrink-0 p-1 rounded-lg hover:bg-white/10 transition-colors">
             {sidebarCollapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
           </button>
-          <button onClick={() => setMobileSidebarOpen(false)} className="ml-auto lg:hidden bg-transparent border-0 text-slate-400 cursor-pointer p-1 rounded-lg hover:bg-slate-100 transition-colors">
+          <button onClick={() => setMobileSidebarOpen(false)} className="ml-auto lg:hidden bg-transparent border-0 text-blue-200 cursor-pointer p-1 rounded-lg hover:bg-white/10 transition-colors">
             <X size={18} />
           </button>
         </div>
@@ -62,13 +62,13 @@ export default function IndustryLayout() {
           {navItems.map((item) => (
             <React.Fragment key={item.id}>
               {item.section && !sidebarCollapsed && (
-                <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400 px-3 mb-1 pt-1">{item.section}</div>
+                <div className="text-[10px] font-bold uppercase tracking-widest text-blue-300/60 px-3 mb-1 pt-1">{item.section}</div>
               )}
               <button
                 onClick={() => { navigate(item.id); setMobileSidebarOpen(false); }}
                 title={sidebarCollapsed ? item.label : ''}
                 className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-200 text-left outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2
-                  ${location.pathname === item.id || (item.id === '/industry-dashboard/scoring' && location.pathname.includes('/scoring')) ? 'bg-blue-100 text-blue-700 font-semibold' : 'text-slate-600 hover:bg-blue-50 hover:text-blue-700'}
+                  ${location.pathname === item.id || (item.id === '/industry-dashboard/scoring' && location.pathname.includes('/scoring')) ? 'bg-[#1565c0] text-white font-semibold' : 'text-white hover:bg-white/10 hover:text-white'}
                   ${sidebarCollapsed ? 'justify-center' : ''}`}
               >
                 {React.createElement(item.icon, { size: 16, className: "flex-shrink-0" })}
@@ -78,8 +78,8 @@ export default function IndustryLayout() {
           ))}
         </nav>
 
-        <div className="p-2 border-t border-line flex-shrink-0">
-          <button onClick={() => logout()} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-slate-400 hover:bg-red-50 hover:text-red-500 transition-all duration-200 ${sidebarCollapsed ? 'justify-center' : ''}`}>
+        <div className="p-2 pt-4 flex-shrink-0">
+          <button onClick={() => logout()} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-white hover:bg-white/10 hover:text-red-400 transition-all duration-200 ${sidebarCollapsed ? 'justify-center' : ''}`}>
             <LogOut size={16} className="flex-shrink-0" />
             {!sidebarCollapsed && <span className="text-sm font-medium">Logout</span>}
           </button>

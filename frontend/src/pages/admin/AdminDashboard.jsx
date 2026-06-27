@@ -115,7 +115,7 @@ export default function AdminDashboard() {
       {/* ============= SIDEBAR ============= */}
       <aside
         id="admin-sidebar"
-        style={{ backgroundColor: '#2B3990', width: sidebarCollapsed ? 68 : 256, minWidth: sidebarCollapsed ? 68 : 256 }}
+        style={{ backgroundColor: '#1a237e', width: sidebarCollapsed ? 68 : 256, minWidth: sidebarCollapsed ? 68 : 256 }}
         className={`flex flex-col flex-shrink-0 transition-all duration-300 overflow-hidden z-50 h-full border-r border-white/10 shadow-2xl
           fixed lg:relative
           ${mobileSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}
@@ -127,7 +127,7 @@ export default function AdminDashboard() {
           {!sidebarCollapsed && (
             <div className="overflow-hidden transition-all duration-300">
               <div className="text-white text-sm font-black whitespace-nowrap tracking-wide">CUI ABBOTTABAD</div>
-              <div className="text-white/60 text-[11px] whitespace-nowrap leading-tight font-semibold">System Administrator</div>
+              <div className="text-blue-300 text-[11px] whitespace-nowrap leading-tight font-semibold">System Administrator</div>
             </div>
           )}
           <button onClick={() => setMobileSidebarOpen(false)} className="ml-auto lg:hidden bg-transparent border-0 text-white cursor-pointer p-1 rounded-lg hover:bg-white/15 transition-colors absolute right-4">
@@ -139,14 +139,14 @@ export default function AdminDashboard() {
           {navItems.map((item) => (
             <React.Fragment key={item.id}>
               {item.section && !sidebarCollapsed && (
-                <div className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-3 mb-2 pt-4">{item.section}</div>
+                <div className="text-[10px] font-bold uppercase tracking-widest text-blue-300/60 px-3 mb-2 pt-4">{item.section}</div>
               )}
               <button
                 onClick={() => goTo(item.id)}
                 title={sidebarCollapsed ? item.label : ''}
                 style={activeView === item.id ? { backgroundColor: '#2563EB' } : {}}
                 className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-200 text-left
-                  ${activeView === item.id ? 'text-white shadow-lg font-bold' : 'text-white/80 hover:bg-white/10 hover:text-white'}
+                  ${activeView === item.id ? 'text-white shadow-lg font-bold' : 'text-white hover:bg-white/10 hover:text-white'}
                   ${sidebarCollapsed ? 'justify-center' : ''}`}
               >
                 {React.createElement(item.icon, { className: "w-4 h-4" })}
@@ -157,7 +157,7 @@ export default function AdminDashboard() {
         </nav>
 
         <div className="p-3 border-t border-white/10 bg-blue-600/10 flex-shrink-0">
-          <button onClick={handleLogout} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-white/80 hover:bg-blue-600/20 hover:text-blue-600 transition-all duration-200 font-bold ${sidebarCollapsed ? 'justify-center' : ''}`}>
+          <button onClick={handleLogout}           className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-white hover:bg-blue-600/20 hover:text-blue-600 transition-all duration-200 font-bold ${sidebarCollapsed ? 'justify-center' : ''}`}>
             <LogOut className="text-sm w-5 text-center flex-shrink-0" />
             {!sidebarCollapsed && <span className="text-sm">Logout</span>}
           </button>

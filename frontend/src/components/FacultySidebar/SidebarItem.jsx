@@ -9,9 +9,9 @@ const SidebarItem = ({ to, icon: Icon, label, onClick }) => {
       className={({ isActive }) => {
         const baseClass = 'flex items-center gap-3.5 px-4 py-3 rounded-[16px] transition-all duration-200 group font-poppins font-semibold text-[15px] ';
         if (isActive) {
-          return baseClass + 'bg-blue-100 text-blue-700 font-semibold';
+          return baseClass + 'bg-[#1565c0] text-white font-semibold';
         }
-        return baseClass + 'text-slate-600 hover:bg-blue-50 hover:text-blue-700';
+        return baseClass + 'text-white hover:bg-white/10 hover:text-white';
       }}
     >
       <Icon className="w-5 h-5 shrink-0" />

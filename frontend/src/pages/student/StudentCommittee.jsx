@@ -75,9 +75,6 @@ const StudentCommittee = () => {
           <div>
             <h3 className="text-lg font-bold text-slate-900">{committee.name}</h3>
             <div className="flex items-center gap-2 mt-1 text-xs text-slate-500">
-              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-lg border ${committee.status === 'active' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-gray-100 text-gray-500 border-gray-200'}`}>
-                {committee.status === 'active' ? 'Active' : committee.status || 'N/A'}
-              </span>
               {groupName && (
                 <>
                   <span className="text-slate-300">|</span>
@@ -155,12 +152,6 @@ const StudentCommittee = () => {
           <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
             <span className="text-slate-400 font-semibold block mb-1">Committee Name</span>
             <span className="font-bold text-slate-900">{committee.name}</span>
-          </div>
-          <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
-            <span className="text-slate-400 font-semibold block mb-1">Status</span>
-            <span className={`font-bold px-2 py-0.5 rounded-lg border text-[10px] inline-block ${committee.status === 'active' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-gray-100 text-gray-500 border-gray-200'}`}>
-              {committee.status === 'active' ? 'Active' : committee.status || 'N/A'}
-            </span>
           </div>
           <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
             <span className="text-slate-400 font-semibold block mb-1">Total Members</span>

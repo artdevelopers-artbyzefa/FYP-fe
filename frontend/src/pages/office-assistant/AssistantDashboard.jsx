@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { getOfficeDashboardStats } from '../../services/office-assistant.service';
 import { ArrowRight, FileUp, GitBranch, GraduationCap, Layers, UserPen, UserPlus, Users, FileSignature, CalendarCheck, Star, Loader2 } from 'lucide-react';
+import PhaseContext from '../../contexts/PhaseContext';
 
 const iconMap = {
   FileUp, UserPen, UserPlus, FileSignature, CalendarCheck, Star
@@ -10,6 +11,10 @@ const iconMap = {
 const AssistantDashboard = () => {
   const navigate = useNavigate();
   const { user } = useOutletContext();
+  const phaseCtx = useContext(PhaseContext);
+  const currentPhase = phaseCtx?.currentPhase;
+  const phase1Keys = ['registration', 'proposal_submission', 'proposal_defense', 'phase1_development', 'phase1_evaluation'];
+  const isPhase1 = currentPhase && phase1Keys.includes(currentPhase.key);
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -116,12 +121,12 @@ const AssistantDashboard = () => {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {[
-              { icon: Layers, label: 'Evaluation Committees', path: '/office-assistant/eval-committee', locked: true },
+              { icon: Layers, label: 'Evaluation Committees', path: '/office-assistant/eval-committee', locked: isPhase1 },
               { icon: FileUp, label: 'Content & Templates', path: '/office-assistant/content', locked: true },
               { icon: Star, label: 'Results & Printing', path: '/office-assistant/results', locked: true },
-              { icon: FileSignature, label: 'Project Directory', path: '/office-assistant/projects', locked: true },
+              { icon: FileSignature, label: 'Project Directory', path: '/office-assistant/projects', locked: isPhase1 },
             ].map(link => (
-              <div key={link.label} onClick={() => { if (!link.locked) navigate(link.path); }} className={`p-4 rounded-2xl border border-gray-100 transition-all ${link.locked ? 'opacity-50 cursor-not-allowed' : 'hover:border-secondary hover:shadow-md cursor-pointer group'}`} title={link.locked ? 'Locked during Phase 1' : link.label}>
+              <div key={link.label} onClick={() => { if (!link.locked) navigate(link.path); }} className={`p-4 rounded-2xl border border-gray-100 transition-all ${link.locked ? 'opacity-50 cursor-not-allowed' : 'hover:border-secondary hover:shadow-md cursor-pointer group'}`} title={link.locked && currentPhase ? `Locked during ${currentPhase.name}` : link.label}>
                 <div className="flex items-center gap-3 mb-2">
                   <div className={`w-9 h-9 rounded-xl flex-center ${link.locked ? 'bg-gray-100 text-gray-400' : 'bg-secondary/10 text-secondary group-hover:scale-105 transition-transform'}`}>
                     <link.icon className="w-4 h-4" />

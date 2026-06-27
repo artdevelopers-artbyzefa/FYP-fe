@@ -1,13 +1,22 @@
-import React, { useEffect, useState, useCallback, useRef, useMemo } from 'react';
-import { getOfficeFaculty, createOfficeFaculty, deleteOfficeFaculty, sendFacultyInvite, updateOfficeFaculty } from '../../services/office-assistant.service';
+import React, { useEffect, useState, useCallback } from 'react';
+import { getOfficeFaculty, deleteOfficeFaculty, sendFacultyInvite, updateOfficeFaculty } from '../../services/office-assistant.service';
 import { showToast, showAlert } from '../../components/AppToast';
-import { Search, Send, Trash2, Pencil, ArrowLeft, ArrowRight, ChevronRight, Loader2, Mail, Users, CheckCircle, XCircle } from 'lucide-react';
+import { Search, Send, Trash2, Pencil, ArrowLeft, ArrowRight, ChevronRight, Loader2, Mail, Users, CheckCircle, XCircle, Star } from 'lucide-react';
 import { GROUP_STATUS_MAP } from '../../utils/constants/status.constant';
 import apiClient from '../../api/apiClient';
 
-const FACULTY_TYPES = ['committee', 'supervisor', 'both'];
-const initialForm = { name: '', email: '', facultyType: 'supervisor', phone: '' };
 const TYPE_COLORS = { committee: 'bg-purple-50 text-purple-700 border-purple-200', supervisor: 'bg-blue-50 text-blue-700 border-blue-200', both: 'bg-emerald-50 text-emerald-700 border-emerald-200' };
+const PRIORITY_LABELS = { 1: '1st Choice', 2: '2nd Choice', 3: '3rd Choice' };
+
+function SkeletonRow() {
+  return (
+    <tr className="animate-pulse">
+      {[1,2,3,4,5,6,7].map(i => (
+        <td key={i} className="px-4 py-3"><div className="h-4 bg-slate-200 rounded w-3/4" /></td>
+      ))}
+    </tr>
+  );
+}
 
 export default function AssistantFaculty() {
   const [faculty, setFaculty] = useState([]);
@@ -67,40 +76,80 @@ export default function AssistantFaculty() {
           className="w-full pl-9 pr-4 py-2.5 bg-white border border-line rounded-xl text-sm outline-none focus:border-blue-500 transition-all" />
       </div>
 
-      {loading ? (
-        <div className="flex items-center justify-center py-20"><Loader2 className="w-6 h-6 animate-spin text-blue-600" /><span className="ml-2 text-sm text-slate-500 font-medium">Loading faculty...</span></div>
-      ) : faculty.length === 0 ? (
-        <div className="flex flex-col items-center gap-3 py-20 text-slate-400">
-          <Users className="w-10 h-10" /><p className="text-sm font-bold">No faculty found</p>
-          <p className="text-xs">Try adjusting your filters.</p>
+      <div className="bg-white rounded-2xl border border-line shadow-sm overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="bg-slate-50 border-b border-line">
+                <th className="text-left px-4 py-3 text-[10px] font-bold text-slate-500 uppercase tracking-wider">Name</th>
+                <th className="text-left px-4 py-3 text-[10px] font-bold text-slate-500 uppercase tracking-wider">Email</th>
+                <th className="text-left px-4 py-3 text-[10px] font-bold text-slate-500 uppercase tracking-wider">Type</th>
+                <th className="text-left px-4 py-3 text-[10px] font-bold text-slate-500 uppercase tracking-wider">Groups</th>
+                <th className="text-left px-4 py-3 text-[10px] font-bold text-slate-500 uppercase tracking-wider">Preferences</th>
+                <th className="text-left px-4 py-3 text-[10px] font-bold text-slate-500 uppercase tracking-wider">Status</th>
+                <th className="text-right px-4 py-3 text-[10px] font-bold text-slate-500 uppercase tracking-wider">Action</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-line">
+              {loading ? (
+                Array.from({ length: 8 }).map((_, i) => <SkeletonRow key={i} />)
+              ) : faculty.length === 0 ? (
+                <tr>
+                  <td colSpan={7} className="px-4 py-16 text-center">
+                    <div className="flex flex-col items-center gap-3 text-slate-400">
+                      <Users className="w-10 h-10" /><p className="text-sm font-bold">No faculty found</p>
+                      <p className="text-xs">Try adjusting your filters.</p>
+                    </div>
+                  </td>
+                </tr>
+              ) : (
+                faculty.map(f => (
+                  <tr key={f.id} onClick={() => { setSelected(f); setView('detail'); }} className={`hover:bg-slate-50 transition-colors cursor-pointer ${!f.active ? 'opacity-60' : ''}`}>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-3">
+                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-[10px] font-bold shrink-0 ${f.active ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-500'}`}>
+                          {f.name?.split(' ').filter(Boolean).slice(0, 2).map(w => w[0]).join('') || '?'}
+                        </div>
+                        <span className="text-sm font-bold text-slate-900">{f.name}</span>
+                      </div>
+                    </td>
+                    <td className="px-4 py-3 text-xs text-slate-500">{f.email}</td>
+                    <td className="px-4 py-3">
+                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-lg border whitespace-nowrap ${TYPE_COLORS[f.facultyType] || 'bg-gray-50 text-gray-500 border-gray-200'}`}>{f.facultyType}</span>
+                    </td>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-bold text-slate-700">{f.proposed + f.inProgress}</span>
+                        <span className="text-[9px] text-slate-400">({f.proposed} pend, {f.inProgress} act)</span>
+                      </div>
+                    </td>
+                    <td className="px-4 py-3">
+                      {f.preferences?.length > 0 ? (
+                        <div className="flex items-center gap-1">
+                          <Star size={11} className="text-amber-400" />
+                          <span className="text-xs text-slate-600">{f.preferences.map(p => p.field).join(', ')}</span>
+                        </div>
+                      ) : (
+                        <span className="text-xs text-slate-400">—</span>
+                      )}
+                    </td>
+                    <td className="px-4 py-3">
+                      {f.active ? (
+                        <span className="flex items-center gap-1 text-[10px] font-bold text-emerald-600"><CheckCircle size={11} /> Active</span>
+                      ) : (
+                        <span className="flex items-center gap-1 text-[10px] font-bold text-slate-400"><XCircle size={11} /> Inactive</span>
+                      )}
+                    </td>
+                    <td className="px-4 py-3 text-right">
+                      <span className="text-blue-600 text-[10px] font-bold flex items-center justify-end gap-0.5">View <ChevronRight size={11} /></span>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
         </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          {faculty.map(f => (
-            <div key={f.id} onClick={() => { setSelected(f); setView('detail'); }}
-              className={`bg-white rounded-2xl border border-line p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer ${!f.active ? 'opacity-60' : ''}`}>
-              <div className="flex items-center gap-3 mb-3">
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-xs font-bold shrink-0 ${f.active ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-500'}`}>
-                  {f.name?.split(' ').filter(Boolean).slice(0, 2).map(w => w[0]).join('') || '?'}
-                </div>
-                <div className="min-w-0 flex-1">
-                  <h3 className="font-bold text-slate-900 text-sm truncate">{f.name}</h3>
-                  <p className="text-[10px] text-slate-400 truncate">{f.email}</p>
-                </div>
-                <span className={`text-[9px] font-bold px-2 py-0.5 rounded-lg border whitespace-nowrap ${TYPE_COLORS[f.facultyType] || 'bg-gray-50 text-gray-500 border-gray-200'}`}>{f.facultyType}</span>
-              </div>
-              <div className="flex items-center gap-3 text-xs text-slate-500 mb-2">
-                <span className="flex items-center gap-1"><Users size={12} /> {f.proposed + f.inProgress} groups</span>
-                {f.active ? <span className="flex items-center gap-1 text-emerald-600"><CheckCircle size={12} /> Active</span> : <span className="flex items-center gap-1 text-slate-400"><XCircle size={12} /> Inactive</span>}
-              </div>
-              <div className="flex items-center justify-between pt-3 border-t border-line">
-                <span className="text-[10px] text-slate-400">{f.proposed} pending, {f.inProgress} active</span>
-                <span className="text-blue-600 text-[10px] font-bold flex items-center gap-0.5">View Profile <ChevronRight size={12} /></span>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
+      </div>
 
       {totalPages > 1 && (
         <div className="flex items-center justify-between">
@@ -124,11 +173,11 @@ function FacultyDetail({ facultyId, onBack, onUpdate }) {
   const [faculty, setFaculty] = useState(null);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
-  const [editForm, setEditForm] = useState(initialForm);
+  const [editForm, setEditForm] = useState({ name: '', email: '', facultyType: 'supervisor', phone: '' });
   const [submitting, setSubmitting] = useState(false);
-  const [selectedGroup, setSelectedGroup] = useState(null);
 
   useEffect(() => {
+    setLoading(true);
     apiClient.get(`/office-assistant/faculty/${facultyId}`).then(res => {
       const f = res.data?.data;
       setFaculty(f);
@@ -161,7 +210,24 @@ function FacultyDetail({ facultyId, onBack, onUpdate }) {
     try { await sendFacultyInvite(facultyId); showToast.success(`Invitation resent to ${faculty.email}`); } catch (err) { showToast.error('Failed to resend.'); }
   };
 
-  if (loading) return <div className="flex items-center justify-center py-20"><Loader2 className="w-6 h-6 animate-spin text-blue-600" /></div>;
+  if (loading) return (
+    <div className="space-y-6">
+      <div className="border-b border-line pb-4">
+        <div className="flex items-center gap-1.5 text-xs font-bold text-slate-500 mb-3"><ArrowLeft size={14} /> Back to Faculty Profiles</div>
+        <div className="flex items-center gap-4">
+          <div className="w-14 h-14 rounded-2xl bg-slate-200 animate-pulse shrink-0" />
+          <div className="flex-1 space-y-2">
+            <div className="h-6 bg-slate-200 rounded w-48 animate-pulse" />
+            <div className="h-4 bg-slate-200 rounded w-64 animate-pulse" />
+          </div>
+        </div>
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2"><div className="h-48 bg-slate-100 rounded-2xl animate-pulse" /></div>
+        <div className="space-y-5"><div className="h-32 bg-slate-100 rounded-2xl animate-pulse" /><div className="h-40 bg-slate-100 rounded-2xl animate-pulse" /></div>
+      </div>
+    </div>
+  );
   if (!faculty) return <div className="text-center py-20 text-slate-400">Faculty not found.</div>;
 
   return (
@@ -256,6 +322,35 @@ function FacultyDetail({ facultyId, onBack, onUpdate }) {
                   <p className="text-[9px] font-bold text-emerald-500">Active</p>
                 </div>
               </div>
+            </div>
+
+            <div className="bg-white rounded-2xl border border-line p-6 shadow-sm">
+              <h5 className="text-xs font-bold text-slate-900 tracking-wider mb-4">Committee Preferences</h5>
+              {faculty.preferences?.length > 0 ? (
+                <div className="space-y-2">
+                  {faculty.preferences.sort((a, b) => a.priority - b.priority).map(p => (
+                    <div key={p.priority} className="flex items-center justify-between p-2.5 rounded-xl bg-amber-50 border border-amber-100">
+                      <span className="text-xs font-bold text-slate-900">{p.field}</span>
+                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-lg border ${p.priority === 1 ? 'bg-amber-100 text-amber-700 border-amber-200' : p.priority === 2 ? 'bg-blue-50 text-blue-700 border-blue-200' : 'bg-slate-100 text-slate-600 border-slate-200'}`}>{PRIORITY_LABELS[p.priority]}</span>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-xs text-slate-400 py-4 text-center">No preferences set</p>
+              )}
+            </div>
+
+            <div className="bg-white rounded-2xl border border-line p-6 shadow-sm">
+              <h5 className="text-xs font-bold text-slate-900 tracking-wider mb-4">Research Areas</h5>
+              {faculty.research?.length > 0 ? (
+                <div className="flex flex-wrap gap-2">
+                  {faculty.research.map((tag, i) => (
+                    <span key={i} className="text-[10px] font-bold px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 border border-indigo-100">{tag}</span>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-xs text-slate-400 py-4 text-center">No research areas tagged</p>
+              )}
             </div>
 
             <div className="bg-white rounded-2xl border border-line p-6 shadow-sm">

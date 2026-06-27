@@ -285,7 +285,7 @@ export default function GroupIdeas() {
                       Proposed by {idea.submittedBy?.name || 'Unknown'}
                     </p>
                   </div>
-                  <span className={`flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg border shrink-0 ${statusConfig[idea.agreementStatus]?.class || 'bg-slate-50 text-slate-600 border-slate-200'}`}>
+                  <span className={`flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg border shrink-0 ${statusConfig[idea.agreementStatus]?.color || 'bg-slate-50 text-slate-600 border-slate-200'}`}>
                     <StatusIcon size={14} />
                     {statusConfig[idea.agreementStatus]?.label || idea.agreementStatus}
                   </span>

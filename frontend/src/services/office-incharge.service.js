@@ -76,6 +76,16 @@ export const getInchargeFacultyReports = async () => {
   return res.data;
 };
 
+export const getInchargeFacultyDetail = async (id) => {
+  const res = await apiClient.get(`/office-incharge/faculty-reports/${id}`);
+  return res.data;
+};
+
+export const getInchargeFacultyGroupDetail = async (facultyId, groupId) => {
+  const res = await apiClient.get(`/office-incharge/faculty-reports/${facultyId}/groups/${groupId}`);
+  return res.data;
+};
+
 export const getInchargeStudentReports = async () => {
   const res = await apiClient.get(INCHARGE_STUDENT_REPORTS_API_URL);
   return res.data;
@@ -88,6 +98,16 @@ export const getProposalReviews = async () => {
 
 export const processProposalReview = async (id, data) => {
   const res = await apiClient.put('/office-incharge/proposal-reviews/' + id, data);
+  return res.data;
+};
+
+export const getForwardedProposals = async () => {
+  const res = await apiClient.get('/office-incharge/forwarded-proposals');
+  return res.data;
+};
+
+export const processForwardedProposal = async (groupId, decision, feedback) => {
+  const res = await apiClient.post(`/office-incharge/forwarded-proposals/${groupId}/process`, { decision, feedback });
   return res.data;
 };
 

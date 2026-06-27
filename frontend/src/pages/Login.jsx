@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { loginUser } from '../services/auth.service';
 import { showToast as AppToast } from '../components/AppToast';
-import { ArrowLeft, ArrowRight, ChevronDown, Eye, EyeOff, Loader, Lock, Mail, UserCircle } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ChevronDown, Eye, EyeOff, GraduationCap, Loader, Lock, Mail, UserCircle } from 'lucide-react';
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -62,14 +62,23 @@ const Login = () => {
       <div className="w-full max-w-[480px]">
         <div className="bg-white rounded-3xl p-10 shadow-2xl">
 
-          {/* Back to Home */}
-          <Link
-            to="/"
-            className="flex items-center gap-1.5 text-xs font-bold text-gray-400 hover:text-primary transition-colors mb-6"
-          >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            Back to Home
-          </Link>
+          {/* Navigation */}
+          <div className="flex items-center justify-between mb-6">
+            <Link
+              to="/"
+              className="flex items-center gap-1.5 text-xs font-bold text-gray-400 hover:text-primary transition-colors"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              Back to Home
+            </Link>
+            <Link
+              to="/student-portal"
+              className="flex items-center gap-1.5 text-xs font-bold text-blue-600 hover:text-primary transition-colors"
+            >
+              <GraduationCap className="w-3.5 h-3.5" />
+              Student Portal
+            </Link>
+          </div>
 
           {/* Logo & Header */}
           <div className="text-center mb-8">

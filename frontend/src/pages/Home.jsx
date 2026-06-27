@@ -32,6 +32,9 @@ export default function Home() {
               <Link to="/login" className="inline-flex items-center justify-center gap-2 py-4 px-8 rounded-3xl font-poppins text-[1.125rem] font-bold bg-primary text-white shadow-lg shadow-primary/25 hover:bg-blue-800 hover:shadow-xl hover:-translate-y-px transition-all text-center">
                 Access Portal <ArrowRight className="w-4 h-4" />
               </Link>
+              <Link to="/student-portal" className="inline-flex items-center justify-center gap-2 py-4 px-8 rounded-3xl font-poppins text-[1.125rem] font-bold bg-white/10 text-white border-[1.5px] border-white/30 hover:bg-white hover:border-primary hover:text-primary transition-all text-center">
+                <GraduationCap className="w-5 h-5" /> Student Portal
+              </Link>
               <a href="#about" className="inline-flex items-center justify-center gap-2 py-4 px-8 rounded-3xl font-poppins text-[1.125rem] font-bold bg-white/10 text-white border-[1.5px] border-white/30 hover:bg-white hover:border-primary hover:text-primary transition-all text-center">
                 Learn More About Program
               </a>

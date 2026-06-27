@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { getStudentPastProjects } from '../../services/student.service';
-import { Search, ExternalLink, X, BookOpen, Code, SlidersHorizontal, Archive } from 'lucide-react';
+import { Search, ExternalLink, ArrowLeft, BookOpen, Code, SlidersHorizontal, Archive, Users, User } from 'lucide-react';
 
 const CATEGORIES = [
   'Artificial Intelligence & ML',
@@ -33,6 +33,7 @@ const StudentPastProjects = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [selectedProject, setSelectedProject] = useState(null);
   const [showFilters, setShowFilters] = useState(false);
+  const [view, setView] = useState('list');
   const limit = 20;
 
   const fetchProjects = useCallback(async () => {
@@ -153,7 +154,7 @@ const StudentPastProjects = () => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {projects.map(p => (
-            <div key={p.id} className="bg-white rounded-2xl border border-line p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer" onClick={() => setSelectedProject(p)}>
+            <div key={p.id} className="bg-white rounded-2xl border border-line p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer" onClick={() => { setSelectedProject(p); setView('detail'); }}>
               <div className="flex items-start justify-between gap-3 mb-3">
                 <h3 className="font-bold text-slate-900 text-base truncate">{p.title}</h3>
               </div>
@@ -193,60 +194,30 @@ const StudentPastProjects = () => {
         </div>
       )}
 
-      {selectedProject && (
-        <div className="fixed inset-0 bg-blue-600/50 backdrop-blur-sm z-[150] flex items-center justify-center p-4">
-          <div className="bg-white rounded-[2rem] w-full max-w-2xl p-6 sm:p-8 shadow-2xl border border-line max-h-[90vh] overflow-y-auto">
-            <div className="flex justify-between items-center mb-6 pb-3 border-b border-line">
-              <h3 className="text-lg font-bold text-slate-900">Project Detail</h3>
-              <button onClick={() => setSelectedProject(null)} className="w-8 h-8 rounded-xl bg-gray-50 border border-line flex items-center justify-center text-slate-400 hover:bg-gray-100 transition-all cursor-pointer">
-                <X size={16} />
-              </button>
+      {view === 'detail' && selectedProject && (
+        <div className="space-y-6">
+          <div className="border-b border-line pb-4">
+            <button onClick={() => { setView('list'); setSelectedProject(null); }} className="flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-slate-900 transition-colors cursor-pointer mb-2">
+              <ArrowLeft size={14} /> Back to Projects
+            </button>
+            <h2 className="text-xl font-bold text-slate-900">{selectedProject.title}</h2>
+            <div className="flex gap-2 mt-2 flex-wrap">
+              <span className="bg-blue-50 text-blue-700 font-bold text-xs px-2.5 py-0.5 rounded-lg border border-blue-200">{selectedProject.session || 'N/A'}</span>
+              {selectedProject.domain && <span className="bg-purple-50 text-purple-700 font-bold text-xs px-2.5 py-0.5 rounded-lg border border-purple-200">{selectedProject.domain}</span>}
             </div>
-            <div className="space-y-5">
-              <div>
-                <h4 className="text-xl font-bold text-slate-900">{selectedProject.title}</h4>
-                <div className="flex gap-2 mt-2 flex-wrap">
-                  <span className="bg-blue-50 text-blue-700 font-bold text-xs px-2.5 py-0.5 rounded-lg border border-blue-200">{selectedProject.session || 'N/A'}</span>
-                  {selectedProject.domain && <span className="bg-purple-50 text-purple-700 font-bold text-xs px-2.5 py-0.5 rounded-lg border border-purple-200">{selectedProject.domain}</span>}
-                </div>
-              </div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2 space-y-5">
               {selectedProject.description && (
-                <div>
-                  <h5 className="text-xs font-bold text-slate-900 tracking-wider mb-2">Description</h5>
-                  <p className="text-xs text-slate-900 leading-relaxed bg-white p-4 rounded-2xl border border-line">{selectedProject.description}</p>
-                </div>
-              )}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-white p-4 rounded-2xl border border-line text-xs">
-                <div>
-                  <span className="text-slate-900 font-bold tracking-wider block mb-1">Supervisor</span>
-                  <span className="font-bold text-slate-900 text-sm">{selectedProject.supervisor?.name || 'N/A'}</span>
-                </div>
-                {selectedProject.coSupervisor?.name && (
-                  <div>
-                    <span className="text-slate-900 font-bold tracking-wider block mb-1">Co-Supervisor</span>
-                    <span className="font-bold text-slate-900 text-sm">{selectedProject.coSupervisor.name}</span>
-                  </div>
-                )}
-              </div>
-              {selectedProject.students?.length > 0 && (
-                <div>
-                  <h5 className="text-xs font-bold text-slate-900 tracking-wider mb-2">Team Members</h5>
-                  <div className="space-y-2">
-                    {selectedProject.students.map((s, i) => (
-                      <div key={i} className="flex items-center gap-3 bg-white p-3 rounded-xl border border-line">
-                        <div className="w-8 h-8 rounded-lg bg-blue-100 text-blue-700 text-xs font-bold flex items-center justify-center">{s.name?.charAt(0)}</div>
-                        <div>
-                          <div className="text-sm font-bold text-slate-900">{s.name}</div>
-                          {s.regNo && <div className="text-xs text-gray-400">{s.regNo}</div>}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                <div className="bg-white rounded-2xl border border-line p-6 shadow-sm">
+                  <h5 className="text-xs font-bold text-slate-900 tracking-wider mb-3">Description</h5>
+                  <p className="text-sm text-slate-700 leading-relaxed">{selectedProject.description}</p>
                 </div>
               )}
               {selectedProject.techStack?.length > 0 && (
-                <div>
-                  <h5 className="text-xs font-bold text-slate-900 tracking-wider mb-2">Technology Stack</h5>
+                <div className="bg-white rounded-2xl border border-line p-6 shadow-sm">
+                  <h5 className="text-xs font-bold text-slate-900 tracking-wider mb-3">Technology Stack</h5>
                   <div className="flex flex-wrap gap-2">
                     {selectedProject.techStack.map((t, i) => (
                       <span key={i} className="bg-gray-50 text-slate-900 font-bold text-xs px-3 py-1.5 rounded-lg border border-line">{t}</span>
@@ -255,8 +226,8 @@ const StudentPastProjects = () => {
                 </div>
               )}
               {selectedProject.documentLinks?.length > 0 && (
-                <div>
-                  <h5 className="text-xs font-bold text-slate-900 tracking-wider mb-2">Documents / Links</h5>
+                <div className="bg-white rounded-2xl border border-line p-6 shadow-sm">
+                  <h5 className="text-xs font-bold text-slate-900 tracking-wider mb-3">Documents / Links</h5>
                   <div className="space-y-2">
                     {selectedProject.documentLinks.map((link, i) => (
                       <a key={i} href={link.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm font-bold text-blue-600 hover:text-blue-700 transition-colors">
@@ -267,8 +238,40 @@ const StudentPastProjects = () => {
                 </div>
               )}
             </div>
-            <div className="mt-8 pt-4 border-t border-line text-right">
-              <button onClick={() => setSelectedProject(null)} className="bg-white hover:bg-white text-slate-900 px-6 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer">Close</button>
+
+            <div className="space-y-5">
+              <div className="bg-white rounded-2xl border border-line p-6 shadow-sm">
+                <h5 className="text-xs font-bold text-slate-900 tracking-wider mb-4 flex items-center gap-1.5"><User size={13} /> Supervision</h5>
+                <div className="space-y-3">
+                  <div>
+                    <span className="text-[10px] font-bold text-slate-400 tracking-wider block mb-0.5">Supervisor</span>
+                    <span className="font-bold text-slate-900 text-sm">{selectedProject.supervisor?.name || 'N/A'}</span>
+                  </div>
+                  {selectedProject.coSupervisor?.name && (
+                    <div>
+                      <span className="text-[10px] font-bold text-slate-400 tracking-wider block mb-0.5">Co-Supervisor</span>
+                      <span className="font-bold text-slate-900 text-sm">{selectedProject.coSupervisor.name}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {selectedProject.students?.length > 0 && (
+                <div className="bg-white rounded-2xl border border-line p-6 shadow-sm">
+                  <h5 className="text-xs font-bold text-slate-900 tracking-wider mb-4 flex items-center gap-1.5"><Users size={13} /> Team Members</h5>
+                  <div className="space-y-2">
+                    {selectedProject.students.map((s, i) => (
+                      <div key={i} className="flex items-center gap-3 p-2.5 rounded-xl border border-line">
+                        <div className="w-8 h-8 rounded-lg bg-blue-100 text-blue-700 text-xs font-bold flex items-center justify-center shrink-0">{s.name?.charAt(0)}</div>
+                        <div className="min-w-0">
+                          <div className="text-sm font-bold text-slate-900 truncate">{s.name}</div>
+                          {s.regNo && <div className="text-[10px] text-gray-400 truncate">{s.regNo}</div>}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

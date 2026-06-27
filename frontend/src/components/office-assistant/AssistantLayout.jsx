@@ -2,13 +2,14 @@ import React, { useState, useContext } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { showToast as toast } from '../AppToast';
 import { logoutUser, getCurrentUser } from '../../services/auth.service';
-import { Archive, Award, Bell, CheckCircle, ChevronLeft, ChevronRight, File, GitBranch, GraduationCap, Home, Layers, Lock, LogOut, Megaphone, Menu, Presentation, Shield, User, UserCog, Users, X } from 'lucide-react';
+import { Archive, ArrowRight, Award, Bell, CheckCircle, ChevronLeft, ChevronRight, File, GitBranch, GraduationCap, Home, Layers, Lock, LogOut, Megaphone, Menu, Presentation, Shield, User, UserCog, Users, X } from 'lucide-react';
 import PhaseContext from '../../contexts/PhaseContext';
 
 const AssistantLayout = () => {
   const phaseCtx = useContext(PhaseContext);
   const currentPhase = phaseCtx?.currentPhase;
-  const isPhase2OrLater = currentPhase && (currentPhase.key === 'phase2_development' || currentPhase.key === 'phase2_defense');
+  const phase1Keys = ['registration', 'proposal_submission', 'proposal_defense', 'phase1_development', 'phase1_evaluation'];
+  const isPhase1 = currentPhase && phase1Keys.includes(currentPhase.key);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [showNotif, setShowNotif] = useState(false);
@@ -29,7 +30,8 @@ const AssistantLayout = () => {
     { to: '/office-assistant/users', icon: Users, label: 'User Management', section: 'User & Account' },
     { to: '/office-assistant/students', icon: GraduationCap, label: 'Student Records', section: 'User & Account' },
     { to: '/office-assistant/faculty', icon: Presentation, label: 'Faculty Profiles', section: 'User & Account' },
-    { to: '/office-assistant/projects', icon: GitBranch, label: 'Project Directory', section: 'FYP Workflow', locked: !isPhase2OrLater },
+    { to: '/office-assistant/forwarded-proposals', icon: ArrowRight, label: 'Forwarded Proposals', section: 'FYP Workflow' },
+    { to: '/office-assistant/projects', icon: GitBranch, label: 'Project Directory', section: 'FYP Workflow', locked: isPhase1 },
     { to: '/office-assistant/content', icon: File, label: 'Content & Templates', section: 'FYP Workflow', locked: true },
     { to: '/office-assistant/project-approvals', icon: CheckCircle, label: 'Project Approvals', section: 'FYP Workflow' },
     { to: '/office-assistant/past-projects', icon: Archive, label: 'Past FYP Projects', section: 'FYP Workflow' },
@@ -73,7 +75,7 @@ const AssistantLayout = () => {
                   </div>
                 )}
                 {link.locked ? (
-                  <div className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-blue-300/60 cursor-not-allowed select-none ${isCollapsed ? 'justify-center w-[44px] h-[44px] mx-auto p-[10px]' : ''}`} title={`${link.label} — locked during Phase 1`}>
+                  <div className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-blue-300/60 cursor-not-allowed select-none ${isCollapsed ? 'justify-center w-[44px] h-[44px] mx-auto p-[10px]' : ''}`} title={`${link.label} — locked`}>
                     {React.createElement(link.icon, { size: 16, className: "flex-shrink-0" })}
                     {!isCollapsed && (
                       <>

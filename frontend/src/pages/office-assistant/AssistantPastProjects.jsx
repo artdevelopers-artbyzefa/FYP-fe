@@ -208,14 +208,35 @@ export default function AssistantPastProjects() {
       </div>
 
       {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {Array.from({ length: 4 }, (_, i) => (
-            <div key={i} className="bg-white rounded-2xl border border-line p-5 shadow-sm animate-pulse">
-              <div className="h-5 rounded-lg skeleton w-3/4 mb-4" /><div className="h-3 rounded skeleton w-full mb-2" /><div className="h-3 rounded skeleton w-2/3 mb-4" />
-              <div className="flex gap-2 mb-3"><div className="h-6 rounded-lg skeleton w-20" /><div className="h-6 rounded-lg skeleton w-24" /></div>
-              <div className="flex gap-2"><div className="h-4 rounded skeleton w-16" /><div className="h-4 rounded skeleton w-20" /></div>
-            </div>
-          ))}
+        <div className="bg-white rounded-2xl border border-line shadow-sm overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-blue-50 border-b border-line text-[11px] font-bold text-slate-900 tracking-wider">
+                  <th className="py-3.5 px-6">Title</th>
+                  <th className="py-3.5 px-6">Session</th>
+                  <th className="py-3.5 px-6">Domain</th>
+                  <th className="py-3.5 px-6">Supervisor</th>
+                  <th className="py-3.5 px-6">Team</th>
+                  <th className="py-3.5 px-6">Tech Stack</th>
+                  <th className="py-3.5 px-6">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-50">
+                {Array.from({ length: 4 }, (_, i) => (
+                  <tr key={i} className="animate-pulse">
+                    <td className="py-4 px-6"><div className="h-4 rounded skeleton w-48" /></td>
+                    <td className="py-4 px-6"><div className="h-4 rounded skeleton w-16" /></td>
+                    <td className="py-4 px-6"><div className="h-5 rounded-lg skeleton w-24" /></td>
+                    <td className="py-4 px-6"><div className="h-4 rounded skeleton w-28" /></td>
+                    <td className="py-4 px-6"><div className="h-4 rounded skeleton w-24" /></td>
+                    <td className="py-4 px-6"><div className="flex gap-1"><div className="h-4 rounded skeleton w-12" /><div className="h-4 rounded skeleton w-16" /><div className="h-4 rounded skeleton w-10" /></div></td>
+                    <td className="py-4 px-6"><div className="h-4 rounded skeleton w-20" /></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       ) : filteredProjects.length === 0 ? (
         <div className="flex flex-col items-center gap-3 py-20 text-slate-400">
@@ -224,35 +245,62 @@ export default function AssistantPastProjects() {
           <p className="text-xs">Try adjusting your search or filters, or add a new past project.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {filteredProjects.map(p => (
-            <div key={p.id} className="bg-white rounded-2xl border border-line p-5 shadow-sm hover:shadow-md transition-all">
-              <div className="flex items-start justify-between gap-3 mb-3">
-                <h3 className="font-bold text-slate-900 text-base truncate">{p.title}</h3>
-              </div>
-              <div className="flex flex-wrap gap-1.5 mb-3">
-                <span className="bg-blue-50 text-blue-700 font-bold text-[10px] px-2 py-1 rounded-lg border border-blue-200">{p.session || 'N/A'}</span>
-                {p.domain && <span className="bg-purple-50 text-purple-700 font-bold text-[10px] px-2 py-1 rounded-lg border border-purple-200 flex items-center gap-1"><BookOpen size={10} /> {p.domain}</span>}
-              </div>
-              <div className="text-xs text-slate-500 mb-3">
-                <span className="font-medium text-slate-900">{p.supervisor?.name || 'N/A'}</span>
-                {p.students?.length > 0 && <span className="text-gray-300"> — </span>}
-                {p.students?.slice(0, 2).map(s => s.name).join(', ')}{p.students?.length > 2 ? '...' : ''}
-              </div>
-              {p.techStack?.length > 0 && (
-                <div className="flex flex-wrap gap-1 mb-3">
-                  {p.techStack.slice(0, 4).map((t, i) => (
-                    <span key={i} className="bg-gray-50 text-slate-900 font-bold text-[10px] px-2 py-1 rounded-lg border border-line">{t}</span>
-                  ))}
-                  {p.techStack.length > 4 && <span className="text-[10px] text-gray-400 font-bold">+{p.techStack.length - 4}</span>}
-                </div>
-              )}
-              <div className="flex items-center gap-2 pt-3 border-t border-line">
-                <button onClick={() => { setSelectedProject(p); setView('detail'); }} className="px-3 py-1.5 rounded-lg bg-blue-50 text-blue-700 border border-blue-200 text-xs font-bold hover:bg-blue-100 transition-all cursor-pointer">View Details</button>
-                <button onClick={() => handleDelete(p.id, p.title)} className="px-3 py-1.5 rounded-lg bg-white text-red-400 border border-line text-xs font-bold hover:bg-red-50 hover:text-red-500 transition-all cursor-pointer flex items-center gap-1"><Trash2 size={12} /> Delete</button>
-              </div>
-            </div>
-          ))}
+        <div className="bg-white rounded-2xl border border-line shadow-sm overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-blue-50 border-b border-line text-[11px] font-bold text-slate-900 tracking-wider">
+                  <th className="py-3.5 px-6">Title</th>
+                  <th className="py-3.5 px-6">Session</th>
+                  <th className="py-3.5 px-6">Domain</th>
+                  <th className="py-3.5 px-6">Supervisor</th>
+                  <th className="py-3.5 px-6">Team</th>
+                  <th className="py-3.5 px-6">Tech Stack</th>
+                  <th className="py-3.5 px-6">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-50 text-sm font-medium text-slate-900">
+                {filteredProjects.map(p => (
+                  <tr key={p.id} className="hover:bg-blue-50/30 transition-colors cursor-pointer" onClick={() => { setSelectedProject(p); setView('detail'); }}>
+                    <td className="py-4 px-6">
+                      <div className="font-bold text-slate-900 text-sm truncate max-w-[220px]">{p.title}</div>
+                    </td>
+                    <td className="py-4 px-6 text-xs">{p.session || 'N/A'}</td>
+                    <td className="py-4 px-6">
+                      {p.domain ? (
+                        <span className="bg-purple-50 text-purple-700 font-bold text-[10px] px-2 py-1 rounded-lg border border-purple-200">{p.domain}</span>
+                      ) : '-'}
+                    </td>
+                    <td className="py-4 px-6 text-xs">{p.supervisor?.name || 'N/A'}</td>
+                    <td className="py-4 px-6 text-xs">
+                      {p.students?.length > 0
+                        ? <span>{p.students.slice(0, 2).map(s => s.name).join(', ')}{p.students.length > 2 ? '...' : ''}</span>
+                        : '-'}
+                    </td>
+                    <td className="py-4 px-6">
+                      {p.techStack?.length > 0 ? (
+                        <div className="flex flex-wrap gap-1">
+                          {p.techStack.slice(0, 3).map((t, i) => (
+                            <span key={i} className="bg-gray-50 text-slate-900 font-bold text-[9px] px-1.5 py-0.5 rounded border border-line">{t}</span>
+                          ))}
+                          {p.techStack.length > 3 && <span className="text-[9px] text-gray-400 font-bold">+{p.techStack.length - 3}</span>}
+                        </div>
+                      ) : '-'}
+                    </td>
+                    <td className="py-4 px-6">
+                      <div className="flex items-center gap-2">
+                        <span className="text-blue-600 text-[10px] font-bold flex items-center gap-0.5">View Details <ChevronRight size={12} /></span>
+                        <button onClick={(e) => { e.stopPropagation(); handleDelete(p.id, p.title); }}
+                          className="p-1.5 rounded-lg bg-white text-red-400 border border-line text-xs font-bold hover:bg-red-50 hover:text-red-500 transition-all cursor-pointer flex items-center gap-1">
+                          <Trash2 size={12} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 

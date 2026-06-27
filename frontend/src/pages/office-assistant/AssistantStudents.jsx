@@ -87,32 +87,49 @@ export default function AssistantStudents() {
           <p className="text-xs">Try adjusting your search.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          {filtered.map(s => (
-            <div key={s.id || s._id} onClick={() => { setSelected(s); setView('detail'); }}
-              className={`bg-white rounded-2xl border border-line p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer ${s.isactive === false ? 'opacity-60' : ''}`}>
-              <div className="flex items-center gap-3 mb-3">
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-xs font-bold shrink-0 ${s.isactive === false ? 'bg-gray-100 text-gray-400' : 'bg-blue-100 text-blue-700'}`}>
-                  {s.name?.charAt(0)}
-                </div>
-                <div className="min-w-0 flex-1">
-                  <h3 className="font-bold text-slate-900 text-sm truncate">{s.name}</h3>
-                  <p className="text-[10px] text-slate-400 truncate">{s.regNo || s.email}</p>
-                </div>
-                <span className={`text-[9px] font-bold px-2 py-0.5 rounded-lg border whitespace-nowrap ${fypStatusConfig[s.status]?.color || 'bg-gray-50 text-gray-500 border-gray-200'}`}>
-                  {fypStatusConfig[s.status]?.label || s.status}
-                </span>
-              </div>
-              <div className="flex items-center gap-1.5 text-xs text-slate-500 mb-2">
-                <User size={12} /> {s.supervisor || 'No supervisor'}
-                {s.semester && <><span className="text-gray-300">|</span> <GraduationCap size={12} /> Sem {s.semester}{s.section ? `/${s.section}` : ''}</>}
-              </div>
-              <div className="flex items-center justify-between pt-3 border-t border-line">
-                <span className="text-[10px] text-slate-400 truncate max-w-[180px]">{s.project || 'No project'}</span>
-                <span className="text-blue-600 text-[10px] font-bold flex items-center gap-0.5">View Details <ChevronRight size={12} /></span>
-              </div>
-            </div>
-          ))}
+        <div className="bg-white rounded-2xl border border-line shadow-sm overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-blue-50 border-b border-line text-[11px] font-bold text-slate-900 tracking-wider">
+                  <th className="py-3.5 px-6">Student Name</th>
+                  <th className="py-3.5 px-6">Registration No</th>
+                  <th className="py-3.5 px-6">Email</th>
+                  <th className="py-3.5 px-6">Semester/Section</th>
+                  <th className="py-3.5 px-6">FYP Status</th>
+                  <th className="py-3.5 px-6">Supervisor</th>
+                  <th className="py-3.5 px-6">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-50 text-sm font-medium text-slate-900">
+                {filtered.map(s => (
+                  <tr key={s.id || s._id} onClick={() => { setSelected(s); setView('detail'); }}
+                    className={`hover:bg-blue-50/30 transition-colors cursor-pointer ${s.isactive === false ? 'opacity-60' : ''}`}>
+                    <td className="py-4 px-6">
+                      <div className="flex items-center gap-3">
+                        <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-xs font-bold shrink-0 ${s.isactive === false ? 'bg-gray-100 text-gray-400' : 'bg-blue-100 text-blue-700'}`}>
+                          {s.name?.charAt(0)}
+                        </div>
+                        <span className="font-bold text-slate-900">{s.name}</span>
+                      </div>
+                    </td>
+                    <td className="py-4 px-6 font-mono text-xs">{s.regNo || '-'}</td>
+                    <td className="py-4 px-6 text-xs text-slate-500">{s.email}</td>
+                    <td className="py-4 px-6 text-xs">{s.semester ? `Sem ${s.semester}${s.section ? `/${s.section}` : ''}` : '-'}</td>
+                    <td className="py-4 px-6">
+                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-lg border whitespace-nowrap ${fypStatusConfig[s.status]?.color || 'bg-gray-50 text-gray-500 border-gray-200'}`}>
+                        {fypStatusConfig[s.status]?.label || s.status}
+                      </span>
+                    </td>
+                    <td className="py-4 px-6 text-xs">{s.supervisor || 'No supervisor'}</td>
+                    <td className="py-4 px-6">
+                      <span className="text-blue-600 text-[10px] font-bold flex items-center gap-0.5">View Details <ChevronRight size={12} /></span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 

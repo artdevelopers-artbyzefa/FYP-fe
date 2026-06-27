@@ -158,39 +158,51 @@ export default function AssistantProjects() {
           <p className="text-xs">Try adjusting your search terms.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          {filtered.map(p => (
-            <div key={p.id} onClick={() => { setSelected(p); setView('detail'); }}
-              className="bg-white rounded-2xl border border-line p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer">
-              <div className="flex items-start justify-between gap-3 mb-3">
-                <h3 className="font-bold text-slate-900 text-sm truncate">{p.title}</h3>
-                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-lg border whitespace-nowrap ${GROUP_STATUS_MAP[p.status]?.color || 'bg-gray-50 text-gray-500 border-gray-200'}`}>
-                  {GROUP_STATUS_MAP[p.status]?.label || p.status}
-                </span>
-              </div>
-              <div className="flex items-center gap-1.5 text-xs text-slate-500 mb-3">
-                <User size={12} /> {p.supervisor}
-                {p.memberCount > 0 && <><span className="text-gray-300">|</span> <Users size={12} /> {p.memberCount} members</>}
-              </div>
-              {p.description && (
-                <p className="text-xs text-slate-500 leading-relaxed mb-3 line-clamp-2">{p.description}</p>
-              )}
-              {p.techStack && (
-                <div className="flex flex-wrap gap-1 mb-3">
-                  {p.techStack.split(',').slice(0, 3).map((t, i) => (
-                    <span key={i} className="bg-gray-50 text-slate-900 font-bold text-[9px] px-1.5 py-0.5 rounded border border-line">{t.trim()}</span>
-                  ))}
-                  {p.techStack.split(',').length > 3 && <span className="text-[9px] text-gray-400 font-bold">+{p.techStack.split(',').length - 3}</span>}
-                </div>
-              )}
-              <div className="flex items-center justify-between pt-3 border-t border-line mt-auto">
-                <div className="flex items-center gap-1.5">
-                  {p.leader && <span className="text-[10px] text-slate-400 truncate max-w-[100px]">{p.leader}</span>}
-                </div>
-                <span className="text-blue-600 text-[10px] font-bold flex items-center gap-0.5">View Details <ChevronRight size={12} /></span>
-              </div>
-            </div>
-          ))}
+        <div className="bg-white rounded-2xl border border-line shadow-sm overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-blue-50 border-b border-line text-[11px] font-bold text-slate-900 tracking-wider">
+                  <th className="py-3.5 px-6">Project Title</th>
+                  <th className="py-3.5 px-6">Leader</th>
+                  <th className="py-3.5 px-6">Supervisor</th>
+                  <th className="py-3.5 px-6">Status</th>
+                  <th className="py-3.5 px-6">Tech Stack</th>
+                  <th className="py-3.5 px-6">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-50 text-sm font-medium text-slate-900">
+                {filtered.map(p => (
+                  <tr key={p.id} onClick={() => { setSelected(p); setView('detail'); }}
+                    className="hover:bg-blue-50/30 transition-colors cursor-pointer">
+                    <td className="py-4 px-6">
+                      <div className="font-bold text-slate-900 text-sm truncate max-w-[220px]">{p.title}</div>
+                    </td>
+                    <td className="py-4 px-6 text-xs">{p.leader || '-'}</td>
+                    <td className="py-4 px-6 text-xs">{p.supervisor || 'N/A'}</td>
+                    <td className="py-4 px-6">
+                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-lg border whitespace-nowrap ${GROUP_STATUS_MAP[p.status]?.color || 'bg-gray-50 text-gray-500 border-gray-200'}`}>
+                        {GROUP_STATUS_MAP[p.status]?.label || p.status}
+                      </span>
+                    </td>
+                    <td className="py-4 px-6">
+                      {p.techStack ? (
+                        <div className="flex flex-wrap gap-1">
+                          {p.techStack.split(',').slice(0, 2).map((t, i) => (
+                            <span key={i} className="bg-gray-50 text-slate-900 font-bold text-[9px] px-1.5 py-0.5 rounded border border-line">{t.trim()}</span>
+                          ))}
+                          {p.techStack.split(',').length > 2 && <span className="text-[9px] text-gray-400 font-bold">+{p.techStack.split(',').length - 2}</span>}
+                        </div>
+                      ) : '-'}
+                    </td>
+                    <td className="py-4 px-6">
+                      <span className="text-blue-600 text-[10px] font-bold flex items-center gap-0.5">View Details <ChevronRight size={12} /></span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>

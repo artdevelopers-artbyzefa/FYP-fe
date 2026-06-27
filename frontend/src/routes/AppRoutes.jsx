@@ -40,7 +40,6 @@ import AssistantStudents from '../pages/office-assistant/AssistantStudents';
 import AssistantFaculty from '../pages/office-assistant/AssistantFaculty';
 import SupervisorDetail from '../pages/office-assistant/SupervisorDetail';
 import AssistantProjects from '../pages/office-assistant/AssistantProjects';
-import AssistantProposalCommittees from '../pages/office-assistant/AssistantProposalCommittees';
 import AssistantEvalCommittees from '../pages/office-assistant/AssistantEvalCommittees';
 import AssistantExternal from '../pages/office-assistant/AssistantExternal';
 import AssistantResults from '../pages/office-assistant/AssistantResults';
@@ -136,7 +135,7 @@ const AppRoutes = () => {
                 <Route path="faculty/:id" element={<SupervisorDetail />} />
                 <Route path="projects" element={<AssistantProjects />} />
                 <Route path="project-approvals" element={<OfficeApprovals />} />
-                <Route path="proposal-committee" element={<AssistantProposalCommittees />} />
+                <Route path="committee-oversight" element={<InchargeCommitteeOversight />} />
                 <Route path="eval-committee" element={<AssistantEvalCommittees />} />
                 <Route path="external" element={<AssistantExternal />} />
                 <Route path="results" element={<AssistantResults />} />

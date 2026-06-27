@@ -30,10 +30,10 @@ const AssistantLayout = () => {
     { to: '/office-assistant/users', icon: Users, label: 'User Management', section: 'User & Account' },
     { to: '/office-assistant/students', icon: GraduationCap, label: 'Student Records', section: 'User & Account' },
     { to: '/office-assistant/faculty', icon: Presentation, label: 'Faculty Profiles', section: 'User & Account' },
-    { to: '/office-assistant/forwarded-proposals', icon: ArrowRight, label: 'Forwarded Proposals', section: 'FYP Workflow' },
+    { to: '/office-assistant/forwarded-proposals', icon: ArrowRight, label: 'Forwarded Proposals', section: 'FYP Workflow', showIn: ['proposal_submission'] },
     { to: '/office-assistant/projects', icon: GitBranch, label: 'Project Directory', section: 'FYP Workflow', locked: isPhase1 },
     { to: '/office-assistant/content', icon: File, label: 'Content & Templates', section: 'FYP Workflow', locked: true },
-    { to: '/office-assistant/project-approvals', icon: CheckCircle, label: 'Project Approvals', section: 'FYP Workflow' },
+    { to: '/office-assistant/project-approvals', icon: CheckCircle, label: 'Project Approvals', section: 'FYP Workflow', showIn: ['proposal_submission'] },
     { to: '/office-assistant/past-projects', icon: Archive, label: 'Past FYP Projects', section: 'FYP Workflow' },
     { to: '/office-assistant/proposal-committee', icon: Users, label: 'Proposal Committees', section: 'Committees & Evaluators', locked: true },
     { to: '/office-assistant/eval-committee', icon: Layers, label: 'Evaluation Committees', section: 'Committees & Evaluators', locked: isPhase1 },
@@ -65,8 +65,8 @@ const AssistantLayout = () => {
         </div>
 
         <nav className="flex-1 overflow-y-auto p-2 sidebar-nav">
-          {navLinks.map((link, index) => {
-            const showSection = index === 0 || navLinks[index - 1].section !== link.section;
+          {navLinks.filter(link => !link.showIn || link.showIn.includes(currentPhase?.key)).map((link, index, visible) => {
+            const showSection = index === 0 || visible[index - 1].section !== link.section;
             return (
               <React.Fragment key={link.to}>
                 {showSection && !isCollapsed && (

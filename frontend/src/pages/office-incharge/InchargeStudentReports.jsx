@@ -263,33 +263,46 @@ export default function InchargeStudentRecords() {
           <p className="text-xs">Try adjusting your search.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          {filtered.map(s => (
-            <div key={s._id} onClick={() => { setSelected(s); setView('detail'); }}
-              className="bg-white rounded-2xl border border-line p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 text-xs font-bold flex items-center justify-center shrink-0">{s.name?.charAt(0)}</div>
-                <div className="min-w-0 flex-1">
-                  <h3 className="font-bold text-slate-900 text-sm truncate">{s.name}</h3>
-                  <p className="text-[10px] text-slate-400 truncate">{s.regNo || s.email}</p>
-                </div>
-                <span className={`text-[9px] font-bold px-2 py-0.5 rounded-lg border whitespace-nowrap ${fypStatusConfig[s.fypStatus]?.color || 'bg-gray-50 text-gray-500 border-gray-200'}`}>
-                  {fypStatusConfig[s.fypStatus]?.label || s.fypStatus}
-                </span>
-              </div>
-              <div className="flex items-center gap-1.5 text-xs text-slate-500 mb-2">
-                <User size={12} /> {s.group?.supervisor?.name || s.assignedSupervisor?.name || 'No supervisor'}
-                {s.group && <><span className="text-gray-300">|</span> <Users size={12} /> {s.group.memberCount} members</>}
-              </div>
-              {s.group?.fypTitle && <p className="text-xs text-slate-600 font-medium truncate mb-2">{s.group.fypTitle}</p>}
-              <div className="flex items-center justify-between pt-3 border-t border-line">
-                <div className="flex items-center gap-1.5">
-                  {s.cgpa > 0 && <span className="text-[10px] font-bold text-slate-500">CGPA: {s.cgpa}</span>}
-                </div>
-                <span className="text-blue-600 text-[10px] font-bold flex items-center gap-0.5">View Details <ChevronRight size={12} /></span>
-              </div>
-            </div>
-          ))}
+        <div className="bg-white rounded-2xl border border-line shadow-sm overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-slate-50 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                  <th className="py-3 px-4">Student</th>
+                  <th className="py-3 px-4">Reg No</th>
+                  <th className="py-3 px-4">FYP Status</th>
+                  <th className="py-3 px-4">Supervisor</th>
+                  <th className="py-3 px-4">Project</th>
+                  <th className="py-3 px-4">Group</th>
+                  <th className="py-3 px-4 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-50 text-sm font-medium text-slate-700">
+                {filtered.map(s => (
+                  <tr key={s._id} className="hover:bg-blue-50/30 transition-colors cursor-pointer" onClick={() => { setSelected(s); setView('detail'); }}>
+                    <td className="py-3 px-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 rounded-lg bg-blue-100 text-blue-700 text-xs font-bold flex items-center justify-center shrink-0">{s.name?.charAt(0)}</div>
+                        <span className="font-bold text-slate-900 text-sm">{s.name || 'Unknown'}</span>
+                      </div>
+                    </td>
+                    <td className="py-3 px-4 text-xs text-slate-500">{s.regNo || s.email || '-'}</td>
+                    <td className="py-3 px-4">
+                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-lg border whitespace-nowrap ${fypStatusConfig[s.fypStatus]?.color || 'bg-gray-50 text-gray-500 border-gray-200'}`}>
+                        {fypStatusConfig[s.fypStatus]?.label || s.fypStatus || 'N/A'}
+                      </span>
+                    </td>
+                    <td className="py-3 px-4 text-xs">{s.group?.supervisor?.name || s.assignedSupervisor?.name || <span className="text-slate-400">No supervisor</span>}</td>
+                    <td className="py-3 px-4 text-xs text-slate-600 max-w-[160px] truncate">{s.group?.fypTitle || s.fypTitle || <span className="text-slate-400">-</span>}</td>
+                    <td className="py-3 px-4 text-xs text-slate-500">{s.group ? `${s.group.memberCount} members` : <span className="text-slate-400">No group</span>}</td>
+                    <td className="py-3 px-4 text-right">
+                      <span className="text-blue-600 text-[10px] font-bold flex items-center justify-end gap-0.5">View Profile <ChevronRight size={12} /></span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>

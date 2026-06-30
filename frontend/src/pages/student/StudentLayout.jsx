@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Outlet, useNavigate, useLocation, Link } from 'react-router-dom';
 import { getUserInfo, logout } from '../../utils/app.utils';
 import apiClient from '../../api/apiClient';
-import { Archive, Bell, ChevronDown, ChevronLeft, ChevronRight, Circle, ClipboardList, GraduationCap, Home, Lightbulb, Lock, LogOut, Menu, Shield, User, UserCircle, Users, X } from 'lucide-react';
+import { Archive, Bell, Calendar, ChevronDown, ChevronLeft, ChevronRight, Circle, ClipboardList, GraduationCap, Home, Lightbulb, Lock, LogOut, Menu, Shield, User, UserCircle, Users, X } from 'lucide-react';
 
 export default function DashboardLayout() {
   const navigate = useNavigate();
@@ -56,6 +56,7 @@ export default function DashboardLayout() {
       { id: '/committee', label: 'My Committee', icon: Shield }
     ]},
     { section: 'Project Execution', items: [
+      { id: '/my-presentations', label: 'My Presentations', icon: Calendar },
       { id: '/project/new', label: 'Group Ideas', icon: Lightbulb },
       { id: '/suggestions', label: 'Supervisor Ideas', icon: Lightbulb },
       { id: '/task-manager', label: 'Task Manager', icon: ClipboardList },
@@ -75,6 +76,7 @@ export default function DashboardLayout() {
   else if (path.includes('/past-projects')) pageTitle = 'Past FYP Projects';
   else if (path.includes('/suggestions')) pageTitle = 'Supervisor Suggestions';
   else if (path.includes('/committee')) pageTitle = 'My Committee';
+  else if (path.includes('/my-presentations')) pageTitle = 'My Presentations';
 
   return (
     <div className="flex h-screen overflow-hidden relative bg-surface selection:bg-blue-100 selection:text-blue-900 font-poppins">

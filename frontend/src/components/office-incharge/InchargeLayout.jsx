@@ -3,7 +3,7 @@ import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { PhaseProvider, usePhase } from '../../contexts/PhaseContext';
 import { showToast as toast } from '../AppToast';
 import { logoutUser, getCurrentUser } from '../../services/auth.service';
-import { AlertCircle, ArrowRight, BarChart3, Bell, Calendar, CheckCircle, ChevronLeft, ChevronRight, ClipboardList, GraduationCap, GitBranch, History, Home, Layers, Lock, LogOut, Menu, Scale, ToggleRight, UserPlus, Users, X } from 'lucide-react';
+import { AlertCircle, BarChart3, Bell, Calendar, ChevronLeft, ChevronRight, ClipboardList, GraduationCap, GitBranch, History, Home, Layers, Lock, LogOut, Menu, Scale, ToggleRight, Users, X } from 'lucide-react';
 
 const Sidebar = ({ isMobileOpen, setIsMobileOpen, isCollapsed, setIsCollapsed, user, roleLabel, navLinks, handleLogout }) => {
   const { currentPhase, loading } = usePhase();
@@ -100,11 +100,10 @@ const LayoutInner = () => {
   const navLinks = [
     { to: '/office-incharge/dashboard', icon: Home, label: 'Dashboard', section: 'Overview' },
     { to: '/office-incharge/phases', icon: ToggleRight, label: 'Phase Control', section: 'Overview' },
-    { to: '/office-incharge/forwarded-proposals', icon: ArrowRight, label: 'Forwarded Proposals', section: 'Overview' },
-
     { to: '/office-incharge/eval-committee', icon: Layers, label: 'Evaluation Committees', section: 'Overview' },
     { to: '/office-incharge/projects', icon: GitBranch, label: 'Project Directory', section: 'Overview' },
-    { to: '/office-incharge/project-approvals', icon: CheckCircle, label: 'Project Approvals', section: 'Overview' },
+    { to: '/office-incharge/committee-oversight', icon: Users, label: 'Committee Oversight', section: 'Overview' },
+    { to: '/office-incharge/timetable', icon: Calendar, label: 'Timetable Management', section: 'Overview' },
     { to: '/office-incharge/student-reports', icon: GraduationCap, label: 'Student Records', section: 'Overview' },
     { to: '/office-incharge/rubrics', icon: ClipboardList, label: 'Rubric Builder', section: 'Curriculum & Sessions' },
     { to: '/office-incharge/sessions', icon: Calendar, label: 'Academic Sessions', section: 'Curriculum & Sessions' },

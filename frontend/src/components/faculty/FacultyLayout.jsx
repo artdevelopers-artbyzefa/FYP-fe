@@ -3,7 +3,7 @@ import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { showToast as toast } from '../AppToast';
 import { logoutUser, getCurrentUser } from '../../services/auth.service';
 import { getFacultyDashboardStats } from '../../services/faculty.service';
-import { Bell, ChevronLeft, ChevronRight, FileSignature, GitBranch, Landmark, Lightbulb, Lightbulb as IdeaIcon, LogOut, Menu, Presentation, Star, Tags, X } from 'lucide-react';
+import { Bell, Calendar, ChevronLeft, ChevronRight, FileSignature, GitBranch, Landmark, Lightbulb, Lightbulb as IdeaIcon, LogOut, Menu, Presentation, Star, Tags, X } from 'lucide-react';
 
 const FacultyLayout = () => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -36,6 +36,7 @@ const FacultyLayout = () => {
     { to: '/faculty/supervision', icon: GitBranch, label: 'Supervised Groups', section: 'FYP Management' },
     { to: '/faculty/suggestions', icon: IdeaIcon, label: 'Suggested Ideas', section: 'FYP Management' },
     { to: '/faculty/evaluations', icon: Star, label: 'Committee Evaluations', section: 'FYP Management' },
+    { to: '/faculty/my-presentations', icon: Calendar, label: 'My Presentations', section: 'FYP Management' },
   ];
 
   return (

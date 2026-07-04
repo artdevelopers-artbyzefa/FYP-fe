@@ -3,7 +3,7 @@ import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { PhaseProvider, usePhase } from '../../contexts/PhaseContext';
 import { showToast as toast } from '../AppToast';
 import { logoutUser, getCurrentUser } from '../../services/auth.service';
-import { AlertCircle, BarChart3, Bell, Calendar, ChevronLeft, ChevronRight, ClipboardList, GraduationCap, GitBranch, History, Home, Layers, Lock, LogOut, Menu, Scale, ToggleRight, Users, X } from 'lucide-react';
+import { AlertCircle, BarChart3, Bell, Calendar, CheckSquare, ChevronLeft, ChevronRight, ClipboardList, GraduationCap, GitBranch, History, Home, Layers, Lock, LogOut, Menu, Scale, ToggleRight, Users, X } from 'lucide-react';
 
 const Sidebar = ({ isMobileOpen, setIsMobileOpen, isCollapsed, setIsCollapsed, user, roleLabel, navLinks, handleLogout }) => {
   const { currentPhase, loading } = usePhase();
@@ -106,6 +106,7 @@ const LayoutInner = () => {
     { to: '/office-incharge/timetable', icon: Calendar, label: 'Timetable Management', section: 'Overview' },
     { to: '/office-incharge/student-reports', icon: GraduationCap, label: 'Student Records', section: 'Overview' },
     { to: '/office-incharge/rubrics', icon: ClipboardList, label: 'Rubric Builder', section: 'Curriculum & Sessions' },
+    { to: '/office-incharge/evaluation-criteria', icon: CheckSquare, label: 'Evaluation Criteria', section: 'Curriculum & Sessions' },
     { to: '/office-incharge/sessions', icon: Calendar, label: 'Academic Sessions', section: 'Curriculum & Sessions' },
     { to: '/office-incharge/grievances', icon: Scale, label: 'Grievances & SLAs', section: 'Analytics & Logs' },
     { to: '/office-incharge/audit-log', icon: History, label: 'System Audit Logs', section: 'Analytics & Logs' },

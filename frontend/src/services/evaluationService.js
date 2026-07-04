@@ -8,3 +8,7 @@ import api from "./api";
 
 export const getEvaluationData = (groupId) => api.get(`/evaluations/groups/${groupId}`);
 export const submitScorecard = (payload) => api.post("/v1/evaluations/submit", payload);
+
+export const getFacultyEvaluationCriteria = () => api.get('/faculty/evaluation-criteria');
+
+export const getStudentEvaluationCriteria = () => api.get('/student/evaluation-criteria');

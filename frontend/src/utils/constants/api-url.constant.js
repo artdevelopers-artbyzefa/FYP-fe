@@ -96,6 +96,7 @@ export const INCHARGE_GRIEVANCES_API_URL = '/office-incharge/grievances';
 export const INCHARGE_FACULTY_REPORTS_API_URL = '/office-incharge/faculty-reports';
 export const INCHARGE_STUDENT_REPORTS_API_URL = '/office-incharge/student-reports';
 export const INCHARGE_AUDIT_LOG_API_URL = '/office-incharge/audit-log';
+export const INCHARGE_EVALUATION_CRITERIA_API_URL = '/office-incharge/evaluation-criteria';
 
 /**
  * Admin Endpoints

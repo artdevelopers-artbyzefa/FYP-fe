@@ -8,7 +8,8 @@ import {
   INCHARGE_GRIEVANCES_API_URL,
   INCHARGE_FACULTY_REPORTS_API_URL,
   INCHARGE_STUDENT_REPORTS_API_URL,
-  INCHARGE_AUDIT_LOG_API_URL
+  INCHARGE_AUDIT_LOG_API_URL,
+  INCHARGE_EVALUATION_CRITERIA_API_URL
 } from '../utils/constants/api-url.constant';
 
 export const getInchargeDashboardStats = async () => {
@@ -33,6 +34,26 @@ export const updateRubric = async (id, data) => {
 
 export const deleteRubric = async (id) => {
   const res = await apiClient.delete(INCHARGE_RUBRICS_API_URL + '/' + id);
+  return res.data;
+};
+
+export const getInchargeEvaluationCriteria = async () => {
+  const res = await apiClient.get(INCHARGE_EVALUATION_CRITERIA_API_URL);
+  return res.data;
+};
+
+export const createEvaluationCriterion = async (data) => {
+  const res = await apiClient.post(INCHARGE_EVALUATION_CRITERIA_API_URL, data);
+  return res.data;
+};
+
+export const updateEvaluationCriterion = async (id, data) => {
+  const res = await apiClient.put(INCHARGE_EVALUATION_CRITERIA_API_URL + '/' + id, data);
+  return res.data;
+};
+
+export const deleteEvaluationCriterion = async (id) => {
+  const res = await apiClient.delete(INCHARGE_EVALUATION_CRITERIA_API_URL + '/' + id);
   return res.data;
 };
 

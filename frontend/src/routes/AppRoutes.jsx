@@ -67,6 +67,9 @@ import InchargeGrievances from '../pages/office-incharge/InchargeGrievances';
 import InchargeFacultyReports from '../pages/office-incharge/InchargeFacultyReports';
 import InchargeStudentReports from '../pages/office-incharge/InchargeStudentReports';
 import InchargeAuditLog from '../pages/office-incharge/InchargeAuditLog';
+import InchargeEvaluationCriteria from '../pages/office-incharge/InchargeEvaluationCriteria';
+import CommitteeEvaluationForm from '../pages/faculty/CommitteeEvaluationForm';
+import StudentEvaluationCriteria from '../pages/student/StudentEvaluationCriteria';
 // Placeholder components
 
 
@@ -108,6 +111,7 @@ const AppRoutes = () => {
                 <Route path="/past-projects" element={<StudentPastProjects />} />
                 <Route path="/suggestions" element={<StudentSuggestions />} />
                 <Route path="/committee" element={<StudentCommittee />} />
+                <Route path="/evaluation-criteria" element={<StudentEvaluationCriteria />} />
                 <Route path="/my-presentations" element={<MyPresentations />} />
             </Route>
 
@@ -153,6 +157,7 @@ const AppRoutes = () => {
                 <Route path="supervision" element={<FacultySupervision />} />
                 <Route path="messaging" element={<FacultyMessaging />} />
                 <Route path="evaluations" element={<FacultyEvaluations />} />
+                <Route path="committee-evaluation" element={<CommitteeEvaluationForm />} />
                 <Route path="head-duties" element={<FacultyHeadDuties />} />
                 <Route path="suggestions" element={<FacultySuggestions />} />
                 <Route path="my-presentations" element={<MyPresentations />} />
@@ -164,6 +169,7 @@ const AppRoutes = () => {
                 <Route path="dashboard" element={<InchargeDashboard />} />
                 <Route path="phases" element={<InchargePhaseControl />} />
                 <Route path="rubrics" element={<InchargeRubrics />} />
+                <Route path="evaluation-criteria" element={<InchargeEvaluationCriteria />} />
                 <Route path="sessions" element={<InchargeSessions />} />
                 <Route path="projects" element={<AssistantProjects />} />
                 <Route path="eval-committee" element={<AssistantEvalCommittees />} />

@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { showToast } from '../../components/AppToast';
-import { Users, Loader2, Plus, Trash2, Pencil, X, Check, GitBranch, Star, ArrowLeft, Save, RefreshCw, ChevronRight } from 'lucide-react';
+import { Users, Plus, Trash2, Pencil, X, Check, GitBranch, Star, ArrowLeft, Save, RefreshCw, ChevronRight } from 'lucide-react';
 import api from '../../services/api';
+import { EvalCommitteesSkeleton } from '../../components/Skeleton';
 
 const PW = { 1: '50%', 2: '30%', 3: '20%' };
 const PL = { 1: '1st Choice', 2: '2nd Choice', 3: '3rd Choice' };
@@ -580,12 +581,7 @@ export default function AssistantEvalCommittees() {
     );
   }
 
-  if (loading) {
-    return React.createElement('div', { className: 'flex items-center justify-center py-20' },
-      React.createElement(Loader2, { className: 'w-6 h-6 animate-spin text-blue-600' }),
-      React.createElement('span', { className: 'ml-2 text-sm text-slate-500 font-medium' }, 'Loading...')
-    );
-  }
+  if (loading) return React.createElement(EvalCommitteesSkeleton, null);
 
   return React.createElement('div', { className: 'space-y-6' },
     React.createElement('div', { className: 'border-b border-line pb-4' },

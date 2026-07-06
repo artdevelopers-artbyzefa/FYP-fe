@@ -285,8 +285,7 @@ function FacultyDetail({ facultyId, onBack, onUpdate }) {
           </div>
         </form>
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 space-y-5">
+        <div className="space-y-5">
             <div className="bg-white rounded-2xl border border-line p-6 shadow-sm">
               <h5 className="text-xs font-bold text-slate-900 tracking-wider mb-4 flex items-center gap-1.5"><Users size={13} /> Supervised Groups ({faculty.groups?.length || 0})</h5>
               {faculty.groups?.length > 0 ? (
@@ -307,9 +306,7 @@ function FacultyDetail({ facultyId, onBack, onUpdate }) {
                 </div>
               ) : <p className="text-xs text-slate-400 py-4 text-center">No groups assigned yet</p>}
             </div>
-          </div>
 
-          <div className="space-y-5">
             <div className="bg-white rounded-2xl border border-line p-6 shadow-sm">
               <h5 className="text-xs font-bold text-slate-900 tracking-wider mb-4">Statistics</h5>
               <div className="grid grid-cols-2 gap-3">
@@ -341,19 +338,6 @@ function FacultyDetail({ facultyId, onBack, onUpdate }) {
             </div>
 
             <div className="bg-white rounded-2xl border border-line p-6 shadow-sm">
-              <h5 className="text-xs font-bold text-slate-900 tracking-wider mb-4">Research Areas</h5>
-              {faculty.research?.length > 0 ? (
-                <div className="flex flex-wrap gap-2">
-                  {faculty.research.map((tag, i) => (
-                    <span key={i} className="text-[10px] font-bold px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 border border-indigo-100">{tag}</span>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-xs text-slate-400 py-4 text-center">No research areas tagged</p>
-              )}
-            </div>
-
-            <div className="bg-white rounded-2xl border border-line p-6 shadow-sm">
               <h5 className="text-xs font-bold text-slate-900 tracking-wider mb-4">Contact</h5>
               <div className="space-y-2 text-xs">
                 <div className="flex justify-between"><span className="text-slate-400">Email</span><span className="font-bold text-slate-900">{faculty.email}</span></div>
@@ -363,7 +347,6 @@ function FacultyDetail({ facultyId, onBack, onUpdate }) {
               </div>
             </div>
           </div>
-        </div>
       )}
     </div>
   );

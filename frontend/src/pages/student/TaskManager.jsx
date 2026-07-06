@@ -49,9 +49,9 @@ const normalizeTasksResponse = (data) => {
   if (Array.isArray(data)) {
     return {
       'Not Started': data.filter(t => t.status === 'todo' || t.status === 'not-started' || t.status === 'not_started'),
-      'In Progress': data.filter(t => t.status === 'in-progress' || t.status === 'in_progress'),
-      'Review': data.filter(t => t.status === 'review'),
-      'Completed': data.filter(t => t.status === 'done' || t.status === 'completed'),
+      'In Progress': data.filter(t => (t.status === 'in-progress' || t.status === 'in_progress') && (t.progress || 0) < 100),
+      'Review': data.filter(t => t.status === 'review' && (t.progress || 0) < 100),
+      'Completed': data.filter(t => t.status === 'done' || t.status === 'completed' || t.progress >= 100),
     };
   }
   return null;
@@ -646,6 +646,9 @@ export default function TaskManager() {
   };
 
   const handleSaveTask = async (updated) => {
+    if (updated.progress >= 100) {
+      updated.status = 'completed';
+    }
     const col = REVERSE_STATUS[updated.status] || 'Not Started';
     try {
       await apiClient.put(`${STUDENT_TASKS_API_URL}/${updated.id || updated._id}`, updated);

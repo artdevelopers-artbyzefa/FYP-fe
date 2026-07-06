@@ -23,6 +23,7 @@ import GroupIdeas from "../pages/student/GroupIdeas";
 import StudentPastProjects from "../pages/student/StudentPastProjects";
 import StudentSuggestions from "../pages/student/StudentSuggestions";
 import StudentCommittee from "../pages/student/StudentCommittee";
+import MyPresentations from "../pages/shared/MyPresentations";
 import HodLayout from '../components/hod/HodLayout';
 import HodDashboard from '../pages/hod/HodDashboard';
 import HodEscalations from '../pages/hod/HodEscalations';
@@ -40,12 +41,10 @@ import AssistantStudents from '../pages/office-assistant/AssistantStudents';
 import AssistantFaculty from '../pages/office-assistant/AssistantFaculty';
 import SupervisorDetail from '../pages/office-assistant/SupervisorDetail';
 import AssistantProjects from '../pages/office-assistant/AssistantProjects';
-import AssistantProposalCommittees from '../pages/office-assistant/AssistantProposalCommittees';
 import AssistantEvalCommittees from '../pages/office-assistant/AssistantEvalCommittees';
 import AssistantExternal from '../pages/office-assistant/AssistantExternal';
 import AssistantResults from '../pages/office-assistant/AssistantResults';
 import AssistantPastProjects from '../pages/office-assistant/AssistantPastProjects';
-import OfficeApprovals from '../pages/office-approvals/OfficeApprovals';
 import FacultyLayout from '../components/faculty/FacultyLayout';
 import FacultyDashboard from '../pages/faculty/FacultyDashboard';
 import FacultyProfile from '../pages/faculty/FacultyProfile';
@@ -68,12 +67,11 @@ import InchargePhaseControl from '../pages/office-incharge/InchargePhaseControl'
 import InchargeRubrics from '../pages/office-incharge/InchargeRubrics';
 import InchargeSessions from '../pages/office-incharge/InchargeSessions';
 import InchargeCommitteeOversight from '../pages/office-incharge/InchargeCommitteeOversight';
+import TimetableManagement from '../pages/office-incharge/TimetableManagement';
 import InchargeGrievances from '../pages/office-incharge/InchargeGrievances';
 import InchargeFacultyReports from '../pages/office-incharge/InchargeFacultyReports';
 import InchargeStudentReports from '../pages/office-incharge/InchargeStudentReports';
 import InchargeAuditLog from '../pages/office-incharge/InchargeAuditLog';
-import InchargeForwardedProposals from '../pages/office-incharge/InchargeForwardedProposals';
-
 // Placeholder components
 
 
@@ -116,6 +114,7 @@ const AppRoutes = () => {
                 <Route path="/suggestions" element={<StudentSuggestions />} />
                 <Route path="/committee" element={<StudentCommittee />} />
                 <Route path="/phase1-remarks" element={<StudentPhase1Remarks />} />
+                <Route path="/my-presentations" element={<MyPresentations />} />
             </Route>
 
             {/* HOD Portal Routes */}
@@ -141,8 +140,8 @@ const AppRoutes = () => {
                 <Route path="faculty" element={<AssistantFaculty />} />
                 <Route path="faculty/:id" element={<SupervisorDetail />} />
                 <Route path="projects" element={<AssistantProjects />} />
-                <Route path="project-approvals" element={<OfficeApprovals />} />
-                <Route path="proposal-committee" element={<AssistantProposalCommittees />} />
+                <Route path="committee-oversight" element={<InchargeCommitteeOversight />} />
+                <Route path="timetable" element={<TimetableManagement />} />
                 <Route path="eval-committee" element={<AssistantEvalCommittees />} />
                 <Route path="external" element={<AssistantExternal />} />
                 <Route path="results" element={<AssistantResults />} />
@@ -166,6 +165,7 @@ const AppRoutes = () => {
                 <Route path="suggestions" element={<FacultySuggestions />} />
                 <Route path="phase1-evaluation" element={<FacultyPhase1Evaluation />} />
                 <Route path="committee-phase1" element={<FacultyCommitteePhase1 />} />
+                <Route path="my-presentations" element={<MyPresentations />} />
             </Route>
 
             {/* FYP Office In-charge Layout Routes */}
@@ -177,8 +177,8 @@ const AppRoutes = () => {
                 <Route path="sessions" element={<InchargeSessions />} />
                 <Route path="projects" element={<AssistantProjects />} />
                 <Route path="eval-committee" element={<AssistantEvalCommittees />} />
-                <Route path="project-approvals" element={<OfficeApprovals />} />
                 <Route path="committee-oversight" element={<InchargeCommitteeOversight />} />
+                <Route path="timetable" element={<TimetableManagement />} />
                 <Route path="grievances" element={<InchargeGrievances />} />
                 <Route path="faculty-reports" element={<InchargeFacultyReports />} />
                 <Route path="student-reports" element={<InchargeStudentReports />} />

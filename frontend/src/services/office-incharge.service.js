@@ -123,3 +123,58 @@ export const getPhases = async () => {
 export const updateActivePhase = async (key) => {
   return await apiClient.put('/phases/active', { key });
 };
+
+export const getTimetableSchedules = async () => {
+  const res = await apiClient.get('/presentation-schedules');
+  return res.data;
+};
+
+export const createTimetableSchedule = async (data) => {
+  const res = await apiClient.post('/presentation-schedules', data);
+  return res.data;
+};
+
+export const getTimetableScheduleById = async (id) => {
+  const res = await apiClient.get(`/presentation-schedules/${id}`);
+  return res.data;
+};
+
+export const generateTimetableSlots = async (id) => {
+  const res = await apiClient.post(`/presentation-schedules/${id}/generate-slots`);
+  return res.data;
+};
+
+export const assignTimetableSlot = async (slotId, data) => {
+  const res = await apiClient.put(`/presentation-schedules/slots/${slotId}/assign`, data);
+  return res.data;
+};
+
+export const unassignTimetableSlot = async (slotId) => {
+  const res = await apiClient.put(`/presentation-schedules/slots/${slotId}/unassign`);
+  return res.data;
+};
+
+export const notifyTimetableSlot = async (slotId) => {
+  const res = await apiClient.post(`/presentation-schedules/slots/${slotId}/notify`);
+  return res.data;
+};
+
+export const deleteTimetableSlots = async (scheduleId) => {
+  const res = await apiClient.delete(`/presentation-schedules/${scheduleId}/slots`);
+  return res.data;
+};
+
+export const deleteTimetableSlot = async (slotId) => {
+  const res = await apiClient.delete(`/presentation-schedules/slots/${slotId}`);
+  return res.data;
+};
+
+export const publishTimetableSchedule = async (id) => {
+  const res = await apiClient.put(`/presentation-schedules/${id}/publish`);
+  return res.data;
+};
+
+export const deleteTimetableSchedule = async (id) => {
+  const res = await apiClient.delete(`/presentation-schedules/${id}`);
+  return res.data;
+};

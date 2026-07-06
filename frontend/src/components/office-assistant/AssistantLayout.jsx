@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { showToast as toast } from '../AppToast';
 import { logoutUser, getCurrentUser } from '../../services/auth.service';
-import { Archive, ArrowRight, Award, BarChart3, Bell, CheckCircle, ChevronLeft, ChevronRight, File, GitBranch, GraduationCap, Home, Layers, Lock, LogOut, Megaphone, Menu, Presentation, Shield, User, UserCog, Users, X } from 'lucide-react';
+import { Archive, ArrowRight, Award, BarChart3, Bell, Calendar, CheckCircle, ChevronLeft, ChevronRight, File, GitBranch, GraduationCap, Home, Layers, Lock, LogOut, Megaphone, Menu, Presentation, Shield, User, UserCog, Users, X } from 'lucide-react';
 import PhaseContext from '../../contexts/PhaseContext';
 
 const AssistantLayout = () => {
@@ -30,12 +30,11 @@ const AssistantLayout = () => {
     { to: '/office-assistant/users', icon: Users, label: 'User Management', section: 'User & Account' },
     { to: '/office-assistant/students', icon: GraduationCap, label: 'Student Records', section: 'User & Account' },
     { to: '/office-assistant/faculty', icon: Presentation, label: 'Faculty Profiles', section: 'User & Account' },
-    { to: '/office-assistant/forwarded-proposals', icon: ArrowRight, label: 'Forwarded Proposals', section: 'FYP Workflow', showIn: ['proposal_submission'] },
     { to: '/office-assistant/projects', icon: GitBranch, label: 'Project Directory', section: 'FYP Workflow', locked: isPhase1 },
     { to: '/office-assistant/content', icon: File, label: 'Content & Templates', section: 'FYP Workflow', locked: true },
-    { to: '/office-assistant/project-approvals', icon: CheckCircle, label: 'Project Approvals', section: 'FYP Workflow', showIn: ['proposal_submission'] },
     { to: '/office-assistant/past-projects', icon: Archive, label: 'Past FYP Projects', section: 'FYP Workflow' },
-    { to: '/office-assistant/proposal-committee', icon: Users, label: 'Proposal Committees', section: 'Committees & Evaluators', locked: false },
+    { to: '/office-assistant/committee-oversight', icon: Users, label: 'Committee Oversight', section: 'Committees & Evaluators' },
+    { to: '/office-assistant/timetable', icon: Calendar, label: 'Timetable Management', section: 'Committees & Evaluators' },
     { to: '/office-assistant/eval-committee', icon: Layers, label: 'Evaluation Committees', section: 'Committees & Evaluators', locked: isPhase1 },
     { to: '/office-assistant/external', icon: User, label: 'Industry Supervisors', section: 'Committees & Evaluators', locked: true },
     { to: '/office-assistant/phase1-marks', icon: BarChart3, label: 'Phase 1 (10%) Marks', section: 'Outcomes' },

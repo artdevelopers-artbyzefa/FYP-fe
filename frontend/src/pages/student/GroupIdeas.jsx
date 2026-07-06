@@ -21,7 +21,7 @@ export default function GroupIdeas() {
   const [voting, setVoting] = useState({});
   const [generating, setGenerating] = useState(false);
   const [aiRemaining, setAiRemaining] = useState(null);
-  const [filter, setFilter] = useState('supervisor_approved');
+  const [filter, setFilter] = useState('fyp_approved');
   const formRef = useRef(null);
 
   useEffect(() => {

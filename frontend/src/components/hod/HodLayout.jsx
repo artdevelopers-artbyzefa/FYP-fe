@@ -44,7 +44,7 @@ const HodLayout = () => {
     { to: '/hod/projects', icon: GitBranch, label: 'Project Directory', section: 'Department Oversight' },
     { to: '/hod/faculty-oversight', icon: Presentation, label: 'Faculty Workload', section: 'Department Oversight', locked: true },
     { to: '/hod/governance', icon: Landmark, label: 'Oversight', section: 'Department Oversight', locked: true },
-    { to: '/hod/committees', icon: Shield, label: 'FYP Committees', section: 'Department Oversight', locked: true },
+    { to: '/hod/committees', icon: Shield, label: 'FYP Committees', section: 'Department Oversight' },
     { to: '/hod/analytics', icon: LineChart, label: 'FYP Analytics', section: 'Department Oversight', locked: true },
   ];
 

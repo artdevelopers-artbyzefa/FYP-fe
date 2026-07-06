@@ -113,6 +113,11 @@ export const ADMIN_CLEAR_CACHE_URL = '/admin/clear-cache';
 export const ADMIN_NOTIFICATIONS_URL = '/admin/notifications';
 
 /**
+ * Timetable / Presentation Schedule Endpoints
+ */
+export const INCHARGE_TIMETABLE_API_URL = '/presentation-schedules';
+
+/**
  * Industry Supervisor Endpoints
  */
 export const INDUSTRY_ASSIGNED_PROJECTS_URL = '/industry/assigned-projects';

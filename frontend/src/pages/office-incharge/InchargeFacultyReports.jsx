@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { getInchargeFacultyReports, getInchargeFacultyDetail, getInchargeFacultyGroupDetail } from '../../services/office-incharge.service';
-import { Search, ArrowLeft, Users, BookOpen, Code, Mail, User, Loader2, GraduationCap, ChevronRight, ExternalLink, Send, FileText, BarChart3, Lock, Star, ChevronDown, ChevronUp, Clock } from 'lucide-react';
+import { Search, ArrowLeft, Users, BookOpen, Code, Mail, User, GraduationCap, ChevronRight, ExternalLink, Send, FileText, BarChart3, Lock, Star, ChevronDown, ChevronUp, Clock } from 'lucide-react';
 import { Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { GROUP_STATUS_MAP, IDEA_STATUS_MAP } from '../../utils/constants/status.constant';
 import api from '../../services/api';
+import { FacultyOverviewSkeleton } from '../../components/Skeleton';
 
 
 
@@ -449,14 +450,7 @@ const InchargeFacultyReports = () => {
         <p className="text-xs text-slate-900 mt-0.5 font-medium">Per-faculty analysis of supervision load, log approval rates, and evaluation performance</p>
       </div>
 
-      {loading ? (
-        <div className="bg-white rounded-2xl border border-line shadow-sm overflow-hidden">
-          <div className="p-8 text-center">
-            <Loader2 className="w-6 h-6 animate-spin text-blue-600 mx-auto" />
-            <p className="text-sm text-slate-500 font-medium mt-2">Loading faculty reports...</p>
-          </div>
-        </div>
-      ) : (
+      {loading ? <FacultyOverviewSkeleton /> : (
         <div className="bg-white rounded-2xl border border-line shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">

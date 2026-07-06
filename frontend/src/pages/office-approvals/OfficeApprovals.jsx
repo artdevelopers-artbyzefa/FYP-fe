@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { getPendingOfficeApprovals, getOfficeApprovalHistory, approveOfficeApproval, rejectOfficeApproval } from '../../services/officeApprovals.service';
 import { showToast as toast } from '../../components/AppToast';
-import { X, Check, Loader2, CheckCircle, Users, ThumbsDown, Clock, History } from 'lucide-react';
+import { X, Check, CheckCircle, Users, ThumbsDown, Clock, History } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { ProjectApprovalsSkeleton } from '../../components/Skeleton';
 
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.04 } } };
 const item = { hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } };
@@ -104,12 +105,7 @@ export default function OfficeApprovals() {
         ))}
       </div>
 
-      {loading ? (
-        <div className="flex items-center justify-center py-20">
-          <Loader2 className="w-6 h-6 text-blue-600 animate-spin" />
-          <span className="ml-2 text-sm text-slate-500 font-medium">Loading...</span>
-        </div>
-      ) : currentList.length === 0 ? (
+      {loading ? <ProjectApprovalsSkeleton /> : currentList.length === 0 ? (
         <motion.div variants={item} className="bg-white rounded-2xl border border-line shadow-card p-10 text-center">
           <div className="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
             {activeTab === 'pending' ? <Clock className="text-slate-300" size={28} /> : <History className="text-slate-300" size={28} />}

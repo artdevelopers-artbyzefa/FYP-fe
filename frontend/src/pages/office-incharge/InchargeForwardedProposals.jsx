@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Loader2, Users, User, Mail, Calendar, ArrowLeft, ChevronRight, ChevronLeft, BookOpen, Code, FileText, BarChart3, Send, GraduationCap, CheckCircle, AlertTriangle, X, AlertCircle, Check } from 'lucide-react';
+import { Users, User, Mail, Calendar, ArrowLeft, ChevronRight, ChevronLeft, BookOpen, Code, FileText, BarChart3, Send, GraduationCap, CheckCircle, AlertTriangle, X, AlertCircle, Check } from 'lucide-react';
 import { getForwardedProposals, processForwardedProposal } from '../../services/office-incharge.service';
 import { GROUP_STATUS_MAP, IDEA_STATUS_MAP } from '../../utils/constants/status.constant';
+import { ForwardedProposalsSkeleton } from '../../components/Skeleton';
 
 const ITEMS_PER_PAGE = 12;
 
@@ -57,12 +58,7 @@ export default function InchargeForwardedProposals() {
     return officeIdea ? officeIdea.status : null;
   };
 
-  if (loading) return (
-    <div className="flex items-center justify-center py-20">
-      <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
-      <span className="ml-2 text-sm text-slate-500 font-medium">Loading forwarded proposals...</span>
-    </div>
-  );
+  if (loading) return <ForwardedProposalsSkeleton />;
 
   if (view === 'detail' && selected) {
     return (

@@ -1,16 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { showToast as toast } from '../AppToast';
 import { logoutUser, getCurrentUser } from '../../services/auth.service';
+import { getFacultyDashboardStats } from '../../services/faculty.service';
 import { Bell, Calendar, ChevronLeft, ChevronRight, Crown, FileSignature, GitBranch, GraduationCap, Landmark, Lightbulb, Lightbulb as IdeaIcon, Lock, LogOut, Menu, Presentation, Star, Tags, X } from 'lucide-react';
 
 const FacultyLayout = () => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [showNotif, setShowNotif] = useState(false);
+  const [hasCommittee, setHasCommittee] = useState(false);
   const navigate = useNavigate();
 
   const user = getCurrentUser() ?? null;
+
+  useEffect(() => {
+    getFacultyDashboardStats().then(res => {
+      if (res?.data?.committeeCount > 0) setHasCommittee(true);
+    }).catch(() => {});
+  }, []);
 
   const handleLogout = () => {
     logoutUser();
@@ -22,8 +30,7 @@ const FacultyLayout = () => {
 
   const navLinks = [
     { to: '/faculty/dashboard', icon: Presentation, label: 'Dashboard', section: 'Overview' },
-    { to: '/faculty/profile', icon: Tags, label: 'Committee Suggestion', section: 'Profile & Schedule' },
-    { to: '/faculty/availability', icon: Calendar, label: 'Timetable', section: 'Profile & Schedule', locked: true },
+    ...(!hasCommittee ? [{ to: '/faculty/profile', icon: Tags, label: 'Committee Suggestion', section: 'Profile & Schedule' }] : []),
     { to: '/faculty/proposals', icon: FileSignature, label: 'Supervision Requests', section: 'FYP Management' },
     { to: '/faculty/group-proposals', icon: Lightbulb, label: 'Group Proposals', section: 'FYP Management' },
     { to: '/faculty/supervision', icon: GitBranch, label: 'Supervised Groups', section: 'FYP Management' },
@@ -31,7 +38,7 @@ const FacultyLayout = () => {
     { to: '/faculty/phase1-evaluation', icon: GraduationCap, label: 'Phase 1 Evaluation', section: 'FYP Management' },
     { to: '/faculty/committee-phase1', icon: Star, label: 'Committee Phase 1', section: 'FYP Management' },
     { to: '/faculty/evaluations', icon: Star, label: 'Committee Evaluations', section: 'FYP Management' },
-    { to: '/faculty/head-duties', icon: Crown, label: 'Head Management', section: 'FYP Management', locked: true },
+    { to: '/faculty/my-presentations', icon: Calendar, label: 'My Presentations', section: 'FYP Management' },
   ];
 
   return (
@@ -67,17 +74,6 @@ const FacultyLayout = () => {
                     {link.section}
                   </div>
                 )}
-                {link.locked ? (
-                  <div className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-blue-300/60 cursor-not-allowed select-none ${isCollapsed ? 'justify-center w-[44px] h-[44px] mx-auto p-[10px]' : ''}`} title={`${link.label} — locked`}>
-                    {React.createElement(link.icon, { size: 16, className: "flex-shrink-0" })}
-                    {!isCollapsed && (
-                      <>
-                        <span className="text-sm font-medium whitespace-nowrap overflow-hidden flex-1">{link.label}</span>
-                        <Lock size={12} className="flex-shrink-0 text-blue-300/60" />
-                      </>
-                    )}
-                  </div>
-                ) : (
                 <NavLink 
                   to={link.to} 
                   onClick={() => setIsMobileOpen(false)}
@@ -86,7 +82,6 @@ const FacultyLayout = () => {
                   {React.createElement(link.icon, { size: 16, className: "flex-shrink-0" })}
                   {!isCollapsed && <span className="text-sm font-medium whitespace-nowrap overflow-hidden flex-1">{link.label}</span>}
                 </NavLink>
-                )}
               </React.Fragment>
             );
           })}

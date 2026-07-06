@@ -72,6 +72,7 @@ import InchargeGrievances from '../pages/office-incharge/InchargeGrievances';
 import InchargeFacultyReports from '../pages/office-incharge/InchargeFacultyReports';
 import InchargeStudentReports from '../pages/office-incharge/InchargeStudentReports';
 import InchargeAuditLog from '../pages/office-incharge/InchargeAuditLog';
+import InchargeForwardedProposals from '../pages/office-incharge/InchargeForwardedProposals';
 // Placeholder components
 
 

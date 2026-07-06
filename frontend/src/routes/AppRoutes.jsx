@@ -57,6 +57,11 @@ import FacultyMessaging from '../pages/faculty/FacultyMessaging';
 import FacultyEvaluations from '../pages/faculty/FacultyEvaluations';
 import FacultyHeadDuties from '../pages/faculty/FacultyHeadDuties';
 import FacultySuggestions from '../pages/faculty/FacultySuggestions';
+import FacultyPhase1Evaluation from '../pages/faculty/FacultyPhase1Evaluation';
+import FacultyCommitteePhase1 from '../pages/faculty/FacultyCommitteePhase1';
+import StudentPhase1Remarks from '../pages/student/StudentPhase1Remarks';
+import InchargePhase1Marks from '../pages/office-incharge/InchargePhase1Marks';
+import AssistantPhase1Marks from '../pages/office-assistant/AssistantPhase1Marks';
 import InchargeLayout from '../components/office-incharge/InchargeLayout';
 import InchargeDashboard from '../pages/office-incharge/InchargeDashboard';
 import InchargePhaseControl from '../pages/office-incharge/InchargePhaseControl';
@@ -110,6 +115,7 @@ const AppRoutes = () => {
                 <Route path="/past-projects" element={<StudentPastProjects />} />
                 <Route path="/suggestions" element={<StudentSuggestions />} />
                 <Route path="/committee" element={<StudentCommittee />} />
+                <Route path="/phase1-remarks" element={<StudentPhase1Remarks />} />
             </Route>
 
             {/* HOD Portal Routes */}
@@ -142,6 +148,7 @@ const AppRoutes = () => {
                 <Route path="results" element={<AssistantResults />} />
                 <Route path="past-projects" element={<AssistantPastProjects />} />
                 <Route path="forwarded-proposals" element={<InchargeForwardedProposals />} />
+                <Route path="phase1-marks" element={<AssistantPhase1Marks />} />
             </Route>
 
             {/* Faculty Supervisor Layout Routes */}
@@ -157,6 +164,8 @@ const AppRoutes = () => {
                 <Route path="evaluations" element={<FacultyEvaluations />} />
                 <Route path="head-duties" element={<FacultyHeadDuties />} />
                 <Route path="suggestions" element={<FacultySuggestions />} />
+                <Route path="phase1-evaluation" element={<FacultyPhase1Evaluation />} />
+                <Route path="committee-phase1" element={<FacultyCommitteePhase1 />} />
             </Route>
 
             {/* FYP Office In-charge Layout Routes */}
@@ -175,6 +184,7 @@ const AppRoutes = () => {
                 <Route path="student-reports" element={<InchargeStudentReports />} />
                 <Route path="audit-log" element={<InchargeAuditLog />} />
                 <Route path="forwarded-proposals" element={<InchargeForwardedProposals />} />
+                <Route path="phase1-marks" element={<InchargePhase1Marks />} />
             </Route>
 
             {/* Catch-all */}

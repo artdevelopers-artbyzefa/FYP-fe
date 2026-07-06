@@ -109,6 +109,7 @@ const LayoutInner = () => {
     { to: '/office-incharge/student-reports', icon: GraduationCap, label: 'Student Records', section: 'Overview' },
     { to: '/office-incharge/rubrics', icon: ClipboardList, label: 'Rubric Builder', section: 'Curriculum & Sessions' },
     { to: '/office-incharge/sessions', icon: Calendar, label: 'Academic Sessions', section: 'Curriculum & Sessions' },
+    { to: '/office-incharge/phase1-marks', icon: BarChart3, label: 'Phase 1 (10%) Marks', section: 'Overview' },
     { to: '/office-incharge/grievances', icon: Scale, label: 'Grievances & SLAs', section: 'Analytics & Logs' },
     { to: '/office-incharge/audit-log', icon: History, label: 'System Audit Logs', section: 'Analytics & Logs' },
   ];

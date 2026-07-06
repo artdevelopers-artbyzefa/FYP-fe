@@ -32,7 +32,8 @@ export default function DashboardLayout() {
   const phaseVisible = (itemId) => {
     const lookup = {
       '/dashboard': 1, '/profile': 1, '/fyp-group': 1, '/supervisor-selection': 1,
-      '/task-manager': 1, '/past-projects': 1, '/suggestions': 1, '/committee': 1
+      '/task-manager': 1, '/past-projects': 1, '/suggestions': 1, '/committee': 1,
+      '/phase1-remarks': 5
     };
     const match = Object.entries(lookup).find(([key]) => itemId.startsWith(key));
     const min = match ? match[1] : (itemId.startsWith('/project') ? 2 : 1);
@@ -53,7 +54,8 @@ export default function DashboardLayout() {
     { section: 'Group & Supervisor', items: [
       { id: '/fyp-group', label: 'FYP Group', icon: Users },
       { id: '/supervisor-selection', label: 'FYP Supervisor', icon: User },
-      { id: '/committee', label: 'My Committee', icon: Shield }
+      { id: '/committee', label: 'My Committee', icon: Shield },
+      { id: '/phase1-remarks', label: 'Phase 1 Remarks', icon: ClipboardList }
     ]},
     { section: 'Project Execution', items: [
       { id: '/project/new', label: 'Group Ideas', icon: Lightbulb },
@@ -75,6 +77,7 @@ export default function DashboardLayout() {
   else if (path.includes('/past-projects')) pageTitle = 'Past FYP Projects';
   else if (path.includes('/suggestions')) pageTitle = 'Supervisor Suggestions';
   else if (path.includes('/committee')) pageTitle = 'My Committee';
+  else if (path.includes('/phase1-remarks')) pageTitle = 'Phase 1 Remarks';
 
   return (
     <div className="flex h-screen overflow-hidden relative bg-surface selection:bg-blue-100 selection:text-blue-900 font-poppins">

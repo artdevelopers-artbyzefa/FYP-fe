@@ -119,3 +119,13 @@ export const INDUSTRY_ASSIGNED_PROJECTS_URL = '/industry/assigned-projects';
 export const INDUSTRY_SUBMIT_SCORECARD_URL = '/industry/submit-scorecard';
 export const INDUSTRY_SCORECARD_STATUS_URL = '/industry/scorecard-status';
 export const INDUSTRY_NOTIFICATIONS_URL = '/industry/notifications';
+
+/**
+ * Phase 1 (10%) Evaluation Endpoints
+ */
+export const PHASE1_SUPERVISOR_GROUPS_URL = '/phase1/supervisor/groups';
+export const PHASE1_SUPERVISOR_EVALUATE_URL = '/phase1/supervisor/evaluate';
+export const PHASE1_COMMITTEE_EVALUATIONS_URL = '/phase1/committee/evaluations';
+export const PHASE1_COMMITTEE_EVALUATE_URL = '/phase1/committee/evaluate';
+export const PHASE1_STUDENT_REMARKS_URL = '/phase1/remarks';
+export const PHASE1_MARKS_URL = '/phase1/marks';

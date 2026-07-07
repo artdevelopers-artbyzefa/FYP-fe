@@ -5,7 +5,8 @@ import {
   PHASE2_COMMITTEE_EVALUATIONS_URL,
   PHASE2_COMMITTEE_EVALUATE_URL,
   PHASE2_STUDENT_REMARKS_URL,
-  PHASE2_MARKS_URL
+  PHASE2_MARKS_URL,
+  FINAL_MARKS_URL
 } from '../utils/constants/api-url.constant';
 
 export const getSupervisorPhase2Groups = async () => {
@@ -35,5 +36,10 @@ export const getStudentPhase2Remarks = async () => {
 
 export const getPhase2Marks = async () => {
   const res = await apiClient.get(PHASE2_MARKS_URL);
+  return res.data;
+};
+
+export const getFinalMarks = async () => {
+  const res = await apiClient.get(FINAL_MARKS_URL);
   return res.data;
 };

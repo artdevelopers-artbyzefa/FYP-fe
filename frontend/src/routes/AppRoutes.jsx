@@ -64,8 +64,10 @@ import StudentPhase1Remarks from '../pages/student/StudentPhase1Remarks';
 import StudentPhase2Remarks from '../pages/student/StudentPhase2Remarks';
 import InchargePhase1Marks from '../pages/office-incharge/InchargePhase1Marks';
 import InchargePhase2Marks from '../pages/office-incharge/InchargePhase2Marks';
+import InchargeFinalMarks from '../pages/office-incharge/InchargeFinalMarks';
 import AssistantPhase1Marks from '../pages/office-assistant/AssistantPhase1Marks';
 import AssistantPhase2Marks from '../pages/office-assistant/AssistantPhase2Marks';
+import AssistantFinalMarks from '../pages/office-assistant/AssistantFinalMarks';
 import InchargeLayout from '../components/office-incharge/InchargeLayout';
 import InchargeDashboard from '../pages/office-incharge/InchargeDashboard';
 import InchargePhaseControl from '../pages/office-incharge/InchargePhaseControl';
@@ -156,6 +158,7 @@ const AppRoutes = () => {
                 <Route path="forwarded-proposals" element={<InchargeForwardedProposals />} />
                 <Route path="phase1-marks" element={<AssistantPhase1Marks />} />
                 <Route path="phase2-marks" element={<AssistantPhase2Marks />} />
+                <Route path="final-marks" element={<AssistantFinalMarks />} />
             </Route>
 
             {/* Faculty Supervisor Layout Routes */}
@@ -196,6 +199,7 @@ const AppRoutes = () => {
                 <Route path="forwarded-proposals" element={<InchargeForwardedProposals />} />
                 <Route path="phase1-marks" element={<InchargePhase1Marks />} />
                 <Route path="phase2-marks" element={<InchargePhase2Marks />} />
+                <Route path="final-marks" element={<InchargeFinalMarks />} />
             </Route>
 
             {/* Catch-all */}

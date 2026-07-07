@@ -144,3 +144,8 @@ export const PHASE2_COMMITTEE_EVALUATIONS_URL = '/phase2/committee/evaluations';
 export const PHASE2_COMMITTEE_EVALUATE_URL = '/phase2/committee/evaluate';
 export const PHASE2_STUDENT_REMARKS_URL = '/phase2/remarks';
 export const PHASE2_MARKS_URL = '/phase2/marks';
+
+/**
+ * Final Calculated Marks Endpoints
+ */
+export const FINAL_MARKS_URL = '/final-marks';

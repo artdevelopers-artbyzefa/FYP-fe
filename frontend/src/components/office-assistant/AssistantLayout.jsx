@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { showToast as toast } from '../AppToast';
 import { logoutUser, getCurrentUser } from '../../services/auth.service';
-import { Archive, ArrowRight, Award, BarChart3, Bell, Calendar, CheckCircle, ChevronLeft, ChevronRight, File, GitBranch, GraduationCap, Home, Layers, Lock, LogOut, Megaphone, Menu, Presentation, Shield, User, UserCog, Users, X } from 'lucide-react';
+import { Archive, ArrowRight, Award, BarChart3, Bell, Calendar, CheckCircle, ChevronLeft, ChevronRight, ClipboardList, File, GitBranch, GraduationCap, Home, Layers, Lock, LogOut, Megaphone, Menu, Presentation, Shield, User, UserCog, Users, X } from 'lucide-react';
 import PhaseContext from '../../contexts/PhaseContext';
 
 const AssistantLayout = () => {
@@ -39,6 +39,7 @@ const AssistantLayout = () => {
     { to: '/office-assistant/external', icon: User, label: 'Industry Supervisors', section: 'Committees & Evaluators', locked: true },
     { to: '/office-assistant/phase1-marks', icon: BarChart3, label: 'Phase 1 (10%) Marks', section: 'Outcomes' },
     { to: '/office-assistant/phase2-marks', icon: BarChart3, label: 'Phase 2 (30%) Marks', section: 'Outcomes' },
+    { to: '/office-assistant/final-marks', icon: ClipboardList, label: 'Final Calculated Marks', section: 'Outcomes' },
     { to: '/office-assistant/results', icon: Award, label: 'Results & Printing', section: 'Outcomes', locked: true },
   ];
 

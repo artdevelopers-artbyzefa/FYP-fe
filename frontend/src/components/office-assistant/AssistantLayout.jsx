@@ -38,6 +38,7 @@ const AssistantLayout = () => {
     { to: '/office-assistant/eval-committee', icon: Layers, label: 'Evaluation Committees', section: 'Committees & Evaluators', locked: isPhase1 },
     { to: '/office-assistant/external', icon: User, label: 'Industry Supervisors', section: 'Committees & Evaluators', locked: true },
     { to: '/office-assistant/phase1-marks', icon: BarChart3, label: 'Phase 1 (10%) Marks', section: 'Outcomes' },
+    { to: '/office-assistant/phase2-marks', icon: BarChart3, label: 'Phase 2 (30%) Marks', section: 'Outcomes' },
     { to: '/office-assistant/results', icon: Award, label: 'Results & Printing', section: 'Outcomes', locked: true },
   ];
 

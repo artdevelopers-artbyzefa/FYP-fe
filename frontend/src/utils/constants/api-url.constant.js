@@ -134,3 +134,13 @@ export const PHASE1_COMMITTEE_EVALUATIONS_URL = '/phase1/committee/evaluations';
 export const PHASE1_COMMITTEE_EVALUATE_URL = '/phase1/committee/evaluate';
 export const PHASE1_STUDENT_REMARKS_URL = '/phase1/remarks';
 export const PHASE1_MARKS_URL = '/phase1/marks';
+
+/**
+ * Phase 2 (30%) Evaluation Endpoints
+ */
+export const PHASE2_SUPERVISOR_GROUPS_URL = '/phase2/supervisor/groups';
+export const PHASE2_SUPERVISOR_EVALUATE_URL = '/phase2/supervisor/evaluate';
+export const PHASE2_COMMITTEE_EVALUATIONS_URL = '/phase2/committee/evaluations';
+export const PHASE2_COMMITTEE_EVALUATE_URL = '/phase2/committee/evaluate';
+export const PHASE2_STUDENT_REMARKS_URL = '/phase2/remarks';
+export const PHASE2_MARKS_URL = '/phase2/marks';

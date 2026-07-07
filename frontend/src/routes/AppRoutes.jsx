@@ -58,9 +58,14 @@ import FacultyHeadDuties from '../pages/faculty/FacultyHeadDuties';
 import FacultySuggestions from '../pages/faculty/FacultySuggestions';
 import FacultyPhase1Evaluation from '../pages/faculty/FacultyPhase1Evaluation';
 import FacultyCommitteePhase1 from '../pages/faculty/FacultyCommitteePhase1';
+import FacultyPhase2Evaluation from '../pages/faculty/FacultyPhase2Evaluation';
+import FacultyCommitteePhase2 from '../pages/faculty/FacultyCommitteePhase2';
 import StudentPhase1Remarks from '../pages/student/StudentPhase1Remarks';
+import StudentPhase2Remarks from '../pages/student/StudentPhase2Remarks';
 import InchargePhase1Marks from '../pages/office-incharge/InchargePhase1Marks';
+import InchargePhase2Marks from '../pages/office-incharge/InchargePhase2Marks';
 import AssistantPhase1Marks from '../pages/office-assistant/AssistantPhase1Marks';
+import AssistantPhase2Marks from '../pages/office-assistant/AssistantPhase2Marks';
 import InchargeLayout from '../components/office-incharge/InchargeLayout';
 import InchargeDashboard from '../pages/office-incharge/InchargeDashboard';
 import InchargePhaseControl from '../pages/office-incharge/InchargePhaseControl';
@@ -115,6 +120,7 @@ const AppRoutes = () => {
                 <Route path="/suggestions" element={<StudentSuggestions />} />
                 <Route path="/committee" element={<StudentCommittee />} />
                 <Route path="/phase1-remarks" element={<StudentPhase1Remarks />} />
+                <Route path="/phase2-remarks" element={<StudentPhase2Remarks />} />
                 <Route path="/my-presentations" element={<MyPresentations />} />
             </Route>
 
@@ -149,6 +155,7 @@ const AppRoutes = () => {
                 <Route path="past-projects" element={<AssistantPastProjects />} />
                 <Route path="forwarded-proposals" element={<InchargeForwardedProposals />} />
                 <Route path="phase1-marks" element={<AssistantPhase1Marks />} />
+                <Route path="phase2-marks" element={<AssistantPhase2Marks />} />
             </Route>
 
             {/* Faculty Supervisor Layout Routes */}
@@ -166,6 +173,8 @@ const AppRoutes = () => {
                 <Route path="suggestions" element={<FacultySuggestions />} />
                 <Route path="phase1-evaluation" element={<FacultyPhase1Evaluation />} />
                 <Route path="committee-phase1" element={<FacultyCommitteePhase1 />} />
+                <Route path="phase2-evaluation" element={<FacultyPhase2Evaluation />} />
+                <Route path="committee-phase2" element={<FacultyCommitteePhase2 />} />
                 <Route path="my-presentations" element={<MyPresentations />} />
             </Route>
 
@@ -186,6 +195,7 @@ const AppRoutes = () => {
                 <Route path="audit-log" element={<InchargeAuditLog />} />
                 <Route path="forwarded-proposals" element={<InchargeForwardedProposals />} />
                 <Route path="phase1-marks" element={<InchargePhase1Marks />} />
+                <Route path="phase2-marks" element={<InchargePhase2Marks />} />
             </Route>
 
             {/* Catch-all */}

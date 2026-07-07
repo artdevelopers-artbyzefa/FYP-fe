@@ -1,9 +1,48 @@
 import React, { useState } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { PhaseProvider, usePhase } from '../../contexts/PhaseContext';
+import { SessionProvider, useSession } from '../../contexts/SessionContext';
 import { showToast as toast } from '../AppToast';
 import { logoutUser, getCurrentUser } from '../../services/auth.service';
-import { AlertCircle, BarChart3, Bell, Calendar, ChevronLeft, ChevronRight, ClipboardList, GraduationCap, GitBranch, History, Home, Layers, Lock, LogOut, Menu, Scale, ToggleRight, Users, X } from 'lucide-react';
+import { AlertCircle, BarChart3, Bell, Calendar, ChevronDown, ChevronLeft, ChevronRight, ClipboardList, GraduationCap, GitBranch, History, Home, Layers, Lock, LogOut, Menu, Scale, ToggleRight, Users, X } from 'lucide-react';
+
+const SessionDropdown = () => {
+  const { sessions, selectedSession, setSelectedSession, loading } = useSession();
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className="relative mx-3 mt-2">
+      <button
+        onClick={() => setOpen(!open)}
+        disabled={loading || !sessions.length}
+        className="w-full flex items-center gap-2 px-3 py-2 bg-white/10 rounded-xl text-white hover:bg-white/15 transition-all cursor-pointer border-0 text-left disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        <GraduationCap size={13} className="text-blue-300 shrink-0" />
+        <span className="text-xs font-semibold truncate flex-1">
+          {loading ? 'Loading...' : selectedSession?.sessionName || selectedSession?.name || 'Select Batch'}
+        </span>
+        {!loading && sessions.length > 0 && <ChevronDown size={12} className={`text-blue-300/60 transition-transform ${open ? 'rotate-180' : ''}`} />}
+      </button>
+      {open && sessions.length > 0 && (
+        <>
+          <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
+          <div className="absolute top-full left-0 right-0 mt-1 bg-white rounded-xl shadow-dropdown z-20 py-1 max-h-48 overflow-y-auto border border-line">
+            {sessions.map(s => (
+              <button
+                key={s._id || s.id}
+                onClick={() => { setSelectedSession(s); setOpen(false); }}
+                className={`w-full text-left px-3 py-2 text-xs font-semibold transition-colors cursor-pointer border-0 bg-transparent hover:bg-blue-50 ${selectedSession?._id === s._id || selectedSession?.id === s.id ? 'text-blue-700 bg-blue-50' : 'text-slate-700'}`}
+              >
+                <span>{s.sessionName || s.name}</span>
+                {s.sessionName && s.name && <span className="text-[9px] text-slate-400 block">{s.name}</span>}
+              </button>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
 
 const Sidebar = ({ isMobileOpen, setIsMobileOpen, isCollapsed, setIsCollapsed, user, roleLabel, navLinks, handleLogout }) => {
   const { currentPhase, loading } = usePhase();
@@ -33,6 +72,8 @@ const Sidebar = ({ isMobileOpen, setIsMobileOpen, isCollapsed, setIsCollapsed, u
             <div className="text-white text-xs font-bold truncate">{currentPhase.name}</div>
           </div>
         )}
+
+        <SessionDropdown />
 
       <nav className="flex-1 overflow-y-auto p-2 sidebar-nav">
         {navLinks.map((link, index) => {
@@ -194,7 +235,9 @@ const LayoutInner = () => {
 
 const InchargeLayout = () => (
   <PhaseProvider>
-    <LayoutInner />
+    <SessionProvider>
+      <LayoutInner />
+    </SessionProvider>
   </PhaseProvider>
 );
 

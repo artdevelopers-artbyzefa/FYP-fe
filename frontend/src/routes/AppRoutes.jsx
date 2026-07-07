@@ -75,6 +75,7 @@ import InchargeRubrics from '../pages/office-incharge/InchargeRubrics';
 import InchargeSessions from '../pages/office-incharge/InchargeSessions';
 import InchargeCommitteeOversight from '../pages/office-incharge/InchargeCommitteeOversight';
 import TimetableManagement from '../pages/office-incharge/TimetableManagement';
+import MeetingTimetable from '../pages/office-incharge/MeetingTimetable';
 import InchargeGrievances from '../pages/office-incharge/InchargeGrievances';
 import InchargeFacultyReports from '../pages/office-incharge/InchargeFacultyReports';
 import InchargeStudentReports from '../pages/office-incharge/InchargeStudentReports';
@@ -151,6 +152,7 @@ const AppRoutes = () => {
                 <Route path="projects" element={<AssistantProjects />} />
                 <Route path="committee-oversight" element={<InchargeCommitteeOversight />} />
                 <Route path="timetable" element={<TimetableManagement />} />
+                <Route path="meeting-timetable" element={<MeetingTimetable />} />
                 <Route path="eval-committee" element={<AssistantEvalCommittees />} />
                 <Route path="external" element={<AssistantExternal />} />
                 <Route path="results" element={<AssistantResults />} />
@@ -192,6 +194,7 @@ const AppRoutes = () => {
                 <Route path="eval-committee" element={<AssistantEvalCommittees />} />
                 <Route path="committee-oversight" element={<InchargeCommitteeOversight />} />
                 <Route path="timetable" element={<TimetableManagement />} />
+                <Route path="meeting-timetable" element={<MeetingTimetable />} />
                 <Route path="grievances" element={<InchargeGrievances />} />
                 <Route path="faculty-reports" element={<InchargeFacultyReports />} />
                 <Route path="student-reports" element={<InchargeStudentReports />} />

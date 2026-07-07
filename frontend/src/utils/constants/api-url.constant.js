@@ -149,3 +149,9 @@ export const PHASE2_MARKS_URL = '/phase2/marks';
  * Final Calculated Marks Endpoints
  */
 export const FINAL_MARKS_URL = '/final-marks';
+
+/**
+ * Meeting / Timetable Endpoints
+ */
+export const MEETINGS_URL = '/meetings';
+export const MEETINGS_WEEK_URL = '/meetings/week';

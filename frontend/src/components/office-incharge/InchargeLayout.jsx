@@ -145,6 +145,7 @@ const LayoutInner = () => {
     { to: '/office-incharge/projects', icon: GitBranch, label: 'Project Directory', section: 'Overview' },
     { to: '/office-incharge/committee-oversight', icon: Users, label: 'Committee Oversight', section: 'Overview' },
     { to: '/office-incharge/timetable', icon: Calendar, label: 'Timetable Management', section: 'Overview' },
+    { to: '/office-incharge/meeting-timetable', icon: Users, label: 'Meeting Timetable', section: 'Overview' },
     { to: '/office-incharge/student-reports', icon: GraduationCap, label: 'Student Records', section: 'Overview' },
     { to: '/office-incharge/rubrics', icon: ClipboardList, label: 'Rubric Builder', section: 'Curriculum & Sessions' },
     { to: '/office-incharge/sessions', icon: Calendar, label: 'Academic Sessions', section: 'Curriculum & Sessions' },

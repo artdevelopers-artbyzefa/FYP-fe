@@ -93,13 +93,13 @@ export default function IndustrySupervisorDashboard() {
 
   /* --- Render -------------------------------------------------------------- */
   return (
-    <div className="flex h-screen overflow-hidden" style={{ fontFamily: "'Poppins', sans-serif", backgroundColor: '#EFF6FF' }}>
+    <div className="flex h-screen overflow-hidden bg-blue-50">
 
       {/* ============= SIDEBAR ============= */}
       <aside
         id="industry-sidebar"
-        style={{ backgroundColor: '#1a237e', width: sidebarCollapsed ? 68 : 256, minWidth: sidebarCollapsed ? 68 : 256 }}
-        className={`flex flex-col flex-shrink-0 transition-all duration-300 overflow-hidden z-50 h-full border-r border-white/10 shadow-2xl
+        style={{ width: sidebarCollapsed ? 68 : 256, minWidth: sidebarCollapsed ? 68 : 256 }}
+        className={`bg-sidebar-bg flex flex-col flex-shrink-0 transition-all duration-300 overflow-hidden z-50 h-full border-r border-white/10 shadow-2xl
           fixed lg:relative
           ${mobileSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}
       >

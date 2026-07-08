@@ -46,7 +46,7 @@ export default function InchargeLayout() {
   return (
     <div className="flex h-screen overflow-hidden relative bg-surface selection:bg-blue-100 selection:text-blue-900 font-poppins">
       <div 
-        className={`bg-[#1a237e] border-r border-white/10 flex flex-col flex-shrink-0 transition-all duration-300 overflow-hidden fixed lg:relative z-[50] h-full ${mobileSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}
+        className={`bg-sidebar-bg border-r border-white/10 flex flex-col flex-shrink-0 transition-all duration-300 overflow-hidden fixed lg:relative z-[50] h-full ${mobileSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}
         style={{ width: sidebarCollapsed ? 68 : 256, minWidth: sidebarCollapsed ? 68 : 256 }}
       >
         <div className="flex items-center gap-3 px-4 py-5 border-b border-white/10 relative">
@@ -75,15 +75,16 @@ export default function InchargeLayout() {
               {group.items.map((item) => {
                 const isActive = path === item.id;
                 return (
-                  <div 
+                  <button 
                     key={item.id}
                     onClick={() => { navigate(item.id); setMobileSidebarOpen(false); }}
-                    className={`flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-200 focus-visible:ring-2 focus-visible:ring-blue-500 ${isActive ? 'bg-[#1565c0] text-white font-semibold' : 'text-white hover:bg-white/10 hover:text-white'} ${sidebarCollapsed ? 'justify-center' : ''}`}
+                    className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 border-0 w-full text-left focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar-bg ${isActive ? 'bg-sidebar-active text-white font-semibold' : 'text-white hover:bg-white/10 hover:text-white'} ${sidebarCollapsed ? 'justify-center' : ''}`}
                     title={item.label}
+                    aria-label={item.label}
                   >
                     {React.createElement(item.icon, { size: 16 })}
                     {!sidebarCollapsed && <span className="text-sm font-medium whitespace-nowrap flex-1">{item.label}</span>}
-                  </div>
+                  </button>
                 );
               })}
             </div>
@@ -91,10 +92,10 @@ export default function InchargeLayout() {
         </nav>
 
         <div className="p-3 pt-5">
-          <div onClick={() => logout()} className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-white hover:bg-white/10 hover:text-red-400 transition-all duration-200" title="Logout">
+          <button onClick={() => logout()} type="button" className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white hover:bg-white/10 hover:text-red-400 transition-all duration-200 border-0 w-full text-left cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar-bg" title="Logout" aria-label="Logout">
             <LogOut size={16} className="flex-shrink-0" />
             {!sidebarCollapsed && <span className="text-sm font-medium">Logout</span>}
-          </div>
+          </button>
         </div>
       </div>
 

@@ -40,7 +40,7 @@ export default function AdminLayout() {
   return (
     <div className="flex h-screen overflow-hidden bg-surface selection:bg-blue-100 selection:text-blue-900 font-poppins">
       <aside
-        className={`bg-[#1a237e] border-r border-white/10 flex flex-col flex-shrink-0 transition-all duration-300 overflow-hidden z-50 h-full
+        className={`bg-sidebar-bg border-r border-white/10 flex flex-col flex-shrink-0 transition-all duration-300 overflow-hidden z-50 h-full
           fixed lg:relative ${mobileSidebarOpen ? 'translate-x-0 w-64 shadow-2xl' : '-translate-x-full lg:translate-x-0'} ${sidebarCollapsed ? 'lg:w-[68px]' : 'w-64 lg:w-64'}`}
       >
         <div className="flex items-center gap-3 px-4 py-5 border-b border-white/10 flex-shrink-0">
@@ -71,7 +71,7 @@ export default function AdminLayout() {
                 onClick={() => { navigate(item.id); setMobileSidebarOpen(false); }}
                 title={sidebarCollapsed ? item.label : ''}
                 className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-200 text-left outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2
-                  ${location.pathname === item.id ? 'bg-[#1565c0] text-white font-semibold' : 'text-white hover:bg-white/10 hover:text-white'}
+                  ${location.pathname === item.id ? 'bg-sidebar-active text-white font-semibold' : 'text-white hover:bg-white/10 hover:text-white'}
                   ${sidebarCollapsed ? 'justify-center' : ''}`}
               >
                 {React.createElement(item.icon, { size: 16, className: "flex-shrink-0" })}

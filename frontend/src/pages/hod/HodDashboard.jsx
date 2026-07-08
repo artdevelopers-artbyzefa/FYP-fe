@@ -79,7 +79,7 @@ const HodDashboard = () => {
       </motion.div>
 
       <motion.div variants={item} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div onClick={() => navigate('/hod/students')} className="card p-5 hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-300 cursor-pointer group">
+        <button onClick={() => navigate('/hod/students')} type="button" className="card p-5 hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-300 group text-left w-full border-0 cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2">
           <div className="flex justify-between items-center mb-3">
             <div className="w-10 h-10 rounded-xl bg-secondary/10 flex-center text-secondary group-hover:scale-105 transition-transform">
               <Users className="w-5 h-5" />
@@ -88,8 +88,8 @@ const HodDashboard = () => {
           </div>
           <h3 className="font-bold text-gray-800 text-sm mb-1">Students</h3>
           <p className="text-xs text-gray-400 font-medium">View and manage registered students.</p>
-        </div>
-        <div onClick={() => navigate('/hod/faculty')} className="card p-5 hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-300 cursor-pointer group">
+        </button>
+        <button onClick={() => navigate('/hod/faculty')} type="button" className="card p-5 hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-300 group text-left w-full border-0 cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2">
           <div className="flex justify-between items-center mb-3">
             <div className="w-10 h-10 rounded-xl bg-secondary/10 flex-center text-secondary group-hover:scale-105 transition-transform">
               <UserCheck className="w-5 h-5" />
@@ -98,8 +98,8 @@ const HodDashboard = () => {
           </div>
           <h3 className="font-bold text-gray-800 text-sm mb-1">Faculty</h3>
           <p className="text-xs text-gray-400 font-medium">Monitor faculty workload and profiles.</p>
-        </div>
-        <div onClick={() => navigate('/hod/escalations')} className="card p-5 hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-300 cursor-pointer group">
+        </button>
+        <button onClick={() => navigate('/hod/escalations')} type="button" className="card p-5 hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-300 group text-left w-full border-0 cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2">
           <div className="flex justify-between items-center mb-3">
             <div className="w-10 h-10 rounded-xl bg-secondary/10 flex-center text-secondary group-hover:scale-105 transition-transform">
               <Gavel className="w-5 h-5" />
@@ -110,8 +110,8 @@ const HodDashboard = () => {
           </div>
           <h3 className="font-bold text-gray-800 text-sm mb-1">Grievances</h3>
           <p className="text-xs text-gray-400 font-medium">{stats?.escalatedGrievances || 0} escalated issues.</p>
-        </div>
-        <div className="card p-5 opacity-50 cursor-not-allowed select-none" title="Locked during Phase 1">
+        </button>
+        <div className="card p-5 opacity-50 select-none" title="Locked during Phase 1" aria-disabled="true">
           <div className="flex justify-between items-center mb-3">
             <div className="w-10 h-10 rounded-xl bg-gray-100 flex-center text-gray-400">
               <LineChart className="w-5 h-5" />

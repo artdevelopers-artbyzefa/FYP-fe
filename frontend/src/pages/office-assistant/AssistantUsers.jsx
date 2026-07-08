@@ -266,15 +266,15 @@ const AssistantUsers = () => {
       <div className="flex items-center justify-between mt-4 px-1">
         <span className="text-[11px] font-bold text-gray-400">{total} total users</span>
         <div className="flex items-center gap-1">
-          <button onClick={() => goToPage(page - 1)} disabled={page <= 1} className="w-7 h-7 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer flex items-center justify-center">
+          <button onClick={() => goToPage(page - 1)} disabled={page <= 1} className="w-10 h-10 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer flex items-center justify-center">
             <ChevronLeft className="w-3.5 h-3.5" />
           </button>
           {pageNumbers.map(p => (
-            <button key={p} onClick={() => goToPage(p)} className={`w-7 h-7 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${p === page ? 'bg-primary text-white' : 'border border-gray-200 text-gray-500 hover:bg-gray-50'}`}>
+            <button key={p} onClick={() => goToPage(p)} className={`w-10 h-10 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${p === page ? 'bg-primary text-white' : 'border border-gray-200 text-gray-500 hover:bg-gray-50'}`}>
               {p}
             </button>
           ))}
-          <button onClick={() => goToPage(page + 1)} disabled={page >= totalPages} className="w-7 h-7 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer flex items-center justify-center">
+          <button onClick={() => goToPage(page + 1)} disabled={page >= totalPages} className="w-10 h-10 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer flex items-center justify-center">
             <ChevronRight className="w-3.5 h-3.5" />
           </button>
         </div>

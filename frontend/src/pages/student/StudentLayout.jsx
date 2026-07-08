@@ -89,7 +89,7 @@ export default function DashboardLayout() {
   return (
     <div className="flex h-screen overflow-hidden relative bg-surface selection:bg-blue-100 selection:text-blue-900 font-poppins">
       <div 
-        className={`bg-[#1a237e] border-r border-white/10 flex flex-col flex-shrink-0 transition-all duration-300 overflow-hidden fixed lg:relative z-[50] h-full ${mobileSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}
+        className={`bg-sidebar-bg border-r border-white/10 flex flex-col flex-shrink-0 transition-all duration-300 overflow-hidden fixed lg:relative z-[50] h-full ${mobileSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}
         style={{ width: sidebarCollapsed ? 68 : 256, minWidth: sidebarCollapsed ? 68 : 256 }}
       >
         <div className="flex items-center gap-3 px-4 py-5 border-b border-white/10 relative">
@@ -133,28 +133,31 @@ export default function DashboardLayout() {
                   
                   return (
                     <div key={item.id} className="mb-1">
-                      <div 
+                      <button
                         onClick={() => { if(!isProfileLocked) setOpen(!isOpen); }}
-                        className={`flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-200 focus-visible:ring-2 focus-visible:ring-blue-500 ${isProfileLocked ? 'opacity-40 cursor-not-allowed pointer-events-none' : ''} ${isActive && !isOpen ? 'bg-[#1565c0] text-white font-semibold' : 'text-white hover:bg-white/10 hover:text-white'} ${sidebarCollapsed ? 'justify-center' : ''}`}
+                        className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 border-0 w-full text-left focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar-bg ${isProfileLocked ? 'opacity-40' : ''} ${isActive && !isOpen ? 'bg-sidebar-active text-white font-semibold' : 'text-white hover:bg-white/10 hover:text-white'} ${sidebarCollapsed ? 'justify-center' : ''}`}
                         title={item.label}
+                        aria-expanded={!isProfileLocked ? isOpen : undefined}
+                        aria-label={item.label}
                       >
                         {React.createElement(item.icon, { size: 16 })}
                         {!sidebarCollapsed && <span className="text-sm font-medium flex-1 whitespace-nowrap">{item.label}</span>}
                         {!sidebarCollapsed && isProfileLocked && <Lock size={10} className="text-blue-300/60 animate-pulse mr-1" />}
                         {!sidebarCollapsed && !isProfileLocked && <ChevronDown size={14} className="text-white/60" />}
-                      </div>
+                      </button>
                       
                       {!sidebarCollapsed && isOpen && !isProfileLocked && (
                           <div className="mt-1 ml-4 border-l border-white/10 pl-2 space-y-1">
                           {visSubs.map(sub => (
-                            <div 
+                            <button 
                               key={sub.id} 
                               onClick={() => { navigate(sub.id); setMobileSidebarOpen(false); }}
-                              className={`flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer transition-all text-sm focus-visible:ring-2 focus-visible:ring-blue-500 ${path === sub.id ? 'text-white bg-white/15 font-semibold' : 'text-white/70 hover:text-white hover:bg-white/10'}`}
+                              className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-sm border-0 w-full text-left focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar-bg ${path === sub.id ? 'text-white bg-white/15 font-semibold' : 'text-white/70 hover:text-white hover:bg-white/10'}`}
+                              aria-label={sub.label}
                             >
                               <Circle size={4} className="fill-current" />
                               <span className="whitespace-nowrap">{sub.label}</span>
-                            </div>
+                            </button>
                           ))}
                         </div>
                       )}
@@ -163,16 +166,17 @@ export default function DashboardLayout() {
                 }
 
                 return (
-                  <div 
+                  <button 
                     key={item.id}
                     onClick={() => { if(!isProfileLocked) { navigate(item.id); setMobileSidebarOpen(false); } }}
-                    className={`flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-200 focus-visible:ring-2 focus-visible:ring-blue-500 ${isProfileLocked ? 'opacity-40 cursor-not-allowed pointer-events-none' : ''} ${isActive ? 'bg-[#1565c0] text-white font-semibold' : 'text-white hover:bg-white/10 hover:text-white'} ${sidebarCollapsed ? 'justify-center' : ''}`}
+                    className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 border-0 w-full text-left focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar-bg ${isProfileLocked ? 'opacity-40' : ''} ${isActive ? 'bg-sidebar-active text-white font-semibold' : 'text-white hover:bg-white/10 hover:text-white'} ${sidebarCollapsed ? 'justify-center' : ''}`}
                     title={item.label}
+                    aria-label={item.label}
                   >
                     {React.createElement(item.icon, { size: 16 })}
                     {!sidebarCollapsed && <span className="text-sm font-medium flex-1 whitespace-nowrap">{item.label}</span>}
                     {!sidebarCollapsed && isProfileLocked && <Lock size={10} className="text-blue-300/60 animate-pulse" />}
-                  </div>
+                  </button>
                 );
               })}
             </div>
@@ -181,10 +185,10 @@ export default function DashboardLayout() {
         </nav>
 
         <div className="p-2 pt-4">
-          <div onClick={() => logout()} className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-white hover:bg-white/10 hover:text-red-400 transition-all duration-200" title="Logout">
+          <button onClick={() => logout()} type="button" className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white hover:bg-white/10 hover:text-red-400 transition-all duration-200 border-0 w-full text-left cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar-bg" title="Logout" aria-label="Logout">
             <LogOut size={16} className="flex-shrink-0" />
             {!sidebarCollapsed && <span className="text-sm font-medium">Logout</span>}
-          </div>
+          </button>
         </div>
       </div>
 

@@ -9,7 +9,7 @@ const SidebarItem = ({ to, icon: Icon, label, onClick }) => {
       className={({ isActive }) => {
         const baseClass = 'flex items-center gap-3.5 px-4 py-3 rounded-[16px] transition-all duration-200 group font-poppins font-semibold text-[15px] ';
         if (isActive) {
-          return baseClass + 'bg-[#1565c0] text-white font-semibold';
+          return baseClass + 'bg-sidebar-active text-white font-semibold';
         }
         return baseClass + 'text-white hover:bg-white/10 hover:text-white';
       }}

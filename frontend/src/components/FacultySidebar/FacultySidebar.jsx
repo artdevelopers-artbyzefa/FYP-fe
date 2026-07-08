@@ -81,7 +81,7 @@ const FacultySidebar = ({ isOpen, onClose }) => {
       )}
 
       {/* Sidebar container */}
-      <div className={`w-[260px] bg-[#1a237e] h-screen text-white flex flex-col p-6 fixed left-0 top-0 border-r border-white/10 shadow-card z-50 transition-transform duration-300 ease-in-out lg:translate-x-0 ${
+      <div className={`w-[260px] bg-sidebar-bg h-screen text-white flex flex-col p-6 fixed left-0 top-0 border-r border-white/10 shadow-card z-50 transition-transform duration-300 ease-in-out lg:translate-x-0 ${
         isOpen ? 'translate-x-0' : '-translate-x-full'
       }`}>
         {/* Brand Logo */}

@@ -14,6 +14,9 @@
   --color-warning: #d97706;
   --color-danger: #dc2626;
 
+  --color-sidebar-bg: #1a237e;
+  --color-sidebar-active: #1565c0;
+
   --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.04);
   --shadow-card-hover: 0 8px 25px -6px rgb(37 99 235 / 0.12);
   --shadow-dropdown: 0 8px 30px rgb(0 0 0 / 0.08);

@@ -314,8 +314,8 @@ export default function InchargeRubrics() {
                     <p className="text-[11px] font-medium mt-0.5" style={{ color: TX.muted }}>{r.version || ''} · {r.criteria?.length || 0} criteria</p>
                   </div>
                   <div className="flex items-center gap-1 flex-shrink-0">
-                    <button type="button" onClick={(e) => { e.stopPropagation(); loadRubric(r); }} className="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 border-0 flex-center cursor-pointer hover:bg-blue-100 transition-all" title="Edit"><Pencil size={11} /></button>
-                    <button type="button" onClick={(e) => { e.stopPropagation(); handleDelete(r.id, r.name); }} className="w-7 h-7 rounded-lg bg-rose-50 text-rose-600 border-0 flex-center cursor-pointer hover:bg-rose-100 transition-all" title="Delete"><Trash2 size={11} /></button>
+                    <button type="button" onClick={(e) => { e.stopPropagation(); loadRubric(r); }} className="w-9 h-9 rounded-lg bg-blue-50 text-blue-600 border-0 flex-center cursor-pointer hover:bg-blue-100 transition-all" title="Edit"><Pencil size={13} /></button>
+                    <button type="button" onClick={(e) => { e.stopPropagation(); handleDelete(r.id, r.name); }} className="w-9 h-9 rounded-lg bg-rose-50 text-rose-600 border-0 flex-center cursor-pointer hover:bg-rose-100 transition-all" title="Delete"><Trash2 size={13} /></button>
                     <Badge status={r.status} />
                     {isOpen ? <ChevronUp size={14} style={{ color: TX.muted }} /> : <ChevronDown size={14} style={{ color: TX.muted }} />}
                   </div>

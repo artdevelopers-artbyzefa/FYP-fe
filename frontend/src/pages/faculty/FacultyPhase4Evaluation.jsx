@@ -135,7 +135,7 @@ const FacultyPhase4Evaluation = () => {
   return (
     <motion.div variants={container} initial="hidden" animate="show" className="space-y-6">
       <motion.div variants={item} className="border-b border-line pb-4 mb-2">
-        <h2 className="text-xl font-bold text-slate-900">Phase 4 (100%) — Supervisor Evaluation</h2>
+        <h1 className="text-xl font-bold text-slate-900">Phase 4 (100%) — Supervisor Evaluation</h1>
         <p className="text-xs text-slate-500 mt-0.5 font-medium">Select a group card to evaluate using the Phase 4 rubric.</p>
       </motion.div>
 

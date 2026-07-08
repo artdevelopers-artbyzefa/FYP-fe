@@ -75,7 +75,7 @@ const FacultyEvaluations = () => {
   return (
     <motion.div variants={container} initial="hidden" animate="show" className="space-y-6">
       <motion.div variants={item} className="border-b border-line pb-4 mb-6">
-        <h2 className="text-xl font-bold text-slate-900">Committee Evaluations</h2>
+        <h1 className="text-xl font-bold text-slate-900">Committee Evaluations</h1>
         <p className="text-xs text-slate-500 mt-0.5 font-medium">Input scores per CLO criteria for assigned defense presentations.</p>
       </motion.div>
 

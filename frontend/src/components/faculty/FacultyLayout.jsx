@@ -4,7 +4,7 @@ import { showToast as toast } from '../AppToast';
 import { logoutUser, getCurrentUser } from '../../services/auth.service';
 import { getFacultyDashboardStats } from '../../services/faculty.service';
 import { SessionProvider, useSession } from '../../contexts/SessionContext';
-import { Bell, Calendar, ChevronLeft, ChevronRight, ChevronDown, Crown, FileSignature, GitBranch, GraduationCap, Landmark, Lightbulb, Lightbulb as IdeaIcon, Lock, LogOut, Menu, Presentation, Star, Tags, X } from 'lucide-react';
+import { Bell, Calendar, ChevronLeft, ChevronRight, ChevronDown, ClipboardList, Crown, FileSignature, GitBranch, GraduationCap, Landmark, Lightbulb, Lightbulb as IdeaIcon, Lock, LogOut, Menu, Presentation, Star, Tags, X } from 'lucide-react';
 
 const SessionDropdown = () => {
   const { sessions, selectedSession, setSelectedSession, loading } = useSession();
@@ -70,18 +70,20 @@ const FacultyLayoutInner = () => {
   const navLinks = [
     { to: '/faculty/dashboard', icon: Presentation, label: 'Dashboard', section: 'Overview' },
     ...(!hasCommittee ? [{ to: '/faculty/profile', icon: Tags, label: 'Committee Suggestion', section: 'Profile & Schedule' }] : []),
-    { to: '/faculty/proposals', icon: FileSignature, label: 'Supervision Requests', section: 'FYP Management' },
-    { to: '/faculty/group-proposals', icon: Lightbulb, label: 'Group Proposals', section: 'FYP Management' },
-    { to: '/faculty/supervision', icon: GitBranch, label: 'Supervised Groups', section: 'FYP Management' },
-    { to: '/faculty/suggestions', icon: IdeaIcon, label: 'Suggested Ideas', section: 'FYP Management' },
-    { to: '/faculty/phase1-evaluation', icon: GraduationCap, label: 'Phase 1 (10%) Evaluation', section: 'FYP Management' },
-    { to: '/faculty/committee-phase1', icon: Star, label: 'Committee Phase 1', section: 'FYP Management' },
-    { to: '/faculty/phase2-evaluation', icon: GraduationCap, label: 'Phase 2 (30%) Evaluation', section: 'FYP Management' },
-    { to: '/faculty/phase3-evaluation', icon: GraduationCap, label: 'Phase 3 (60%) Evaluation', section: 'FYP Management' },
-    { to: '/faculty/phase4-evaluation', icon: GraduationCap, label: 'Phase 4 (100%) Evaluation', section: 'FYP Management' },
-    { to: '/faculty/committee-phase2', icon: Star, label: 'Committee Phase 2', section: 'FYP Management' },
-    { to: '/faculty/evaluations', icon: Star, label: 'Committee Evaluations', section: 'FYP Management' },
-    { to: '/faculty/my-presentations', icon: Calendar, label: 'My Presentations', section: 'FYP Management' },
+    { to: '/faculty/availability', icon: Calendar, label: 'Availability', section: 'Profile & Schedule' },
+    { to: '/faculty/proposals', icon: FileSignature, label: 'Supervision Requests', section: 'Supervision' },
+    { to: '/faculty/group-proposals', icon: Lightbulb, label: 'Group Proposals', section: 'Supervision' },
+    { to: '/faculty/supervision', icon: GitBranch, label: 'Supervised Groups', section: 'Supervision' },
+    { to: '/faculty/suggestions', icon: IdeaIcon, label: 'Suggested Ideas', section: 'Supervision' },
+    { to: '/faculty/phase1-evaluation', icon: GraduationCap, label: 'Phase 1 (10%)', section: 'Supervisor Evaluations' },
+    { to: '/faculty/phase2-evaluation', icon: GraduationCap, label: 'Phase 2 (30%)', section: 'Supervisor Evaluations' },
+    { to: '/faculty/phase3-evaluation', icon: GraduationCap, label: 'Phase 3 (60%)', section: 'Supervisor Evaluations' },
+    { to: '/faculty/phase4-evaluation', icon: GraduationCap, label: 'Phase 4 (100%)', section: 'Supervisor Evaluations' },
+    { to: '/faculty/committee-phase1', icon: Star, label: 'Committee Phase 1', section: 'Committee Evaluations' },
+    { to: '/faculty/committee-phase2', icon: Star, label: 'Committee Phase 2', section: 'Committee Evaluations' },
+    { to: '/faculty/evaluations', icon: ClipboardList, label: 'Scorecard Entry', section: 'Committee Evaluations' },
+    { to: '/faculty/messaging', icon: Tags, label: 'Messaging', section: 'Communication' },
+    { to: '/faculty/my-presentations', icon: Calendar, label: 'My Presentations', section: 'Communication' },
   ];
 
   return (

@@ -38,14 +38,14 @@ const HodLayout = () => {
 
   const navLinks = [
     { to: '/hod/dashboard', icon: PieChart, label: 'Dashboard', section: 'Executive' },
-    { to: '/hod/escalations', icon: Gavel, label: 'Escalated Grievances', section: 'Grievance & Escalations' },
-    { to: '/hod/students', icon: Users, label: 'Students', section: 'Department Oversight' },
-    { to: '/hod/faculty', icon: UserCheck, label: 'Faculty', section: 'Department Oversight' },
-    { to: '/hod/projects', icon: GitBranch, label: 'Project Directory', section: 'Department Oversight' },
-    { to: '/hod/faculty-oversight', icon: Presentation, label: 'Faculty Workload', section: 'Department Oversight', locked: true },
-    { to: '/hod/governance', icon: Landmark, label: 'Oversight', section: 'Department Oversight', locked: true },
-    { to: '/hod/committees', icon: Shield, label: 'FYP Committees', section: 'Department Oversight' },
-    { to: '/hod/analytics', icon: LineChart, label: 'FYP Analytics', section: 'Department Oversight', locked: true },
+    { to: '/hod/escalations', icon: Gavel, label: 'Escalated Grievances', section: 'Grievances & Oversight' },
+    { to: '/hod/governance', icon: Landmark, label: 'Governance & Oversight', section: 'Grievances & Oversight', locked: true },
+    { to: '/hod/students', icon: Users, label: 'Students', section: 'Department' },
+    { to: '/hod/faculty', icon: UserCheck, label: 'Faculty Profiles', section: 'Department' },
+    { to: '/hod/faculty-oversight', icon: Presentation, label: 'Faculty Workload', section: 'Department', locked: true },
+    { to: '/hod/committees', icon: Shield, label: 'FYP Committees', section: 'Department' },
+    { to: '/hod/projects', icon: GitBranch, label: 'Project Directory', section: 'Projects & Analytics' },
+    { to: '/hod/analytics', icon: LineChart, label: 'FYP Analytics', section: 'Projects & Analytics', locked: true },
   ];
 
   const handleSendCode = async (e) => {

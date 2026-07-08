@@ -52,15 +52,17 @@ export default function DashboardLayout() {
     { section: 'Account', items: [
       { id: '/profile', label: 'My Profile', icon: UserCircle }
     ]},
-    { section: 'Group & Supervisor', items: [
-      { id: '/fyp-group', label: 'FYP Group', icon: Users },
-      { id: '/supervisor-selection', label: 'FYP Supervisor', icon: User },
-      { id: '/committee', label: 'My Committee', icon: Shield },
-      { id: '/phase1-remarks', label: 'Phase 1 Remarks', icon: ClipboardList },
-      { id: '/phase2-remarks', label: 'Phase 2 Remarks', icon: ClipboardList }
+    { section: 'Group', items: [
+      { id: '/fyp-group', label: 'My FYP Group', icon: Users },
+      { id: '/supervisor-selection', label: 'Supervisor', icon: User },
+      { id: '/committee', label: 'Committee', icon: Shield },
+      { id: '/my-presentations', label: 'Presentations', icon: Calendar }
     ]},
-    { section: 'Project Execution', items: [
-      { id: '/my-presentations', label: 'My Presentations', icon: Calendar },
+    { section: 'Evaluation Remarks', items: [
+      { id: '/phase1-remarks', label: 'Phase 1 (10%)', icon: ClipboardList },
+      { id: '/phase2-remarks', label: 'Phase 2 (30%)', icon: ClipboardList }
+    ]},
+    { section: 'Project', items: [
       { id: '/project/new', label: 'Group Ideas', icon: Lightbulb },
       { id: '/suggestions', label: 'Supervisor Ideas', icon: Lightbulb },
       { id: '/task-manager', label: 'Task Manager', icon: ClipboardList },

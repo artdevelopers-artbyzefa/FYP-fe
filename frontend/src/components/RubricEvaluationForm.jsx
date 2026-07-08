@@ -38,6 +38,9 @@ const SubCriterionRow = ({ sub, values, onTierChange, onScoreChange }) => {
   const v = values[sub.id] || { score: 0, tier: null };
   const selected = v.tier;
   const score = v.score;
+  const selectedTier = selected ? sub.tiers.find(t => t.label === selected) : null;
+  const tierMin = selectedTier?.minScore ?? 0;
+  const tierMax = selectedTier?.maxScore ?? sub.maxScore;
 
   const handleScoreInput = (e) => {
     const raw = e.target.value;
@@ -47,7 +50,7 @@ const SubCriterionRow = ({ sub, values, onTierChange, onScoreChange }) => {
     }
     const val = parseFloat(raw);
     if (!isNaN(val)) {
-      const clamped = Math.min(Math.max(val, 0), sub.maxScore);
+      const clamped = Math.min(Math.max(val, tierMin), tierMax);
       onScoreChange(sub.id, parseFloat(clamped.toFixed(1)));
     }
   };
@@ -76,19 +79,21 @@ const SubCriterionRow = ({ sub, values, onTierChange, onScoreChange }) => {
           />
         ))}
       </div>
-      {selected && (
+      {selected && selectedTier && (
         <div className="flex items-center justify-end gap-2">
           <Pencil size={11} className="text-slate-400" />
           <input
             type="number"
-            min="0"
-            max={sub.maxScore}
+            min={tierMin}
+            max={tierMax}
             step="0.1"
             value={score}
             onChange={handleScoreInput}
             className="w-20 text-center bg-white border border-slate-300 rounded-lg px-2 py-1 text-xs font-bold text-slate-900 outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition-all"
           />
-          <span className="text-[10px] text-slate-400 font-medium">/ {sub.maxScore}</span>
+          <span className="text-[10px] text-slate-400 font-medium">
+            / {tierMin}–{tierMax}
+          </span>
         </div>
       )}
     </div>

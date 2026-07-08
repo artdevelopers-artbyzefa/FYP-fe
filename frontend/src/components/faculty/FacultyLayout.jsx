@@ -77,6 +77,8 @@ const FacultyLayoutInner = () => {
     { to: '/faculty/phase1-evaluation', icon: GraduationCap, label: 'Phase 1 (10%) Evaluation', section: 'FYP Management' },
     { to: '/faculty/committee-phase1', icon: Star, label: 'Committee Phase 1', section: 'FYP Management' },
     { to: '/faculty/phase2-evaluation', icon: GraduationCap, label: 'Phase 2 (30%) Evaluation', section: 'FYP Management' },
+    { to: '/faculty/phase3-evaluation', icon: GraduationCap, label: 'Phase 3 (60%) Evaluation', section: 'FYP Management' },
+    { to: '/faculty/phase4-evaluation', icon: GraduationCap, label: 'Phase 4 (100%) Evaluation', section: 'FYP Management' },
     { to: '/faculty/committee-phase2', icon: Star, label: 'Committee Phase 2', section: 'FYP Management' },
     { to: '/faculty/evaluations', icon: Star, label: 'Committee Evaluations', section: 'FYP Management' },
     { to: '/faculty/my-presentations', icon: Calendar, label: 'My Presentations', section: 'FYP Management' },

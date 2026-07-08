@@ -1,63 +1,111 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { getSupervisorPhase1Groups, submitSupervisorPhase1Evaluation } from '../../services/phase1.service';
+import { getRubricByPhase } from '../../services/rubric.service';
+import RubricEvaluationForm, { calcTotal, buildInitialValues, buildCriteriaScoresPayload } from '../../components/RubricEvaluationForm';
 import { showToast } from '../../components/AppToast';
-import { Users, Loader2, CheckCircle, Clock, ChevronDown, ChevronRight, AlertTriangle } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Users, Loader2, CheckCircle, Clock, ChevronDown, ChevronRight } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.04 } } };
 const item = { hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } };
 
 const FacultyPhase1Evaluation = () => {
   const [groups, setGroups] = useState([]);
+  const [rubric, setRubric] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [submittingId, setSubmittingId] = useState(null);
-  const [formState, setFormState] = useState({}); // { [groupId]: { marks, remarks, errors, expanded } }
+  const [submitting, setSubmitting] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
+  const [values, setValues] = useState({});
+  const [marks, setMarks] = useState(0);
+  const [remarks, setRemarks] = useState('');
+  const [errors, setErrors] = useState({});
   const [expandedMembers, setExpandedMembers] = useState({});
+  const [rubricLoading, setRubricLoading] = useState(false);
 
   useEffect(() => {
     setLoading(true);
-    getSupervisorPhase1Groups()
-      .then(res => setGroups(Array.isArray(res.data) ? res.data : []))
+    Promise.all([
+      getSupervisorPhase1Groups(),
+      getRubricByPhase('phase1')
+    ])
+      .then(([groupsRes, rubricRes]) => {
+        const g = Array.isArray(groupsRes.data) ? groupsRes.data : [];
+        const r = rubricRes.data;
+        setGroups(g);
+        setRubric(r);
+      })
       .catch(console.error)
       .finally(() => setLoading(false));
   }, []);
 
-  const getForm = (groupId) => formState[groupId] || { marks: '', remarks: '', errors: {}, expanded: false };
+  const selectGroup = useCallback((groupId) => {
+    if (selectedId === groupId) {
+      setSelectedId(null);
+      return;
+    }
+    const g = groups.find(x => x.groupId === groupId);
+    setSelectedId(groupId);
+    if (g?.status === 'evaluated' && g.criteriaScores?.length > 0) {
+      const initial = buildInitialValues(rubric, g.criteriaScores);
+      setValues(initial);
+      const total = calcTotal(initial, rubric);
+      setMarks(total);
+      setRemarks(g.supervisorRemarks ?? '');
+    } else {
+      const initial = buildInitialValues(rubric, []);
+      setValues(initial);
+      setMarks(0);
+      setRemarks('');
+    }
+    setErrors({});
+  }, [selectedId, groups, rubric]);
 
-  const setForm = (groupId, patch) =>
-    setFormState(prev => ({ ...prev, [groupId]: { ...getForm(groupId), ...patch } }));
+  const handleValuesChange = useCallback((newValues) => {
+    setValues(newValues);
+    const total = calcTotal(newValues, rubric);
+    setMarks(total);
+  }, [rubric]);
 
-  const validate = (groupId) => {
-    const f = getForm(groupId);
+  const handleMarksChange = useCallback((m) => {
+    setMarks(m);
+  }, []);
+
+  const handleRemarksChange = useCallback((r) => {
+    setRemarks(r);
+    setErrors(prev => ({ ...prev, remarks: null }));
+  }, []);
+
+  const validate = () => {
     const errs = {};
-    const markVal = parseFloat(f.marks);
-    if (isNaN(markVal) || markVal < 0 || markVal > 100) errs.marks = 'Must be 0–100';
-    if (!f.remarks.trim()) errs.remarks = 'Remarks required';
-    setForm(groupId, { errors: errs });
+    if (!remarks.trim()) errs.remarks = 'Remarks required';
+    if (marks <= 0 && rubric?.totalMarks > 0) errs.marks = 'Please select tiers for all criteria';
+    setErrors(errs);
     return Object.keys(errs).length === 0;
   };
 
-  const handleSubmit = async (groupId) => {
-    if (!validate(groupId)) return;
-    setSubmittingId(groupId);
-    const f = getForm(groupId);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validate() || !selectedId) return;
+    setSubmitting(true);
+    const criteriaScores = buildCriteriaScoresPayload(values, rubric);
     try {
       await submitSupervisorPhase1Evaluation({
-        groupId,
-        marks: parseFloat(f.marks),
-        remarks: f.remarks.trim()
+        groupId: selectedId,
+        marks,
+        remarks: remarks.trim(),
+        criteriaScores
       });
       showToast.success('Evaluation submitted');
       setGroups(prev => prev.map(g =>
-        g.groupId === groupId
-          ? { ...g, supervisorMark: parseFloat(f.marks), supervisorRemarks: f.remarks.trim(), status: 'evaluated' }
+        g.groupId === selectedId
+          ? { ...g, supervisorMark: marks, supervisorRemarks: remarks.trim(), criteriaScores, status: 'evaluated' }
           : g
       ));
     } catch (err) {
       const msg = err.response?.data?.message || err.mappedError?.message || 'Submission failed';
       showToast.error(msg);
     } finally {
-      setSubmittingId(null);
+      setSubmitting(false);
     }
   };
 
@@ -68,7 +116,7 @@ const FacultyPhase1Evaluation = () => {
           <div className="skeleton h-7 w-56 rounded-md" />
           <div className="skeleton h-4 w-80 rounded-md mt-2" />
         </div>
-        <div className="grid grid-cols-1 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {[1, 2, 3].map(i => (
             <div key={i} className="bg-white rounded-2xl border border-line shadow-sm p-5">
               <div className="skeleton h-5 w-40 rounded-md mb-3" />
@@ -83,12 +131,13 @@ const FacultyPhase1Evaluation = () => {
 
   const evaluated = groups.filter(g => g.status === 'evaluated').length;
   const pending = groups.length - evaluated;
+  const selected = groups.find(g => g.groupId === selectedId);
 
   return (
     <motion.div variants={container} initial="hidden" animate="show" className="space-y-6">
-      <motion.div variants={item} className="border-b border-line pb-4 mb-6">
+      <motion.div variants={item} className="border-b border-line pb-4 mb-2">
         <h2 className="text-xl font-bold text-slate-900">Phase 1 (10%) — Supervisor Evaluation</h2>
-        <p className="text-xs text-slate-500 mt-0.5 font-medium">Submit marks and mandatory remarks for your supervised groups.</p>
+        <p className="text-xs text-slate-500 mt-0.5 font-medium">Select a group card to evaluate using the Phase 1 rubric.</p>
       </motion.div>
 
       {groups.length > 0 && (
@@ -106,51 +155,96 @@ const FacultyPhase1Evaluation = () => {
           <p className="text-xs text-slate-400 mt-1">You have no groups to evaluate for Phase 1.</p>
         </motion.div>
       ) : (
-        <motion.div variants={item} className="space-y-3">
-          {groups.map(group => {
-            const f = getForm(group.groupId);
-            const isEvaluated = group.status === 'evaluated';
-            const expanded = f.expanded;
+        <>
+          <motion.div variants={item} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {groups.map(group => {
+              const isSelected = selectedId === group.groupId;
+              const isEvald = group.status === 'evaluated';
 
-            return (
-              <div key={group.groupId} className="bg-white rounded-2xl border border-line shadow-sm overflow-hidden">
-                <div className="px-5 py-4 flex items-center justify-between gap-4">
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-2">
-                      <h3 className="text-sm font-bold text-slate-900 truncate">{group.name || `Group ${group.groupId}`}</h3>
-                      <span className={`shrink-0 text-[10px] font-semibold px-2 py-0.5 rounded-lg border ${isEvaluated ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-amber-50 text-amber-700 border-amber-200'}`}>
-                        {isEvaluated ? 'Evaluated' : 'Pending'}
-                      </span>
+              return (
+                <button
+                  key={group.groupId}
+                  onClick={() => selectGroup(group.groupId)}
+                  className={`relative text-left w-full rounded-2xl border-2 p-5 transition-all duration-200 cursor-pointer bg-white shadow-sm hover:shadow-md ${
+                    isSelected
+                      ? 'border-blue-500 ring-2 ring-blue-200'
+                      : isEvald
+                        ? 'border-emerald-200 hover:border-emerald-300'
+                        : 'border-line hover:border-slate-300'
+                  }`}
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0 flex-1">
+                      <h3 className="text-sm font-bold text-slate-900 truncate">{group.name || `Group ${String(group.groupId).substring(0, 6)}`}</h3>
+                      {group.title && (
+                        <p className="text-[10px] text-slate-500 mt-0.5 truncate">{group.title}</p>
+                      )}
                     </div>
-                    {group.title && <p className="text-[10px] text-slate-500 mt-0.5 truncate">{group.title}</p>}
+                    <span className={`shrink-0 text-[10px] font-semibold px-2 py-0.5 rounded-lg border ${
+                      isEvald
+                        ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                        : 'bg-amber-50 text-amber-700 border-amber-200'
+                    }`}>
+                      {isEvald ? 'Evaluated' : 'Pending'}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-3 mt-3 text-[10px] text-slate-400">
+                    <span className="flex items-center gap-1">
+                      <Users size={11} /> {group.members?.length || 0}
+                    </span>
+                    {isEvald && (
+                      <span className="flex items-center gap-1 text-emerald-600 font-semibold">
+                        <CheckCircle size={11} /> {group.supervisorMark}/{rubric?.totalMarks || 5}
+                      </span>
+                    )}
+                  </div>
+
+                  {isEvald && group.supervisorRemarks && (
+                    <div className="mt-2 pt-2 border-t border-dashed border-slate-200">
+                      <p className="text-[9px] text-slate-400 leading-relaxed line-clamp-2">{group.supervisorRemarks}</p>
+                    </div>
+                  )}
+                </button>
+              );
+            })}
+          </motion.div>
+
+          <AnimatePresence>
+            {selected && rubric && (
+              <motion.div
+                key={selected.groupId}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 16 }}
+                className="bg-white rounded-2xl border border-line shadow-md overflow-hidden"
+              >
+                <div className="px-6 py-4 border-b border-line bg-slate-50/50 flex items-center justify-between gap-4">
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-sm font-bold text-slate-900 truncate">{selected.name || `Group ${String(selected.groupId).substring(0, 6)}`}</h3>
+                    {selected.title && <p className="text-[10px] text-slate-500 mt-0.5">{selected.title}</p>}
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
-                    {isEvaluated ? (
-                      <div className="flex items-center gap-1.5 text-[10px] text-slate-400">
-                        <CheckCircle size={12} className="text-emerald-500" />
-                        <span className="font-semibold">{group.supervisorMark}/100</span>
-                      </div>
-                    ) : (
-                      <button
-                        onClick={() => setForm(group.groupId, { expanded: !expanded })}
-                        className="px-3.5 py-1.5 rounded-lg bg-blue-600 text-white font-semibold text-[10px] hover:bg-blue-700 transition-all cursor-pointer border-0 whitespace-nowrap"
-                      >
-                        {expanded ? 'Cancel' : 'Evaluate'}
-                      </button>
-                    )}
+                    <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-lg border ${
+                      selected.status === 'evaluated'
+                        ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                        : 'bg-amber-50 text-amber-700 border-amber-200'
+                    }`}>
+                      {selected.status === 'evaluated' ? 'Evaluated' : 'Pending'}
+                    </span>
                     <button
-                      onClick={() => setExpandedMembers(prev => ({ ...prev, [group.groupId]: !prev[group.groupId] }))}
-                      className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-50 transition-all cursor-pointer border-0 bg-transparent"
+                      onClick={(e) => { e.stopPropagation(); setExpandedMembers(prev => ({ ...prev, [selected.groupId]: !prev[selected.groupId] })); }}
+                      className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-all cursor-pointer border-0 bg-transparent"
                     >
-                      {expandedMembers[group.groupId] ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+                      {expandedMembers[selected.groupId] ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
                     </button>
                   </div>
                 </div>
 
-                {expandedMembers[group.groupId] && group.members?.length > 0 && (
-                  <div className="border-t border-line bg-slate-50/50 divide-y divide-line">
-                    {group.members.map((m, i) => (
-                      <div key={i} className="flex items-center gap-3 px-5 py-2.5">
+                {expandedMembers[selected.groupId] && selected.members?.length > 0 && (
+                  <div className="border-b border-line bg-slate-50/30 divide-y divide-line px-6">
+                    {selected.members.map((m, i) => (
+                      <div key={i} className="flex items-center gap-3 py-2.5">
                         <div className="w-7 h-7 rounded-lg bg-blue-100 text-blue-700 text-[10px] font-bold flex items-center justify-center shrink-0">
                           {(m.name || '?').charAt(0)}
                         </div>
@@ -161,71 +255,33 @@ const FacultyPhase1Evaluation = () => {
                   </div>
                 )}
 
-                {isEvaluated && (
-                  <div className="border-t border-line px-5 py-3 bg-slate-50/30">
-                    <div className="flex items-start gap-2">
-                      <span className="text-[10px] font-semibold text-slate-500 shrink-0 mt-0.5">Remarks:</span>
-                      <p className="text-xs text-slate-700">{group.supervisorRemarks || '—'}</p>
-                    </div>
+                <form onSubmit={handleSubmit} className="p-6">
+                  <RubricEvaluationForm
+                    rubric={rubric}
+                    values={values}
+                    onChange={handleValuesChange}
+                    marks={marks}
+                    onMarksChange={handleMarksChange}
+                    remarks={remarks}
+                    onRemarksChange={handleRemarksChange}
+                    errors={errors}
+                  />
+
+                  <div className="flex items-center gap-3 pt-4 mt-4 border-t border-line">
+                    <button
+                      type="submit"
+                      disabled={submitting}
+                      className="px-5 py-2.5 rounded-lg bg-blue-600 text-white font-semibold text-[10px] hover:bg-blue-700 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed border-0 flex items-center gap-1.5"
+                    >
+                      {submitting && <Loader2 size={12} className="animate-spin" />}
+                      {submitting ? 'Submitting…' : 'Submit Evaluation'}
+                    </button>
                   </div>
-                )}
-
-                {expanded && !isEvaluated && (
-                  <form
-                    onSubmit={(e) => { e.preventDefault(); handleSubmit(group.groupId); }}
-                    className="border-t border-line px-5 py-4 bg-slate-50/30 space-y-3"
-                  >
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                      <div className="sm:col-span-1">
-                        <label className="block text-[10px] font-semibold text-slate-700 mb-1">
-                          Marks <span className="text-slate-400">(0–100)</span>
-                        </label>
-                        <input
-                          type="number"
-                          min="0"
-                          max="100"
-                          step="0.1"
-                          value={f.marks}
-                          onChange={e => { setForm(group.groupId, { marks: e.target.value, errors: { ...f.errors, marks: null } }); }}
-                          placeholder="0–100"
-                          className={`w-full bg-white border rounded-lg px-3 py-2 text-xs outline-none transition-all focus:ring-1 ${f.errors.marks ? 'border-red-400 focus:border-red-400 focus:ring-red-400' : 'border-line focus:border-blue-400 focus:ring-blue-400'}`}
-                        />
-                        {f.errors.marks && <p className="text-[9px] text-red-500 font-medium mt-0.5">{f.errors.marks}</p>}
-                      </div>
-                      <div className="sm:col-span-2">
-                        <label className="block text-[10px] font-semibold text-slate-700 mb-1">
-                          Remarks <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          value={f.remarks}
-                          onChange={e => { setForm(group.groupId, { remarks: e.target.value, errors: { ...f.errors, remarks: null } }); }}
-                          placeholder="Provide detailed feedback on the group's Phase 1 work..."
-                          rows={2}
-                          className={`w-full bg-white border rounded-lg px-3 py-2 text-xs outline-none transition-all focus:ring-1 resize-none ${f.errors.remarks ? 'border-red-400 focus:border-red-400 focus:ring-red-400' : 'border-line focus:border-blue-400 focus:ring-blue-400'}`}
-                        />
-                        {f.errors.remarks && <p className="text-[9px] text-red-500 font-medium mt-0.5">{f.errors.remarks}</p>}
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-3 pt-1">
-                      <button
-                        type="submit"
-                        disabled={submittingId === group.groupId}
-                        className="px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold text-[10px] hover:bg-blue-700 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed border-0 flex items-center gap-1.5"
-                      >
-                        {submittingId === group.groupId && <Loader2 size={12} className="animate-spin" />}
-                        {submittingId === group.groupId ? 'Submitting…' : 'Submit Evaluation'}
-                      </button>
-                      <span className="text-[9px] text-slate-400 flex items-center gap-1">
-                        <AlertTriangle size={10} /> Warning: submission cannot be modified
-                      </span>
-                    </div>
-                  </form>
-                )}
-              </div>
-            );
-          })}
-        </motion.div>
+                </form>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </>
       )}
     </motion.div>
   );

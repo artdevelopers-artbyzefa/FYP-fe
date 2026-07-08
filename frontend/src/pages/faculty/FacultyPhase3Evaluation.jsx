@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { getSupervisorPhase2Groups, submitSupervisorPhase2Evaluation } from '../../services/phase2.service';
+import { getSupervisorPhase3Groups, submitSupervisorPhase3Evaluation } from '../../services/phase3.service';
 import { getRubricByPhase } from '../../services/rubric.service';
 import RubricEvaluationForm, { calcTotal, buildInitialValues, buildCriteriaScoresPayload } from '../../components/RubricEvaluationForm';
 import { showToast } from '../../components/AppToast';
@@ -9,7 +9,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.04 } } };
 const item = { hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } };
 
-const FacultyPhase2Evaluation = () => {
+const FacultyPhase3Evaluation = () => {
   const [groups, setGroups] = useState([]);
   const [rubric, setRubric] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -24,8 +24,8 @@ const FacultyPhase2Evaluation = () => {
   useEffect(() => {
     setLoading(true);
     Promise.all([
-      getSupervisorPhase2Groups(),
-      getRubricByPhase('phase2')
+      getSupervisorPhase3Groups(),
+      getRubricByPhase('phase3')
     ])
       .then(([groupsRes, rubricRes]) => {
         const g = Array.isArray(groupsRes.data) ? groupsRes.data : [];
@@ -88,7 +88,7 @@ const FacultyPhase2Evaluation = () => {
     setSubmitting(true);
     const criteriaScores = buildCriteriaScoresPayload(values, rubric);
     try {
-      await submitSupervisorPhase2Evaluation({
+      await submitSupervisorPhase3Evaluation({
         groupId: selectedId,
         marks,
         remarks: remarks.trim(),
@@ -135,8 +135,8 @@ const FacultyPhase2Evaluation = () => {
   return (
     <motion.div variants={container} initial="hidden" animate="show" className="space-y-6">
       <motion.div variants={item} className="border-b border-line pb-4 mb-2">
-        <h2 className="text-xl font-bold text-slate-900">Phase 2 (30%) — Supervisor Evaluation</h2>
-        <p className="text-xs text-slate-500 mt-0.5 font-medium">Select a group card to evaluate using the Phase 2 rubric.</p>
+        <h2 className="text-xl font-bold text-slate-900">Phase 3 (60%) — Supervisor Evaluation</h2>
+        <p className="text-xs text-slate-500 mt-0.5 font-medium">Select a group card to evaluate using the Phase 3 rubric.</p>
       </motion.div>
 
       {groups.length > 0 && (
@@ -151,7 +151,7 @@ const FacultyPhase2Evaluation = () => {
         <motion.div variants={item} className="bg-white rounded-2xl border border-line shadow-sm p-12 text-center">
           <Users size={40} className="text-slate-300 mx-auto mb-4" />
           <h3 className="text-sm font-bold text-slate-700">No supervised groups</h3>
-          <p className="text-xs text-slate-400 mt-1">You have no groups to evaluate for Phase 2.</p>
+          <p className="text-xs text-slate-400 mt-1">You have no groups to evaluate for Phase 3.</p>
         </motion.div>
       ) : (
         <>
@@ -194,7 +194,7 @@ const FacultyPhase2Evaluation = () => {
                     </span>
                     {isEvald && (
                       <span className="flex items-center gap-1 text-emerald-600 font-semibold">
-                        <CheckCircle size={11} /> {group.supervisorMark}/{rubric?.totalMarks || 45}
+                        <CheckCircle size={11} /> {group.supervisorMark}/{rubric?.totalMarks || 15}
                       </span>
                     )}
                   </div>
@@ -286,4 +286,4 @@ const FacultyPhase2Evaluation = () => {
   );
 };
 
-export default FacultyPhase2Evaluation;
+export default FacultyPhase3Evaluation;

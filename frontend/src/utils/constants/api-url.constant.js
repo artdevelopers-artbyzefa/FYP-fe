@@ -146,6 +146,18 @@ export const PHASE2_STUDENT_REMARKS_URL = '/phase2/remarks';
 export const PHASE2_MARKS_URL = '/phase2/marks';
 
 /**
+ * Phase 3 (60%) Evaluation Endpoints
+ */
+export const PHASE3_SUPERVISOR_GROUPS_URL = '/phase3/supervisor/groups';
+export const PHASE3_SUPERVISOR_EVALUATE_URL = '/phase3/supervisor/evaluate';
+
+/**
+ * Phase 4 (100%) Evaluation Endpoints
+ */
+export const PHASE4_SUPERVISOR_GROUPS_URL = '/phase4/supervisor/groups';
+export const PHASE4_SUPERVISOR_EVALUATE_URL = '/phase4/supervisor/evaluate';
+
+/**
  * Final Calculated Marks Endpoints
  */
 export const FINAL_MARKS_URL = '/final-marks';

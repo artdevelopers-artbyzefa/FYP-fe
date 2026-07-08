@@ -59,6 +59,8 @@ import FacultySuggestions from '../pages/faculty/FacultySuggestions';
 import FacultyPhase1Evaluation from '../pages/faculty/FacultyPhase1Evaluation';
 import FacultyCommitteePhase1 from '../pages/faculty/FacultyCommitteePhase1';
 import FacultyPhase2Evaluation from '../pages/faculty/FacultyPhase2Evaluation';
+import FacultyPhase3Evaluation from '../pages/faculty/FacultyPhase3Evaluation';
+import FacultyPhase4Evaluation from '../pages/faculty/FacultyPhase4Evaluation';
 import FacultyCommitteePhase2 from '../pages/faculty/FacultyCommitteePhase2';
 import StudentPhase1Remarks from '../pages/student/StudentPhase1Remarks';
 import StudentPhase2Remarks from '../pages/student/StudentPhase2Remarks';
@@ -179,6 +181,8 @@ const AppRoutes = () => {
                 <Route path="phase1-evaluation" element={<FacultyPhase1Evaluation />} />
                 <Route path="committee-phase1" element={<FacultyCommitteePhase1 />} />
                 <Route path="phase2-evaluation" element={<FacultyPhase2Evaluation />} />
+                <Route path="phase3-evaluation" element={<FacultyPhase3Evaluation />} />
+                <Route path="phase4-evaluation" element={<FacultyPhase4Evaluation />} />
                 <Route path="committee-phase2" element={<FacultyCommitteePhase2 />} />
                 <Route path="my-presentations" element={<MyPresentations />} />
             </Route>

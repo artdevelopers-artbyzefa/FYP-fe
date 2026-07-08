@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react';
 import { Info, ChevronDown, ChevronRight, Pencil } from 'lucide-react';
 
 const TierRadio = ({ tier, name, checked, onChange }) => {
-  const isSelected = checked && checked.label === tier.label;
+  const isSelected = checked === tier.label;
   return (
     <label
       className={`flex items-start gap-2.5 p-2.5 rounded-lg border cursor-pointer transition-all text-left ${

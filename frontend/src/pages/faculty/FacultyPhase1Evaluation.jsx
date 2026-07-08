@@ -3,7 +3,7 @@ import { getSupervisorPhase1Groups, submitSupervisorPhase1Evaluation } from '../
 import { getRubricByPhase } from '../../services/rubric.service';
 import RubricEvaluationForm, { calcTotal, buildInitialValues, buildCriteriaScoresPayload } from '../../components/RubricEvaluationForm';
 import { showToast } from '../../components/AppToast';
-import { Users, Loader2, CheckCircle, Clock, ChevronDown, ChevronRight } from 'lucide-react';
+import { Users, Loader2, CheckCircle, Check, Clock, ChevronDown, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.04 } } };
@@ -167,12 +167,17 @@ const FacultyPhase1Evaluation = () => {
                   onClick={() => selectGroup(group.groupId)}
                   className={`relative text-left w-full rounded-2xl border-2 p-5 transition-all duration-200 cursor-pointer bg-white shadow-sm hover:shadow-md ${
                     isSelected
-                      ? 'border-blue-500 ring-2 ring-blue-200'
+                      ? 'border-blue-600 ring-2 ring-blue-300 bg-blue-50 -translate-y-0.5'
                       : isEvald
                         ? 'border-emerald-200 hover:border-emerald-300'
                         : 'border-line hover:border-slate-300'
                   }`}
                 >
+                  {isSelected && (
+                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center shadow-md z-10">
+                      <Check size={14} className="text-white" strokeWidth={3} />
+                    </div>
+                  )}
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0 flex-1">
                       <h3 className="text-sm font-bold text-slate-900 truncate">{group.name || `Group ${String(group.groupId).substring(0, 6)}`}</h3>

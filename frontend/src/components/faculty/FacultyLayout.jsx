@@ -81,6 +81,8 @@ const FacultyLayoutInner = () => {
     { to: '/faculty/phase4-evaluation', icon: GraduationCap, label: 'Phase 4 (100%)', section: 'Supervisor Evaluations' },
     { to: '/faculty/committee-phase1', icon: Star, label: 'Committee Phase 1', section: 'Committee Evaluations' },
     { to: '/faculty/committee-phase2', icon: Star, label: 'Committee Phase 2', section: 'Committee Evaluations' },
+    { to: '/faculty/committee-phase3', icon: Star, label: 'Committee Phase 3', section: 'Committee Evaluations' },
+    { to: '/faculty/committee-phase4', icon: Star, label: 'Committee Phase 4', section: 'Committee Evaluations' },
     { to: '/faculty/evaluations', icon: ClipboardList, label: 'Scorecard Entry', section: 'Committee Evaluations' },
     { to: '/faculty/messaging', icon: Tags, label: 'Messaging', section: 'Communication' },
     { to: '/faculty/my-presentations', icon: Calendar, label: 'My Presentations', section: 'Communication' },

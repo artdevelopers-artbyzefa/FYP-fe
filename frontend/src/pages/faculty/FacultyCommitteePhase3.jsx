@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo, useCallback } from 'react';
-import { getCommitteePhase2Evaluations, submitCommitteePhase2Evaluation } from '../../services/phase2.service';
+import { getCommitteePhase3Evaluations, submitCommitteePhase3Evaluation } from '../../services/phase3.service';
 import { getRubricByPhase } from '../../services/rubric.service';
 import RubricEvaluationForm, { calcTotal, buildInitialValues, buildCriteriaScoresPayload } from '../../components/RubricEvaluationForm';
 import { showToast } from '../../components/AppToast';
@@ -9,7 +9,7 @@ import { motion } from 'framer-motion';
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.04 } } };
 const item = { hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } };
 
-const FacultyCommitteePhase2 = () => {
+const FacultyCommitteePhase3 = () => {
   const [evaluations, setEvaluations] = useState([]);
   const [rubric, setRubric] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -20,8 +20,8 @@ const FacultyCommitteePhase2 = () => {
   useEffect(() => {
     setLoading(true);
     Promise.all([
-      getCommitteePhase2Evaluations(),
-      getRubricByPhase('phase2', 'committee')
+      getCommitteePhase3Evaluations(),
+      getRubricByPhase('phase3', 'committee')
     ])
       .then(([evRes, rubricRes]) => {
         setEvaluations(Array.isArray(evRes.data) ? evRes.data : []);
@@ -91,7 +91,7 @@ const FacultyCommitteePhase2 = () => {
     const f = getForm(id);
     const criteriaScores = buildCriteriaScoresPayload(f.values, rubric);
     try {
-      await submitCommitteePhase2Evaluation({
+      await submitCommitteePhase3Evaluation({
         evaluationId: id,
         marks: f.marks,
         remarks: f.remarks.trim(),
@@ -151,8 +151,8 @@ const FacultyCommitteePhase2 = () => {
   return (
     <motion.div variants={container} initial="hidden" animate="show" className="space-y-6">
       <motion.div variants={item} className="border-b border-line pb-4 mb-6">
-        <h1 className="text-xl font-bold text-slate-900">Phase 2 (30%) — Committee Evaluation</h1>
-        <p className="text-xs text-slate-500 mt-0.5 font-medium">Evaluate groups using the Phase 2 committee rubric.</p>
+        <h1 className="text-xl font-bold text-slate-900">Phase 3 (60%) — Committee Evaluation</h1>
+        <p className="text-xs text-slate-500 mt-0.5 font-medium">Evaluate groups using the Phase 3 committee rubric.</p>
       </motion.div>
 
       {evaluations.length > 0 && (
@@ -167,7 +167,7 @@ const FacultyCommitteePhase2 = () => {
         <motion.div variants={item} className="bg-white rounded-2xl border border-line shadow-sm p-12 text-center">
           <ClipboardList size={40} className="text-slate-300 mx-auto mb-4" />
           <h3 className="text-sm font-bold text-slate-700">No evaluations assigned</h3>
-          <p className="text-xs text-slate-400 mt-1">You have no Phase 2 committee evaluations.</p>
+          <p className="text-xs text-slate-400 mt-1">You have no Phase 3 committee evaluations.</p>
         </motion.div>
       ) : (
         <>
@@ -308,7 +308,7 @@ const FacultyCommitteePhase2 = () => {
                           </span>
                         </td>
                         <td className="py-4 px-6 text-right text-xs font-bold text-slate-700">
-                          {isDone ? `${ev.marks?.toFixed(1) ?? '—'} / ${rubric?.totalMarks ?? 41}` : '—'}
+                          {isDone ? `${ev.marks?.toFixed(1) ?? '—'} / ${rubric?.totalMarks ?? 15}` : '—'}
                         </td>
                       </tr>
                     );
@@ -323,4 +323,4 @@ const FacultyCommitteePhase2 = () => {
   );
 };
 
-export default FacultyCommitteePhase2;
+export default FacultyCommitteePhase3;

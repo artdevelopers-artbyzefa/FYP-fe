@@ -1,5 +1,7 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import { getCommitteePhase1Evaluations, submitCommitteePhase1Evaluation } from '../../services/phase1.service';
+import { getRubricByPhase } from '../../services/rubric.service';
+import RubricEvaluationForm, { calcTotal, buildInitialValues, buildCriteriaScoresPayload } from '../../components/RubricEvaluationForm';
 import { showToast } from '../../components/AppToast';
 import { Users, Loader2, Star, ClipboardList, CheckCircle, Clock, ChevronDown, ChevronRight, AlertTriangle } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -9,6 +11,7 @@ const item = { hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } };
 
 const FacultyCommitteePhase1 = () => {
   const [evaluations, setEvaluations] = useState([]);
+  const [rubric, setRubric] = useState(null);
   const [loading, setLoading] = useState(true);
   const [submittingId, setSubmittingId] = useState(null);
   const [formState, setFormState] = useState({});
@@ -16,8 +19,14 @@ const FacultyCommitteePhase1 = () => {
 
   useEffect(() => {
     setLoading(true);
-    getCommitteePhase1Evaluations()
-      .then(res => setEvaluations(Array.isArray(res.data) ? res.data : []))
+    Promise.all([
+      getCommitteePhase1Evaluations(),
+      getRubricByPhase('phase1', 'committee')
+    ])
+      .then(([evRes, rubricRes]) => {
+        setEvaluations(Array.isArray(evRes.data) ? evRes.data : []);
+        setRubric(rubricRes.data);
+      })
       .catch(console.error)
       .finally(() => setLoading(false));
   }, []);
@@ -32,16 +41,44 @@ const FacultyCommitteePhase1 = () => {
     return Array.from(map.values());
   }, [evaluations]);
 
-  const getForm = (id) => formState[id] || { marks: '', remarks: '', errors: {}, expanded: false };
+  const getForm = (id) => formState[id] || { values: {}, marks: 0, remarks: '', errors: {}, expanded: false };
 
   const setForm = (id, patch) =>
     setFormState(prev => ({ ...prev, [id]: { ...getForm(id), ...patch } }));
 
+  const openForm = useCallback((ev) => {
+    if (ev.status === 'Completed') return;
+    const existing = getForm(ev.id);
+    if (existing.expanded) {
+      setForm(ev.id, { expanded: false });
+      return;
+    }
+    const initial = buildInitialValues(rubric, ev.criteriaScores || []);
+    setForm(ev.id, {
+      expanded: true,
+      values: initial,
+      marks: calcTotal(initial, rubric),
+      remarks: ev.remarks || '',
+      errors: {}
+    });
+  }, [rubric]);
+
+  const handleValuesChange = useCallback((id, newValues) => {
+    setForm(id, {
+      values: newValues,
+      marks: calcTotal(newValues, rubric),
+      errors: { ...getForm(id).errors, marks: null }
+    });
+  }, [rubric]);
+
+  const handleRemarksChange = useCallback((id, val) => {
+    setForm(id, { remarks: val, errors: { ...getForm(id).errors, remarks: null } });
+  }, []);
+
   const validate = (id) => {
     const f = getForm(id);
     const errs = {};
-    const markVal = parseFloat(f.marks);
-    if (isNaN(markVal) || markVal < 0 || markVal > 100) errs.marks = 'Must be 0–100';
+    if (f.marks <= 0 && rubric?.totalMarks > 0) errs.marks = 'Please select tiers for all criteria';
     if (!f.remarks.trim()) errs.remarks = 'Remarks required';
     setForm(id, { errors: errs });
     return Object.keys(errs).length === 0;
@@ -52,18 +89,21 @@ const FacultyCommitteePhase1 = () => {
     if (!validate(id)) return;
     setSubmittingId(id);
     const f = getForm(id);
+    const criteriaScores = buildCriteriaScoresPayload(f.values, rubric);
     try {
       await submitCommitteePhase1Evaluation({
         evaluationId: id,
-        marks: parseFloat(f.marks),
-        remarks: f.remarks.trim()
+        marks: f.marks,
+        remarks: f.remarks.trim(),
+        criteriaScores
       });
       showToast.success('Evaluation submitted');
       setEvaluations(prev => prev.map(e =>
         e.id === id
-          ? { ...e, marks: parseFloat(f.marks), remarks: f.remarks.trim(), status: 'Completed' }
+          ? { ...e, marks: f.marks, remarks: f.remarks.trim(), criteriaScores, status: 'Completed' }
           : e
       ));
+      setForm(id, { expanded: false });
     } catch (err) {
       const msg = err.response?.data?.message || err.mappedError?.message || 'Submission failed';
       showToast.error(msg);
@@ -111,8 +151,8 @@ const FacultyCommitteePhase1 = () => {
   return (
     <motion.div variants={container} initial="hidden" animate="show" className="space-y-6">
       <motion.div variants={item} className="border-b border-line pb-4 mb-6">
-        <h2 className="text-xl font-bold text-slate-900">Phase 1 (10%) — Committee Evaluation</h2>
-        <p className="text-xs text-slate-500 mt-0.5 font-medium">Submit marks and mandatory remarks for assigned groups.</p>
+        <h1 className="text-xl font-bold text-slate-900">Phase 1 (10%) — Committee Evaluation</h1>
+        <p className="text-xs text-slate-500 mt-0.5 font-medium">Evaluate groups using the Phase 1 committee rubric.</p>
       </motion.div>
 
       {evaluations.length > 0 && (
@@ -164,13 +204,15 @@ const FacultyCommitteePhase1 = () => {
                           {comm.evaluations.map(ev => {
                             const f = getForm(ev.id);
                             const isDone = ev.status === 'Completed';
-                            const expanded = f.expanded;
 
                             return (
                               <div key={ev.id}>
                                 <div className="flex items-center justify-between px-5 py-3 hover:bg-blue-50/30 transition-colors">
                                   <div className="min-w-0 flex-1">
                                     <div className="text-xs font-semibold text-slate-900">{ev.groupName || `Group ${ev.groupId}`}</div>
+                                    {ev.projectTitle && (
+                                      <div className="text-[9px] text-slate-400 mt-0.5 truncate">{ev.projectTitle}</div>
+                                    )}
                                     <div className="text-[9px] text-slate-400 font-mono mt-0.5">{ev.id}</div>
                                   </div>
                                   <div className="flex items-center gap-2 shrink-0">
@@ -179,10 +221,10 @@ const FacultyCommitteePhase1 = () => {
                                     </span>
                                     {!isDone ? (
                                       <button
-                                        onClick={() => setForm(ev.id, { expanded: !expanded })}
+                                        onClick={() => openForm(ev)}
                                         className="px-3 py-1.5 rounded-lg bg-blue-600 text-white font-semibold text-[10px] hover:bg-blue-700 transition-all cursor-pointer border-0 whitespace-nowrap"
                                       >
-                                        {expanded ? 'Cancel' : 'Evaluate'}
+                                        {f.expanded ? 'Cancel' : 'Evaluate'}
                                       </button>
                                     ) : (
                                       <span className="inline-flex items-center gap-1 text-[10px] text-slate-400 font-semibold italic px-2">
@@ -192,56 +234,37 @@ const FacultyCommitteePhase1 = () => {
                                   </div>
                                 </div>
 
-                                {expanded && !isDone && (
-                                  <form
-                                    onSubmit={(e) => { e.preventDefault(); handleSubmit(ev); }}
-                                    className="border-t border-line px-5 py-4 bg-slate-50/30 space-y-3"
-                                  >
-                                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                                      <div className="sm:col-span-1">
-                                        <label className="block text-[10px] font-semibold text-slate-700 mb-1">
-                                          Marks <span className="text-slate-400">(0–100)</span>
-                                        </label>
-                                        <input
-                                          type="number"
-                                          min="0"
-                                          max="100"
-                                          step="0.1"
-                                          value={f.marks}
-                                          onChange={e => setForm(ev.id, { marks: e.target.value, errors: { ...f.errors, marks: null } })}
-                                          placeholder="0–100"
-                                          className={`w-full bg-white border rounded-lg px-3 py-2 text-xs outline-none transition-all focus:ring-1 ${f.errors.marks ? 'border-red-400 focus:border-red-400 focus:ring-red-400' : 'border-line focus:border-blue-400 focus:ring-blue-400'}`}
-                                        />
-                                        {f.errors.marks && <p className="text-[9px] text-red-500 font-medium mt-0.5">{f.errors.marks}</p>}
+                                {f.expanded && !isDone && rubric && (
+                                  <div className="border-t border-line">
+                                    <form
+                                      onSubmit={(e) => { e.preventDefault(); handleSubmit(ev); }}
+                                      className="p-5 bg-slate-50/30 space-y-4"
+                                    >
+                                      <RubricEvaluationForm
+                                        rubric={rubric}
+                                        values={f.values}
+                                        onChange={(v) => handleValuesChange(ev.id, v)}
+                                        marks={f.marks}
+                                        onMarksChange={() => {}}
+                                        remarks={f.remarks}
+                                        onRemarksChange={(v) => handleRemarksChange(ev.id, v)}
+                                        errors={f.errors}
+                                      />
+                                      <div className="flex items-center gap-3 pt-2">
+                                        <button
+                                          type="submit"
+                                          disabled={submittingId === ev.id}
+                                          className="px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold text-[10px] hover:bg-blue-700 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed border-0 flex items-center gap-1.5"
+                                        >
+                                          {submittingId === ev.id && <Loader2 size={12} className="animate-spin" />}
+                                          {submittingId === ev.id ? 'Submitting…' : 'Submit Evaluation'}
+                                        </button>
+                                        <span className="text-[9px] text-slate-400 flex items-center gap-1">
+                                          <AlertTriangle size={10} /> Cannot be modified after submission
+                                        </span>
                                       </div>
-                                      <div className="sm:col-span-2">
-                                        <label className="block text-[10px] font-semibold text-slate-700 mb-1">
-                                          Remarks <span className="text-red-500">*</span>
-                                        </label>
-                                        <textarea
-                                          value={f.remarks}
-                                          onChange={e => setForm(ev.id, { remarks: e.target.value, errors: { ...f.errors, remarks: null } })}
-                                          placeholder="Provide detailed feedback..."
-                                          rows={2}
-                                          className={`w-full bg-white border rounded-lg px-3 py-2 text-xs outline-none transition-all focus:ring-1 resize-none ${f.errors.remarks ? 'border-red-400 focus:border-red-400 focus:ring-red-400' : 'border-line focus:border-blue-400 focus:ring-blue-400'}`}
-                                        />
-                                        {f.errors.remarks && <p className="text-[9px] text-red-500 font-medium mt-0.5">{f.errors.remarks}</p>}
-                                      </div>
-                                    </div>
-                                    <div className="flex items-center gap-3 pt-1">
-                                      <button
-                                        type="submit"
-                                        disabled={submittingId === ev.id}
-                                        className="px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold text-[10px] hover:bg-blue-700 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed border-0 flex items-center gap-1.5"
-                                      >
-                                        {submittingId === ev.id && <Loader2 size={12} className="animate-spin" />}
-                                        {submittingId === ev.id ? 'Submitting…' : 'Submit Evaluation'}
-                                      </button>
-                                      <span className="text-[9px] text-slate-400 flex items-center gap-1">
-                                        <AlertTriangle size={10} /> Cannot be modified after submission
-                                      </span>
-                                    </div>
-                                  </form>
+                                    </form>
+                                  </div>
                                 )}
                               </div>
                             );
@@ -268,13 +291,12 @@ const FacultyCommitteePhase1 = () => {
                     <th className="py-3.5 px-6">Group</th>
                     <th className="py-3.5 px-6">Committee</th>
                     <th className="py-3.5 px-6">Status</th>
-                    <th className="py-3.5 px-6 text-right">Action</th>
+                    <th className="py-3.5 px-6 text-right">Marks</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-line text-sm font-medium text-slate-900">
                   {evaluations.map(ev => {
                     const isDone = ev.status === 'Completed';
-                    const expanded = getForm(ev.id).expanded;
                     return (
                       <tr key={ev.id} className="hover:bg-blue-50/30 transition-colors">
                         <td className="py-4 px-6 text-slate-700 font-mono text-xs font-semibold">{ev.id}</td>
@@ -285,19 +307,8 @@ const FacultyCommitteePhase1 = () => {
                             {ev.status}
                           </span>
                         </td>
-                        <td className="py-4 px-6 text-right">
-                          {!isDone ? (
-                            <button
-                              onClick={() => setForm(ev.id, { expanded: !expanded })}
-                              className="px-3 py-1.5 rounded-lg bg-blue-600 text-white font-semibold text-[10px] hover:bg-blue-700 transition-all cursor-pointer border-0"
-                            >
-                              {expanded ? 'Cancel' : 'Evaluate'}
-                            </button>
-                          ) : (
-                            <span className="text-[10px] text-slate-400 font-semibold italic flex items-center gap-1 justify-end">
-                              <CheckCircle size={10} /> Submitted
-                            </span>
-                          )}
+                        <td className="py-4 px-6 text-right text-xs font-bold text-slate-700">
+                          {isDone ? `${ev.marks?.toFixed(1) ?? '—'} / ${rubric?.totalMarks ?? 9}` : '—'}
                         </td>
                       </tr>
                     );

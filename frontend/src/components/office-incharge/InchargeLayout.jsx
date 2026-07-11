@@ -127,8 +127,6 @@ const LayoutInner = () => {
   const navigate = useNavigate();
   const user = getCurrentUser() ?? null;
   const { currentPhase, loading } = usePhase();
-  const phase1Keys = ['registration', 'proposal_submission'];
-  const isPhase1 = currentPhase && phase1Keys.includes(currentPhase.key);
 
   const handleLogout = () => {
     logoutUser();
@@ -150,12 +148,17 @@ const LayoutInner = () => {
     { to: '/office-incharge/projects', icon: GitBranch, label: 'Project Directory', section: 'Records' },
     { to: '/office-incharge/student-reports', icon: GraduationCap, label: 'Student Records', section: 'Records' },
     { to: '/office-incharge/forwarded-proposals', icon: GitBranch, label: 'Forwarded Proposals', section: 'Records' },
-    { to: '/office-incharge/phase1-marks', icon: BarChart3, label: 'Phase 1 (10%) Marks', section: 'Marks' },
-    { to: '/office-incharge/phase2-marks', icon: BarChart3, label: 'Phase 2 (30%) Marks', section: 'Marks' },
+    { to: '/office-incharge/phase1-marks', icon: BarChart3, label: 'Phase 1 (10%) Marks', section: 'Marks', showPhaseKey: 'phase1_evaluation' },
+    { to: '/office-incharge/phase2-marks', icon: BarChart3, label: 'Phase 2 (30%) Marks', section: 'Marks', showPhaseKey: 'phase2_evaluation' },
+    { to: '/office-incharge/phase3-marks', icon: BarChart3, label: 'Phase 3 (60%) Marks', section: 'Marks', showPhaseKey: 'phase3_evaluation' },
+    { to: '/office-incharge/phase4-marks', icon: BarChart3, label: 'Phase 4 (100%) Marks', section: 'Marks', showPhaseKey: 'phase4_evaluation' },
     { to: '/office-incharge/final-marks', icon: ClipboardList, label: 'Final Calculated Marks', section: 'Marks' },
     { to: '/office-incharge/grievances', icon: Scale, label: 'Grievances & SLAs', section: 'Audit & Logs' },
     { to: '/office-incharge/audit-log', icon: History, label: 'System Audit Logs', section: 'Audit & Logs' },
-  ];
+  ].filter(link => {
+    if (!link.showPhaseKey) return true;
+    return currentPhase?.key === link.showPhaseKey;
+  });
 
   return (
     <div className="flex h-screen overflow-hidden relative bg-surface selection:bg-blue-100 selection:text-blue-900 font-poppins">

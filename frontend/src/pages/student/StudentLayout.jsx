@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Outlet, useNavigate, useLocation, Link } from 'react-router-dom';
 import { getUserInfo, logout } from '../../utils/app.utils';
-import apiClient from '../../api/apiClient';
+import { PhaseProvider, usePhase } from '../../contexts/PhaseContext';
 import { Archive, Bell, Calendar, ChevronDown, ChevronLeft, ChevronRight, Circle, ClipboardList, GraduationCap, Home, Lightbulb, Lock, LogOut, Menu, Shield, User, UserCircle, Users, X } from 'lucide-react';
 
-export default function DashboardLayout() {
+const StudentLayoutInner = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const user = getUserInfo() ?? null;
@@ -16,29 +16,34 @@ export default function DashboardLayout() {
   const path = location.pathname;
   const isLocked = !user.profileCompleted;
 
-  const [phaseSeq, setPhaseSeq] = useState(1);
-  const [phaseName, setPhaseName] = useState('Phase 1: Student Registration');
-  useEffect(() => {
-    apiClient.get('/phases').then(res => {
-      const phases = res.data?.data || [];
-      const active = phases.find(p => p.isActive);
-      if (active) {
-        setPhaseSeq(active.sequence);
-        setPhaseName(active.name);
-      }
-    }).catch(() => {});
-  }, []);
+  const { currentPhase } = usePhase();
+  const phaseSeq = currentPhase?.sequence ?? 1;
+  const phaseName = currentPhase?.name ?? '';
+
+  const phaseConfig = {
+    '/dashboard':            { minSeq: 1 },
+    '/profile':              { minSeq: 1 },
+    '/fyp-group':            { minSeq: 1, maxSeq: 3 },
+    '/supervisor-selection': { minSeq: 1, maxSeq: 3 },
+    '/committee':            { minSeq: 1 },
+    '/my-presentations':     { minSeq: 3, maxSeq: 8 },
+    '/phase1-remarks':       { minSeq: 5 },
+    '/phase2-remarks':       { minSeq: 7 },
+    '/phase3-remarks':       { minSeq: 10 },
+    '/phase4-remarks':       { minSeq: 12 },
+    '/project':              { minSeq: 2, maxSeq: 4 },
+    '/suggestions':          { minSeq: 1 },
+    '/task-manager':         { minSeq: 4 },
+    '/past-projects':        { minSeq: 1 },
+  };
 
   const phaseVisible = (itemId) => {
-    const lookup = {
-      '/dashboard': 1, '/profile': 1, '/fyp-group': 1, '/supervisor-selection': 1,
-      '/task-manager': 1, '/past-projects': 1, '/suggestions': 1, '/committee': 1,
-      '/phase1-remarks': 5,
-      '/phase2-remarks': 7
-    };
-    const match = Object.entries(lookup).find(([key]) => itemId.startsWith(key));
-    const min = match ? match[1] : (itemId.startsWith('/project') ? 2 : 1);
-    return phaseSeq >= min;
+    const match = Object.entries(phaseConfig).find(([key]) => itemId.startsWith(key));
+    if (!match) return true;
+    const { minSeq, maxSeq } = match[1];
+    if (phaseSeq < minSeq) return false;
+    if (maxSeq && phaseSeq > maxSeq) return false;
+    return true;
   };
 
   useEffect(() => {
@@ -60,7 +65,9 @@ export default function DashboardLayout() {
     ]},
     { section: 'Evaluation Remarks', items: [
       { id: '/phase1-remarks', label: 'Phase 1 (10%)', icon: ClipboardList },
-      { id: '/phase2-remarks', label: 'Phase 2 (30%)', icon: ClipboardList }
+      { id: '/phase2-remarks', label: 'Phase 2 (30%)', icon: ClipboardList },
+      { id: '/phase3-remarks', label: 'Phase 3 (60%)', icon: ClipboardList },
+      { id: '/phase4-remarks', label: 'Phase 4 (100%)', icon: ClipboardList }
     ]},
     { section: 'Project', items: [
       { id: '/project/new', label: 'Group Ideas', icon: Lightbulb },
@@ -84,6 +91,8 @@ export default function DashboardLayout() {
   else if (path.includes('/committee')) pageTitle = 'My Committee';
   else if (path.includes('/phase1-remarks')) pageTitle = 'Phase 1 Remarks';
   else if (path.includes('/phase2-remarks')) pageTitle = 'Phase 2 Remarks';
+  else if (path.includes('/phase3-remarks')) pageTitle = 'Phase 3 Remarks';
+  else if (path.includes('/phase4-remarks')) pageTitle = 'Phase 4 Remarks';
   else if (path.includes('/my-presentations')) pageTitle = 'My Presentations';
 
   return (
@@ -251,4 +260,12 @@ export default function DashboardLayout() {
       </div>
     </div>
   );
-}
+};
+
+const DashboardLayout = () => (
+  <PhaseProvider>
+    <StudentLayoutInner />
+  </PhaseProvider>
+);
+
+export default DashboardLayout;

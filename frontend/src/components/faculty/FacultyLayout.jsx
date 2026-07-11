@@ -3,6 +3,7 @@ import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { showToast as toast } from '../AppToast';
 import { logoutUser, getCurrentUser } from '../../services/auth.service';
 import { getFacultyDashboardStats } from '../../services/faculty.service';
+import { PhaseProvider, usePhase } from '../../contexts/PhaseContext';
 import { SessionProvider, useSession } from '../../contexts/SessionContext';
 import { Bell, Calendar, ChevronLeft, ChevronRight, ChevronDown, ClipboardList, Crown, FileSignature, GitBranch, GraduationCap, Landmark, Lightbulb, Lightbulb as IdeaIcon, Lock, LogOut, Menu, Presentation, Star, Tags, X } from 'lucide-react';
 
@@ -50,6 +51,9 @@ const FacultyLayoutInner = () => {
   const [showNotif, setShowNotif] = useState(false);
   const [hasCommittee, setHasCommittee] = useState(false);
   const navigate = useNavigate();
+  const { currentPhase } = usePhase();
+  const phaseSeq = currentPhase?.sequence ?? 0;
+  const phaseKey = currentPhase?.key ?? '';
 
   const user = getCurrentUser() ?? null;
 
@@ -67,26 +71,33 @@ const FacultyLayoutInner = () => {
 
   const roleLabel = 'Faculty Portal';
 
-  const navLinks = [
+  const allLinks = [
     { to: '/faculty/dashboard', icon: Presentation, label: 'Dashboard', section: 'Overview' },
     ...(!hasCommittee ? [{ to: '/faculty/profile', icon: Tags, label: 'Committee Suggestion', section: 'Profile & Schedule' }] : []),
     { to: '/faculty/availability', icon: Calendar, label: 'Availability', section: 'Profile & Schedule' },
-    { to: '/faculty/proposals', icon: FileSignature, label: 'Supervision Requests', section: 'Supervision' },
-    { to: '/faculty/group-proposals', icon: Lightbulb, label: 'Group Proposals', section: 'Supervision' },
-    { to: '/faculty/supervision', icon: GitBranch, label: 'Supervised Groups', section: 'Supervision' },
-    { to: '/faculty/suggestions', icon: IdeaIcon, label: 'Suggested Ideas', section: 'Supervision' },
-    { to: '/faculty/phase1-evaluation', icon: GraduationCap, label: 'Phase 1 (10%)', section: 'Supervisor Evaluations' },
-    { to: '/faculty/phase2-evaluation', icon: GraduationCap, label: 'Phase 2 (30%)', section: 'Supervisor Evaluations' },
-    { to: '/faculty/phase3-evaluation', icon: GraduationCap, label: 'Phase 3 (60%)', section: 'Supervisor Evaluations' },
-    { to: '/faculty/phase4-evaluation', icon: GraduationCap, label: 'Phase 4 (100%)', section: 'Supervisor Evaluations' },
-    { to: '/faculty/committee-phase1', icon: Star, label: 'Committee Phase 1', section: 'Committee Evaluations' },
-    { to: '/faculty/committee-phase2', icon: Star, label: 'Committee Phase 2', section: 'Committee Evaluations' },
-    { to: '/faculty/committee-phase3', icon: Star, label: 'Committee Phase 3', section: 'Committee Evaluations' },
-    { to: '/faculty/committee-phase4', icon: Star, label: 'Committee Phase 4', section: 'Committee Evaluations' },
+    { to: '/faculty/proposals', icon: FileSignature, label: 'Supervision Requests', section: 'Supervision', maxSeq: 3 },
+    { to: '/faculty/group-proposals', icon: Lightbulb, label: 'Group Proposals', section: 'Supervision', minSeq: 2, maxSeq: 4 },
+    { to: '/faculty/supervision', icon: GitBranch, label: 'Supervised Groups', section: 'Supervision', minSeq: 4 },
+    { to: '/faculty/suggestions', icon: IdeaIcon, label: 'Suggested Ideas', section: 'Supervision', minSeq: 1 },
+    { to: '/faculty/phase1-evaluation', icon: GraduationCap, label: 'Phase 1 (10%)', section: 'Supervisor Evaluations', showPhaseKey: 'phase1_evaluation' },
+    { to: '/faculty/phase2-evaluation', icon: GraduationCap, label: 'Phase 2 (30%)', section: 'Supervisor Evaluations', showPhaseKey: 'phase2_evaluation' },
+    { to: '/faculty/phase3-evaluation', icon: GraduationCap, label: 'Phase 3 (60%)', section: 'Supervisor Evaluations', showPhaseKey: 'phase3_evaluation' },
+    { to: '/faculty/phase4-evaluation', icon: GraduationCap, label: 'Phase 4 (100%)', section: 'Supervisor Evaluations', showPhaseKey: 'phase4_evaluation' },
+    { to: '/faculty/committee-phase1', icon: Star, label: 'Committee Phase 1', section: 'Committee Evaluations', showPhaseKey: 'phase1_evaluation' },
+    { to: '/faculty/committee-phase2', icon: Star, label: 'Committee Phase 2', section: 'Committee Evaluations', showPhaseKey: 'phase2_evaluation' },
+    { to: '/faculty/committee-phase3', icon: Star, label: 'Committee Phase 3', section: 'Committee Evaluations', showPhaseKey: 'phase3_evaluation' },
+    { to: '/faculty/committee-phase4', icon: Star, label: 'Committee Phase 4', section: 'Committee Evaluations', showPhaseKey: 'phase4_evaluation' },
     { to: '/faculty/evaluations', icon: ClipboardList, label: 'Scorecard Entry', section: 'Committee Evaluations' },
     { to: '/faculty/messaging', icon: Tags, label: 'Messaging', section: 'Communication' },
     { to: '/faculty/my-presentations', icon: Calendar, label: 'My Presentations', section: 'Communication' },
   ];
+
+  const navLinks = allLinks.filter(link => {
+    if (link.showPhaseKey && phaseKey !== link.showPhaseKey) return false;
+    if (link.minSeq && phaseSeq < link.minSeq) return false;
+    if (link.maxSeq && phaseSeq > link.maxSeq) return false;
+    return true;
+  });
 
   return (
     <div className="flex h-screen overflow-hidden relative bg-surface selection:bg-blue-100 selection:text-blue-900 font-poppins">
@@ -216,9 +227,11 @@ const FacultyLayoutInner = () => {
 };
 
 const FacultyLayout = () => (
-  <SessionProvider>
-    <FacultyLayoutInner />
-  </SessionProvider>
+  <PhaseProvider>
+    <SessionProvider>
+      <FacultyLayoutInner />
+    </SessionProvider>
+  </PhaseProvider>
 );
 
 export default FacultyLayout;

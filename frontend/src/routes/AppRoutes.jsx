@@ -66,11 +66,17 @@ import FacultyCommitteePhase3 from '../pages/faculty/FacultyCommitteePhase3';
 import FacultyCommitteePhase4 from '../pages/faculty/FacultyCommitteePhase4';
 import StudentPhase1Remarks from '../pages/student/StudentPhase1Remarks';
 import StudentPhase2Remarks from '../pages/student/StudentPhase2Remarks';
+import StudentPhase3Remarks from '../pages/student/StudentPhase3Remarks';
+import StudentPhase4Remarks from '../pages/student/StudentPhase4Remarks';
 import InchargePhase1Marks from '../pages/office-incharge/InchargePhase1Marks';
 import InchargePhase2Marks from '../pages/office-incharge/InchargePhase2Marks';
+import InchargePhase3Marks from '../pages/office-incharge/InchargePhase3Marks';
+import InchargePhase4Marks from '../pages/office-incharge/InchargePhase4Marks';
 import InchargeFinalMarks from '../pages/office-incharge/InchargeFinalMarks';
 import AssistantPhase1Marks from '../pages/office-assistant/AssistantPhase1Marks';
 import AssistantPhase2Marks from '../pages/office-assistant/AssistantPhase2Marks';
+import AssistantPhase3Marks from '../pages/office-assistant/AssistantPhase3Marks';
+import AssistantPhase4Marks from '../pages/office-assistant/AssistantPhase4Marks';
 import AssistantFinalMarks from '../pages/office-assistant/AssistantFinalMarks';
 import InchargeLayout from '../components/office-incharge/InchargeLayout';
 import InchargeDashboard from '../pages/office-incharge/InchargeDashboard';
@@ -128,6 +134,8 @@ const AppRoutes = () => {
                 <Route path="/committee" element={<StudentCommittee />} />
                 <Route path="/phase1-remarks" element={<StudentPhase1Remarks />} />
                 <Route path="/phase2-remarks" element={<StudentPhase2Remarks />} />
+                <Route path="/phase3-remarks" element={<StudentPhase3Remarks />} />
+                <Route path="/phase4-remarks" element={<StudentPhase4Remarks />} />
                 <Route path="/my-presentations" element={<MyPresentations />} />
             </Route>
 
@@ -164,6 +172,8 @@ const AppRoutes = () => {
                 <Route path="forwarded-proposals" element={<InchargeForwardedProposals />} />
                 <Route path="phase1-marks" element={<AssistantPhase1Marks />} />
                 <Route path="phase2-marks" element={<AssistantPhase2Marks />} />
+                <Route path="phase3-marks" element={<AssistantPhase3Marks />} />
+                <Route path="phase4-marks" element={<AssistantPhase4Marks />} />
                 <Route path="final-marks" element={<AssistantFinalMarks />} />
             </Route>
 
@@ -210,6 +220,8 @@ const AppRoutes = () => {
                 <Route path="forwarded-proposals" element={<InchargeForwardedProposals />} />
                 <Route path="phase1-marks" element={<InchargePhase1Marks />} />
                 <Route path="phase2-marks" element={<InchargePhase2Marks />} />
+                <Route path="phase3-marks" element={<InchargePhase3Marks />} />
+                <Route path="phase4-marks" element={<InchargePhase4Marks />} />
                 <Route path="final-marks" element={<InchargeFinalMarks />} />
             </Route>
 

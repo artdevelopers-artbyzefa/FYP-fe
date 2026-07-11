@@ -152,6 +152,8 @@ export const PHASE3_SUPERVISOR_GROUPS_URL = '/phase3/supervisor/groups';
 export const PHASE3_SUPERVISOR_EVALUATE_URL = '/phase3/supervisor/evaluate';
 export const PHASE3_COMMITTEE_EVALUATIONS_URL = '/phase3/committee/evaluations';
 export const PHASE3_COMMITTEE_EVALUATE_URL = '/phase3/committee/evaluate';
+export const PHASE3_STUDENT_REMARKS_URL = '/phase3/remarks';
+export const PHASE3_MARKS_URL = '/phase3/marks';
 
 /**
  * Phase 4 (100%) Evaluation Endpoints
@@ -160,6 +162,8 @@ export const PHASE4_SUPERVISOR_GROUPS_URL = '/phase4/supervisor/groups';
 export const PHASE4_SUPERVISOR_EVALUATE_URL = '/phase4/supervisor/evaluate';
 export const PHASE4_COMMITTEE_EVALUATIONS_URL = '/phase4/committee/evaluations';
 export const PHASE4_COMMITTEE_EVALUATE_URL = '/phase4/committee/evaluate';
+export const PHASE4_STUDENT_REMARKS_URL = '/phase4/remarks';
+export const PHASE4_MARKS_URL = '/phase4/marks';
 
 /**
  * Final Calculated Marks Endpoints

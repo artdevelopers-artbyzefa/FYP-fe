@@ -2,12 +2,13 @@ import React, { useState, useContext } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { showToast as toast } from '../AppToast';
 import { logoutUser, getCurrentUser } from '../../services/auth.service';
+import { usePhase } from '../../contexts/PhaseContext';
 import { Archive, ArrowRight, Award, BarChart3, Bell, Calendar, CheckCircle, ChevronLeft, ChevronRight, ClipboardList, File, GitBranch, GraduationCap, Home, Layers, Lock, LogOut, Megaphone, Menu, Presentation, Shield, User, UserCog, Users, X } from 'lucide-react';
-import PhaseContext from '../../contexts/PhaseContext';
 
 const AssistantLayout = () => {
-  const phaseCtx = useContext(PhaseContext);
-  const currentPhase = phaseCtx?.currentPhase;
+  const { currentPhase } = usePhase();
+  const phaseKey = currentPhase?.key ?? '';
+  const phaseSeq = currentPhase?.sequence ?? 0;
   const phase1Keys = ['registration', 'proposal_submission', 'proposal_defense', 'phase1_development', 'phase1_evaluation'];
   const isPhase1 = currentPhase && phase1Keys.includes(currentPhase.key);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -38,11 +39,16 @@ const AssistantLayout = () => {
     { to: '/office-assistant/timetable', icon: Calendar, label: 'Timetable Management', section: 'Committees & Scheduling' },
     { to: '/office-assistant/meeting-timetable', icon: Users, label: 'Meeting Timetable', section: 'Committees & Scheduling' },
     { to: '/office-assistant/external', icon: User, label: 'Industry Supervisors', section: 'Committees & Scheduling', locked: true },
-    { to: '/office-assistant/phase1-marks', icon: BarChart3, label: 'Phase 1 (10%) Marks', section: 'Marks & Results' },
-    { to: '/office-assistant/phase2-marks', icon: BarChart3, label: 'Phase 2 (30%) Marks', section: 'Marks & Results' },
+    { to: '/office-assistant/phase1-marks', icon: BarChart3, label: 'Phase 1 (10%) Marks', section: 'Marks & Results', showPhaseKey: 'phase1_evaluation' },
+    { to: '/office-assistant/phase2-marks', icon: BarChart3, label: 'Phase 2 (30%) Marks', section: 'Marks & Results', showPhaseKey: 'phase2_evaluation' },
+    { to: '/office-assistant/phase3-marks', icon: BarChart3, label: 'Phase 3 (60%) Marks', section: 'Marks & Results', showPhaseKey: 'phase3_evaluation' },
+    { to: '/office-assistant/phase4-marks', icon: BarChart3, label: 'Phase 4 (100%) Marks', section: 'Marks & Results', showPhaseKey: 'phase4_evaluation' },
     { to: '/office-assistant/final-marks', icon: ClipboardList, label: 'Final Calculated Marks', section: 'Marks & Results' },
     { to: '/office-assistant/results', icon: Award, label: 'Results & Printing', section: 'Marks & Results', locked: true },
-  ];
+  ].filter(link => {
+    if (link.showPhaseKey && phaseKey !== link.showPhaseKey) return false;
+    return true;
+  });
 
   return (
     <div className="flex h-screen overflow-hidden relative bg-surface selection:bg-blue-100 selection:text-blue-900 font-poppins">

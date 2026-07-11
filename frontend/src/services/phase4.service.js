@@ -3,7 +3,9 @@ import {
   PHASE4_SUPERVISOR_GROUPS_URL,
   PHASE4_SUPERVISOR_EVALUATE_URL,
   PHASE4_COMMITTEE_EVALUATIONS_URL,
-  PHASE4_COMMITTEE_EVALUATE_URL
+  PHASE4_COMMITTEE_EVALUATE_URL,
+  PHASE4_STUDENT_REMARKS_URL,
+  PHASE4_MARKS_URL
 } from '../utils/constants/api-url.constant';
 
 export const getSupervisorPhase4Groups = async () => {
@@ -23,5 +25,15 @@ export const getCommitteePhase4Evaluations = async () => {
 
 export const submitCommitteePhase4Evaluation = async (payload) => {
   const res = await apiClient.post(PHASE4_COMMITTEE_EVALUATE_URL, payload);
+  return res.data;
+};
+
+export const getStudentPhase4Remarks = async () => {
+  const res = await apiClient.get(PHASE4_STUDENT_REMARKS_URL);
+  return res.data;
+};
+
+export const getPhase4Marks = async () => {
+  const res = await apiClient.get(PHASE4_MARKS_URL);
   return res.data;
 };

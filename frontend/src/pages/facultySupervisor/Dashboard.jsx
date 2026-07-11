@@ -74,7 +74,7 @@ export default function Dashboard() {
 
           <button 
             onClick={() => navigate('/faculty/evaluations')}
-            className="flex items-center justify-between gap-4 bg-blue-600 text-white font-semibold px-5 py-3 rounded-xl shadow-lg transition-all duration-200 hover:bg-blue-700 hover:shadow-xl hover:-translate-y-0.5 group text-sm w-full md:w-56 focus-visible:ring-2 focus-visible:ring-white"
+            className="flex items-center justify-between gap-4 bg-btn text-white font-semibold px-5 py-3 rounded-xl shadow-lg transition-all duration-200 hover:bg-btn-hover hover:shadow-xl hover:-translate-y-0.5 group text-sm w-full md:w-56 focus-visible:ring-2 focus-visible:ring-white"
           >
             <div className="flex items-center gap-2.5">
               <EvaluationsIcon className="w-4 h-4 text-white" />

@@ -174,7 +174,7 @@ const FacultyPhase1Evaluation = () => {
                   }`}
                 >
                   {isSelected && (
-                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center shadow-md z-10">
+                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-btn rounded-full flex items-center justify-center shadow-md z-10">
                       <Check size={14} className="text-white" strokeWidth={3} />
                     </div>
                   )}
@@ -276,7 +276,7 @@ const FacultyPhase1Evaluation = () => {
                     <button
                       type="submit"
                       disabled={submitting}
-                      className="px-5 py-2.5 rounded-lg bg-blue-600 text-white font-semibold text-[10px] hover:bg-blue-700 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed border-0 flex items-center gap-1.5"
+                      className="px-5 py-2.5 rounded-lg bg-btn text-white font-semibold text-[10px] hover:bg-btn-hover transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed border-0 flex items-center gap-1.5"
                     >
                       {submitting && <Loader2 size={12} className="animate-spin" />}
                       {submitting ? 'Submitting…' : 'Submit Evaluation'}

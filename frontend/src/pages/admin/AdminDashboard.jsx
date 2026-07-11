@@ -334,7 +334,7 @@ export default function AdminDashboard() {
                     <h2 className="text-xl font-black text-slate-900">User Account Management &amp; Credentials</h2>
                     <p className="text-xs text-slate-500 mt-0.5 font-medium">Create new user accounts, assign roles, and trigger password resets</p>
                   </div>
-                  <button onClick={() => setCreateUserOpen(true)} className="px-5 py-2.5 bg-blue-600 text-white hover:bg-blue-600 rounded-xl text-xs font-bold shadow-lg transition-all flex items-center gap-2 cursor-pointer">
+                  <button onClick={() => setCreateUserOpen(true)} className="px-5 py-2.5 bg-btn text-white hover:bg-btn-hover rounded-xl text-xs font-bold shadow-lg transition-all flex items-center gap-2 cursor-pointer">
                     <Plus className="w-4 h-4" /> Create New User
                   </button>
                 </div>
@@ -566,7 +566,7 @@ export default function AdminDashboard() {
               </div>
               <div className="flex justify-end gap-3 pt-4 border-t border-line">
                 <button type="button" onClick={() => setCreateUserOpen(false)} className="px-5 py-2.5 rounded-xl text-xs font-bold text-slate-900 hover:bg-white transition-colors cursor-pointer">Cancel</button>
-                <button type="submit" className="bg-blue-600 hover:bg-blue-600 text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow-lg transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none">Create Account</button>
+                <button type="submit" className="bg-btn hover:bg-btn-hover text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow-lg transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none">Create Account</button>
               </div>
             </form>
           </div>

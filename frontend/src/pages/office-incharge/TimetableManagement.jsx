@@ -255,7 +255,7 @@ export default function TimetableManagement() {
             </div>
           </div>
           <button onClick={() => setShowCreate(!showCreate)}
-            className="flex items-center gap-2 px-4 py-2.5 bg-blue-600 text-white text-xs font-bold rounded-xl hover:bg-blue-700 cursor-pointer border-0 shadow-sm">
+            className="flex items-center gap-2 px-4 py-2.5 bg-btn text-white text-xs font-bold rounded-xl hover:bg-btn-hover cursor-pointer border-0 shadow-sm">
             <Plus size={15} /> New Schedule
           </button>
         </div>
@@ -299,7 +299,7 @@ export default function TimetableManagement() {
               <button type="button" onClick={() => setShowCreate(false)}
                 className="px-5 py-2.5 text-xs font-bold text-slate-600 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 cursor-pointer transition-all">Cancel</button>
               <button type="submit"
-                className="px-5 py-2.5 text-xs font-bold text-white bg-blue-600 rounded-xl hover:bg-blue-700 cursor-pointer border-0 transition-all shadow-sm">Create</button>
+                className="px-5 py-2.5 text-xs font-bold text-white bg-btn rounded-xl hover:bg-btn-hover cursor-pointer border-0 transition-all shadow-sm">Create</button>
             </div>
           </form>
         )}
@@ -452,7 +452,7 @@ export default function TimetableManagement() {
               <div className="flex flex-wrap gap-2">
                 {!slots.length ? (
                   <button onClick={() => handleGenerate(selectedId)}
-                    className="flex items-center gap-1.5 px-4 py-2 bg-blue-600 text-white text-[10px] font-bold rounded-xl hover:bg-blue-700 cursor-pointer border-0 shadow-sm">
+                    className="flex items-center gap-1.5 px-4 py-2 bg-btn text-white text-[10px] font-bold rounded-xl hover:bg-btn-hover cursor-pointer border-0 shadow-sm">
                     <RefreshCw size={13} /> Generate Slots
                   </button>
                 ) : (
@@ -842,7 +842,7 @@ function AssignPanel({ slot, committees, groups, editMode, onClose, onAssign, on
       </div>
       <div className="flex justify-end gap-2 pt-2">
         <button onClick={handleConfirm}
-          className="px-6 py-2.5 bg-blue-600 text-white text-xs font-bold rounded-xl hover:bg-blue-700 cursor-pointer border-0 transition-all shadow-sm flex items-center gap-2">
+          className="px-6 py-2.5 bg-btn text-white text-xs font-bold rounded-xl hover:bg-btn-hover cursor-pointer border-0 transition-all shadow-sm flex items-center gap-2">
           <CheckCircle size={14} /> Confirm Assignment
         </button>
       </div>

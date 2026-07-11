@@ -44,7 +44,7 @@ const AssistantResults = () => {
           <button onClick={() => window.print()} className="bg-white border border-line hover:border-blue-500 text-slate-900 hover:text-blue-600 px-5 py-2.5 rounded-xl font-bold text-sm shadow-sm transition-all flex items-center gap-2 cursor-pointer">
             <Printer size={15} /> Print Report
           </button>
-          <button onClick={handleExportPDF} className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-sm transition-all flex items-center gap-2 cursor-pointer">
+          <button onClick={handleExportPDF} className="bg-btn hover:bg-btn-hover text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-sm transition-all flex items-center gap-2 cursor-pointer">
             <FileText size={15} /> Export as PDF
           </button>
         </div>

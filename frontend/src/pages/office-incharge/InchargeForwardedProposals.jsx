@@ -351,7 +351,7 @@ export default function InchargeForwardedProposals() {
               </button>
               {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
                 <button key={p} onClick={() => setPage(p)}
-                  className={`w-9 h-9 rounded-xl text-xs font-bold transition-all cursor-pointer border ${page === p ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-slate-600 border-line hover:bg-blue-50'}`}>
+                  className={`w-9 h-9 rounded-xl text-xs font-bold transition-all cursor-pointer border ${page === p ? 'bg-btn text-white border-btn' : 'bg-white text-slate-600 border-line hover:bg-blue-50'}`}>
                   {p}
                 </button>
               ))}

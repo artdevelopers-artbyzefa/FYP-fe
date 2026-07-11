@@ -263,7 +263,7 @@ export default function AssistantProjects() {
         {TABS.map(t => (
           <button key={t.key} onClick={() => setTab(t.key)}
             className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer border ${
-              tab === t.key ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-slate-600 border-gray-200 hover:bg-blue-50'
+              tab === t.key ? 'bg-btn text-white border-btn' : 'bg-white text-slate-600 border-gray-200 hover:bg-blue-50'
             }`}>{t.label}</button>
         ))}
       </div>

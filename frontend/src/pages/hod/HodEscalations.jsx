@@ -132,7 +132,7 @@ const HodEscalations = () => {
                   <button
                     onClick={() => handleMandate(esc.id)}
                     disabled={actionInProgress === esc.id}
-                    className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold transition-all cursor-pointer shadow-sm flex items-center gap-2 text-sm disabled:opacity-50 focus-visible:ring-2 focus-visible:ring-blue-500"
+                    className="px-6 py-3 bg-btn hover:bg-btn-hover text-white rounded-xl font-semibold transition-all cursor-pointer shadow-sm flex items-center gap-2 text-sm disabled:opacity-50 focus-visible:ring-2 focus-visible:ring-blue-500"
                   >
                     <CheckCircle size={16} /> Mandate Re-evaluation
                   </button>
@@ -179,7 +179,7 @@ const HodEscalations = () => {
               </div>
               <div className="flex justify-end gap-3 pt-4 border-t border-line">
                 <button type="button" onClick={() => setIsModalOpen(false)} className="px-5 py-2.5 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-50 transition-colors cursor-pointer">Cancel</button>
-                <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow-sm transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500">Confirm Binding Dismissal</button>
+                <button type="submit" className="bg-btn hover:bg-btn-hover text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow-sm transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500">Confirm Binding Dismissal</button>
               </div>
             </form>
           </motion.div>

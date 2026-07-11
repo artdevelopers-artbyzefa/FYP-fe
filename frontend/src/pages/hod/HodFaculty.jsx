@@ -63,7 +63,7 @@ const HodFaculty = () => {
                   <td className="py-4 px-6 text-slate-500 text-xs font-bold">{f.supervisionLoad} group{f.supervisionLoad !== 1 ? 's' : ''}</td>
                   <td className="py-4 px-6"><span className={`font-bold text-xs px-2.5 py-1 rounded-lg border tracking-wider ${f.isactive ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-rose-50 text-rose-600 border-rose-200'}`}>{f.isactive ? 'Active' : 'Inactive'}</span></td>
                   <td className="py-4 px-6 text-right">
-                    <button onClick={() => { setSelected(f); setView('detail'); }} className="px-3 py-1.5 rounded-lg bg-blue-600 text-white text-[10px] font-bold hover:bg-blue-700 transition-all cursor-pointer border-0 flex items-center gap-1 ml-auto">
+                    <button onClick={() => { setSelected(f); setView('detail'); }} className="px-3 py-1.5 rounded-lg bg-btn text-white text-[10px] font-bold hover:bg-btn-hover transition-all cursor-pointer border-0 flex items-center gap-1 ml-auto">
                       <User size={11} /> View Profile
                     </button>
                   </td>
@@ -79,7 +79,7 @@ const HodFaculty = () => {
           <span className="text-xs font-bold text-slate-400">{total} total faculty</span>
           <div className="flex items-center gap-2">
             <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page <= 1} className="p-2 rounded-lg border border-line text-slate-400 hover:bg-blue-50 disabled:opacity-30 cursor-pointer"><ChevronLeft size={16} /></button>
-            {Array.from({ length: Math.min(totalPages, 7) }, (_, i) => { const start = Math.max(1, Math.min(page - 3, totalPages - 6)); const p = start + i; if (p > totalPages) return null; return <button key={p} onClick={() => setPage(p)} className={`w-8 h-8 rounded-lg text-xs font-bold transition-all cursor-pointer ${p === page ? 'bg-blue-600 text-white' : 'border border-line text-slate-500 hover:bg-blue-50'}`}>{p}</button>; })}
+            {Array.from({ length: Math.min(totalPages, 7) }, (_, i) => { const start = Math.max(1, Math.min(page - 3, totalPages - 6)); const p = start + i; if (p > totalPages) return null; return <button key={p} onClick={() => setPage(p)} className={`w-8 h-8 rounded-lg text-xs font-bold transition-all cursor-pointer ${p === page ? 'bg-btn text-white' : 'border border-line text-slate-500 hover:bg-blue-50'}`}>{p}</button>; })}
             <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page >= totalPages} className="p-2 rounded-lg border border-line text-slate-400 hover:bg-blue-50 disabled:opacity-30 cursor-pointer"><ChevronRight size={16} /></button>
           </div>
         </motion.div>
@@ -130,7 +130,7 @@ function FacultyDetail({ faculty, onBack, onUpdate }) {
               {detail.isactive ? <span className="flex items-center gap-1 text-emerald-600"><CheckCircle size={12} /> Active</span> : <span className="flex items-center gap-1 text-slate-400"><XCircle size={12} /> Inactive</span>}
             </div>
           </div>
-          <button onClick={() => setEditing(!editing)} className="px-4 py-2 bg-blue-600 text-white text-xs font-bold rounded-xl hover:bg-blue-700 transition-all cursor-pointer border-0 flex items-center gap-1.5"><Pencil size={12} /> {editing ? 'Cancel' : 'Edit'}</button>
+          <button onClick={() => setEditing(!editing)} className="px-4 py-2 bg-btn text-white text-xs font-bold rounded-xl hover:bg-btn-hover transition-all cursor-pointer border-0 flex items-center gap-1.5"><Pencil size={12} /> {editing ? 'Cancel' : 'Edit'}</button>
         </div>
       </motion.div>
 
@@ -144,7 +144,7 @@ function FacultyDetail({ faculty, onBack, onUpdate }) {
           </div>
           <div className="flex justify-end gap-3 pt-4 border-t border-line">
             <button type="button" onClick={() => setEditing(false)} className="px-5 py-2.5 rounded-xl text-xs font-bold text-slate-900 border border-line hover:bg-gray-50 cursor-pointer">Cancel</button>
-            <button type="submit" disabled={submitting} className="px-6 py-2.5 bg-blue-600 text-white rounded-xl text-xs font-bold hover:bg-blue-700 transition-all cursor-pointer disabled:opacity-50">{submitting ? 'Saving...' : 'Save Changes'}</button>
+            <button type="submit" disabled={submitting} className="px-6 py-2.5 bg-btn text-white rounded-xl text-xs font-bold hover:bg-btn-hover transition-all cursor-pointer disabled:opacity-50">{submitting ? 'Saving...' : 'Save Changes'}</button>
           </div>
         </motion.form>
       ) : (
@@ -164,7 +164,7 @@ function FacultyDetail({ faculty, onBack, onUpdate }) {
                         <span>Leader: {g.leader}</span>
                         {g.memberCount > 0 && <><span>|</span> <Users size={10} /> {g.memberCount} members</>}
                       </div>
-                      {g.progress > 0 && <div className="mt-2 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full bg-blue-600 rounded-full" style={{ width: `${g.progress}%` }} /></div>}
+                      {g.progress > 0 && <div className="mt-2 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full bg-btn rounded-full" style={{ width: `${g.progress}%` }} /></div>}
                     </div>
                   ))}
                 </div>
@@ -271,7 +271,7 @@ function GroupDetail({ group, onBack }) {
 
           <div className="bg-white rounded-2xl border border-line p-6 shadow-sm">
             <h5 className="text-xs font-bold text-slate-900 tracking-wider mb-4">Progress</h5>
-            <div className="flex items-center gap-3"><div className="flex-1 h-2.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full bg-blue-600 rounded-full" style={{ width: `${group.progress || 0}%` }} /></div><span className="text-sm font-black text-slate-900">{group.progress || 0}%</span></div>
+            <div className="flex items-center gap-3"><div className="flex-1 h-2.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full bg-btn rounded-full" style={{ width: `${group.progress || 0}%` }} /></div><span className="text-sm font-black text-slate-900">{group.progress || 0}%</span></div>
           </div>
         </div>
       </motion.div>

@@ -181,7 +181,7 @@ export default function InchargeRubrics() {
           <p className="text-sm font-medium mt-0.5" style={{ color: TX.muted }}>View published rubrics, create new ones, and export with different themes.</p>
         </div>
         <button onClick={() => { setShowForm(!showForm); if (!showForm) { setRubricName(''); setCriteria([EMPTY()]); setEditingId(null); } }}
-          className={`px-5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer border-0 ${showForm ? 'bg-gray-100 text-gray-600' : 'bg-blue-600 text-white hover:bg-blue-700'}`}>
+          className={`px-5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer border-0 ${showForm ? 'bg-gray-100 text-gray-600' : 'bg-btn text-white hover:bg-btn-hover'}`}>
           {showForm ? 'Cancel' : 'Create Rubric'}
         </button>
       </div>

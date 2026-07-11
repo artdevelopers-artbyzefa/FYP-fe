@@ -556,7 +556,7 @@ function TaskSidePanel({ task, onClose, onSave, onDelete, visible, assigneeOptio
                   disabled={!dirty || saving}
                   className={`w-full py-2.5 rounded-lg text-[13px] font-semibold transition-all cursor-pointer ${
                     dirty && !saving
-                      ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                      ? 'bg-btn hover:bg-btn-hover text-white'
                       : 'bg-slate-100 text-slate-400 cursor-not-allowed'
                   }`}
                 >
@@ -912,7 +912,7 @@ export default function TaskManager() {
             </div>
             <button
               onClick={() => setShowQuickAdd(true)}
-              className="flex items-center gap-1.5 px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-[13px] font-semibold rounded-lg transition-colors cursor-pointer"
+              className="flex items-center gap-1.5 px-3.5 py-2 bg-btn hover:bg-btn-hover text-white text-[13px] font-semibold rounded-lg transition-colors cursor-pointer"
             >
               <Plus size={16} strokeWidth={2} />
               New Task
@@ -995,7 +995,7 @@ export default function TaskManager() {
                 <button
                   onClick={handleCreateTask}
                   disabled={!quickTitle.trim()}
-                  className="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white text-[13px] font-semibold rounded-lg transition-colors cursor-pointer"
+                  className="px-4 py-2.5 bg-btn hover:bg-btn-hover disabled:bg-slate-300 disabled:cursor-not-allowed text-white text-[13px] font-semibold rounded-lg transition-colors cursor-pointer"
                 >
                   Add
                 </button>

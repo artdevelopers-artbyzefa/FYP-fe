@@ -45,13 +45,13 @@ export default function RubricBuilder() {
             <div className="flex gap-2">
               <button 
                 onClick={() => setRubricType('proposal')}
-                className={`px-4 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${rubricType === 'proposal' ? 'bg-blue-600 text-white shadow-md' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                className={`px-4 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${rubricType === 'proposal' ? 'bg-btn text-white shadow-md' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
               >
                 Proposal Rubric
               </button>
               <button 
                 onClick={() => setRubricType('fyp')}
-                className={`px-4 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${rubricType === 'fyp' ? 'bg-blue-600 text-white shadow-md' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                className={`px-4 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${rubricType === 'fyp' ? 'bg-btn text-white shadow-md' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
               >
                 FYP Evaluation Rubric
               </button>
@@ -104,7 +104,7 @@ export default function RubricBuilder() {
             </div>
 
             <div className="pt-4 border-t border-line flex justify-end">
-              <button type="submit" disabled={!isValid} className={`px-6 py-2.5 rounded-xl font-bold text-sm shadow-lg transition-all cursor-pointer ${isValid ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-blue-600/20' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}>
+              <button type="submit" disabled={!isValid} className={`px-6 py-2.5 rounded-xl font-bold text-sm shadow-lg transition-all cursor-pointer ${isValid ? 'bg-btn hover:bg-btn-hover text-white shadow-blue-600/20' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}>
                 Publish Rubric Schema
               </button>
             </div>

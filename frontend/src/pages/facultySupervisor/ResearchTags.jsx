@@ -67,7 +67,7 @@ export default function ResearchTags() {
             {tags.map(tag => (
               <span
                 key={tag.id}
-                className="inline-flex items-center gap-1.5 bg-blue-600 text-white text-sm font-medium px-3.5 py-1.5 rounded-full"
+                className="inline-flex items-center gap-1.5 bg-btn text-white text-sm font-medium px-3.5 py-1.5 rounded-full"
               >
                 {tag.label}
                 <button
@@ -99,7 +99,7 @@ export default function ResearchTags() {
             <button
               onClick={handleAddTag}
               disabled={!newTag.trim()}
-              className="px-5 py-2.5 bg-blue-600 text-white text-sm font-bold rounded-full hover:bg-blue-700 active:scale-[0.97] transition-all duration-150 shadow-card disabled:opacity-40 disabled:cursor-not-allowed shrink-0 focus-visible:ring-2 focus-visible:ring-blue-500"
+              className="px-5 py-2.5 bg-btn text-white text-sm font-bold rounded-full hover:bg-btn-hover active:scale-[0.97] transition-all duration-150 shadow-card disabled:opacity-40 disabled:cursor-not-allowed shrink-0 focus-visible:ring-2 focus-visible:ring-blue-500"
             >
               Add Tag
             </button>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { showToast } from '../../components/AppToast';
-import { Users, Check, X, ArrowLeft, ChevronRight, Search, BookOpen, Star } from 'lucide-react';
+import { Users, Check, X, Search, BookOpen } from 'lucide-react';
 import api from '../../services/api';
 import { CommitteeOversightSkeleton } from '../../components/Skeleton';
 
@@ -36,6 +36,34 @@ function scoreGroupForCommittee(groupPrefs, committeeMembers, allFaculty) {
     totalScore += weight * (1 + fieldScore);
   }
   return totalScore;
+}
+
+function getCommitteeExpertise(committee, allFaculty) {
+  var weightMap = { 1: 0.5, 2: 0.3, 3: 0.2 };
+  var fieldWeights = {};
+  (committee.members || []).forEach(function(m) {
+    var mId = m.id || m._id || m;
+    var fac = allFaculty.find(function(f) { return f.id === mId; });
+    if (fac && fac.preferences) {
+      fac.preferences.forEach(function(p) {
+        var w = weightMap[p.priority] || 0;
+        fieldWeights[p.field] = (fieldWeights[p.field] || 0) + w;
+      });
+    }
+  });
+  return Object.entries(fieldWeights)
+    .sort(function(a, b) { return b[1] - a[1]; })
+    .slice(0, 2)
+    .map(function(e) { return e[0]; });
+}
+
+function getMemberPrefsText(memberId, allFaculty) {
+  var fac = allFaculty.find(function(f) { return f.id === memberId; });
+  if (!fac || !fac.preferences || fac.preferences.length === 0) { return ''; }
+  return fac.preferences
+    .sort(function(a, b) { return a.priority - b.priority; })
+    .map(function(p) { return p.field + ' (#' + p.priority + ')'; })
+    .join(', ');
 }
 
 export default function InchargeCommitteeOversight() {
@@ -153,7 +181,7 @@ export default function InchargeCommitteeOversight() {
             { key: 'pending', label: 'Pending Review' },
             { key: 'all', label: 'All' },
           ].map(function(t) {
-            return React.createElement('button', { key: t.key, onClick: function() { setFilter(t.key); }, className: 'px-3 py-1.5 rounded-lg text-[10px] font-bold transition-all cursor-pointer border ' + (filter === t.key ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-slate-600 border-gray-200 hover:bg-blue-50') }, t.label);
+            return React.createElement('button', { key: t.key, onClick: function() { setFilter(t.key); }, className: 'px-3 py-1.5 rounded-lg text-[10px] font-bold transition-all cursor-pointer border ' + (filter === t.key ? 'bg-btn text-white border-btn' : 'bg-white text-slate-600 border-gray-200 hover:bg-blue-50') }, t.label);
           })
         ),
         React.createElement('div', { className: 'relative w-full sm:w-56' },
@@ -176,6 +204,7 @@ export default function InchargeCommitteeOversight() {
               React.createElement('th', { className: 'py-3 px-4' }, 'Group'),
               React.createElement('th', { className: 'py-3 px-4' }, 'Supervisor'),
               React.createElement('th', { className: 'py-3 px-4' }, 'Preferences'),
+              React.createElement('th', { className: 'py-3 px-4' }, 'Project'),
               React.createElement('th', { className: 'py-3 px-4' }, 'Suggested Committee'),
               React.createElement('th', { className: 'py-3 px-4' }, 'Score'),
               React.createElement('th', { className: 'py-3 px-4 text-right' }, 'Actions')
@@ -183,7 +212,7 @@ export default function InchargeCommitteeOversight() {
           ),
           React.createElement('tbody', { className: 'divide-y divide-line text-sm' },
             filtered.length === 0
-              ? React.createElement('tr', null, React.createElement('td', { colSpan: 6, className: 'py-12 text-center text-slate-400' },
+              ? React.createElement('tr', null, React.createElement('td', { colSpan: 7, className: 'py-12 text-center text-slate-400' },
                   React.createElement(BookOpen, { className: 'w-8 h-8 mx-auto mb-2 opacity-50' }),
                   React.createElement('p', { className: 'text-sm font-bold' }, 'No groups found')
                 ))
@@ -212,7 +241,12 @@ export default function InchargeCommitteeOversight() {
                   var suggestName = a.best ? a.best.committeeName : 'No match';
                   var suggestScore = a.best ? a.best.score.toFixed(1) : '-';
                   var hasConflict = a.best ? a.best.hasConflict : false;
-                  return React.createElement('tr', { key: g._id, className: 'hover:bg-slate-50 transition-colors' },
+                  var acceptedIdea = g.acceptedIdea;
+                  var ideaFields = acceptedIdea && acceptedIdea.fields
+                      ? acceptedIdea.fields.split(',').map(function(f) { return f.trim(); }).filter(Boolean)
+                      : [];
+                    var ideaTitle = acceptedIdea ? acceptedIdea.title : null;
+                    return React.createElement('tr', { key: g._id, className: 'hover:bg-slate-50 transition-colors' },
                     React.createElement('td', { className: 'py-3 px-4' },
                       React.createElement('div', { className: 'flex items-center gap-2.5' },
                         React.createElement('div', { className: 'w-7 h-7 rounded-lg bg-slate-100 text-slate-600 text-[9px] font-bold flex items-center justify-center' }, (gName.charAt(0) || '?').toUpperCase()),
@@ -231,13 +265,49 @@ export default function InchargeCommitteeOversight() {
                           }))
                         : React.createElement('span', { className: 'text-[10px] text-slate-400 italic' }, 'No preferences')
                     ),
+                    React.createElement('td', { className: 'px-4 max-w-[160px]' },
+                      ideaFields.length > 0
+                        ? React.createElement('div', { className: 'flex flex-col gap-1' },
+                            ideaTitle
+                              ? React.createElement('span', { className: 'text-[9px] text-slate-500 truncate', title: ideaTitle }, ideaTitle)
+                              : null,
+                            React.createElement('div', { className: 'flex gap-1 flex-wrap' }, ideaFields.map(function(f, i) {
+                              return React.createElement('span', { key: i, className: 'text-[9px] font-bold px-1.5 py-0.5 rounded bg-purple-50 text-purple-700 border border-purple-200' }, f);
+                            }))
+                          )
+                        : React.createElement('span', { className: 'text-[10px] text-slate-400 italic' }, ideaTitle ? 'No fields' : 'No idea')
+                    ),
                     React.createElement('td', { className: 'px-4' },
                       currentAssigned
-                        ? React.createElement('span', { className: 'text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-lg border border-emerald-200 flex items-center gap-1 w-fit' },
-                            React.createElement(Check, { size: 11 }), assignedCommitteeName
-                          )
+                        ? (function() {
+                            var assignedC = committees.find(function(c) { return c.id === currentAssigned; });
+                            var assignedTip = '';
+                            if (assignedC) {
+                              assignedTip = (assignedC.members || []).map(function(m) {
+                                var mId = m.id || m._id || m;
+                                var mName = m.name || mId;
+                                var prefs = getMemberPrefsText(mId, faculty);
+                                return mName + (prefs ? ': ' + prefs : '');
+                              }).join('\n');
+                            }
+                            return React.createElement('span', { className: 'text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-lg border border-emerald-200 flex items-center gap-1 w-fit cursor-help', title: assignedTip || '' },
+                              React.createElement(Check, { size: 11 }), assignedCommitteeName
+                            );
+                          })()
                         : React.createElement('div', { className: 'flex flex-col gap-0.5' },
-                            React.createElement('span', { className: 'text-xs font-bold text-indigo-700' }, suggestName),
+                            (function() {
+                              var matchedCommittee = a.best ? committees.find(function(c) { return c.id === a.best.committeeId; }) : null;
+                              var tipText = '';
+                              if (matchedCommittee) {
+                                tipText = (matchedCommittee.members || []).map(function(m) {
+                                  var mId = m.id || m._id || m;
+                                  var mName = m.name || mId;
+                                  var prefs = getMemberPrefsText(mId, faculty);
+                                  return mName + (prefs ? ': ' + prefs : '');
+                                }).join('\n');
+                              }
+                              return React.createElement('span', { className: 'text-xs font-bold text-indigo-700 cursor-help border-b border-dotted border-indigo-300', title: tipText || '' }, suggestName);
+                            })(),
                             (a.best && a.best.hasConflict)
                               ? React.createElement('span', { className: 'text-[9px] text-amber-600' }, 'Supervisor conflict — ' + (a.secondBest ? a.secondBest.committeeName : 'no alternative'))
                               : null
@@ -292,22 +362,39 @@ export default function InchargeCommitteeOversight() {
               React.createElement('th', { className: 'py-3 px-4' }, 'Committee'),
               React.createElement('th', { className: 'py-3 px-4' }, 'Head'),
               React.createElement('th', { className: 'py-3 px-4' }, 'Members'),
+              React.createElement('th', { className: 'py-3 px-4' }, 'Expertise'),
               React.createElement('th', { className: 'py-3 px-4' }, 'Status')
             )
           ),
           React.createElement('tbody', { className: 'divide-y divide-line text-sm' },
             committees.length === 0
-              ? React.createElement('tr', null, React.createElement('td', { colSpan: 4, className: 'py-12 text-center text-slate-400' }, 'No committees created yet.'))
+              ? React.createElement('tr', null, React.createElement('td', { colSpan: 5, className: 'py-12 text-center text-slate-400' }, 'No committees created yet.'))
               : committees.map(function(c) {
                   var headName = c.head || 'Not assigned';
                   var memberNames = (c.members || []).map(function(m) { return typeof m === 'string' ? m : (m.name || ''); }).filter(Boolean);
+                  var expertise = getCommitteeExpertise(c, faculty);
+                  var tooltipText = (c.members || []).map(function(m) {
+                    var mId = m.id || m._id || m;
+                    var mName = m.name || mId;
+                    var prefs = getMemberPrefsText(mId, faculty);
+                    return mName + (prefs ? ': ' + prefs : '');
+                  }).join('\n');
                   return React.createElement('tr', { key: c.id, className: 'hover:bg-slate-50 transition-colors' },
-                    React.createElement('td', { className: 'py-3 px-4 font-bold text-slate-900 text-xs' }, c.name),
+                    React.createElement('td', { className: 'py-3 px-4 font-bold text-slate-900 text-xs' },
+                      React.createElement('span', { title: tooltipText, className: 'cursor-help border-b border-dotted border-slate-300' }, c.name)
+                    ),
                     React.createElement('td', { className: 'py-3 px-4 text-xs text-slate-600' }, headName),
                     React.createElement('td', { className: 'py-3 px-4' },
                       React.createElement('div', { className: 'flex flex-wrap gap-1' },
                         memberNames.map(function(n, i) { return React.createElement('span', { key: i, className: 'text-[9px] font-bold bg-slate-100 text-slate-700 px-1.5 py-0.5 rounded' }, n); })
                       )
+                    ),
+                    React.createElement('td', { className: 'py-3 px-4' },
+                      expertise.length > 0
+                        ? React.createElement('div', { className: 'flex flex-wrap gap-1' }, expertise.map(function(f, i) {
+                            return React.createElement('span', { key: i, className: 'text-[9px] font-bold px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-700 border border-indigo-200' }, f);
+                          }))
+                        : React.createElement('span', { className: 'text-[10px] text-slate-400 italic' }, 'N/A')
                     ),
                     React.createElement('td', { className: 'py-3 px-4' },
                       React.createElement('span', { className: 'text-[9px] font-bold px-2 py-0.5 rounded-lg border ' + (c.status === 'active' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-gray-100 text-gray-500 border-gray-200') }, c.status === 'active' ? 'Active' : (c.status || 'N/A'))

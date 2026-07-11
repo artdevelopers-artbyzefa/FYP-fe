@@ -155,7 +155,7 @@ export default function SupervisorSelection() {
                       </div>
                     </div>
                     <button disabled={requesting[sup.id] || !group} onClick={() => handleRequest(sup.id)}
-                      className="ml-3 flex-shrink-0 bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-2 rounded-lg text-xs font-bold transition-all border-0 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5">
+                      className="ml-3 flex-shrink-0 bg-btn hover:bg-btn-hover text-white px-3.5 py-2 rounded-lg text-xs font-bold transition-all border-0 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5">
                       {requesting[sup.id] ? <><Check className="w-3.5 h-3.5" /> Sending</> : <><Send className="w-3.5 h-3.5" /> Request</>}
                     </button>
                   </div>
@@ -178,7 +178,7 @@ export default function SupervisorSelection() {
                 ].map(f => (
                   <button key={f.key} onClick={() => setFilter(f.key)}
                     className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer border ${
-                      filter === f.key ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-slate-600 border-gray-200 hover:bg-blue-50'
+                      filter === f.key ? 'bg-btn text-white border-btn' : 'bg-white text-slate-600 border-gray-200 hover:bg-blue-50'
                     }`}>{f.label}</button>
                 ))}
               </div>

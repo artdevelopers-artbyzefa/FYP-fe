@@ -93,7 +93,7 @@ const HodStudents = () => {
                   <td className="py-2.5 px-4"><span className={`font-bold text-[10px] px-2 py-0.5 rounded-lg border tracking-wider ${fypStatusConfig[s.status]?.color || 'bg-slate-50 text-slate-500 border-slate-200'}`}>{fypStatusConfig[s.status]?.label || s.status?.replace(/_/g, ' ') || 'Not Started'}</span></td>
                   <td className="py-2.5 px-4 text-slate-500 text-xs truncate max-w-[120px]">{s.supervisor || '-'}</td>
                   <td className="py-2.5 px-4 text-right">
-                    <button onClick={() => { setSelected(s); setView('detail'); }} className="px-3 py-1.5 rounded-lg bg-blue-600 text-white text-[10px] font-bold hover:bg-blue-700 transition-all cursor-pointer border-0 flex items-center gap-1 ml-auto">
+                    <button onClick={() => { setSelected(s); setView('detail'); }} className="px-3 py-1.5 rounded-lg bg-btn text-white text-[10px] font-bold hover:bg-btn-hover transition-all cursor-pointer border-0 flex items-center gap-1 ml-auto">
                       <User size={11} /> View Profile
                     </button>
                   </td>
@@ -109,7 +109,7 @@ const HodStudents = () => {
           <span className="text-[11px] font-bold text-slate-400">{total} total students</span>
           <div className="flex items-center gap-1">
             <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page <= 1} className="w-10 h-10 rounded-lg border border-line text-slate-400 hover:bg-blue-50 disabled:opacity-30 cursor-pointer flex items-center justify-center"><ChevronLeft size={14} /></button>
-            {pageNumbers.map(p => <button key={p} onClick={() => setPage(p)} className={`w-10 h-10 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${p === page ? 'bg-blue-600 text-white' : 'border border-line text-slate-500 hover:bg-blue-50'}`}>{p}</button>)}
+            {pageNumbers.map(p => <button key={p} onClick={() => setPage(p)} className={`w-10 h-10 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${p === page ? 'bg-btn text-white' : 'border border-line text-slate-500 hover:bg-blue-50'}`}>{p}</button>)}
             <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page >= totalPages} className="w-10 h-10 rounded-lg border border-line text-slate-400 hover:bg-blue-50 disabled:opacity-30 cursor-pointer flex items-center justify-center"><ChevronRight size={14} /></button>
           </div>
         </motion.div>
@@ -159,7 +159,7 @@ function StudentDetail({ student, onBack, onUpdate }) {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <button onClick={() => setEditing(!editing)} className="px-4 py-2 bg-blue-600 text-white text-xs font-bold rounded-xl hover:bg-blue-700 transition-all cursor-pointer border-0 flex items-center gap-1.5"><Pencil size={12} /> {editing ? 'Cancel' : 'Edit'}</button>
+            <button onClick={() => setEditing(!editing)} className="px-4 py-2 bg-btn text-white text-xs font-bold rounded-xl hover:bg-btn-hover transition-all cursor-pointer border-0 flex items-center gap-1.5"><Pencil size={12} /> {editing ? 'Cancel' : 'Edit'}</button>
             {student.isactive !== false && <button onClick={handleDeactivate} className="px-4 py-2 bg-white text-rose-600 text-xs font-bold rounded-xl border border-rose-200 hover:bg-rose-50 transition-all cursor-pointer flex items-center gap-1.5"><Trash2 size={12} /> Deactivate</button>}
           </div>
         </div>
@@ -183,7 +183,7 @@ function StudentDetail({ student, onBack, onUpdate }) {
           </div>
           <div className="flex justify-end gap-3 pt-4 border-t border-line">
             <button type="button" onClick={() => setEditing(false)} className="px-5 py-2.5 rounded-xl text-xs font-bold text-slate-900 border border-line hover:bg-gray-50 cursor-pointer">Cancel</button>
-            <button type="submit" disabled={submitting} className="px-6 py-2.5 bg-blue-600 text-white rounded-xl text-xs font-bold hover:bg-blue-700 transition-all cursor-pointer disabled:opacity-50">{submitting ? 'Saving...' : 'Save Changes'}</button>
+            <button type="submit" disabled={submitting} className="px-6 py-2.5 bg-btn text-white rounded-xl text-xs font-bold hover:bg-btn-hover transition-all cursor-pointer disabled:opacity-50">{submitting ? 'Saving...' : 'Save Changes'}</button>
           </div>
         </motion.form>
       ) : (
@@ -208,7 +208,7 @@ function StudentDetail({ student, onBack, onUpdate }) {
                     <span>Leader: {student.groupData.leader}</span>
                     <span>|</span> <Users size={10} /> {student.groupData.memberCount} members
                   </div>
-                  {student.groupData.progress > 0 && <div className="mt-2 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full bg-blue-600 rounded-full" style={{ width: `${student.groupData.progress}%` }} /></div>}
+                  {student.groupData.progress > 0 && <div className="mt-2 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full bg-btn rounded-full" style={{ width: `${student.groupData.progress}%` }} /></div>}
                 </div>
               ) : <div className="p-4 rounded-xl border border-line"><p className="text-xs text-slate-400 text-center">No project assigned</p></div>}
             </div>
@@ -227,7 +227,7 @@ function StudentDetail({ student, onBack, onUpdate }) {
             </div>
             <div className="bg-white rounded-2xl border border-line p-6 shadow-sm">
               <h5 className="text-xs font-bold text-slate-900 tracking-wider mb-4">Progress</h5>
-              <div className="flex items-center gap-3"><div className="flex-1 h-2.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full bg-blue-600 rounded-full" style={{ width: `${student.progress || 0}%` }} /></div><span className="text-sm font-black text-slate-900">{student.progress || 0}%</span></div>
+              <div className="flex items-center gap-3"><div className="flex-1 h-2.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full bg-btn rounded-full" style={{ width: `${student.progress || 0}%` }} /></div><span className="text-sm font-black text-slate-900">{student.progress || 0}%</span></div>
             </div>
           </div>
         </motion.div>
@@ -319,7 +319,7 @@ function GroupDetail({ group, onBack }) {
 
           <div className="bg-white rounded-2xl border border-line p-6 shadow-sm">
             <h5 className="text-xs font-bold text-slate-900 tracking-wider mb-4">Progress</h5>
-            <div className="flex items-center gap-3"><div className="flex-1 h-2.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full bg-blue-600 rounded-full" style={{ width: `${group.progress || 0}%` }} /></div><span className="text-sm font-black text-slate-900">{group.progress || 0}%</span></div>
+            <div className="flex items-center gap-3"><div className="flex-1 h-2.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full bg-btn rounded-full" style={{ width: `${group.progress || 0}%` }} /></div><span className="text-sm font-black text-slate-900">{group.progress || 0}%</span></div>
           </div>
         </div>
       </motion.div>

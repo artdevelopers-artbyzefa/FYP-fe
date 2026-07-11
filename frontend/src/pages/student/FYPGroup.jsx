@@ -232,7 +232,7 @@ export default function FYPGroup() {
                 </div>
                 <div className="flex gap-2">
                   <button onClick={handleSavePrefs} disabled={savingPrefs || prefs.length === 0}
-                    className="flex-1 py-2 bg-blue-600 text-white rounded-xl text-xs font-bold hover:bg-blue-700 transition-all cursor-pointer disabled:opacity-50 border-0 flex-center gap-2">
+                    className="flex-1 py-2 bg-btn text-white rounded-xl text-xs font-bold hover:bg-btn-hover transition-all cursor-pointer disabled:opacity-50 border-0 flex-center gap-2">
                     {savingPrefs && <Loader size={11} className="animate-spin" />}
                     {savingPrefs ? 'Saving...' : 'Save Preferences'}
                   </button>
@@ -287,7 +287,7 @@ export default function FYPGroup() {
                           <div className="text-xs text-slate-500 mt-0.5">{student.regNo} {student.semester ? `• Sem ${student.semester}` : ''} {student.cgpa ? `• CGPA: ${student.cgpa}` : ''}</div>
                         </div>
                       </div>
-                      <button disabled={sending[student.id]} onClick={() => handleSend(student.id)} className="ml-3 flex-shrink-0 bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-2 rounded-lg text-xs font-bold transition-all border-0 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-blue-500">
+                      <button disabled={sending[student.id]} onClick={() => handleSend(student.id)} className="ml-3 flex-shrink-0 bg-btn hover:bg-btn-hover text-white px-3.5 py-2 rounded-lg text-xs font-bold transition-all border-0 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-blue-500">
                         {sending[student.id] ? <><Check className="w-3.5 h-3.5" /> Sent</> : <><Send className="w-3.5 h-3.5" /> Send</>}
                       </button>
                     </div>

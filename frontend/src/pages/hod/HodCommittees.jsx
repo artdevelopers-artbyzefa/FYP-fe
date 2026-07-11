@@ -118,7 +118,7 @@ const HodCommittees = () => {
               const p = start + i;
               if (p > totalPages) return null;
               return (
-                <button key={p} onClick={() => goToPage(p)} className={`w-8 h-8 rounded-lg text-xs font-bold transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500 ${p === page ? 'bg-blue-600 text-white' : 'border border-line text-slate-500 hover:bg-blue-50'}`}>
+                <button key={p} onClick={() => goToPage(p)} className={`w-8 h-8 rounded-lg text-xs font-bold transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500 ${p === page ? 'bg-btn text-white' : 'border border-line text-slate-500 hover:bg-blue-50'}`}>
                   {p}
                 </button>
               );

@@ -125,10 +125,10 @@ const FacultyMessaging = () => {
               const isYou = msg.sender.includes('You');
               return (
                 <div key={idx} className={`flex gap-3 items-start ${isYou ? 'flex-row-reverse' : ''}`}>
-                  <div className={`w-8 h-8 rounded-xl flex items-center justify-center font-semibold text-xs flex-shrink-0 ${isYou ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-500'}`}>
+                  <div className={`w-8 h-8 rounded-xl flex items-center justify-center font-semibold text-xs flex-shrink-0 ${isYou ? 'bg-btn text-white' : 'bg-slate-200 text-slate-500'}`}>
                     {isYou ? 'AH' : 'G'}
                   </div>
-                  <div className={`p-4 rounded-2xl max-w-md ${isYou ? 'bg-blue-600 text-white' : 'bg-white border border-line text-slate-700 shadow-sm'}`}>
+                  <div className={`p-4 rounded-2xl max-w-md ${isYou ? 'bg-btn text-white' : 'bg-white border border-line text-slate-700 shadow-sm'}`}>
                     <span className={`font-semibold text-xs block mb-1 ${isYou ? 'text-white' : 'text-slate-900'}`}>{msg.sender}</span>
                     <p className={`text-xs leading-relaxed ${isYou ? 'text-white/90' : 'text-slate-500'}`}>{msg.text}</p>
                     <span className={`text-[10px] mt-2 block font-semibold ${isYou ? 'text-white/60 text-right' : 'text-slate-400 text-right'}`}>{msg.time}</span>
@@ -147,7 +147,7 @@ const FacultyMessaging = () => {
                 placeholder="Type your message here..." 
                 className="flex-1 bg-white border border-line rounded-xl px-4 py-3 text-sm outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition-all"
               />
-              <button type="submit" className="bg-blue-600 text-white w-12 h-12 rounded-xl flex items-center justify-center hover:bg-blue-700 transition-all shadow-sm cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500">
+              <button type="submit" className="bg-btn text-white w-12 h-12 rounded-xl flex items-center justify-center hover:bg-btn-hover transition-all shadow-sm cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500">
                 <Send size={16} />
               </button>
             </form>

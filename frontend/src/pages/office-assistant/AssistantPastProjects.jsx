@@ -159,7 +159,7 @@ export default function AssistantPastProjects() {
           <h2 className="text-xl font-bold text-slate-900">Past FYP Projects</h2>
           <p className="text-xs text-slate-900 mt-0.5 font-medium">Archive of all completed FYP projects from previous sessions</p>
         </div>
-        <button onClick={() => setView('create')} className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg transition-all flex items-center gap-2 cursor-pointer">
+        <button onClick={() => setView('create')} className="bg-btn hover:bg-btn-hover text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg transition-all flex items-center gap-2 cursor-pointer">
           <Plus className="w-4 h-4" /> Add Past Project
         </button>
       </div>
@@ -474,7 +474,7 @@ function CreatePastProjectForm({ sessions, onBack, onSaved }) {
 
         <div className="flex justify-end gap-3">
           <button type="button" onClick={onBack} className="px-5 py-2.5 rounded-xl text-xs font-bold text-slate-900 hover:bg-gray-50 transition-colors cursor-pointer border border-line">Cancel</button>
-          <button type="submit" disabled={submitting} className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow-lg transition-all cursor-pointer disabled:opacity-50 flex items-center gap-2">
+          <button type="submit" disabled={submitting} className="bg-btn hover:bg-btn-hover text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow-lg transition-all cursor-pointer disabled:opacity-50 flex items-center gap-2">
             {submitting ? <Loader2 size={14} className="animate-spin" /> : <Archive size={14} />} Save Project
           </button>
         </div>

@@ -159,7 +159,7 @@ export default function AssistantFaculty() {
             {Array.from({ length: Math.min(totalPages, 7) }, (_, i) => {
               const start = Math.max(1, Math.min(page - 3, totalPages - 6)); const p = start + i;
               if (p > totalPages) return null;
-              return <button key={p} onClick={() => setPage(p)} className={`w-8 h-8 rounded-xl text-xs font-bold transition-all cursor-pointer ${p === page ? 'bg-blue-600 text-white' : 'border border-line text-slate-500 hover:bg-blue-50'}`}>{p}</button>;
+              return <button key={p} onClick={() => setPage(p)} className={`w-8 h-8 rounded-xl text-xs font-bold transition-all cursor-pointer ${p === page ? 'bg-btn text-white' : 'border border-line text-slate-500 hover:bg-blue-50'}`}>{p}</button>;
             })}
             <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page >= totalPages} className="p-2 rounded-xl border border-line text-slate-500 hover:bg-white disabled:opacity-30 cursor-pointer"><ArrowRight size={14} /></button>
           </div>
@@ -249,7 +249,7 @@ function FacultyDetail({ facultyId, onBack, onUpdate }) {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <button onClick={() => setEditing(!editing)} className="px-4 py-2 bg-blue-600 text-white text-xs font-bold rounded-xl hover:bg-blue-700 transition-all cursor-pointer border-0 flex items-center gap-1.5"><Pencil size={12} /> {editing ? 'Cancel' : 'Edit'}</button>
+            <button onClick={() => setEditing(!editing)} className="px-4 py-2 bg-btn text-white text-xs font-bold rounded-xl hover:bg-btn-hover transition-all cursor-pointer border-0 flex items-center gap-1.5"><Pencil size={12} /> {editing ? 'Cancel' : 'Edit'}</button>
             {!faculty.active && <button onClick={handleResendInvite} className="px-4 py-2 bg-amber-50 text-amber-700 text-xs font-bold rounded-xl border border-amber-200 hover:bg-amber-100 transition-all cursor-pointer flex items-center gap-1.5"><Send size={12} /> Resend Invite</button>}
             <button onClick={handleDelete} className="px-4 py-2 bg-white text-rose-600 text-xs font-bold rounded-xl border border-rose-200 hover:bg-rose-50 transition-all cursor-pointer flex items-center gap-1.5"><Trash2 size={12} /> Delete</button>
           </div>
@@ -281,7 +281,7 @@ function FacultyDetail({ facultyId, onBack, onUpdate }) {
           </div>
           <div className="flex justify-end gap-3 pt-4 border-t border-line">
             <button type="button" onClick={() => setEditing(false)} className="px-5 py-2.5 rounded-xl text-xs font-bold text-slate-900 border border-line hover:bg-gray-50 cursor-pointer">Cancel</button>
-            <button type="submit" disabled={submitting} className="px-6 py-2.5 bg-blue-600 text-white rounded-xl text-xs font-bold hover:bg-blue-700 transition-all cursor-pointer disabled:opacity-50">{submitting ? 'Saving...' : 'Save Changes'}</button>
+            <button type="submit" disabled={submitting} className="px-6 py-2.5 bg-btn text-white rounded-xl text-xs font-bold hover:bg-btn-hover transition-all cursor-pointer disabled:opacity-50">{submitting ? 'Saving...' : 'Save Changes'}</button>
           </div>
         </form>
       ) : (
@@ -300,7 +300,7 @@ function FacultyDetail({ facultyId, onBack, onUpdate }) {
                         <span>Leader: {g.leader}</span>
                         {g.members?.length > 0 && <><span>|</span> <span>{g.members.length} members</span></>}
                       </div>
-                      {g.progress > 0 && <div className="mt-2 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full bg-blue-600 rounded-full" style={{ width: `${g.progress}%` }} /></div>}
+                      {g.progress > 0 && <div className="mt-2 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full bg-btn rounded-full" style={{ width: `${g.progress}%` }} /></div>}
                     </div>
                   ))}
                 </div>

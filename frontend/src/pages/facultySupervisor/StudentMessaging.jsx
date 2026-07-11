@@ -183,10 +183,10 @@ export default function StudentMessaging() {
                     </p>
                   </div>
                   {group.hasUnread && !isActive && (
-                    <div className="w-2 h-2 rounded-full bg-blue-600 shrink-0 absolute right-6" />
+                    <div className="w-2 h-2 rounded-full bg-btn shrink-0 absolute right-6" />
                   )}
                   {isActive && (
-                    <div className="w-1.5 h-1.5 rounded-full bg-blue-600 shrink-0" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-btn shrink-0" />
                   )}
                 </div>
               );
@@ -264,7 +264,7 @@ export default function StudentMessaging() {
             <button 
               type="submit"
               disabled={sending || !inputValue.trim()}
-              className="px-5 h-10 bg-blue-600 text-white font-bold text-sm rounded-xl hover:bg-blue-700 transition-colors flex items-center gap-2 disabled:opacity-50 shrink-0 shadow-card focus-visible:ring-2 focus-visible:ring-blue-500"
+              className="px-5 h-10 bg-btn text-white font-bold text-sm rounded-xl hover:bg-btn-hover transition-colors flex items-center gap-2 disabled:opacity-50 shrink-0 shadow-card focus-visible:ring-2 focus-visible:ring-blue-500"
             >
               {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
               <span className="hidden sm:inline">Send</span>

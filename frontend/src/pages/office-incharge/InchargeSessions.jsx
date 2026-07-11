@@ -81,7 +81,7 @@ const InchargeSessions = () => {
           <h2 className="text-xl font-bold text-slate-900">FYP Cycle History</h2>
           <p className="text-xs text-slate-500 mt-0.5 font-medium">Manage all FYP academic cycles — create new sessions, activate past ones, and track full cycle history</p>
         </div>
-        <button onClick={() => setShowForm(!showForm)} className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition-all cursor-pointer shadow-sm ${showForm ? 'bg-gray-50 text-gray-600 border border-gray-200' : 'bg-blue-600 text-white hover:bg-blue-700'}`}>
+        <button onClick={() => setShowForm(!showForm)} className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition-all cursor-pointer shadow-sm ${showForm ? 'bg-gray-50 text-gray-600 border border-gray-200' : 'bg-btn text-white hover:bg-btn-hover'}`}>
           <Plus className="w-4 h-4" /> {showForm ? 'Cancel' : 'New FYP Cycle'}
         </button>
       </div>
@@ -89,7 +89,7 @@ const InchargeSessions = () => {
       <div className={`transition-all duration-500 ease-in-out overflow-hidden ${showForm ? 'max-h-[500px] opacity-100 mb-6' : 'max-h-0 opacity-0 pointer-events-none'}`}>
         <div className="bg-gray-50 rounded-2xl p-5 sm:p-6 border border-gray-100 shadow-inner">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 bg-blue-600 text-white rounded-xl flex items-center justify-center"><Calendar className="w-5 h-5" /></div>
+            <div className="w-10 h-10 bg-btn text-white rounded-xl flex items-center justify-center"><Calendar className="w-5 h-5" /></div>
             <div>
               <h3 className="text-base font-bold text-gray-800">Create New FYP Cycle</h3>
               <p className="text-[10px] text-gray-400 font-bold tracking-widest">New cycles become active immediately</p>
@@ -121,7 +121,7 @@ const InchargeSessions = () => {
               </div>
             </div>
             <div className="flex justify-end pt-4 border-t border-gray-200/50">
-              <button type="submit" disabled={submitting} className="px-8 py-2.5 bg-blue-600 text-white rounded-xl text-xs font-bold shadow-sm hover:bg-blue-700 transition-all cursor-pointer border-0 disabled:opacity-50 flex items-center gap-2">
+              <button type="submit" disabled={submitting} className="px-8 py-2.5 bg-btn text-white rounded-xl text-xs font-bold shadow-sm hover:bg-btn-hover transition-all cursor-pointer border-0 disabled:opacity-50 flex items-center gap-2">
                 {submitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                 {submitting ? 'Creating...' : 'Create & Activate'}
               </button>

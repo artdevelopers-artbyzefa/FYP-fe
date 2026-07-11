@@ -303,7 +303,7 @@ const InchargePhaseControl = () => {
             <button
               onClick={() => handleActivatePhase(nextUpPhase)}
               disabled={actionId === nextUpPhase.key + 'start'}
-              className="inline-flex items-center justify-center gap-2 font-semibold font-poppins rounded-xl transition-all duration-200 cursor-pointer border-0 w-full md:w-auto px-8 py-5 text-sm font-black h-auto shadow-lg shadow-secondary/20 flex-shrink-0 bg-secondary text-white hover:bg-blue-700 hover:-translate-y-px hover:shadow-lg hover:shadow-blue-500/30 disabled:opacity-60 disabled:cursor-not-allowed"
+              className="inline-flex items-center justify-center gap-2 font-semibold font-poppins rounded-xl transition-all duration-200 cursor-pointer border-0 w-full md:w-auto px-8 py-5 text-sm font-black h-auto shadow-lg shadow-secondary/20 flex-shrink-0 bg-secondary text-white hover:bg-btn-hover hover:-translate-y-px hover:shadow-lg hover:shadow-blue-500/30 disabled:opacity-60 disabled:cursor-not-allowed"
             >
               {actionId === nextUpPhase.key + 'start' ? (
                 <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -350,7 +350,7 @@ const InchargePhaseControl = () => {
               >
                 {/* Step icon */}
                 <div className={`w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center flex-shrink-0 font-black text-base transition-all
-                  ${status === 'completed' ? 'bg-blue-600 text-white'
+                  ${status === 'completed' ? 'bg-btn text-white'
                     : status === 'active' ? 'bg-emerald-500 text-white shadow-md shadow-emerald-200'
                       : 'bg-gray-100 text-gray-400'}`}>
                   {status === 'completed' ? (
@@ -404,7 +404,7 @@ const InchargePhaseControl = () => {
                       <button
                         onClick={() => handleActivatePhase(phase)}
                         disabled={actionId === phase.key + 'start'}
-                        className="inline-flex items-center justify-center gap-2 font-semibold font-poppins rounded-xl transition-all duration-200 cursor-pointer border-0 px-3.5 py-1.5 text-xs bg-secondary text-white hover:bg-blue-700 hover:-translate-y-px hover:shadow-lg hover:shadow-blue-500/30 disabled:opacity-60 disabled:cursor-not-allowed"
+                        className="inline-flex items-center justify-center gap-2 font-semibold font-poppins rounded-xl transition-all duration-200 cursor-pointer border-0 px-3.5 py-1.5 text-xs bg-secondary text-white hover:bg-btn-hover hover:-translate-y-px hover:shadow-lg hover:shadow-blue-500/30 disabled:opacity-60 disabled:cursor-not-allowed"
                       >
                         {actionId === phase.key + 'start' ? (
                           <div className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin" />

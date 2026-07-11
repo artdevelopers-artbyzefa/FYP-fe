@@ -83,7 +83,7 @@ const InchargePhase2Marks = () => {
           <button onClick={() => window.print()} className="bg-white border border-line hover:border-blue-500 text-slate-900 hover:text-blue-600 px-3.5 py-2 rounded-xl font-bold text-[10px] shadow-sm transition-all flex items-center gap-1.5 cursor-pointer">
             <Printer size={13} /> Print
           </button>
-          <button onClick={exportPDF} className="bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-2 rounded-xl font-bold text-[10px] shadow-sm transition-all flex items-center gap-1.5 cursor-pointer">
+          <button onClick={exportPDF} className="bg-btn hover:bg-btn-hover text-white px-3.5 py-2 rounded-xl font-bold text-[10px] shadow-sm transition-all flex items-center gap-1.5 cursor-pointer">
             <FileText size={13} /> PDF
           </button>
         </div>

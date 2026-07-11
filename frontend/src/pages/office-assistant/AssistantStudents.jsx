@@ -143,7 +143,7 @@ export default function AssistantStudents() {
               if (p > totalPages) return null;
               return (
                 <button key={p} onClick={() => setPage(p)}
-                  className={`w-8 h-8 rounded-xl text-xs font-bold transition-all cursor-pointer ${p === page ? 'bg-blue-600 text-white' : 'border border-line text-slate-500 hover:bg-blue-50'}`}>{p}</button>
+                  className={`w-8 h-8 rounded-xl text-xs font-bold transition-all cursor-pointer ${p === page ? 'bg-btn text-white' : 'border border-line text-slate-500 hover:bg-blue-50'}`}>{p}</button>
               );
             })}
             <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page >= totalPages}
@@ -221,7 +221,7 @@ function StudentDetail({ student, onBack, onUpdate }) {
           </div>
           <div className="flex items-center gap-2">
             <button onClick={() => setEditing(!editing)}
-              className="px-4 py-2 bg-blue-600 text-white text-xs font-bold rounded-xl hover:bg-blue-700 transition-all cursor-pointer border-0 flex items-center gap-1.5">
+              className="px-4 py-2 bg-btn text-white text-xs font-bold rounded-xl hover:bg-btn-hover transition-all cursor-pointer border-0 flex items-center gap-1.5">
               <Pencil size={12} /> {editing ? 'Cancel' : 'Edit'}
             </button>
             {student.isactive !== false && (
@@ -286,7 +286,7 @@ function StudentDetail({ student, onBack, onUpdate }) {
           </div>
           <div className="flex justify-end gap-3 pt-4 border-t border-line">
             <button type="button" onClick={() => setEditing(false)} className="px-5 py-2.5 rounded-xl text-xs font-bold text-slate-900 border border-line hover:bg-gray-50 transition-colors cursor-pointer">Cancel</button>
-            <button type="submit" disabled={submitting} className="px-6 py-2.5 bg-blue-600 text-white rounded-xl text-xs font-bold hover:bg-blue-700 transition-all cursor-pointer disabled:opacity-50">
+            <button type="submit" disabled={submitting} className="px-6 py-2.5 bg-btn text-white rounded-xl text-xs font-bold hover:bg-btn-hover transition-all cursor-pointer disabled:opacity-50">
               {submitting ? 'Saving...' : 'Save Changes'}
             </button>
           </div>
@@ -312,7 +312,7 @@ function StudentDetail({ student, onBack, onUpdate }) {
                   {student.progress > 0 && (
                     <div className="flex items-center gap-2">
                       <div className="w-20 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                        <div className="h-full bg-blue-600 rounded-full" style={{ width: `${student.progress}%` }} />
+                        <div className="h-full bg-btn rounded-full" style={{ width: `${student.progress}%` }} />
                       </div>
                       <span className="text-xs font-bold text-slate-500">{student.progress}%</span>
                     </div>
@@ -339,7 +339,7 @@ function StudentDetail({ student, onBack, onUpdate }) {
               <h5 className="text-xs font-bold text-slate-900 tracking-wider mb-4">Progress</h5>
               <div className="flex items-center gap-3">
                 <div className="flex-1 h-2.5 bg-gray-100 rounded-full overflow-hidden">
-                  <div className="h-full bg-blue-600 rounded-full" style={{ width: `${student.progress || 0}%` }} />
+                  <div className="h-full bg-btn rounded-full" style={{ width: `${student.progress || 0}%` }} />
                 </div>
                 <span className="text-sm font-black text-slate-900">{student.progress || 0}%</span>
               </div>

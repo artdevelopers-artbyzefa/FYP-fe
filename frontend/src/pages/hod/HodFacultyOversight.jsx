@@ -189,7 +189,7 @@ const HodFacultyOversight = () => {
               </div>
               <div className="flex justify-end gap-3 pt-4 border-t border-gray-100">
                 <button type="button" onClick={() => setEditFaculty(null)} className="px-5 py-2.5 rounded-xl text-xs font-bold text-gray-500 hover:bg-gray-50 transition-colors cursor-pointer border-0">Cancel</button>
-                <button type="submit" disabled={submitting} className="px-6 py-2.5 bg-blue-600 text-white rounded-xl text-xs font-bold shadow-sm hover:bg-blue-700 transition-all cursor-pointer border-0 disabled:opacity-50 flex items-center gap-2">
+                <button type="submit" disabled={submitting} className="px-6 py-2.5 bg-btn text-white rounded-xl text-xs font-bold shadow-sm hover:bg-btn-hover transition-all cursor-pointer border-0 disabled:opacity-50 flex items-center gap-2">
                   {submitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   {submitting ? 'Saving...' : 'Save Changes'}
                 </button>

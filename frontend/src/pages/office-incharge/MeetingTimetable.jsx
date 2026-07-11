@@ -238,7 +238,7 @@ export default function MeetingTimetable() {
             </div>
           </div>
           <button onClick={openCreateForm}
-            className="flex items-center gap-2 px-4 py-2.5 bg-blue-600 text-white text-xs font-bold rounded-xl hover:bg-blue-700 cursor-pointer border-0 shadow-sm transition-all">
+            className="flex items-center gap-2 px-4 py-2.5 bg-btn text-white text-xs font-bold rounded-xl hover:bg-btn-hover cursor-pointer border-0 shadow-sm transition-all">
             <Plus size={15} /> New Meeting
           </button>
         </div>
@@ -430,7 +430,7 @@ export default function MeetingTimetable() {
                   Cancel
                 </button>
                 <button type="submit" disabled={submitting}
-                  className="px-5 py-2.5 text-xs font-bold text-white bg-blue-600 rounded-xl hover:bg-blue-700 cursor-pointer border-0 transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+                  className="px-5 py-2.5 text-xs font-bold text-white bg-btn rounded-xl hover:bg-btn-hover cursor-pointer border-0 transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
                   {submitting ? (
                     <><RefreshCw size={13} className="animate-spin" /> Saving...</>
                   ) : (

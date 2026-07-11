@@ -140,7 +140,7 @@ function FacultyPrefEditor(props) {
             faculty.research && faculty.research.length > 0 ? React.createElement('span', { className: 'text-slate-400' }, 'Research: ' + faculty.research.join(', ')) : null
           )
         ),
-        React.createElement('button', { onClick: handleSave, disabled: saving, className: 'px-5 py-2.5 bg-blue-600 text-white rounded-xl text-xs font-bold hover:bg-blue-700 disabled:opacity-50 cursor-pointer border-0 flex items-center gap-1.5' },
+        React.createElement('button', { onClick: handleSave, disabled: saving, className: 'px-5 py-2.5 bg-btn text-white rounded-xl text-xs font-bold hover:bg-btn-hover disabled:opacity-50 cursor-pointer border-0 flex items-center gap-1.5' },
           saving ? React.createElement(Loader2, { size: 12, className: 'animate-spin' }) : React.createElement(Check, { size: 12 }),
           saving ? 'Saving...' : 'Save Preferences'
         )
@@ -178,7 +178,7 @@ function FacultyPrefEditor(props) {
         React.createElement('span', { className: 'text-xs text-slate-400 font-medium' }, prefs.length === 0 ? 'No preferences selected' : prefs.length + '/3 selected'),
         React.createElement('div', { className: 'flex gap-2' },
           React.createElement('button', { onClick: onBack, className: 'px-4 py-2 rounded-xl text-xs font-bold text-slate-600 border border-line hover:bg-gray-50 cursor-pointer' }, 'Cancel'),
-          React.createElement('button', { onClick: handleSave, disabled: saving || prefs.length === 0, className: 'px-5 py-2 bg-blue-600 text-white rounded-xl text-xs font-bold hover:bg-blue-700 disabled:opacity-50 cursor-pointer flex items-center gap-1.5' },
+          React.createElement('button', { onClick: handleSave, disabled: saving || prefs.length === 0, className: 'px-5 py-2 bg-btn text-white rounded-xl text-xs font-bold hover:bg-btn-hover disabled:opacity-50 cursor-pointer flex items-center gap-1.5' },
             saving && React.createElement(Loader2, { size: 12, className: 'animate-spin' }), ' Save Preferences'
           )
         )
@@ -427,7 +427,7 @@ export default function AssistantEvalCommittees() {
               var c = groupConfigs[realIdx];
               if (!c || !c.name || !c.head) { showToast.error('Set name and head first.'); return; }
               handleCreateComm(group.map(function(m) { return m.id; }), c.head, c.name, c.milestone, realIdx);
-            }, disabled: submitting, className: 'flex items-center gap-1.5 px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-bold hover:bg-blue-700 disabled:opacity-50 cursor-pointer border-0' },
+            }, disabled: submitting, className: 'flex items-center gap-1.5 px-4 py-2 bg-btn text-white rounded-lg text-xs font-bold hover:bg-btn-hover disabled:opacity-50 cursor-pointer border-0' },
               React.createElement(Save, { size: 12 }), ' Save Committee'
             )
           )
@@ -486,7 +486,7 @@ export default function AssistantEvalCommittees() {
     return React.createElement('div', { className: 'space-y-4' },
       React.createElement('div', { className: 'flex items-center justify-between' },
         React.createElement('p', { className: 'text-xs text-slate-500' }, committees.length + ' evaluation committee' + (committees.length !== 1 ? 's' : '')),
-        React.createElement('button', { onClick: function() { setEditCommittee({ name: '', head: '', members: [] }); }, className: 'flex items-center gap-1.5 px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-bold hover:bg-blue-700 transition-all cursor-pointer border-0' },
+        React.createElement('button', { onClick: function() { setEditCommittee({ name: '', head: '', members: [] }); }, className: 'flex items-center gap-1.5 px-4 py-2 bg-btn text-white rounded-xl text-xs font-bold hover:bg-btn-hover transition-all cursor-pointer border-0' },
           React.createElement(Plus, { size: 13 }), ' New Committee'
         )
       ),
@@ -531,7 +531,7 @@ export default function AssistantEvalCommittees() {
                 await handleCreateComm(editCommittee.members, editCommittee.head, editCommittee.name, '');
               }
               setEditCommittee(null);
-            }, disabled: submitting || !editCommittee.name || !editCommittee.head || editCommittee.members.length === 0, className: 'px-5 py-2 bg-blue-600 text-white rounded-xl text-xs font-bold hover:bg-blue-700 disabled:opacity-50 cursor-pointer' },
+            }, disabled: submitting || !editCommittee.name || !editCommittee.head || editCommittee.members.length === 0, className: 'px-5 py-2 bg-btn text-white rounded-xl text-xs font-bold hover:bg-btn-hover disabled:opacity-50 cursor-pointer' },
               editCommittee._id ? 'Update' : 'Create'
             )
           )
@@ -590,7 +590,7 @@ export default function AssistantEvalCommittees() {
     ),
     React.createElement('div', { className: 'flex gap-2 flex-wrap' },
       TABS.map(function(t) {
-        return React.createElement('button', { key: t.key, onClick: function() { setTab(t.key); }, className: 'px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer border ' + (tab === t.key ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-slate-600 border-gray-200 hover:bg-blue-50') }, t.label);
+        return React.createElement('button', { key: t.key, onClick: function() { setTab(t.key); }, className: 'px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer border ' + (tab === t.key ? 'bg-btn text-white border-btn' : 'bg-white text-slate-600 border-gray-200 hover:bg-blue-50') }, t.label);
       })
     ),
     tab === 'faculty' ? renderFacultyTab() : null,

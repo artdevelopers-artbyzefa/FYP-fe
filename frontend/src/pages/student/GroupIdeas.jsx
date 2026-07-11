@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { submitGroupIdea, getGroupIdeas, voteOnGroupIdea, getStudentGroup, generateAIDescription, getAvailableSupervisors, resubmitGroupIdea } from '../../services/student.service';
+import { getApprovedSupervisorIdeas, requestSupervisorIdea } from '../../services/studentSupervisorIdea.service';
 import { showToast as toast } from '../../components/AppToast';
 import { IDEA_STATUS_MAP as statusConfig } from '../../utils/constants/status.constant';
 import { getUserInfo } from '../../utils/app.utils';
-import { Check, ChevronDown, ChevronUp, Clock, Lightbulb, Loader, Plus, RefreshCw, Sparkles, ThumbsDown, ThumbsUp, Upload, X } from 'lucide-react';
+import { Check, ChevronDown, ChevronUp, Clock, Lightbulb, Loader, Plus, RefreshCw, Sparkles, ThumbsDown, ThumbsUp, Upload, X, Send, BookOpen, Eye } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.04 } } };
@@ -44,11 +45,44 @@ export default function GroupIdeas() {
   const [loadingSupervisors, setLoadingSupervisors] = useState(false);
   const [showSupervisorDropdown, setShowSupervisorDropdown] = useState(false);
   const [supervisorSearch, setSupervisorSearch] = useState('');
+  const [showApprovedIdeas, setShowApprovedIdeas] = useState(false);
+  const [approvedIdeas, setApprovedIdeas] = useState([]);
+  const [loadingApproved, setLoadingApproved] = useState(false);
+  const [requestingId, setRequestingId] = useState(null);
   const formRef = useRef(null);
 
   useEffect(() => {
     loadData();
   }, []);
+
+  useEffect(() => {
+    if (showApprovedIdeas) loadApprovedIdeas();
+  }, [showApprovedIdeas]);
+
+  const loadApprovedIdeas = async () => {
+    setLoadingApproved(true);
+    try {
+      const res = await getApprovedSupervisorIdeas();
+      setApprovedIdeas(res.data || []);
+    } catch {
+      toast.error('Failed to load approved ideas');
+    } finally {
+      setLoadingApproved(false);
+    }
+  };
+
+  const handleRequestIdea = async (ideaId) => {
+    setRequestingId(ideaId);
+    try {
+      await requestSupervisorIdea(ideaId, '');
+      toast.success('Request sent to supervisor.');
+      loadApprovedIdeas();
+    } catch (err) {
+      toast.error(err?.response?.data?.message || 'Failed to request');
+    } finally {
+      setRequestingId(null);
+    }
+  };
 
   useEffect(() => {
     if (showForm) {
@@ -209,7 +243,7 @@ export default function GroupIdeas() {
         {!ideas.some(i => i.agreementStatus === 'supervisor_approved') && (
           <button
             onClick={() => setShowForm(!showForm)}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-xl text-sm font-bold transition-all border-0 cursor-pointer flex items-center gap-2 focus-visible:ring-2 focus-visible:ring-blue-500"
+            className="bg-btn hover:bg-btn-hover text-white px-4 py-2.5 rounded-xl text-sm font-bold transition-all border-0 cursor-pointer flex items-center gap-2 focus-visible:ring-2 focus-visible:ring-blue-500"
           >
             <Plus size={16} />
             {showForm ? 'Cancel' : 'New Idea'}
@@ -423,7 +457,7 @@ export default function GroupIdeas() {
                     }
                     setTechInput('');
                   }} disabled={!techInput.trim()}
-                  className="px-4 py-2.5 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700 transition-all cursor-pointer disabled:opacity-50 border-0">Add</button>
+                  className="px-4 py-2.5 bg-btn text-white rounded-xl text-sm font-bold hover:bg-btn-hover transition-all cursor-pointer disabled:opacity-50 border-0">Add</button>
               </div>
             </div>
             <div>
@@ -445,7 +479,7 @@ export default function GroupIdeas() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl text-sm font-bold transition-all border-0 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 focus-visible:ring-2 focus-visible:ring-blue-500"
+                className="bg-btn hover:bg-btn-hover text-white px-5 py-2.5 rounded-xl text-sm font-bold transition-all border-0 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 focus-visible:ring-2 focus-visible:ring-blue-500"
               >
                 {submitting ? <Loader className="w-4 h-4 animate-spin" /> : <Upload size={16} />}
                 {submitting ? 'Submitting...' : 'Submit Idea'}
@@ -462,7 +496,7 @@ export default function GroupIdeas() {
         ].map(f => (
           <button key={f.key} onClick={() => setFilter(f.key)}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer border ${
-              filter === f.key ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-slate-600 border-gray-200 hover:bg-blue-50'
+              filter === f.key ? 'bg-btn text-white border-btn' : 'bg-white text-slate-600 border-gray-200 hover:bg-blue-50'
             }`}>{f.label}</button>
         ))}
       </div>
@@ -690,6 +724,72 @@ export default function GroupIdeas() {
           })}
         </div>
       )}
+
+      <div className="border-t border-line pt-6 mt-8">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-indigo-50 flex items-center justify-center">
+              <Lightbulb size={16} className="text-indigo-600" />
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-slate-900">Browse Approved Ideas</h3>
+              <p className="text-[10px] text-slate-400">Project ideas approved by FYP Office that you can request to work on</p>
+            </div>
+          </div>
+          <button onClick={() => setShowApprovedIdeas(!showApprovedIdeas)}
+            className="bg-btn hover:bg-btn-hover text-white px-4 py-2 rounded-xl font-bold text-xs shadow-sm transition-all flex items-center gap-2 cursor-pointer">
+            {showApprovedIdeas ? <ChevronUp size={14} /> : <Eye size={14} />}
+            {showApprovedIdeas ? 'Hide' : 'Browse Ideas'}
+          </button>
+        </div>
+
+        {showApprovedIdeas && (
+          loadingApproved ? (
+            <div className="flex items-center justify-center py-12">
+              <Loader className="animate-spin text-slate-400" size={24} />
+            </div>
+          ) : approvedIdeas.length === 0 ? (
+            <div className="flex flex-col items-center gap-2 py-12 text-slate-400">
+              <BookOpen size={24} />
+              <p className="text-xs font-bold">No approved ideas available yet.</p>
+              <p className="text-[10px]">Ideas submitted by supervisors and approved by FYP Office will appear here.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {approvedIdeas.map(idea => (
+                <div key={idea.id} className="bg-white rounded-2xl border border-line p-5 shadow-sm hover:shadow-md transition-all">
+                  <h3 className="font-bold text-slate-900 text-sm mb-2">{idea.title}</h3>
+                  {idea.description && <p className="text-xs text-slate-500 leading-relaxed mb-3 line-clamp-3">{idea.description}</p>}
+                  <div className="flex flex-wrap gap-1.5 mb-3">
+                    {idea.category && <span className="bg-purple-50 text-purple-700 text-[10px] font-bold px-2 py-1 rounded-lg border border-purple-200">{idea.category}</span>}
+                    {idea.techStack && idea.techStack.split(',').map((t, i) => <span key={i} className="bg-gray-50 text-slate-600 text-[10px] font-bold px-2 py-1 rounded-lg border border-line">{t.trim()}</span>)}
+                  </div>
+                  <div className="flex items-center justify-between pt-3 border-t border-line">
+                    <span className="text-[10px] text-slate-400">by <strong className="text-slate-600">{idea.supervisor?.name || 'Unknown'}</strong></span>
+                    <div className="flex items-center gap-2">
+                      {idea.requested ? (
+                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                          idea.requested === 'pending' ? 'bg-amber-50 text-amber-700 border border-amber-200' :
+                          idea.requested === 'accepted' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' :
+                          'bg-red-50 text-red-600 border border-red-200'
+                        }`}>
+                          {idea.requested === 'pending' ? 'Requested' : idea.requested === 'accepted' ? 'Accepted' : 'Rejected'}
+                        </span>
+                      ) : (
+                        <button onClick={() => handleRequestIdea(idea.id)} disabled={requestingId === idea.id}
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-btn text-white text-[10px] font-bold hover:bg-btn-hover transition-all cursor-pointer border-0 disabled:opacity-50">
+                          {requestingId === idea.id ? <Loader className="animate-spin" size={12} /> : <Send size={12} />}
+                          Request
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )
+        )}
+      </div>
     </motion.div>
   );
 }

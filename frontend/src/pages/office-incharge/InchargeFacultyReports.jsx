@@ -256,7 +256,7 @@ const InchargeFacultyReports = () => {
                 )}
                 <div className="flex items-center gap-2 pt-3 border-t border-line">
                   <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                    <div className="h-full bg-blue-600 rounded-full" style={{ width: `${g.progress || 0}%` }} />
+                    <div className="h-full bg-btn rounded-full" style={{ width: `${g.progress || 0}%` }} />
                   </div>
                   <span className="text-[10px] font-bold text-slate-500">{g.progress || 0}%</span>
                   <ChevronRight size={14} className="text-slate-300" />
@@ -432,7 +432,7 @@ const InchargeFacultyReports = () => {
               <h5 className="text-xs font-bold text-slate-900 tracking-wider mb-4">Progress</h5>
               <div className="flex items-center gap-3">
                 <div className="flex-1 h-2.5 bg-gray-100 rounded-full overflow-hidden">
-                  <div className="h-full bg-blue-600 rounded-full" style={{ width: `${groupDetail.progress || 0}%` }} />
+                  <div className="h-full bg-btn rounded-full" style={{ width: `${groupDetail.progress || 0}%` }} />
                 </div>
                 <span className="text-sm font-black text-slate-900">{groupDetail.progress || 0}%</span>
               </div>
@@ -493,7 +493,7 @@ const InchargeFacultyReports = () => {
                       </td>
                       <td className="py-4 px-6 text-center">
                         <button onClick={() => openFaculty(r._id)}
-                          className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-blue-600 text-white text-xs font-bold rounded-xl hover:bg-blue-700 transition-all cursor-pointer border-0">
+                          className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-btn text-white text-xs font-bold rounded-xl hover:bg-btn-hover transition-all cursor-pointer border-0">
                           <User size={12} /> View Profile
                         </button>
                       </td>

@@ -66,7 +66,7 @@ const AssistantExternal = () => {
           <h2 className="text-xl font-bold text-slate-900">External & Industry Supervisor Management</h2>
           <p className="text-xs text-slate-900 mt-0.5 font-medium">Create temporary evaluator accounts, set evaluation windows, and allocate project assignments</p>
         </div>
-        <button onClick={() => setIsCreateOpen(true)} className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg transition-all flex items-center gap-2 cursor-pointer">
+        <button onClick={() => setIsCreateOpen(true)} className="bg-btn hover:bg-btn-hover text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg transition-all flex items-center gap-2 cursor-pointer">
           <UserPlus className="w-4 h-4" /> Create Temporary Evaluator
         </button>
       </div>
@@ -110,7 +110,7 @@ const AssistantExternal = () => {
                     {ev.status === 'Allocated' ? (
                       <button onClick={() => showToast.success('Notification email dispatched!')} className="px-3 py-1.5 rounded-lg bg-white hover:bg-blue-50 border border-line text-xs font-bold transition-all cursor-pointer">Notify</button>
                     ) : (
-                      <button onClick={() => setIsAssignOpen(true)} className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition-all cursor-pointer shadow-sm">Assign Project</button>
+                      <button onClick={() => setIsAssignOpen(true)} className="px-3 py-1.5 rounded-lg bg-btn hover:bg-btn-hover text-white font-bold text-xs transition-all cursor-pointer shadow-sm">Assign Project</button>
                     )}
                   </td>
                 </tr>
@@ -148,7 +148,7 @@ const AssistantExternal = () => {
               </div>
               <div className="flex justify-end gap-3 pt-4 border-t border-line">
                 <button type="button" onClick={() => setIsCreateOpen(false)} className="px-5 py-2.5 rounded-xl text-xs font-bold text-slate-900 hover:bg-white transition-colors cursor-pointer">Cancel</button>
-                <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow-lg transition-all cursor-pointer">Create Account</button>
+                <button type="submit" className="bg-btn hover:bg-btn-hover text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow-lg transition-all cursor-pointer">Create Account</button>
               </div>
             </form>
           </div>
@@ -183,7 +183,7 @@ const AssistantExternal = () => {
               </div>
               <div className="flex justify-end gap-3 pt-4 border-t border-line">
                 <button type="button" onClick={() => setIsAssignOpen(false)} className="px-5 py-2.5 rounded-xl text-xs font-bold text-slate-900 hover:bg-white transition-colors cursor-pointer">Cancel</button>
-                <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow-lg transition-all cursor-pointer">Confirm Allocation</button>
+                <button type="submit" className="bg-btn hover:bg-btn-hover text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow-lg transition-all cursor-pointer">Confirm Allocation</button>
               </div>
             </form>
           </div>

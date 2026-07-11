@@ -193,7 +193,7 @@ export default function Profile() {
           </div>
 
           <div className="flex items-center justify-end gap-3 pt-4 border-t border-line">
-            <button type="submit" disabled={loading} className="bg-blue-600 hover:bg-blue-600 text-white px-5 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2 shadow-lg focus-visible:ring-2 focus-visible:ring-blue-500">
+            <button type="submit" disabled={loading} className="bg-btn hover:bg-btn-hover text-white px-5 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2 shadow-lg focus-visible:ring-2 focus-visible:ring-blue-500">
               {loading ? <Loader className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />} {loading ? 'Saving...' : 'Save Profile'}
             </button>
           </div>

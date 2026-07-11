@@ -84,7 +84,7 @@ const FacultyHeadDuties = () => {
                   </td>
                   <td className="py-4 px-6 text-slate-600 font-semibold">{d.nextMeeting}</td>
                   <td className="py-4 px-6 text-right space-x-2">
-                    <button onClick={handleConsolidate} className="px-3 py-1.5 rounded-lg bg-blue-600 text-white font-semibold text-xs hover:bg-blue-700 transition-all cursor-pointer shadow-sm focus-visible:ring-2 focus-visible:ring-blue-500">Consolidate Results</button>
+                    <button onClick={handleConsolidate} className="px-3 py-1.5 rounded-lg bg-btn text-white font-semibold text-xs hover:bg-btn-hover transition-all cursor-pointer shadow-sm focus-visible:ring-2 focus-visible:ring-blue-500">Consolidate Results</button>
                   </td>
                 </tr>
               ))}

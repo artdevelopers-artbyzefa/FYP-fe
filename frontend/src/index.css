@@ -6,10 +6,12 @@
   --color-surface: #f1f5f9;
   --color-line: #e2e8f0;
 
-  --color-primary: #1565c0;
-  --color-primary-dark: #0d47a1;
-  --color-primary-deep: #1a237e;
-  --color-secondary: #1e3a8a;
+  --color-primary: #1e3a8a;
+  --color-primary-dark: #172554;
+  --color-btn: #1565c0;
+  --color-btn-hover: #0d47a1;
+  --color-secondary: #2563eb;
+  --color-accent: #3b82f6;
 
   --color-success: #059669;
   --color-warning: #d97706;
@@ -19,7 +21,7 @@
   --color-sidebar-active: #1565c0;
 
   --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.04);
-  --shadow-card-hover: 0 8px 25px -6px rgb(37 99 235 / 0.12);
+  --shadow-card-hover: 0 8px 25px -6px rgb(21 101 192 / 0.15);
   --shadow-dropdown: 0 8px 30px rgb(0 0 0 / 0.08);
 
   --radius-4xl: 2rem;
@@ -74,7 +76,7 @@
   }
 
   body {
-    @apply font-poppins bg-surface text-slate-700 min-h-screen selection:bg-blue-100 selection:text-blue-900;
+    @apply font-poppins bg-surface text-slate-700 min-h-screen selection:bg-btn/15 selection:text-btn;
     min-height: 100dvh;
     scrollbar-width: thin;
     scrollbar-color: #cbd5e1 transparent;
@@ -265,11 +267,11 @@
   }
 
   .btn-primary {
-    @apply px-5 py-2.5 bg-blue-600 text-white rounded-xl text-xs font-bold shadow-sm hover:bg-blue-700 transition-all cursor-pointer border-0;
+    @apply px-5 py-2.5 bg-btn text-white rounded-xl text-xs font-bold shadow-sm hover:bg-btn-hover transition-all cursor-pointer border-0;
   }
 
   .btn-primary-sm {
-    @apply px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white border border-blue-600 text-xs font-semibold transition-all cursor-pointer;
+    @apply px-3 py-1.5 rounded-lg bg-btn hover:bg-btn-hover text-white border border-btn text-xs font-semibold transition-all cursor-pointer;
   }
 
   .input-field {

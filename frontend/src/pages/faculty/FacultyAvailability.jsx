@@ -86,7 +86,7 @@ const FacultyAvailability = () => {
           <h2 className="text-xl font-bold text-slate-900">Weekly Availability Schedule</h2>
           <p className="text-xs text-slate-500 mt-0.5 font-medium">Click on time slots to toggle your availability for student consultations and defense scheduling</p>
         </div>
-        <button onClick={handleSave} className="bg-blue-600 text-white px-5 py-2.5 rounded-xl font-semibold text-sm shadow-sm hover:bg-blue-700 transition-all flex items-center gap-2 cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500">
+        <button onClick={handleSave} className="bg-btn text-white px-5 py-2.5 rounded-xl font-semibold text-sm shadow-sm hover:bg-btn-hover transition-all flex items-center gap-2 cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500">
           <Save size={15} /> Save Schedule
         </button>
       </motion.div>

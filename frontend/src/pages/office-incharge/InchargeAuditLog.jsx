@@ -178,7 +178,7 @@ const InchargeAuditLog = () => {
               <ChevronLeft size={14} />
             </button>
             {pageNumbers.map(p => (
-              <button key={p} onClick={() => setPage(p)} className={`w-10 h-10 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${p === page ? 'bg-blue-600 text-white' : 'border border-line text-slate-500 hover:bg-blue-50'}`}>{p}</button>
+              <button key={p} onClick={() => setPage(p)} className={`w-10 h-10 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${p === page ? 'bg-btn text-white' : 'border border-line text-slate-500 hover:bg-blue-50'}`}>{p}</button>
             ))}
             <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page >= totalPages} className="w-10 h-10 rounded-lg border border-line text-slate-400 hover:bg-blue-50 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer flex items-center justify-center">
               <ChevronRight size={14} />

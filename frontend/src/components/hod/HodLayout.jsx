@@ -296,7 +296,7 @@ const HodLayout = () => {
                 ) : (
                   <User size={28} />
                 )}
-                <label className="absolute bottom-0 right-0 w-7 h-7 bg-blue-600 text-white rounded-full flex items-center justify-center cursor-pointer border-2 border-white hover:bg-blue-700 transition-colors">
+                <label className="absolute bottom-0 right-0 w-7 h-7 bg-btn text-white rounded-full flex items-center justify-center cursor-pointer border-2 border-white hover:bg-btn-hover transition-colors">
                   {uploadingAvatar ? <Loader2 size={12} className="animate-spin" /> : <Camera size={12} />}
                   <input type="file" accept="image/*" onChange={handleAvatarUpload} className="hidden" />
                 </label>
@@ -318,7 +318,7 @@ const HodLayout = () => {
                     </div>
                   </div>
                   <div className="flex justify-end pt-2">
-                    <button type="submit" disabled={passSubmitting} className="px-6 py-2.5 bg-blue-600 text-white rounded-xl text-xs font-bold shadow-sm hover:bg-blue-700 transition-all cursor-pointer border-0 disabled:opacity-50 flex items-center gap-2">
+                    <button type="submit" disabled={passSubmitting} className="px-6 py-2.5 bg-btn text-white rounded-xl text-xs font-bold shadow-sm hover:bg-btn-hover transition-all cursor-pointer border-0 disabled:opacity-50 flex items-center gap-2">
                       {passSubmitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                       {passSubmitting ? 'Sending...' : 'Send Verification Code'}
                     </button>
@@ -340,7 +340,7 @@ const HodLayout = () => {
                   </div>
                   <div className="flex items-center justify-between pt-2">
                     <button type="button" onClick={() => setPassStep('email')} className="text-xs text-gray-500 hover:text-gray-700 font-medium bg-transparent border-0 cursor-pointer">Back</button>
-                    <button type="submit" disabled={passSubmitting} className="px-6 py-2.5 bg-blue-600 text-white rounded-xl text-xs font-bold shadow-sm hover:bg-blue-700 transition-all cursor-pointer border-0 disabled:opacity-50 flex items-center gap-2">
+                    <button type="submit" disabled={passSubmitting} className="px-6 py-2.5 bg-btn text-white rounded-xl text-xs font-bold shadow-sm hover:bg-btn-hover transition-all cursor-pointer border-0 disabled:opacity-50 flex items-center gap-2">
                       {passSubmitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                       {passSubmitting ? 'Changing...' : 'Change Password'}
                     </button>

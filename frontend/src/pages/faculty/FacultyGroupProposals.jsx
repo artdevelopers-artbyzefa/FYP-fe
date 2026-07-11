@@ -107,7 +107,7 @@ const FacultyGroupProposals = () => {
         {[{ key: 'all', label: `All (${allIdeas.length})` }, ...Object.entries(STATUS_MAP).map(([k, v]) => ({ key: k, label: `${v.label} (${counts[k] || 0})` }))].map(f => (
           <button key={f.key} onClick={() => setFilter(f.key)}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer border ${
-              filter === f.key ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-slate-600 border-gray-200 hover:bg-blue-50'
+              filter === f.key ? 'bg-btn text-white border-btn' : 'bg-white text-slate-600 border-gray-200 hover:bg-blue-50'
             }`}>{f.label}</button>
         ))}
       </div>
@@ -185,7 +185,7 @@ const FacultyGroupProposals = () => {
                       </button>
                       {idea.agreementStatus === 'supervisor_approved' && (
                         <button onClick={() => showConfirm('Forward to FYP Office', 'Forward this group to FYP Office for further review?', () => handleForward(idea.group?._id || idea.group))}
-                          className="flex items-center gap-1.5 px-4 py-2 bg-blue-600 text-white text-xs font-bold rounded-xl hover:bg-blue-700 transition-all cursor-pointer border-0">
+                          className="flex items-center gap-1.5 px-4 py-2 bg-btn text-white text-xs font-bold rounded-xl hover:bg-btn-hover transition-all cursor-pointer border-0">
                           <Send className="w-3.5 h-3.5" /> Forward to FYP Office
                         </button>
                       )}
@@ -230,7 +230,7 @@ const FacultyGroupProposals = () => {
 
       <AnimatePresence>
         {confirm.show && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-blue-600/20 backdrop-blur-sm">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-btn/20 backdrop-blur-sm">
             <motion.div initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }} className="bg-white rounded-2xl shadow-2xl border border-line w-full max-w-sm p-6">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center">
@@ -247,7 +247,7 @@ const FacultyGroupProposals = () => {
                   Cancel
                 </button>
                 <button onClick={handleConfirm}
-                  className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 transition-all cursor-pointer border-0">
+                  className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-btn hover:bg-btn-hover transition-all cursor-pointer border-0">
                   Confirm
                 </button>
               </div>

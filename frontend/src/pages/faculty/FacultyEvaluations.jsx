@@ -133,7 +133,7 @@ const FacultyEvaluations = () => {
                               {e.status}
                             </span>
                             {e.status === 'Pending' ? (
-                              <button onClick={() => openScoreModal(e)} className="px-3 py-1.5 rounded-lg bg-blue-600 text-white font-semibold text-[10px] hover:bg-blue-700 transition-all cursor-pointer shadow-sm border-0 whitespace-nowrap">Input Scores</button>
+                              <button onClick={() => openScoreModal(e)} className="px-3 py-1.5 rounded-lg bg-btn text-white font-semibold text-[10px] hover:bg-btn-hover transition-all cursor-pointer shadow-sm border-0 whitespace-nowrap">Input Scores</button>
                             ) : (
                               <span className="inline-flex items-center gap-1 text-[10px] text-slate-400 font-semibold italic px-2">
                                 <Lock size={10} /> Locked
@@ -182,7 +182,7 @@ const FacultyEvaluations = () => {
                   </td>
                   <td className="py-4 px-6 text-right">
                     {e.status === 'Pending' ? (
-                      <button onClick={() => openScoreModal(e)} className="px-3 py-1.5 rounded-lg bg-blue-600 text-white font-semibold text-xs hover:bg-blue-700 transition-all cursor-pointer shadow-sm focus-visible:ring-2 focus-visible:ring-blue-500">Input Scores</button>
+                      <button onClick={() => openScoreModal(e)} className="px-3 py-1.5 rounded-lg bg-btn text-white font-semibold text-xs hover:bg-btn-hover transition-all cursor-pointer shadow-sm focus-visible:ring-2 focus-visible:ring-blue-500">Input Scores</button>
                     ) : (
                       <span className="inline-flex items-center gap-1 text-xs text-slate-400 font-semibold italic">
                         <Lock size={12} /> Locked
@@ -257,7 +257,7 @@ const FacultyEvaluations = () => {
 
               <div className="flex justify-end gap-3 pt-4 border-t border-line">
                 <button type="button" onClick={() => setIsScoreOpen(false)} className="px-5 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500">Cancel</button>
-                <button type="submit" className="bg-blue-600 text-white px-6 py-2.5 rounded-xl text-xs font-semibold hover:bg-blue-700 shadow-sm transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500">Submit & Lock Scores</button>
+                <button type="submit" className="bg-btn text-white px-6 py-2.5 rounded-xl text-xs font-semibold hover:bg-btn-hover shadow-sm transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500">Submit & Lock Scores</button>
               </div>
             </form>
           </div>

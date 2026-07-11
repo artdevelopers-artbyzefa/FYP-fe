@@ -38,7 +38,7 @@ const Sidebar = ({ isOpen, onClose }) => {
   const menuClass = ({ isActive }) => 
     `flex items-center gap-3.5 px-4 py-3 rounded-[16px] transition-all duration-200 group font-poppins font-semibold text-[15px] ${
       isActive 
-        ? 'bg-secondary text-white shadow-lg shadow-blue-600/20' 
+        ? 'bg-sidebar-active text-white shadow-lg shadow-black/20' 
         : 'text-blue-100/70 hover:bg-white/5 hover:text-white'
     }`;
 
@@ -84,7 +84,7 @@ const Sidebar = ({ isOpen, onClose }) => {
       )}
 
       {/* Sidebar container */}
-      <div className={`w-[260px] bg-[#1e3a8a] h-screen text-white flex flex-col p-6 fixed left-0 top-0 border-r border-white/5 shadow-2xl z-50 transition-transform duration-300 ease-in-out lg:translate-x-0 ${
+      <div className={`w-[260px] bg-sidebar-bg h-screen text-white flex flex-col p-6 fixed left-0 top-0 border-r border-white/5 shadow-2xl z-50 transition-transform duration-300 ease-in-out lg:translate-x-0 ${
         isOpen ? 'translate-x-0' : '-translate-x-full'
       }`}>
         {/* Brand Logo */}

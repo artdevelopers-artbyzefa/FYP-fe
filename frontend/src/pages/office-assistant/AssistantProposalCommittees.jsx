@@ -146,7 +146,7 @@ const AssistantProposalCommittees = () => {
               <button
                 type="submit"
                 disabled={submitting}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-xl font-bold text-sm shadow-lg transition-all cursor-pointer disabled:opacity-50"
+                className="bg-btn hover:bg-btn-hover text-white px-6 py-2.5 rounded-xl font-bold text-sm shadow-lg transition-all cursor-pointer disabled:opacity-50"
               >
                 {submitting ? 'Creating...' : 'Create Committee'}
               </button>
@@ -183,7 +183,7 @@ const AssistantProposalCommittees = () => {
                 </div>
               </div>
               <div className="flex gap-3 justify-end pt-2">
-                <button onClick={handleAssign} className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer">Assign Proposal</button>
+                <button onClick={handleAssign} className="bg-btn hover:bg-btn-hover text-white px-5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer">Assign Proposal</button>
                 <button onClick={handlePublish} className="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer">Publish Schedule</button>
               </div>
             </div>

@@ -58,7 +58,7 @@ const InchargeGrievances = () => {
                   </div>
                   
                   <div className="flex flex-wrap gap-2 pt-4 border-t border-line justify-end">
-                    <button onClick={() => handleAction('Action Requested Successfully')} className="px-4 py-2.5 bg-blue-600 hover:bg-blue-600 text-white rounded-xl font-bold transition-all cursor-pointer shadow-sm flex items-center gap-2">
+                    <button onClick={() => handleAction('Action Requested Successfully')} className="px-4 py-2.5 bg-btn hover:bg-btn-hover text-white rounded-xl font-bold transition-all cursor-pointer shadow-sm flex items-center gap-2">
                       <RefreshCw className="w-4 h-4" /> Take Action
                     </button>
                     <button onClick={() => handleAction('Grievance Escalated to HOD', 'warning')} className="px-4 py-2.5 bg-white hover:bg-white text-white rounded-xl font-bold transition-all cursor-pointer shadow-sm flex items-center gap-2">

@@ -2,9 +2,10 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import {
   Plus, X, Check, Calendar, Clock,
   List, Columns, CalendarDays, Trash2,
-  User, Tag, AlignLeft, AlertCircle, Bell, ChevronDown, Pencil
+  User, Tag, AlignLeft, AlertCircle, Bell, ChevronDown, Pencil, GripVertical
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import apiClient from '../../api/apiClient';
 import { STUDENT_TASKS_API_URL } from '../../utils/constants/api-url.constant';
 import { getStudentGroup } from '../../services/student.service';
@@ -13,10 +14,17 @@ import { logger } from '../../utils/logger';
 const COLUMNS = ['Not Started', 'In Progress', 'Review', 'Completed'];
 
 const COLUMN_META = {
-  'Not Started': { dot: 'bg-slate-400' },
-  'In Progress': { dot: 'bg-blue-500' },
-  'Review': { dot: 'bg-amber-500' },
-  'Completed': { dot: 'bg-emerald-500' },
+  'Not Started': { dot: 'bg-slate-400', statusKey: 'not_started' },
+  'In Progress': { dot: 'bg-blue-500', statusKey: 'in_progress' },
+  'Review': { dot: 'bg-amber-500', statusKey: 'review' },
+  'Completed': { dot: 'bg-emerald-500', statusKey: 'completed' },
+};
+
+const COL_TO_STATUS = {
+  'Not Started': 'not_started',
+  'In Progress': 'in_progress',
+  'Review': 'review',
+  'Completed': 'completed',
 };
 
 const REVERSE_STATUS = {
@@ -115,7 +123,7 @@ function InlineTitleEdit({ value, onSave, onCancel }) {
   );
 }
 
-function TaskCard({ task, onSelect }) {
+function TaskCard({ task, onSelect, index }) {
   const [editing, setEditing] = useState(false);
 
   const handleInlineSave = async (title) => {
@@ -128,89 +136,128 @@ function TaskCard({ task, onSelect }) {
   };
 
   return (
-    <div className="group relative">
-      <div
-        onClick={() => !editing && onSelect(task)}
-        className="bg-white rounded-lg border border-slate-200 px-3.5 py-3 cursor-pointer hover:border-blue-300 hover:bg-blue-50/30 transition-all duration-150"
-      >
-        <div className="flex items-start gap-2">
-          <div className="flex-1 min-w-0" onDoubleClick={(e) => { e.stopPropagation(); setEditing(true); }}>
-            {editing ? (
-              <InlineTitleEdit
-                value={task.title}
-                onSave={handleInlineSave}
-                onCancel={() => setEditing(false)}
-              />
-            ) : (
-              <h4 className="text-[13px] font-semibold text-slate-800 leading-snug line-clamp-2">{task.title}</h4>
-            )}
-            <div className="flex items-center gap-2.5 mt-2.5">
-              {task.priority && (
-                <span className="flex items-center gap-1 text-[11px] font-medium text-slate-500">
-                  <span className={`w-2 h-2 rounded-full ${PRIORITY_STYLES[task.priority]?.dot || 'bg-slate-400'}`} />
-                  {task.priority}
-                </span>
-              )}
-              {task.dueDate && (
-                <span className={`flex items-center gap-1 text-[11px] font-medium ${task.overdue ? 'text-red-500' : 'text-slate-500'}`}>
-                  <Calendar size={11} />
-                  {formatDate(task.dueDate)}
-                </span>
-              )}
-              {task.assignee && (
-                <span className="ml-auto flex items-center justify-center w-5 h-5 rounded-full bg-slate-200 text-[9px] font-bold text-slate-600">
-                  {task.assignee.substring(0, 2).toUpperCase()}
-                </span>
-              )}
-            </div>
-            {task.progress > 0 && task.progress < 100 && (
-              <div className="mt-2.5 h-1 w-full bg-slate-100 rounded-full overflow-hidden">
-                <div className="h-full bg-blue-500 rounded-full transition-all" style={{ width: `${task.progress}%` }} />
+    <Draggable draggableId={String(task.id || task._id)} index={index}>
+      {(provided, snapshot) => (
+        <div
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+          className="group relative"
+        >
+          <div
+            onClick={() => !editing && onSelect(task)}
+            className={`bg-white rounded-lg border px-3.5 py-3 cursor-pointer transition-all duration-150 ${
+              snapshot.isDragging
+                ? 'border-blue-400 bg-blue-50 shadow-lg rotate-2 scale-[1.02] z-50'
+                : 'border-slate-200 hover:border-blue-300 hover:bg-blue-50/30'
+            }`}
+          >
+            <div className="flex items-start gap-1.5">
+              <div
+                {...provided.dragHandleProps}
+                className="mt-0.5 cursor-grab active:cursor-grabbing text-slate-300 hover:text-slate-400 transition-colors flex-shrink-0"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <GripVertical size={14} strokeWidth={1.5} />
               </div>
-            )}
+              <div className="flex-1 min-w-0" onDoubleClick={(e) => { e.stopPropagation(); setEditing(true); }}>
+                {editing ? (
+                  <InlineTitleEdit
+                    value={task.title}
+                    onSave={handleInlineSave}
+                    onCancel={() => setEditing(false)}
+                  />
+                ) : (
+                  <h4 className="text-[13px] font-semibold text-slate-800 leading-snug line-clamp-2">{task.title}</h4>
+                )}
+                <div className="flex items-center gap-2.5 mt-2.5">
+                  {task.priority && (
+                    <span className="flex items-center gap-1 text-[11px] font-medium text-slate-500">
+                      <span className={`w-2 h-2 rounded-full ${PRIORITY_STYLES[task.priority]?.dot || 'bg-slate-400'}`} />
+                      {task.priority}
+                    </span>
+                  )}
+                  {task.dueDate && (
+                    <span className={`flex items-center gap-1 text-[11px] font-medium ${task.overdue ? 'text-red-500' : 'text-slate-500'}`}>
+                      <Calendar size={11} />
+                      {formatDate(task.dueDate)}
+                    </span>
+                  )}
+                  {task.assignee && (
+                    <span className="ml-auto flex items-center justify-center w-5 h-5 rounded-full bg-slate-200 text-[9px] font-bold text-slate-600">
+                      {task.assignee.substring(0, 2).toUpperCase()}
+                    </span>
+                  )}
+                </div>
+                {task.progress > 0 && task.progress < 100 && (
+                  <div className="mt-2.5 h-1 w-full bg-slate-100 rounded-full overflow-hidden">
+                    <div className="h-full bg-blue-500 rounded-full transition-all" style={{ width: `${task.progress}%` }} />
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
+          <button
+            onClick={(e) => { e.stopPropagation(); setEditing(true); }}
+            className="absolute top-2 right-2 p-1 rounded-md bg-white border border-slate-200 shadow-sm opacity-0 group-hover:opacity-100 transition-opacity text-slate-400 hover:text-blue-600 cursor-pointer"
+            title="Rename"
+          >
+            <Pencil size={12} strokeWidth={2} />
+          </button>
         </div>
-      </div>
-      <button
-        onClick={(e) => { e.stopPropagation(); setEditing(true); }}
-        className="absolute top-2 right-2 p-1 rounded-md bg-white border border-slate-200 shadow-sm opacity-0 group-hover:opacity-100 transition-opacity text-slate-400 hover:text-blue-600 cursor-pointer"
-        title="Rename"
-      >
-        <Pencil size={12} strokeWidth={2} />
-      </button>
-    </div>
+      )}
+    </Draggable>
   );
 }
 
-function BoardView({ tasks, onSelectTask }) {
+function BoardView({ tasks, onSelectTask, onDragEnd }) {
   return (
-    <div className="flex gap-4 overflow-x-auto pb-2 -mx-1 px-1" style={{ scrollbarWidth: 'thin' }}>
-      {COLUMNS.map(col => {
-        const meta = COLUMN_META[col];
-        const colTasks = tasks[col] || [];
-        return (
-          <div key={col} className="flex-1 min-w-[260px] max-w-[320px] bg-slate-50/80 rounded-xl border border-slate-200">
-            <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200">
-              <div className="flex items-center gap-2">
-                <span className={`w-2 h-2 rounded-full ${meta.dot}`} />
-                <h3 className="text-[13px] font-semibold text-slate-700">{col}</h3>
-                <span className="text-[11px] font-medium text-slate-400 ml-1">{colTasks.length}</span>
-              </div>
-            </div>
-            <div className="p-2.5 space-y-2 min-h-[120px]">
-              {colTasks.map(task => (
-                <TaskCard key={task.id || task._id} task={task} onSelect={onSelectTask} />
-              ))}
-              {colTasks.length === 0 && (
-                <div className="flex items-center justify-center h-20 text-[12px] text-slate-400 font-medium">
-                  No tasks
+    <DragDropContext onDragEnd={onDragEnd}>
+      <div className="flex gap-4 overflow-x-auto pb-2 -mx-1 px-1" style={{ scrollbarWidth: 'thin' }}>
+        {COLUMNS.map(col => {
+          const meta = COLUMN_META[col];
+          const colTasks = tasks[col] || [];
+          return (
+            <Droppable key={col} droppableId={col}>
+              {(provided, snapshot) => (
+                <div
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                  className={`flex-1 min-w-[260px] max-w-[320px] rounded-xl border transition-colors ${
+                    snapshot.isDraggingOver
+                      ? 'border-blue-300 bg-blue-50/50'
+                      : 'bg-slate-50/80 border-slate-200'
+                  }`}
+                >
+                  <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200">
+                    <div className="flex items-center gap-2">
+                      <span className={`w-2 h-2 rounded-full ${meta.dot}`} />
+                      <h3 className="text-[13px] font-semibold text-slate-700">{col}</h3>
+                      <span className="text-[11px] font-medium text-slate-400 ml-1">{colTasks.length}</span>
+                    </div>
+                  </div>
+                  <div className="p-2.5 space-y-2 min-h-[120px]">
+                    {colTasks.map((task, index) => (
+                      <TaskCard key={task.id || task._id} task={task} index={index} onSelect={onSelectTask} />
+                    ))}
+                    {provided.placeholder}
+                    {colTasks.length === 0 && !snapshot.isDraggingOver && (
+                      <div className="flex items-center justify-center h-20 text-[12px] text-slate-400 font-medium">
+                        No tasks
+                      </div>
+                    )}
+                    {colTasks.length === 0 && snapshot.isDraggingOver && (
+                      <div className="flex items-center justify-center h-20 text-[12px] text-blue-400 font-medium border-2 border-dashed border-blue-200 rounded-lg bg-blue-50/30">
+                        Drop here
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
-            </div>
-          </div>
-        );
-      })}
-    </div>
+            </Droppable>
+          );
+        })}
+      </div>
+    </DragDropContext>
   );
 }
 
@@ -732,6 +779,42 @@ export default function TaskManager() {
     showToast('Task created');
   };
 
+  const handleDragEnd = async (result) => {
+    const { source, destination, draggableId } = result;
+    if (!destination) return;
+    if (source.droppableId === destination.droppableId && source.index === destination.index) return;
+
+    const sourceCol = source.droppableId;
+    const destCol = destination.droppableId;
+
+    setTasks(prev => {
+      const next = { ...prev };
+      const sourceItems = [...(next[sourceCol] || [])];
+      const [moved] = sourceItems.splice(source.index, 1);
+      next[sourceCol] = sourceItems;
+
+      if (!moved) return prev;
+
+      const updated = {
+        ...moved,
+        status: COL_TO_STATUS[destCol] || moved.status,
+        progress: destCol === 'Completed' ? 100 : moved.progress,
+      };
+
+      const destItems = [...(next[destCol] || [])];
+      destItems.splice(destination.index, 0, updated);
+      next[destCol] = destItems;
+
+      apiClient.put(`${STUDENT_TASKS_API_URL}/${updated.id || updated._id}`, {
+        status: updated.status,
+        progress: updated.progress,
+      }).catch(err => logger('Error saving task after drag:', err));
+
+      showToast(`Moved to ${destCol}`);
+      return next;
+    });
+  };
+
   const handleQuickKeyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -995,7 +1078,7 @@ export default function TaskManager() {
             ))}
           </div>
         ) : view === 'board' ? (
-          <BoardView tasks={tasks} onSelectTask={handleSelectTask} />
+          <BoardView tasks={tasks} onSelectTask={handleSelectTask} onDragEnd={handleDragEnd} />
         ) : view === 'table' ? (
           <TableView tasks={tasks} onSelectTask={handleSelectTask} />
         ) : (

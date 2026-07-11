@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { submitGroupIdea, getGroupIdeas, voteOnGroupIdea, getStudentGroup, generateAIDescription } from '../../services/student.service';
+import { submitGroupIdea, getGroupIdeas, voteOnGroupIdea, getStudentGroup, generateAIDescription, getAvailableSupervisors } from '../../services/student.service';
 import { showToast as toast } from '../../components/AppToast';
 import { IDEA_STATUS_MAP as statusConfig } from '../../utils/constants/status.constant';
 import { getUserInfo } from '../../utils/app.utils';
@@ -9,24 +9,61 @@ import { motion } from 'framer-motion';
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.04 } } };
 const item = { hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } };
 
+const PROJECT_FIELDS = [
+  'Artificial Intelligence', 'Machine Learning', 'Deep Learning',
+  'Data Science', 'Web Development', 'Mobile Development',
+  'Cybersecurity', 'Cloud Computing', 'DevOps', 'Blockchain',
+  'Internet of Things (IoT)', 'Computer Vision', 'Natural Language Processing',
+  'Robotics', 'Game Development', 'Database Systems', 'Software Engineering',
+  'Network Engineering', 'Augmented Reality (AR)', 'Virtual Reality (VR)',
+  'Embedded Systems', 'Bioinformatics', 'Human-Computer Interaction',
+  'Distributed Systems', 'Quantum Computing', 'Big Data Analytics',
+  'Edge Computing', 'Voice/Audio Processing', 'Recommender Systems',
+  'Information Retrieval',
+];
+
 
 export default function GroupIdeas() {
   const [ideas, setIdeas] = useState([]);
   const [group, setGroup] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
-  const [newIdea, setNewIdea] = useState({ title: '', description: '', techStack: [] });
+  const [newIdea, setNewIdea] = useState({ title: '', description: '', fields: [], techStack: [], selectedSupervisor: null });
   const [techInput, setTechInput] = useState('');
+  const [fieldInput, setFieldInput] = useState('');
+  const [showFieldDropdown, setShowFieldDropdown] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [voting, setVoting] = useState({});
   const [generating, setGenerating] = useState(false);
   const [aiRemaining, setAiRemaining] = useState(null);
   const [filter, setFilter] = useState('fyp_approved');
+  const [supervisors, setSupervisors] = useState([]);
+  const [loadingSupervisors, setLoadingSupervisors] = useState(false);
+  const [showSupervisorDropdown, setShowSupervisorDropdown] = useState(false);
+  const [supervisorSearch, setSupervisorSearch] = useState('');
   const formRef = useRef(null);
 
   useEffect(() => {
     loadData();
   }, []);
+
+  useEffect(() => {
+    if (showForm) {
+      loadSupervisors();
+    }
+  }, [showForm]);
+
+  const loadSupervisors = async () => {
+    setLoadingSupervisors(true);
+    try {
+      const res = await getAvailableSupervisors();
+      setSupervisors(res || []);
+    } catch {
+      toast.error('Failed to load supervisors');
+    } finally {
+      setLoadingSupervisors(false);
+    }
+  };
 
   const loadData = async () => {
     setLoading(true);
@@ -52,11 +89,14 @@ export default function GroupIdeas() {
       const formData = new FormData();
       formData.append('title', newIdea.title);
       formData.append('description', newIdea.description);
+      formData.append('fields', newIdea.fields.join(', '));
       formData.append('techStack', newIdea.techStack.join(', '));
       if (newIdea.documentFile) formData.append('document', newIdea.documentFile);
+      if (newIdea.selectedSupervisor) formData.append('supervisorId', newIdea.selectedSupervisor);
       const res = await submitGroupIdea(formData);
       toast.success(res.message);
-      setNewIdea({ title: '', description: '', techStack: [], documentFile: null });
+      setNewIdea({ title: '', description: '', fields: [], techStack: [], selectedSupervisor: null, documentFile: null });
+      setSupervisorSearch('');
       setShowForm(false);
       const ideasRes = await getGroupIdeas();
       setIdeas(ideasRes?.data || []);
@@ -183,6 +223,149 @@ export default function GroupIdeas() {
               />
             </div>
             <div>
+              <label className="block text-sm font-bold text-slate-900 mb-1.5">
+                Field / Domain <span className="text-xs font-normal text-slate-400">({newIdea.fields.length}/3 selected)</span>
+              </label>
+              <div className="flex flex-wrap gap-1.5 mb-2">
+                {newIdea.fields.map((field, i) => (
+                  <span key={i} className="flex items-center gap-1 bg-purple-100 text-purple-700 text-xs font-bold px-2.5 py-1 rounded-lg border border-purple-200">
+                    {field}
+                    <button type="button" onClick={() => setNewIdea({ ...newIdea, fields: newIdea.fields.filter((_, j) => j !== i) })}
+                      className="bg-transparent border-0 p-0 text-purple-500 hover:text-purple-700 cursor-pointer text-xs">×</button>
+                  </span>
+                ))}
+              </div>
+              <div className="relative">
+                <input
+                  type="text"
+                  value={fieldInput}
+                  onChange={e => {
+                    setFieldInput(e.target.value);
+                    setShowFieldDropdown(true);
+                  }}
+                  onFocus={() => setShowFieldDropdown(true)}
+                  onBlur={() => setTimeout(() => setShowFieldDropdown(false), 200)}
+                  className="w-full bg-white border border-line rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600/20"
+                  placeholder="Search and select project fields..."
+                  disabled={newIdea.fields.length >= 3}
+                />
+                {showFieldDropdown && (
+                  <div className="absolute z-20 mt-1 w-full bg-white border border-line rounded-xl shadow-lg max-h-48 overflow-y-auto">
+                    {PROJECT_FIELDS.filter(f =>
+                      f.toLowerCase().includes(fieldInput.toLowerCase()) && !newIdea.fields.includes(f)
+                    ).length === 0 ? (
+                      <div className="px-4 py-3 text-sm text-slate-400">No matching fields</div>
+                    ) : (
+                      PROJECT_FIELDS.filter(f =>
+                        f.toLowerCase().includes(fieldInput.toLowerCase()) && !newIdea.fields.includes(f)
+                      ).map(f => (
+                        <button
+                          key={f}
+                          type="button"
+                          onMouseDown={e => {
+                            e.preventDefault();
+                            if (newIdea.fields.length < 3) {
+                              setNewIdea({ ...newIdea, fields: [...newIdea.fields, f] });
+                              setFieldInput('');
+                            }
+                          }}
+                          className="w-full text-left px-4 py-2.5 text-sm text-slate-700 hover:bg-blue-50 hover:text-blue-700 transition-colors cursor-pointer border-0 bg-transparent"
+                        >
+                          {f}
+                        </button>
+                      ))
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-bold text-slate-900 mb-1.5">
+                Request Supervisor <span className="text-xs font-normal text-slate-400">(select who should supervise this project)</span>
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  value={supervisorSearch}
+                  onChange={e => {
+                    setSupervisorSearch(e.target.value);
+                    setShowSupervisorDropdown(true);
+                  }}
+                  onFocus={() => setShowSupervisorDropdown(true)}
+                  onBlur={() => setTimeout(() => setShowSupervisorDropdown(false), 200)}
+                  className="w-full bg-white border border-line rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600/20"
+                  placeholder={loadingSupervisors ? 'Loading supervisors...' : 'Search for a supervisor...'}
+                  disabled={loadingSupervisors}
+                />
+                {newIdea.selectedSupervisor && (
+                  <div className="mt-2 flex items-center gap-2 bg-emerald-50 text-emerald-700 text-xs font-bold px-3 py-2 rounded-lg border border-emerald-200">
+                    <Check size={14} />
+                    <span>
+                      Selected: {supervisors.find(s => s.id === newIdea.selectedSupervisor)?.name || 'Supervisor'}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setNewIdea({ ...newIdea, selectedSupervisor: null });
+                        setSupervisorSearch('');
+                      }}
+                      className="ml-auto bg-transparent border-0 p-0 text-emerald-500 hover:text-emerald-700 cursor-pointer text-xs font-bold"
+                    >
+                      ×
+                    </button>
+                  </div>
+                )}
+                {showSupervisorDropdown && !newIdea.selectedSupervisor && (
+                  <div className="absolute z-20 mt-1 w-full bg-white border border-line rounded-xl shadow-lg max-h-56 overflow-y-auto">
+                    {supervisors.filter(s =>
+                      s.available && (
+                        !supervisorSearch ||
+                        s.name.toLowerCase().includes(supervisorSearch.toLowerCase()) ||
+                        s.email.toLowerCase().includes(supervisorSearch.toLowerCase())
+                      )
+                    ).length === 0 ? (
+                      <div className="px-4 py-3 text-sm text-slate-400">
+                        {supervisors.length === 0 ? 'No supervisors available' : 'No matching supervisors'}
+                      </div>
+                    ) : (
+                      supervisors.filter(s =>
+                        s.available && (
+                          !supervisorSearch ||
+                          s.name.toLowerCase().includes(supervisorSearch.toLowerCase()) ||
+                          s.email.toLowerCase().includes(supervisorSearch.toLowerCase())
+                        )
+                      ).map(s => (
+                        <button
+                          key={s.id}
+                          type="button"
+                          onMouseDown={e => {
+                            e.preventDefault();
+                            setNewIdea({ ...newIdea, selectedSupervisor: s.id });
+                            setSupervisorSearch(s.name);
+                            setShowSupervisorDropdown(false);
+                          }}
+                          className="w-full text-left px-4 py-2.5 text-sm text-slate-700 hover:bg-blue-50 hover:text-blue-700 transition-colors cursor-pointer border-0 bg-transparent flex items-center justify-between"
+                        >
+                          <div className="flex items-center gap-3 min-w-0">
+                            <span className="w-7 h-7 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-[10px] font-bold shrink-0">
+                              {s.avatar || s.name.charAt(0).toUpperCase()}
+                            </span>
+                            <div className="text-left min-w-0">
+                              <div className="font-medium truncate">{s.name}</div>
+                              <div className="text-[10px] text-slate-400 truncate">{s.email}</div>
+                            </div>
+                          </div>
+                          <span className={`shrink-0 text-[10px] font-bold px-2 py-0.5 rounded-full ${s.currentGroups < s.maxGroups ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-500'}`}>
+                            {s.currentGroups}/{s.maxGroups} groups
+                          </span>
+                        </button>
+                      ))
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+            <div>
               <label className="block text-sm font-bold text-slate-900 mb-1.5">Technology Stack</label>
               <div className="flex flex-wrap gap-1.5 mb-2">
                 {newIdea.techStack.map((tag, i) => (
@@ -293,6 +476,16 @@ export default function GroupIdeas() {
 
                 {idea.description && (
                   <p className="text-sm text-slate-600 mb-4 leading-relaxed">{idea.description}</p>
+                )}
+
+                {idea.fields && (
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {idea.fields.split(',').map((field, i) => (
+                      <span key={i} className="bg-purple-50 text-purple-700 text-xs font-bold px-2.5 py-1 rounded-lg border border-purple-100">
+                        {field.trim()}
+                      </span>
+                    ))}
+                  </div>
                 )}
 
                 {idea.techStack && (

@@ -82,6 +82,14 @@ export const submitGroupIdea = async (payload) => {
   return res.data;
 };
 
+export const resubmitGroupIdea = async (id, payload) => {
+  const isFormData = payload instanceof FormData;
+  const res = await apiClient.post(`/student/ideas/group/${id}/resubmit`, payload, {
+    headers: isFormData ? { 'Content-Type': 'multipart/form-data' } : {}
+  });
+  return res.data;
+};
+
 export const getGroupIdeas = async () => {
   const res = await apiClient.get(STUDENT_GET_GROUP_IDEAS_URL);
   return res.data;

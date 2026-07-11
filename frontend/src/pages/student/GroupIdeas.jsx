@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { submitGroupIdea, getGroupIdeas, voteOnGroupIdea, getStudentGroup, generateAIDescription, getAvailableSupervisors } from '../../services/student.service';
+import { submitGroupIdea, getGroupIdeas, voteOnGroupIdea, getStudentGroup, generateAIDescription, getAvailableSupervisors, resubmitGroupIdea } from '../../services/student.service';
 import { showToast as toast } from '../../components/AppToast';
 import { IDEA_STATUS_MAP as statusConfig } from '../../utils/constants/status.constant';
 import { getUserInfo } from '../../utils/app.utils';
-import { Check, ChevronDown, ChevronUp, Clock, Lightbulb, Loader, Plus, Sparkles, ThumbsDown, ThumbsUp, Upload, X } from 'lucide-react';
+import { Check, ChevronDown, ChevronUp, Clock, Lightbulb, Loader, Plus, RefreshCw, Sparkles, ThumbsDown, ThumbsUp, Upload, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.04 } } };
@@ -33,6 +33,9 @@ export default function GroupIdeas() {
   const [fieldInput, setFieldInput] = useState('');
   const [showFieldDropdown, setShowFieldDropdown] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [resubmitIdea, setResubmitIdea] = useState({ description: '', techStack: [] });
+  const [resubmitTechInput, setResubmitTechInput] = useState('');
+  const [resubmitting, setResubmitting] = useState(null);
   const [voting, setVoting] = useState({});
   const [generating, setGenerating] = useState(false);
   const [aiRemaining, setAiRemaining] = useState(null);
@@ -104,6 +107,29 @@ export default function GroupIdeas() {
       toast.error(err?.response?.data?.message || 'Failed to submit idea');
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const handleResubmit = async (ideaId) => {
+    const idea = ideas.find(i => i._id === ideaId);
+    if (!idea) return;
+    setResubmitting(ideaId);
+    try {
+      const formData = new FormData();
+      formData.append('description', resubmitIdea.description || idea.description || '');
+      formData.append('techStack', (resubmitIdea.techStack.length ? resubmitIdea.techStack : (idea.techStack ? idea.techStack.split(',').map(t => t.trim()).filter(Boolean) : [])).join(', '));
+      formData.append('fields', idea.fields || '');
+      if (resubmitIdea.documentFile) formData.append('document', resubmitIdea.documentFile);
+      const res = await resubmitGroupIdea(ideaId, formData);
+      toast.success(res.message);
+      setResubmitIdea({ description: '', techStack: [], documentFile: null });
+      setResubmitTechInput('');
+      setResubmitting(null);
+      const ideasRes = await getGroupIdeas();
+      setIdeas(ideasRes?.data || []);
+    } catch (err) {
+      toast.error(err?.response?.data?.message || 'Failed to resubmit idea');
+      setResubmitting(null);
     }
   };
 
@@ -498,7 +524,78 @@ export default function GroupIdeas() {
                   </div>
                 )}
 
-                {idea.supervisorFeedback && (
+                {idea.agreementStatus === 'needs_improvement' && (
+                  <div className="mb-4 p-4 bg-orange-50 rounded-xl border border-orange-200">
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-orange-100 flex items-center justify-center shrink-0 mt-0.5">
+                        <RefreshCw size={16} className="text-orange-600" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-xs font-bold text-orange-700 mb-1">Supervisor Requested Changes</p>
+                        <p className="text-sm text-orange-800 mb-3">{idea.supervisorFeedback || 'Please improve your proposal based on the feedback.'}</p>
+                        <div className="space-y-3">
+                          <div>
+                            <label className="block text-[10px] font-bold text-slate-600 mb-1">Updated Description</label>
+                            <textarea
+                              value={resubmitIdea.description}
+                              onChange={e => setResubmitIdea(p => ({ ...p, description: e.target.value }))}
+                              className="w-full bg-white border border-orange-200 rounded-xl px-3 py-2 text-sm min-h-[80px] focus:outline-none focus:ring-2 focus:ring-orange-400/30"
+                              placeholder={idea.description || 'Improve your project description...'}
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[10px] font-bold text-slate-600 mb-1">Technology Stack</label>
+                            <div className="flex flex-wrap gap-1 mb-2">
+                              {(resubmitIdea.techStack.length ? resubmitIdea.techStack : (idea.techStack ? idea.techStack.split(',').map(t => t.trim()).filter(Boolean) : [])).map((tag, i) => (
+                                <span key={i} className="flex items-center gap-1 bg-orange-100 text-orange-700 text-xs font-bold px-2 py-0.5 rounded-lg border border-orange-200">
+                                  {tag}
+                                  <button type="button" onClick={() => {
+                                    const current = resubmitIdea.techStack.length ? resubmitIdea.techStack : (idea.techStack ? idea.techStack.split(',').map(t => t.trim()).filter(Boolean) : []);
+                                    setResubmitIdea(p => ({ ...p, techStack: current.filter((_, j) => j !== i) }));
+                                  }} className="bg-transparent border-0 p-0 text-orange-500 hover:text-orange-700 cursor-pointer text-xs">×</button>
+                                </span>
+                              ))}
+                            </div>
+                            <div className="flex gap-2">
+                              <input type="text" value={resubmitTechInput} onChange={e => setResubmitTechInput(e.target.value)}
+                                onKeyDown={e => {
+                                  if (e.key === 'Enter' || e.key === ',') {
+                                    e.preventDefault();
+                                    const val = resubmitTechInput.trim();
+                                    if (val) {
+                                      const current = resubmitIdea.techStack.length ? resubmitIdea.techStack : (idea.techStack ? idea.techStack.split(',').map(t => t.trim()).filter(Boolean) : []);
+                                      if (!current.includes(val)) setResubmitIdea(p => ({ ...p, techStack: [...current, val] }));
+                                    }
+                                    setResubmitTechInput('');
+                                  }
+                                }}
+                                className="flex-1 bg-white border border-orange-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400/30"
+                                placeholder="Add technology..." />
+                            </div>
+                          </div>
+                          <div>
+                            <label className="block text-[10px] font-bold text-slate-600 mb-1">Updated Document (optional)</label>
+                            <input type="file" accept=".pdf" onChange={e => {
+                              const file = e.target.files?.[0];
+                              if (file && file.size > 10 * 1024 * 1024) { toast.error('File too large (max 10MB).'); return; }
+                              setResubmitIdea(p => ({ ...p, documentFile: file }));
+                            }} className="w-full bg-white border border-orange-200 rounded-xl px-3 py-2 text-sm file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:bg-orange-50 file:text-orange-700 file:text-xs file:font-bold cursor-pointer" />
+                          </div>
+                          <button
+                            onClick={() => handleResubmit(idea._id)}
+                            disabled={resubmitting === idea._id}
+                            className="w-full bg-orange-600 hover:bg-orange-700 text-white px-4 py-2.5 rounded-xl text-sm font-bold transition-all border-0 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                          >
+                            {resubmitting === idea._id ? <Loader size={16} className="animate-spin" /> : <RefreshCw size={16} />}
+                            {resubmitting === idea._id ? 'Resubmitting...' : 'Resubmit Improved Proposal'}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {idea.supervisorFeedback && idea.agreementStatus !== 'needs_improvement' && (
                   <div className="mb-4 p-3 bg-slate-50 rounded-xl border border-line">
                     <p className="text-xs font-bold text-slate-500 mb-1">Supervisor Feedback</p>
                     <p className="text-sm text-slate-700">{idea.supervisorFeedback}</p>

@@ -6,9 +6,10 @@
   --color-surface: #f1f5f9;
   --color-line: #e2e8f0;
 
-  --color-primary: #1e3a8a;
-  --color-secondary: #2563eb;
-  --color-accent: #3b82f6;
+  --color-primary: #1565c0;
+  --color-primary-dark: #0d47a1;
+  --color-primary-deep: #1a237e;
+  --color-secondary: #1e3a8a;
 
   --color-success: #059669;
   --color-warning: #d97706;

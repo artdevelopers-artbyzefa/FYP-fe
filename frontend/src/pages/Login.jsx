@@ -1,55 +1,73 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
 import { loginUser } from '../services/auth.service';
 import { showToast as AppToast } from '../components/AppToast';
-import { ArrowLeft, ArrowRight, ChevronDown, Eye, EyeOff, GraduationCap, Loader, Lock, Mail, UserCircle } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ChevronDown, Eye, EyeOff, Loader, Lock, Mail, UserCircle, Zap } from 'lucide-react';
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const { register, handleSubmit, setValue, formState: { errors } } = useForm({
-    defaultValues: {
-      role: 'Student'
+  const [formData, setFormData] = useState({ role: 'Student', email: '', password: '' });
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    if (!formData.email || !formData.password) {
+      AppToast.error('Missing fields', 'Enter email and password');
+      return;
     }
-  });
-
-  const handleQuickLogin = (role, email, password) => {
-    setValue('role', role);
-    setValue('email', email);
-    setValue('password', password);
-    setTimeout(() => {
-      handleSubmit(onSubmit)();
-    }, 50);
-  };
-
-  const onSubmit = async (data) => {
     setIsLoading(true);
     try {
-      const response = await loginUser(data);
+      const response = await loginUser(formData);
       AppToast.success('Login Successful', 'Welcome back to the FYP Portal!');
-
-      // Role-based navigation
-      const userRole = response.user?.role || data.role;
-      if (userRole === 'HOD') {
-        navigate('/hod/dashboard');
-      } else if (userRole === 'FYP Office Assistant') {
-        navigate('/office-assistant/dashboard');
-      } else if (userRole === 'Faculty Supervisor' || userRole === 'Faculty') {
-        navigate('/faculty/dashboard');
-      } else if (userRole === 'FYP Office In-charge') {
-        navigate('/office-incharge/dashboard');
-      } else if (userRole === 'System Administrator' || userRole === 'Admin') {
-        navigate('/admin/dashboard');
-      } else if (userRole === 'Industry Supervisor' || userRole === 'Industry') {
-        navigate('/industry/dashboard');
-      } else {
-        navigate('/dashboard');
-      }
+      const userRole = response.user?.role || formData.role;
+      const routes = {
+        'Student': '/dashboard',
+        'HOD': '/hod/dashboard',
+        'FYP Office Assistant': '/office-assistant/dashboard',
+        'Faculty Supervisor': '/faculty/dashboard',
+        'Faculty': '/faculty/dashboard',
+        'FYP Office In-charge': '/office-incharge/dashboard',
+        'System Administrator': '/admin/dashboard',
+        'Admin': '/admin/dashboard',
+        'Industry Supervisor': '/industry/dashboard',
+        'Industry': '/industry/dashboard',
+      };
+      navigate(routes[userRole] || '/dashboard');
     } catch (error) {
-      AppToast.error(error.title || 'Login Failed', error.message || 'Invalid credentials');
+      const msg = error?.message || '';
+      if (msg.toLowerCase().includes('invalid') || msg.toLowerCase().includes('not found')) {
+        AppToast.error('Wrong Password', 'Enter correct email and password.');
+      } else {
+        AppToast.error(error?.title || 'Login Failed', msg || 'Invalid credentials.');
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleQuickLogin = async (email, password, role) => {
+    setIsLoading(true);
+    try {
+      const response = await loginUser({ role, email, password });
+      AppToast.success('Login Successful', `Welcome, ${role}!`);
+      const userRole = response.user?.role || role;
+      const routes = {
+        'Student': '/dashboard',
+        'HOD': '/hod/dashboard',
+        'FYP Office Assistant': '/office-assistant/dashboard',
+        'Faculty Supervisor': '/faculty/dashboard',
+        'Faculty': '/faculty/dashboard',
+        'FYP Office In-charge': '/office-incharge/dashboard',
+        'System Administrator': '/admin/dashboard',
+        'Admin': '/admin/dashboard',
+        'Industry Supervisor': '/industry/dashboard',
+        'Industry': '/industry/dashboard',
+      };
+      navigate(routes[userRole] || '/dashboard');
+    } catch (error) {
+      AppToast.error(error?.title || 'Login Failed', error?.message || 'Invalid credentials.');
     } finally {
       setIsLoading(false);
     }
@@ -64,47 +82,27 @@ const Login = () => {
 
           {/* Navigation */}
           <div className="flex items-center justify-between mb-6">
-            <Link
-              to="/"
-              className="flex items-center gap-1.5 text-xs font-bold text-gray-400 hover:text-primary transition-colors"
-            >
-              <ArrowLeft className="w-3.5 h-3.5" />
-              Back to Home
-            </Link>
-            <Link
-              to="/student-portal"
-              className="flex items-center gap-1.5 text-xs font-bold text-blue-600 hover:text-primary transition-colors"
-            >
-              <GraduationCap className="w-3.5 h-3.5" />
-              Student Portal
+            <Link to="/" className="flex items-center gap-1.5 text-xs font-bold text-gray-400 hover:text-primary transition-colors">
+              <ArrowLeft className="w-3.5 h-3.5" /> Back to Home
             </Link>
           </div>
 
           {/* Logo & Header */}
           <div className="text-center mb-8">
-            <div className="w-[80px] h-[80px] mx-auto mb-4 drop-shadow">
-              <img
-                src="/cuilogo.png"
-                alt="CUI Logo"
-                className="h-20 w-auto mx-auto"
-              />
-            </div>
+            <img src="/cuilogo.png" alt="CUI Logo" className="h-20 w-auto mx-auto mb-4" />
             <h1 className="text-2xl font-black text-[#1e3a8a] tracking-tight mb-1">CUI Abbottabad</h1>
             <p className="text-sm font-medium text-gray-500">FYP Management System</p>
           </div>
 
-          {/* Form */}
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={onSubmit} className="space-y-4">
 
             {/* Role Selection */}
             <div className="space-y-1.5">
               <label className="text-xs font-bold text-slate-700 tracking-wider">Select Role</label>
               <div className="relative">
                 <UserCircle className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4 pointer-events-none z-10" />
-                <select
-                  {...register('role', { required: 'Role is required' })}
-                  className="w-full bg-white border border-gray-200 rounded-xl py-3 pl-10 pr-8 text-sm font-semibold text-gray-700 outline-none focus:border-primary appearance-none cursor-pointer transition-all"
-                >
+                <select value={formData.role} onChange={e => setFormData({...formData, role: e.target.value})}
+                  className="w-full bg-white border border-gray-200 rounded-xl py-3 pl-10 pr-8 text-sm font-semibold text-gray-700 outline-none focus:border-primary appearance-none cursor-pointer transition-all">
                   <option value="Student">Student</option>
                   <option value="FYP Office Assistant">FYP Office Assistant</option>
                   <option value="FYP Office In-charge">FYP Office In-charge</option>
@@ -117,130 +115,47 @@ const Login = () => {
               </div>
             </div>
 
-            {/* Email Address */}
             <div className="space-y-1.5">
               <label className="text-xs font-bold text-slate-700 tracking-wider">Email Address</label>
               <div className="relative">
                 <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4 pointer-events-none z-10" />
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  {...register('email', { required: 'Email is required' })}
-                  className={`w-full bg-white border ${errors.email ? 'border-primary' : 'border-gray-200'} rounded-xl py-3 pl-10 pr-4 text-sm font-medium text-gray-700 outline-none focus:border-primary transition-all`}
-                />
+                <input type="email" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} placeholder="Enter your email"
+                  className="w-full bg-white border border-gray-200 rounded-xl py-3 pl-10 pr-4 text-sm font-medium text-gray-700 outline-none focus:border-primary" />
               </div>
-              {errors.email && <p className="text-danger text-[10px] font-bold mt-1 ml-1">{errors.email.message}</p>}
             </div>
-
-            {/* Password */}
             <div className="space-y-1.5">
               <label className="text-xs font-bold text-slate-700 tracking-wider">Password</label>
               <div className="relative">
                 <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4 pointer-events-none z-10" />
-                <input
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Enter your password"
-                  {...register('password', { required: 'Password is required' })}
-                  className={`w-full bg-white border ${errors.password ? 'border-primary' : 'border-gray-200'} rounded-xl py-3 pl-10 pr-10 text-sm font-medium text-gray-700 outline-none focus:border-primary transition-all`}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-primary text-sm transition-colors z-10 focus:outline-none"
-                >
+                <input type={showPassword ? "text" : "password"} value={formData.password} onChange={e => setFormData({...formData, password: e.target.value})} placeholder="Enter your password"
+                  className="w-full bg-white border border-gray-200 rounded-xl py-3 pl-10 pr-10 text-sm font-medium text-gray-700 outline-none focus:border-primary" />
+                <button type="button" onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-primary transition-colors z-10 focus:outline-none">
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
-              {errors.password && <p className="text-danger text-[10px] font-bold mt-1 ml-1">{errors.password.message}</p>}
             </div>
-
-            {/* Remember & Forgot */}
-            <div className="flex items-center justify-between pt-1">
-              <label className="flex items-center gap-2 text-sm cursor-pointer">
-                <input type="checkbox" id="remMe" className="w-4 h-4 border border-gray-300 rounded accent-primary" />
-                <span className="text-gray-500 font-medium">Remember me</span>
-              </label>
-              <Link to="/forgot-password" className="text-sm text-primary font-bold hover:underline">Forgot Password?</Link>
-            </div>
-
-            {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full bg-[#1e3a8a] text-white rounded-xl py-3.5 font-bold text-base hover:bg-blue-900 transition-all disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-3 mt-2"
-            >
+            <button type="submit" disabled={isLoading}
+              className="w-full bg-[#1e3a8a] text-white rounded-xl py-3.5 font-bold text-base hover:bg-blue-900 transition-all disabled:opacity-70 flex items-center justify-center gap-3 mt-2">
               {isLoading ? <Loader className="w-5 h-5 animate-spin" /> : null}
               <span>{isLoading ? 'Signing In...' : 'Sign In'}</span>
               {!isLoading ? <ArrowRight className="w-5 h-5" /> : null}
             </button>
-
-            {/* Quick Demo Logins */}
-            <div className="mt-6 pt-5 border-t border-gray-100">
-              <div className="text-center text-[10px] font-black text-gray-400 mb-3 tracking-wider">
-                Quick Demo Login
-              </div>
-              <div className="grid grid-cols-2 gap-2">
-                <button
-                  type="button"
-                  onClick={() => handleQuickLogin('Student', 'fa23-bcs-013@cuiatd.edu.pk', 'Megamix@123')}
-                  className="py-2.5 px-3 text-xs font-bold rounded-lg border border-gray-200 text-gray-700 bg-white hover:bg-primary hover:text-white hover:border-primary transition-all text-center focus:outline-none"
-                >
-                  Student (FA23-BCS-013)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleQuickLogin('Student', 'fa23-bcs-034@cuiatd.edu.pk', 'Megamix@123')}
-                  className="py-2.5 px-3 text-xs font-bold rounded-lg border border-amber-200 text-amber-700 bg-amber-50 hover:bg-primary hover:text-white hover:border-primary transition-all text-center focus:outline-none"
-                >
-                  Student (FA23-BCS-034)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleQuickLogin('HOD', 'hod@cuiatd.edu.pk', 'Megamix@123')}
-                  className="py-2.5 px-3 text-xs font-bold rounded-lg border border-gray-200 text-gray-700 bg-white hover:bg-primary hover:text-white hover:border-primary transition-all text-center focus:outline-none"
-                >
-                  HOD
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleQuickLogin('FYP Office In-charge', 'fypincharge@cuiatd.edu.pk', 'Megamix@123')}
-                  className="py-2.5 px-3 text-xs font-bold rounded-lg border border-gray-200 text-gray-700 bg-white hover:bg-primary hover:text-white hover:border-primary transition-all text-center focus:outline-none"
-                >
-                  FYP Incharge
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleQuickLogin('Faculty Supervisor', 'faculty@cuiatd.edu.pk', 'Megamix@123')}
-                  className="py-2.5 px-3 text-xs font-bold rounded-lg border border-gray-200 text-gray-700 bg-white hover:bg-primary hover:text-white hover:border-primary transition-all text-center focus:outline-none"
-                >
-                  Faculty
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleQuickLogin('Faculty Supervisor', 'ininsico@gmail.com', 'Megamix@123')}
-                  className="py-2.5 px-3 text-xs font-bold rounded-lg border border-amber-200 text-amber-700 bg-amber-50 hover:bg-primary hover:text-white hover:border-primary transition-all text-center focus:outline-none"
-                >
-                  Faculty (ininsico)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleQuickLogin('Faculty Supervisor', 'bilalrathore577@gmail.com', 'Megamix@123')}
-                  className="py-2.5 px-3 text-xs font-bold rounded-lg border border-amber-200 text-amber-700 bg-amber-50 hover:bg-primary hover:text-white hover:border-primary transition-all text-center focus:outline-none"
-                >
-                  Faculty (Bilal)
-                </button>
-              </div>
-              <div className="flex justify-center mt-2">
-                <button
-                  type="button"
-                  onClick={() => handleQuickLogin('FYP Office Assistant', 'office@cuiatd.edu.pk', 'Megamix@123')}
-                  className="w-full py-2.5 px-3 text-xs font-bold rounded-lg border border-gray-200 text-gray-700 bg-white hover:bg-primary hover:text-white hover:border-primary transition-all text-center focus:outline-none"
-                >
-                  Office Assistant
-                </button>
-              </div>
-            </div>
           </form>
+
+          <div className="mt-6 pt-4 border-t border-gray-100">
+            <p className="text-xs font-semibold text-gray-400 text-center mb-3 tracking-wider">QUICK LOGIN</p>
+            <div className="flex gap-3">
+              <button type="button" onClick={() => handleQuickLogin('FYPIncharge@cuiatd.edu.pk', 'Megamix@123', 'FYP Office In-charge')} disabled={isLoading}
+                className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-3 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-xl text-xs font-bold border border-emerald-200 transition-all disabled:opacity-50">
+                <Zap className="w-3.5 h-3.5" /> FYP Incharge
+              </button>
+              <button type="button" onClick={() => handleQuickLogin('office@cuiatd.edu.pk', 'Megamix@123', 'FYP Office Assistant')} disabled={isLoading}
+                className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-3 bg-amber-50 hover:bg-amber-100 text-amber-700 rounded-xl text-xs font-bold border border-amber-200 transition-all disabled:opacity-50">
+                <Zap className="w-3.5 h-3.5" /> FYP Assistant
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </main>

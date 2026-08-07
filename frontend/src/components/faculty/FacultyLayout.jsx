@@ -72,27 +72,28 @@ const FacultyLayoutInner = () => {
   const roleLabel = 'Faculty Portal';
 
   const allLinks = [
-    { to: '/faculty/dashboard', icon: Presentation, label: 'Dashboard', section: 'Overview' },
-    ...(!hasCommittee ? [{ to: '/faculty/profile', icon: Tags, label: 'Committee Suggestion', section: 'Profile & Schedule' }] : []),
-    { to: '/faculty/availability', icon: Calendar, label: 'Availability', section: 'Profile & Schedule' },
-    { to: '/faculty/proposals', icon: FileSignature, label: 'Supervision Requests', section: 'Supervision', maxSeq: 3 },
-    { to: '/faculty/group-proposals', icon: Lightbulb, label: 'Group Proposals', section: 'Supervision', minSeq: 2, maxSeq: 4 },
-    { to: '/faculty/supervision', icon: GitBranch, label: 'Supervised Groups', section: 'Supervision', minSeq: 4 },
-    { to: '/faculty/suggestions', icon: IdeaIcon, label: 'Suggested Ideas', section: 'Supervision', minSeq: 1 },
-    { to: '/faculty/phase1-evaluation', icon: GraduationCap, label: 'Phase 1 (10%)', section: 'Supervisor Evaluations', showPhaseKey: 'phase1_evaluation' },
-    { to: '/faculty/phase2-evaluation', icon: GraduationCap, label: 'Phase 2 (30%)', section: 'Supervisor Evaluations', showPhaseKey: 'phase2_evaluation' },
-    { to: '/faculty/phase3-evaluation', icon: GraduationCap, label: 'Phase 3 (60%)', section: 'Supervisor Evaluations', showPhaseKey: 'phase3_evaluation' },
-    { to: '/faculty/phase4-evaluation', icon: GraduationCap, label: 'Phase 4 (100%)', section: 'Supervisor Evaluations', showPhaseKey: 'phase4_evaluation' },
-    { to: '/faculty/committee-phase1', icon: Star, label: 'Committee Phase 1', section: 'Committee Evaluations', showPhaseKey: 'phase1_evaluation' },
-    { to: '/faculty/committee-phase2', icon: Star, label: 'Committee Phase 2', section: 'Committee Evaluations', showPhaseKey: 'phase2_evaluation' },
-    { to: '/faculty/committee-phase3', icon: Star, label: 'Committee Phase 3', section: 'Committee Evaluations', showPhaseKey: 'phase3_evaluation' },
-    { to: '/faculty/committee-phase4', icon: Star, label: 'Committee Phase 4', section: 'Committee Evaluations', showPhaseKey: 'phase4_evaluation' },
-    { to: '/faculty/evaluations', icon: ClipboardList, label: 'Scorecard Entry', section: 'Committee Evaluations' },
-    { to: '/faculty/messaging', icon: Tags, label: 'Messaging', section: 'Communication' },
-    { to: '/faculty/my-presentations', icon: Calendar, label: 'My Presentations', section: 'Communication' },
+    { to: '/faculty/dashboard', icon: Presentation, label: 'Dashboard', section: 'Overview', phases: ['registration', 'proposal_submission', 'proposal_defense', 'phase1_development', 'phase1_evaluation'] },
+    ...(!hasCommittee ? [{ to: '/faculty/profile', icon: Tags, label: 'Committee Suggestion', section: 'Profile & Schedule', phases: ['registration', 'proposal_submission', 'proposal_defense', 'phase1_development', 'phase1_evaluation'] }] : []),
+    { to: '/faculty/availability', icon: Calendar, label: 'Availability', section: 'Profile & Schedule', phases: ['registration', 'proposal_submission', 'proposal_defense', 'phase1_development', 'phase1_evaluation'] },
+    { to: '/faculty/proposals', icon: FileSignature, label: 'Supervision Requests', section: 'Supervision', phases: ['registration', 'proposal_submission', 'proposal_defense'] },
+    { to: '/faculty/group-proposals', icon: Lightbulb, label: 'Group Proposals', section: 'Supervision', phases: ['proposal_submission', 'proposal_defense'] },
+    { to: '/faculty/supervision', icon: GitBranch, label: 'Supervised Groups', section: 'Supervision', phases: ['proposal_defense', 'phase1_development', 'phase1_evaluation'] },
+    { to: '/faculty/suggestions', icon: IdeaIcon, label: 'Suggested Ideas', section: 'Supervision', phases: ['registration', 'proposal_submission'] },
+    { to: '/faculty/phase1-evaluation', icon: GraduationCap, label: 'Phase 1 (10%)', section: 'Supervisor Evaluations', phases: ['phase1_evaluation'] },
+    { to: '/faculty/phase2-evaluation', icon: GraduationCap, label: 'Phase 2 (30%)', section: 'Supervisor Evaluations', phases: [] },
+    { to: '/faculty/phase3-evaluation', icon: GraduationCap, label: 'Phase 3 (60%)', section: 'Supervisor Evaluations', phases: [] },
+    { to: '/faculty/phase4-evaluation', icon: GraduationCap, label: 'Phase 4 (100%)', section: 'Supervisor Evaluations', phases: [] },
+    { to: '/faculty/committee-phase1', icon: Star, label: 'Committee Phase 1', section: 'Committee Evaluations', phases: ['phase1_evaluation'] },
+    { to: '/faculty/committee-phase2', icon: Star, label: 'Committee Phase 2', section: 'Committee Evaluations', phases: [] },
+    { to: '/faculty/committee-phase3', icon: Star, label: 'Committee Phase 3', section: 'Committee Evaluations', phases: [] },
+    { to: '/faculty/committee-phase4', icon: Star, label: 'Committee Phase 4', section: 'Committee Evaluations', phases: [] },
+    { to: '/faculty/evaluations', icon: ClipboardList, label: 'Scorecard Entry', section: 'Committee Evaluations', phases: ['phase1_evaluation'] },
+    { to: '/faculty/messaging', icon: Tags, label: 'Messaging', section: 'Communication', phases: [] },
+    { to: '/faculty/my-presentations', icon: Calendar, label: 'My Presentations', section: 'Communication', phases: [] },
   ];
 
   const navLinks = allLinks.filter(link => {
+    if (!link.phases.includes(phaseKey)) return false;
     if (link.showPhaseKey && phaseKey !== link.showPhaseKey) return false;
     if (link.minSeq && phaseSeq < link.minSeq) return false;
     if (link.maxSeq && phaseSeq > link.maxSeq) return false;

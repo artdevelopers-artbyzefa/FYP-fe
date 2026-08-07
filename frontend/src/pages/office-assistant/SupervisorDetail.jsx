@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import apiClient from '../../api/apiClient';
 import { showToast } from '../../components/AppToast';
 import { ArrowLeft, UserCheck, UserX, Shield, GraduationCap, Mail, Phone, Calendar, Users } from 'lucide-react';
@@ -16,8 +16,12 @@ const statusColors = {
 const SupervisorDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const [faculty, setFaculty] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const isIncharge = location.pathname.includes('/office-incharge/');
+  const backPath = isIncharge ? '/office-incharge/faculty' : '/office-assistant/faculty';
 
   useEffect(() => {
     apiClient.get('/office-assistant/faculty/' + id)
@@ -41,7 +45,7 @@ const SupervisorDetail = () => {
     return (
       <div className="text-center py-20">
         <h3 className="text-lg font-bold text-gray-600">Faculty not found</h3>
-        <button onClick={() => navigate('/office-assistant/faculty')} className="mt-4 px-5 py-2 bg-primary text-white rounded-xl text-sm font-bold cursor-pointer border-0">Back to Faculty</button>
+        <button onClick={() => navigate(backPath)} className="mt-4 px-5 py-2 bg-primary text-white rounded-xl text-sm font-bold cursor-pointer border-0">Back to Faculty</button>
       </div>
     );
   }
@@ -51,7 +55,7 @@ const SupervisorDetail = () => {
   return (
     <>
       <div className="mb-6">
-        <button onClick={() => navigate('/office-assistant/faculty')} className="flex items-center gap-2 text-sm font-bold text-gray-400 hover:text-gray-600 transition-colors cursor-pointer bg-transparent border-0 mb-4">
+        <button onClick={() => navigate(backPath)} className="flex items-center gap-2 text-sm font-bold text-gray-400 hover:text-gray-600 transition-colors cursor-pointer bg-transparent border-0 mb-4">
           <ArrowLeft className="w-4 h-4" /> Back to Faculty
         </button>
 
@@ -65,7 +69,7 @@ const SupervisorDetail = () => {
               <div className="flex flex-wrap gap-2 mt-2">
                 <span className={`text-xs font-bold px-3 py-1 rounded-lg border ${isActive ? 'bg-emerald-100 text-emerald-700 border-emerald-200' : 'bg-red-100 text-red-700 border-red-200'} flex items-center gap-1.5`}>
                   {isActive ? <UserCheck className="w-3.5 h-3.5" /> : <UserX className="w-3.5 h-3.5" />}
-                  {isActive ? 'Active — Has logged in' : 'Inactive — Has not set up account'}
+                  {isActive ? 'Active' : 'Inactive'}
                 </span>
                 <span className="text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200 px-3 py-1 rounded-lg flex items-center gap-1.5">
                   <Shield className="w-3.5 h-3.5" /> {faculty.facultyType}
@@ -113,7 +117,9 @@ const SupervisorDetail = () => {
                   <span className="font-medium">Lead: {g.leader || 'None'}</span>
                 </div>
                 {g.members && g.members.length > 0 && (
-                  <p className="text-xs text-gray-400 mt-1 ml-5">{g.members.join(', ')}</p>
+                  <p className="text-xs text-gray-400 mt-1 ml-5">
+                    {g.members.map(m => typeof m === 'string' ? m : (m.name || m.email || 'Unknown')).join(', ')}
+                  </p>
                 )}
                 {(!g.members || g.members.length === 0) && (
                   <p className="text-xs text-gray-300 italic mt-1 ml-5">No students assigned to this group</p>
@@ -130,9 +136,6 @@ const SupervisorDetail = () => {
                   <span className="font-bold text-gray-500">{g.progress || 0}%</span>
                 </div>
               </div>
-            </div>
-            <div className="flex items-center gap-4 mt-3 pt-3 border-t border-gray-50 text-[10px] text-gray-400">
-              <span className="flex items-center gap-1"><Calendar className="w-3 h-3" /> {new Date(g.createdAt).toLocaleDateString()}</span>
             </div>
           </div>
         ))}

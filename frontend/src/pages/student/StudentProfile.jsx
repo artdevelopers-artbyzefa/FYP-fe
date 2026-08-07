@@ -15,7 +15,8 @@ export default function Profile() {
     fatherName: '',
     section: '',
     dob: '',
-    phone: ''
+    phone: '',
+    semester: ''
   });
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
@@ -28,7 +29,8 @@ export default function Profile() {
         fatherName: data.fatherName || '',
         section: data.section || '',
         dob: data.dateofBirth ? data.dateofBirth.split('T')[0] : '',
-        phone: data.whatsappNumber || ''
+        phone: data.whatsappNumber || '',
+        semester: data.semester || ''
       });
       if (data.profilepicture) setProfilePicPreview(data.profilepicture);
       setFetching(false);
@@ -78,6 +80,7 @@ export default function Profile() {
         section: formData.section,
         dob: formData.dob,
         phone: formData.phone,
+        semester: formData.semester ? parseInt(formData.semester) : undefined,
         profilepicture: profilePicPreview || undefined
       };
       const res = await updateStudentProfile(payload);
@@ -161,6 +164,16 @@ export default function Profile() {
                   <option value="B">B</option>
                   <option value="C">C</option>
                   <option value="D">D</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-slate-900 mb-1.5">Current Semester</label>
+              <div className="relative">
+                <Users className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-900 text-sm" />
+                <select value={formData.semester} onChange={e => setFormData({...formData, semester: e.target.value})} className="w-full bg-white border border-line rounded-xl py-2.5 pl-10 pr-3 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all appearance-none cursor-pointer" required>
+                  <option value="">Select Semester</option>
+                  {[1,2,3,4,5,6,7,8,9,10,11,12].map(s => <option key={s} value={s}>{s}</option>)}
                 </select>
               </div>
             </div>

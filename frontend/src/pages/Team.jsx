@@ -24,6 +24,7 @@ const Team = () => {
         {
           initials: "AI",
           name: "Ms. Ayesha Irshad",
+          image: "/ayeshapicture.png",
           role: "FYP Coordinator - Lecturer",
           desc: "Expertise in Trust in IoT devices. Coordinating project lifecycles and academic standards for the FYP Portal.",
         },
@@ -31,6 +32,7 @@ const Team = () => {
         {
           initials: "FA",
           name: "Dr. Faraz Ahmad",
+          image: "/farazpicture.png",
           role: "FYP Coordinator - Lecturer",
           desc: "Focused on core computing principles and guiding student development across various technology stacks.",
         },
@@ -42,12 +44,14 @@ const Team = () => {
         {
           initials: "HS",
           name: "Mr.Huzaifa Safdar",
+          image: "/huzaifapicture.png",
           role: "Team Lead & DevOps Engineer",
           desc: "Expertise in DevOps & Full Stack development. Leading technical architecture and deployment strategies.",
         },
         {
           initials: "EU",
           name: "Ms.Eman Umar",
+          image: "/emanpicture.png",
           role: "Project Manager & AI/ML Developer",
           desc: "Expertise in AI/ML and Project Management. Coordinating workflows and ensuring academic standards.",
         },
@@ -59,18 +63,21 @@ const Team = () => {
         {
           initials: "AF",
           name: "Ms.Arooj Fatima",
+          image: "/aroojpicture.png",
           role: "Frontend Developer",
           desc: "Expertise in Frontend UI/UX & Backend. Designing seamless user journeys and responsive interfaces.",
         },
         {
           initials: "LA",
           name: "Ms.Laraib Ali",
+          image: "/laraibalipicture.png",
           role: "Frontend Developer",
           desc: "Expertise in Frontend UI/UX & Backend. Crafting high-fidelity UI patterns and modular frontend components.",
         },
         {
           initials: "SR",
           name: "Mr.Mudasir Hussain",
+          image: "/mudasirpicture.png",
           role: "Frontend/Backend & Security Developer",
           desc: "Specialized in Secuirty Audits & Desigining the Frontend and Backend.",
         },

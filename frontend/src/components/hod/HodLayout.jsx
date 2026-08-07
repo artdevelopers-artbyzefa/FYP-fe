@@ -3,7 +3,7 @@ import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { showToast as toast } from '../AppToast';
 import { logoutUser, getCurrentUser } from '../../services/auth.service';
 import api from '../../services/api';
-import { Bell, ChevronLeft, ChevronRight, Crown, Gavel, GitBranch, Landmark, LineChart, Lock, LogOut, Menu, PieChart, Presentation, Shield, User, UserCheck, Users, X, Camera, Loader2, Mail, KeyRound } from 'lucide-react';
+import { Bell, ChevronLeft, ChevronRight, Crown, Gavel, GitBranch, Landmark, Lock, LogOut, Menu, PieChart, Shield, User, UserCheck, Users, X, Camera, Loader2, Mail, KeyRound } from 'lucide-react';
 
 const HodLayout = () => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -42,10 +42,8 @@ const HodLayout = () => {
     { to: '/hod/governance', icon: Landmark, label: 'Governance & Oversight', section: 'Grievances & Oversight', locked: true },
     { to: '/hod/students', icon: Users, label: 'Students', section: 'Department' },
     { to: '/hod/faculty', icon: UserCheck, label: 'Faculty Profiles', section: 'Department' },
-    { to: '/hod/faculty-oversight', icon: Presentation, label: 'Faculty Workload', section: 'Department', locked: true },
     { to: '/hod/committees', icon: Shield, label: 'FYP Committees', section: 'Department' },
     { to: '/hod/projects', icon: GitBranch, label: 'Project Directory', section: 'Projects & Analytics' },
-    { to: '/hod/analytics', icon: LineChart, label: 'FYP Analytics', section: 'Projects & Analytics', locked: true },
   ];
 
   const handleSendCode = async (e) => {

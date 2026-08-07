@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { getOfficeDashboardStats } from '../../services/office-assistant.service';
-import { ArrowRight, FileUp, GitBranch, GraduationCap, Layers, UserPen, UserPlus, Users, FileSignature, CalendarCheck, Star } from 'lucide-react';
+import { ArrowRight, FileUp, GitBranch, GraduationCap, Layers, Loader2, UserPen, UserPlus, Users, FileSignature, CalendarCheck, Star } from 'lucide-react';
 import PhaseContext from '../../contexts/PhaseContext';
 import { DashboardSkeleton } from '../../components/Skeleton';
 

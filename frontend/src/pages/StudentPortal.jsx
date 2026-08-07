@@ -107,6 +107,26 @@ export default function StudentPortal() {
   if (studentData) {
     return (
       <div className="min-h-screen bg-gray-50 font-poppins">
+        {/* Syncing Overlay */}
+        {loading && (
+          <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center">
+            <div className="bg-white rounded-2xl p-8 max-w-sm w-full mx-4 shadow-2xl text-center">
+              <div className="w-20 h-20 mx-auto mb-5 relative">
+                <div className="absolute inset-0 border-4 border-blue-100 rounded-full"></div>
+                <div className="absolute inset-0 border-4 border-transparent border-t-primary rounded-full animate-spin"></div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-3 h-3 bg-primary rounded-full animate-ping"></div>
+                </div>
+              </div>
+              <h3 className="text-lg font-bold text-slate-900 mb-2">Fetching Your Details</h3>
+              <p className="text-sm text-slate-500 mb-4">Syncing your data from the official student portal...</p>
+              <div className="w-full bg-slate-100 rounded-full h-2 mb-2 overflow-hidden">
+                <div className="h-full bg-gradient-to-r from-primary to-blue-500 rounded-full animate-pulse" style={{width: '60%'}}></div>
+              </div>
+              <p className="text-xs text-slate-400">This may take a moment</p>
+            </div>
+          </div>
+        )}
         <div className="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-50">
           <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
             <div className="flex items-center gap-3">

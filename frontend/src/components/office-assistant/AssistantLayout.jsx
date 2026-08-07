@@ -2,8 +2,8 @@ import React, { useState, useContext } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { showToast as toast } from '../AppToast';
 import { logoutUser, getCurrentUser } from '../../services/auth.service';
-import { usePhase } from '../../contexts/PhaseContext';
-import { Archive, ArrowRight, Award, BarChart3, Bell, Calendar, CheckCircle, ChevronLeft, ChevronRight, ClipboardList, File, GitBranch, GraduationCap, Home, Layers, Lock, LogOut, Megaphone, Menu, Presentation, Shield, User, UserCog, Users, X } from 'lucide-react';
+import { PhaseProvider, usePhase } from '../../contexts/PhaseContext';
+import { Archive, ArrowRight, Award, BarChart3, Bell, Calendar, CheckCircle, ChevronLeft, ChevronRight, ClipboardList, File, GitBranch, GraduationCap, Home, Layers, Loader2, Lock, LogOut, Mail, Megaphone, Menu, Presentation, Scale, Shield, User, UserCog, Users, X } from 'lucide-react';
 
 const AssistantLayout = () => {
   const { currentPhase } = usePhase();
@@ -26,29 +26,30 @@ const AssistantLayout = () => {
 
   const roleLabel = 'FYP Office Assistant';
 
-  const navLinks = [
-    { to: '/office-assistant/dashboard', icon: Home, label: 'Dashboard', section: 'Overview' },
-    { to: '/office-assistant/users', icon: Users, label: 'User Management', section: 'Accounts' },
-    { to: '/office-assistant/students', icon: GraduationCap, label: 'Student Records', section: 'Accounts' },
-    { to: '/office-assistant/faculty', icon: Presentation, label: 'Faculty Profiles', section: 'Accounts' },
-    { to: '/office-assistant/projects', icon: GitBranch, label: 'Project Directory', section: 'Projects', locked: isPhase1 },
-    { to: '/office-assistant/past-projects', icon: Archive, label: 'Past FYP Projects', section: 'Projects' },
-    { to: '/office-assistant/content', icon: File, label: 'Content & Templates', section: 'Projects', locked: true },
-    { to: '/office-assistant/eval-committee', icon: Layers, label: 'Evaluation Committees', section: 'Committees & Scheduling', locked: isPhase1 },
-    { to: '/office-assistant/committee-oversight', icon: Users, label: 'Committee Oversight', section: 'Committees & Scheduling' },
-    { to: '/office-assistant/timetable', icon: Calendar, label: 'Timetable Management', section: 'Committees & Scheduling' },
-    { to: '/office-assistant/meeting-timetable', icon: Users, label: 'Meeting Timetable', section: 'Committees & Scheduling' },
-    { to: '/office-assistant/external', icon: User, label: 'Industry Supervisors', section: 'Committees & Scheduling', locked: true },
-    { to: '/office-assistant/phase1-marks', icon: BarChart3, label: 'Phase 1 (10%) Marks', section: 'Marks & Results', showPhaseKey: 'phase1_evaluation' },
-    { to: '/office-assistant/phase2-marks', icon: BarChart3, label: 'Phase 2 (30%) Marks', section: 'Marks & Results', showPhaseKey: 'phase2_evaluation' },
-    { to: '/office-assistant/phase3-marks', icon: BarChart3, label: 'Phase 3 (60%) Marks', section: 'Marks & Results', showPhaseKey: 'phase3_evaluation' },
-    { to: '/office-assistant/phase4-marks', icon: BarChart3, label: 'Phase 4 (100%) Marks', section: 'Marks & Results', showPhaseKey: 'phase4_evaluation' },
-    { to: '/office-assistant/final-marks', icon: ClipboardList, label: 'Final Calculated Marks', section: 'Marks & Results' },
-    { to: '/office-assistant/results', icon: Award, label: 'Results & Printing', section: 'Marks & Results', locked: true },
-  ].filter(link => {
-    if (link.showPhaseKey && phaseKey !== link.showPhaseKey) return false;
-    return true;
-  });
+  const allNavLinks = [
+    { to: '/office-assistant/dashboard', icon: Home, label: 'Dashboard', section: 'Overview', phases: ['registration', 'proposal_submission', 'proposal_defense', 'phase1_development', 'phase1_evaluation'] },
+    { to: '/office-assistant/users', icon: Users, label: 'User Management', section: 'Accounts', phases: ['registration', 'proposal_submission', 'proposal_defense', 'phase1_development', 'phase1_evaluation'] },
+    { to: '/office-assistant/students', icon: GraduationCap, label: 'Student Records', section: 'Accounts', phases: ['registration', 'proposal_submission', 'proposal_defense', 'phase1_development', 'phase1_evaluation'] },
+    { to: '/office-assistant/faculty', icon: Presentation, label: 'Faculty Profiles', section: 'Accounts', phases: ['registration', 'proposal_submission', 'proposal_defense', 'phase1_development', 'phase1_evaluation'] },
+    { to: '/office-assistant/projects', icon: GitBranch, label: 'Project Directory', section: 'Projects', phases: ['registration', 'proposal_submission', 'proposal_defense', 'phase1_development', 'phase1_evaluation'] },
+    { to: '/office-assistant/past-projects', icon: Archive, label: 'Past FYP Projects', section: 'Projects', phases: ['proposal_submission', 'proposal_defense', 'phase1_development', 'phase1_evaluation'] },
+    { to: '/office-assistant/content', icon: File, label: 'Content & Templates', section: 'Projects', phases: ['proposal_submission', 'proposal_defense', 'phase1_development', 'phase1_evaluation'] },
+    { to: '/office-assistant/eval-committee', icon: Layers, label: 'Evaluation Committees', section: 'Committees & Scheduling', phases: ['proposal_submission', 'proposal_defense'] },
+    { to: '/office-assistant/committee-oversight', icon: Users, label: 'Committee Oversight', section: 'Committees & Scheduling', phases: ['proposal_submission', 'proposal_defense'] },
+    { to: '/office-assistant/timetable', icon: Calendar, label: 'Timetable Management', section: 'Committees & Scheduling', phases: ['proposal_submission', 'proposal_defense'] },
+    { to: '/office-assistant/meeting-timetable', icon: Users, label: 'Meeting Timetable', section: 'Committees & Scheduling', phases: ['proposal_submission', 'proposal_defense'] },
+    { to: '/office-assistant/external', icon: User, label: 'Industry Supervisors', section: 'Committees & Scheduling', phases: [] },
+    { to: '/office-assistant/phase1-marks', icon: BarChart3, label: 'Phase 1 (10%) Marks', section: 'Marks & Results', phases: ['phase1_evaluation'] },
+    { to: '/office-assistant/phase2-marks', icon: BarChart3, label: 'Phase 2 (30%) Marks', section: 'Marks & Results', phases: [] },
+    { to: '/office-assistant/phase3-marks', icon: BarChart3, label: 'Phase 3 (60%) Marks', section: 'Marks & Results', phases: [] },
+    { to: '/office-assistant/phase4-marks', icon: BarChart3, label: 'Phase 4 (100%) Marks', section: 'Marks & Results', phases: [] },
+    { to: '/office-assistant/final-marks', icon: ClipboardList, label: 'Final Calculated Marks', section: 'Marks & Results', phases: [] },
+    { to: '/office-assistant/results', icon: Award, label: 'Results & Printing', section: 'Marks & Results', phases: ['phase1_evaluation'] },
+    { to: '/office-assistant/grievances', icon: Scale, label: 'Grievances & SLAs', section: 'Audit & Logs', phases: ['registration', 'proposal_submission', 'proposal_defense', 'phase1_development', 'phase1_evaluation'] },
+    { to: '/office-assistant/content', icon: File, label: 'Content Management', section: 'Audit & Logs', phases: ['registration', 'proposal_submission', 'proposal_defense', 'phase1_development', 'phase1_evaluation'] },
+    { to: '/office-assistant/email', icon: Mail, label: 'Email Center', section: 'Audit & Logs', phases: ['registration', 'proposal_submission', 'proposal_defense', 'phase1_development', 'phase1_evaluation'] },
+  ];
+  const navLinks = allNavLinks.filter(link => link.phases.includes(phaseKey));
 
   return (
     <div className="flex h-screen overflow-hidden relative bg-surface selection:bg-blue-100 selection:text-blue-900 font-poppins">
@@ -183,4 +184,10 @@ const AssistantLayout = () => {
   );
 };
 
-export default AssistantLayout;
+const AssistantLayoutWrapper = () => (
+  <PhaseProvider>
+    <AssistantLayout />
+  </PhaseProvider>
+);
+
+export default AssistantLayoutWrapper;

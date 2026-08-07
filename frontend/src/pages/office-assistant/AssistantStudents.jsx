@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { getOfficeStudents, createOfficeStudent, deleteOfficeStudent, updateOfficeStudent } from '../../services/office-assistant.service';
 import { showToast, showAlert } from '../../components/AppToast';
 import { sendWelcomeEmail } from '../../services/email.service';
-import { Search, UserPlus, X, Send, Trash2, Pencil, ArrowLeft, ArrowRight, ChevronRight, Users, Mail, BookOpen, Code, GraduationCap, User, ChevronDown } from 'lucide-react';
+import { Search, UserPlus, X, Send, Trash2, Pencil, ArrowLeft, ArrowRight, ChevronRight, Users, Mail, BookOpen, Code, GraduationCap, User, ChevronDown, RefreshCw } from 'lucide-react';
 import { GROUP_STATUS_MAP } from '../../utils/constants/status.constant';
 import { StudentRecordsSkeleton } from '../../components/Skeleton';
 
@@ -12,9 +12,6 @@ const validateForm = (form) => {
   const e = {};
   if (!form.name.trim()) e.name = 'Full name is required';
   if (!form.reg.trim()) e.reg = 'Registration number is required';
-  if (!form.email.trim()) e.email = 'Email is required';
-  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = 'Invalid email format';
-  else if (!form.email.toLowerCase().endsWith('@cuiatd.edu.pk')) e.email = 'Must be @cuiatd.edu.pk';
   if (form.cgpa && (parseFloat(form.cgpa) < 0 || parseFloat(form.cgpa) > 4.0)) e.cgpa = 'CGPA must be between 0.0 and 4.0';
   return e;
 };
@@ -40,6 +37,10 @@ export default function AssistantStudents() {
   const [view, setView] = useState('list');
   const [selected, setSelected] = useState(null);
   const [search, setSearch] = useState('');
+  const [showAdd, setShowAdd] = useState(false);
+  const [addForm, setAddForm] = useState(initialForm);
+  const [addErrors, setAddErrors] = useState({});
+  const [adding, setAdding] = useState(false);
   const limit = 20;
 
   const loadStudents = useCallback((p) => {
@@ -52,7 +53,60 @@ export default function AssistantStudents() {
     .finally(() => setLoading(false));
   }, [page]);
 
-  useEffect(() => { loadStudents(page); }, [page, loadStudents]);
+  useEffect(() => { loadStudents(page);   }, [page, loadStudents]);
+
+  const handleDelete = (student) => {
+    showAlert.confirm('Delete Student', `Permanently delete "${student.name}"? This removes all records and cannot be undone.`, 'Delete', 'Cancel').then(async (res) => {
+      if (res.isConfirmed) {
+        try { await deleteOfficeStudent(student.id); showToast.success('Deleted', `${student.name} removed.`); loadStudents(page); }
+        catch (err) { showToast.error('Failed', err?.response?.data?.message || 'Could not delete.'); }
+      }
+    });
+  };
+
+  const handleReactivate = async (student) => {
+    try {
+      const token = localStorage.getItem('token');
+      await fetch(`/api/office-assistant/students/${student.id}/reactivate`, {
+        method: 'POST', headers: { Authorization: `Bearer ${token}` }
+      });
+      showToast.success('Reactivated', `${student.name} is now active.`);
+      loadStudents(page);
+    } catch (err) {
+      showToast.error('Failed', 'Could not reactivate.');
+    }
+  };
+
+  const handleAdd = async (e) => {
+    e.preventDefault();
+    const errors = validateForm(addForm);
+    setAddErrors(errors);
+    if (Object.keys(errors).length) return;
+    const reg = addForm.reg.trim().toUpperCase().replace(/^CIIT\//, '').replace(/\/ATD$/, '');
+    const email = `${reg.replace(/-/g, '').toLowerCase()}@cuiatd.edu.pk`;
+    setAdding(true);
+    try {
+      await createOfficeStudent({
+        name: addForm.name.trim(),
+        regNo: addForm.reg.trim(),
+        email,
+        semester: addForm.semester || undefined,
+        section: addForm.section || undefined,
+        cgpa: addForm.cgpa || undefined,
+        fatherName: addForm.fatherName || undefined,
+        whatsappNumber: addForm.whatsappNumber || undefined,
+      });
+      showToast.success('Student Added', 'Credentials sent to student email.');
+      setShowAdd(false);
+      setAddForm(initialForm);
+      setAddErrors({});
+      loadStudents(page);
+    } catch (err) {
+      showToast.error('Failed', err?.response?.data?.message || 'Could not add student');
+    } finally {
+      setAdding(false);
+    }
+  };
 
   const filtered = students.filter(s =>
     !search || s.name?.toLowerCase().includes(search.toLowerCase()) || s.regNo?.toLowerCase().includes(search.toLowerCase()) || s.email?.toLowerCase().includes(search.toLowerCase())
@@ -69,12 +123,72 @@ export default function AssistantStudents() {
           <h2 className="text-xl font-bold text-slate-900">Student Records</h2>
           <p className="text-xs text-slate-900 mt-0.5 font-medium">Manage student profiles, groups, and FYP status</p>
         </div>
-        <div className="relative w-full sm:w-72">
-          <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-          <input type="text" placeholder="Search by name, reg no, or email..." value={search} onChange={e => setSearch(e.target.value)}
-            className="w-full pl-9 pr-4 py-2.5 bg-white border border-line rounded-xl text-sm outline-none focus:border-blue-500 transition-all" />
+        <div className="flex items-center gap-3">
+          <button onClick={() => { setShowAdd(!showAdd); setAddErrors({}); }} className="flex items-center gap-2 px-4 py-2.5 bg-primary text-white rounded-xl font-bold text-sm hover:bg-navy-dark transition-all cursor-pointer border-0 shadow-sm">
+            <UserPlus className="w-4 h-4" /> Add Student
+          </button>
+          <div className="relative w-60">
+            <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+            <input type="text" placeholder="Search..." value={search} onChange={e => setSearch(e.target.value)}
+              className="w-full pl-9 pr-4 py-2.5 bg-white border border-line rounded-xl text-sm outline-none focus:border-blue-500 transition-all" />
+          </div>
         </div>
       </div>
+
+      {showAdd && (
+        <form onSubmit={handleAdd} className="bg-blue-50/50 rounded-2xl border border-blue-200 p-6 space-y-4">
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm font-bold text-slate-900">Add New Student</h3>
+            <button type="button" onClick={() => setShowAdd(false)} className="p-1.5 rounded-lg hover:bg-blue-100 cursor-pointer border-0 bg-transparent text-slate-500"><X size={16} /></button>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div>
+              <label className="block text-[10px] font-bold text-slate-500 mb-1">Full Name *</label>
+              <input type="text" value={addForm.name} onChange={e => setAddForm(f => ({ ...f, name: e.target.value }))} placeholder="Student name" className={`w-full bg-white border ${addErrors.name ? 'border-rose-300' : 'border-line'} rounded-xl px-3 py-2 text-sm outline-none focus:border-blue-500`} />
+              {addErrors.name && <p className="text-[10px] text-rose-500 mt-0.5">{addErrors.name}</p>}
+            </div>
+            <div>
+              <label className="block text-[10px] font-bold text-slate-500 mb-1">Reg No *</label>
+              <input type="text" value={addForm.reg} onChange={e => { setAddForm(f => ({ ...f, reg: e.target.value })); setAddErrors({}); }} placeholder="FA23-BCS-013" className={`w-full bg-white border ${addErrors.reg ? 'border-rose-300' : 'border-line'} rounded-xl px-3 py-2 text-sm outline-none focus:border-blue-500 font-mono`} />
+              {addErrors.reg && <p className="text-[10px] text-rose-500 mt-0.5">{addErrors.reg}</p>}
+              {addForm.reg && !addErrors.reg && (
+                <p className="text-[10px] text-blue-500 mt-0.5 font-mono">
+                  Email: {addForm.reg.trim().toUpperCase().replace(/^CIIT\//, '').replace(/\/ATD$/, '').replace(/-/g, '').toLowerCase()}@cuiatd.edu.pk
+                </p>
+              )}
+            </div>
+            <div>
+              <label className="block text-[10px] font-bold text-slate-500 mb-1">Semester</label>
+              <select value={addForm.semester} onChange={e => setAddForm(f => ({ ...f, semester: e.target.value }))} className="w-full bg-white border border-line rounded-xl px-3 py-2 text-sm font-bold text-slate-900 outline-none focus:border-blue-500 cursor-pointer">
+                {['1','2','3','4','5','6','7','8'].map(s => <option key={s} value={s}>Semester {s}</option>)}
+              </select>
+            </div>
+            <div>
+              <label className="block text-[10px] font-bold text-slate-500 mb-1">Section</label>
+              <input type="text" value={addForm.section} onChange={e => setAddForm(f => ({ ...f, section: e.target.value }))} placeholder="A/B/C/D" className="w-full bg-white border border-line rounded-xl px-3 py-2 text-sm outline-none focus:border-blue-500" />
+            </div>
+            <div>
+              <label className="block text-[10px] font-bold text-slate-500 mb-1">CGPA</label>
+              <input type="text" inputMode="decimal" value={addForm.cgpa} onChange={e => setAddForm(f => ({ ...f, cgpa: e.target.value }))} placeholder="0.0 - 4.0" className={`w-full bg-white border ${addErrors.cgpa ? 'border-rose-300' : 'border-line'} rounded-xl px-3 py-2 text-sm outline-none focus:border-blue-500`} />
+              {addErrors.cgpa && <p className="text-[10px] text-rose-500 mt-0.5">{addErrors.cgpa}</p>}
+            </div>
+            <div>
+              <label className="block text-[10px] font-bold text-slate-500 mb-1">Father's Name</label>
+              <input type="text" value={addForm.fatherName} onChange={e => setAddForm(f => ({ ...f, fatherName: e.target.value }))} placeholder="Father name" className="w-full bg-white border border-line rounded-xl px-3 py-2 text-sm outline-none focus:border-blue-500" />
+            </div>
+            <div>
+              <label className="block text-[10px] font-bold text-slate-500 mb-1">Phone Number (optional)</label>
+              <input type="text" value={addForm.whatsappNumber} onChange={e => setAddForm(f => ({ ...f, whatsappNumber: e.target.value }))} placeholder="e.g. +92-3001234567" className="w-full bg-white border border-line rounded-xl px-3 py-2 text-sm outline-none focus:border-blue-500" />
+            </div>
+          </div>
+          <div className="flex justify-end gap-2 pt-2">
+            <button type="button" onClick={() => setShowAdd(false)} className="px-4 py-2 rounded-xl text-xs font-bold text-slate-500 hover:bg-white cursor-pointer border-0">Cancel</button>
+            <button type="submit" disabled={adding} className="px-5 py-2 bg-primary text-white rounded-xl text-xs font-bold hover:bg-navy-dark cursor-pointer border-0 disabled:opacity-50 flex items-center gap-1.5">
+              {adding ? 'Adding...' : 'Add Student'}
+            </button>
+          </div>
+        </form>
+      )}
 
       {loading ? <StudentRecordsSkeleton /> : filtered.length === 0 ? (
         <div className="flex flex-col items-center gap-3 py-20 text-slate-400">
@@ -119,7 +233,20 @@ export default function AssistantStudents() {
                     </td>
                     <td className="py-4 px-6 text-xs">{s.supervisor || 'No supervisor'}</td>
                     <td className="py-4 px-6">
-                      <span className="text-blue-600 text-[10px] font-bold flex items-center gap-0.5">View Details <ChevronRight size={12} /></span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-blue-600 text-[10px] font-bold flex items-center gap-0.5">View Details <ChevronRight size={12} /></span>
+                        {s.isactive === false ? (
+                          <button onClick={(e) => { e.stopPropagation(); handleReactivate(s); }}
+                            className="p-1.5 rounded-lg bg-emerald-50 text-emerald-600 border border-emerald-200 hover:bg-emerald-100 cursor-pointer flex items-center justify-center" title="Reactivate">
+                            <RefreshCw size={13} />
+                          </button>
+                        ) : (
+                          <button onClick={(e) => { e.stopPropagation(); handleDelete(s); }}
+                            className="p-1.5 rounded-lg bg-red-50 text-red-500 border border-red-200 hover:bg-red-100 cursor-pointer flex items-center justify-center" title="Delete student">
+                            <Trash2 size={13} />
+                          </button>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -201,6 +328,19 @@ function StudentDetail({ student, onBack, onUpdate }) {
       });
   };
 
+  const handleReactivate = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      await fetch(`/api/office-assistant/students/${student.id}/reactivate`, {
+        method: 'POST', headers: { Authorization: `Bearer ${token}` }
+      });
+      showToast.success('Reactivated', `${student.name} is now active.`);
+      onUpdate();
+    } catch (err) {
+      showToast.error('Failed', 'Could not reactivate.');
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="border-b border-line pb-4">
@@ -228,6 +368,12 @@ function StudentDetail({ student, onBack, onUpdate }) {
               <button onClick={handleDeactivate}
                 className="px-4 py-2 bg-white text-rose-600 text-xs font-bold rounded-xl border border-rose-200 hover:bg-rose-50 transition-all cursor-pointer flex items-center gap-1.5">
                 <Trash2 size={12} /> Deactivate
+              </button>
+            )}
+            {student.isactive === false && (
+              <button onClick={handleReactivate}
+                className="px-4 py-2 bg-emerald-50 text-emerald-600 text-xs font-bold rounded-xl border border-emerald-200 hover:bg-emerald-100 transition-all cursor-pointer flex items-center gap-1.5">
+                <RefreshCw size={12} /> Reactivate
               </button>
             )}
           </div>
@@ -280,8 +426,8 @@ function StudentDetail({ student, onBack, onUpdate }) {
               <input type="text" value={editForm.fatherName} onChange={e => setEditForm(f => ({ ...f, fatherName: e.target.value }))} className="w-full bg-white border border-line rounded-xl px-4 py-2.5 text-sm outline-none focus:border-blue-500 transition-all" />
             </div>
             <div>
-              <label className="block text-[10px] font-bold text-slate-500 mb-1.5">WhatsApp</label>
-              <input type="text" value={editForm.whatsappNumber} onChange={e => setEditForm(f => ({ ...f, whatsappNumber: e.target.value }))} className="w-full bg-white border border-line rounded-xl px-4 py-2.5 text-sm outline-none focus:border-blue-500 transition-all" />
+              <label className="block text-[10px] font-bold text-slate-500 mb-1.5">Phone Number (optional)</label>
+              <input type="text" value={editForm.whatsappNumber} onChange={e => setEditForm(f => ({ ...f, whatsappNumber: e.target.value }))} placeholder="e.g. +92-3001234567" className="w-full bg-white border border-line rounded-xl px-4 py-2.5 text-sm outline-none focus:border-blue-500 transition-all" />
             </div>
           </div>
           <div className="flex justify-end gap-3 pt-4 border-t border-line">

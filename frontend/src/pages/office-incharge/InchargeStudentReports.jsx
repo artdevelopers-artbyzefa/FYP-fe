@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { getInchargeStudentReports } from '../../services/office-incharge.service';
-import { ArrowLeft, Users, User, Mail, BookOpen, Code, GraduationCap, ChevronRight, Search, FileText, BarChart3, CheckCircle, X, Clock } from 'lucide-react';
+import { deleteOfficeStudent } from '../../services/office-assistant.service';
+import apiClient from '../../api/apiClient';
+import { showToast as toast } from '../../components/AppToast';
+import { ArrowLeft, Users, User, Mail, BookOpen, Code, GraduationCap, ChevronRight, Search, FileText, BarChart3, CheckCircle, X, Clock, Trash2, AlertTriangle } from 'lucide-react';
 import { IDEA_STATUS_MAP } from '../../utils/constants/status.constant';
 import { StudentRecordsSkeleton } from '../../components/Skeleton';
 
@@ -32,6 +35,7 @@ export default function InchargeStudentRecords() {
   const [selected, setSelected] = useState(null);
   const [selectedIdea, setSelectedIdea] = useState(null);
   const [search, setSearch] = useState('');
+  const [deactivating, setDeactivating] = useState(null);
 
   useEffect(() => {
     getInchargeStudentReports()
@@ -39,6 +43,36 @@ export default function InchargeStudentRecords() {
       .catch(console.error)
       .finally(() => setLoading(false));
   }, []);
+
+  const handleDeactivate = async (studentId, studentName) => {
+    if (!window.confirm(`Deactivate student "${studentName}"? This disables their account but keeps records.`)) return;
+    setDeactivating(studentId);
+    try {
+      await deleteOfficeStudent(studentId);
+      toast.success('Student Deactivated', `${studentName} has been deactivated.`);
+      setStudents(prev => prev.map(s => s._id === studentId ? { ...s, isactive: false } : s));
+    } catch (err) {
+      toast.error('Failed', err.response?.data?.message || 'Could not deactivate student');
+    } finally {
+      setDeactivating(null);
+    }
+  };
+
+  const handleHardDelete = async (userId, studentId, studentName) => {
+    if (!window.confirm(`PERMANENTLY DELETE "${studentName}"?\n\nThis will wipe ALL records, relations, and data forever. This CANNOT be undone.`)) return;
+    if (!window.confirm(`FINAL WARNING: Are you absolutely sure you want to permanently delete "${studentName}"?`)) return;
+    setDeactivating(studentId);
+    try {
+      await apiClient.delete(`/office-assistant/users/${userId}/hard`);
+      toast.success('Student Deleted', `${studentName} has been permanently removed.`);
+      setStudents(prev => prev.filter(s => s._id !== studentId));
+      if (selected?._id === studentId) { setView('list'); setSelected(null); }
+    } catch (err) {
+      toast.error('Failed', err.response?.data?.message || 'Could not delete student');
+    } finally {
+      setDeactivating(null);
+    }
+  };
 
   const filtered = students.filter(s =>
     !search || s.name?.toLowerCase().includes(search.toLowerCase()) || s.regNo?.toLowerCase().includes(search.toLowerCase())
@@ -182,6 +216,25 @@ export default function InchargeStudentRecords() {
             </span>
             {selected.cgpa > 0 && <span className="bg-blue-50 text-blue-700 font-bold text-xs px-2.5 py-0.5 rounded-lg border border-blue-200">CGPA: {selected.cgpa}</span>}
             {selected.semester > 0 && <span className="bg-purple-50 text-purple-700 font-bold text-xs px-2.5 py-0.5 rounded-lg border border-purple-200">Semester {selected.semester}</span>}
+            {selected.isactive === false && <span className="bg-red-50 text-red-600 font-bold text-xs px-2.5 py-0.5 rounded-lg border border-red-200">Deactivated</span>}
+          </div>
+          <div className="flex gap-2 mt-4">
+            <button
+              onClick={() => handleDeactivate(selected._id, selected.name)}
+              disabled={deactivating === selected._id || selected.isactive === false}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold border border-red-200 bg-red-50 text-red-600 hover:bg-red-100 transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+            >
+              <Trash2 size={12} />
+              {deactivating === selected._id ? '...' : selected.isactive === false ? 'Already Deactivated' : 'Deactivate'}
+            </button>
+            <button
+              onClick={() => handleHardDelete(selected.userId, selected._id, selected.name)}
+              disabled={deactivating === selected._id}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold border border-red-300 bg-red-600 text-white hover:bg-red-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+            >
+              <AlertTriangle size={12} />
+              {deactivating === selected._id ? '...' : 'Delete Permanently'}
+            </button>
           </div>
         </div>
 
@@ -296,7 +349,25 @@ export default function InchargeStudentRecords() {
                     <td className="py-3 px-4 text-xs text-slate-600 max-w-[160px] truncate">{s.group?.fypTitle || s.fypTitle || <span className="text-slate-400">-</span>}</td>
                     <td className="py-3 px-4 text-xs text-slate-500">{s.group ? `${s.group.memberCount} members` : <span className="text-slate-400">No group</span>}</td>
                     <td className="py-3 px-4 text-right">
-                      <span className="text-blue-600 text-[10px] font-bold flex items-center justify-end gap-0.5">View Profile <ChevronRight size={12} /></span>
+                      <div className="flex items-center justify-end gap-1.5">
+                        <button
+                          onClick={(e) => { e.stopPropagation(); handleDeactivate(s._id, s.name); }}
+                          disabled={deactivating === s._id || s.isactive === false}
+                          className="text-red-400 hover:bg-red-50 p-1.5 rounded-lg transition-colors disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer border-0 bg-transparent"
+                          title={s.isactive === false ? 'Already deactivated' : 'Deactivate student'}
+                        >
+                          <Trash2 size={13} />
+                        </button>
+                        <button
+                          onClick={(e) => { e.stopPropagation(); handleHardDelete(s.userId, s._id, s.name); }}
+                          disabled={deactivating === s._id}
+                          className="text-red-600 hover:bg-red-100 p-1.5 rounded-lg transition-colors disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer border-0 bg-transparent"
+                          title="Delete permanently"
+                        >
+                          <AlertTriangle size={13} />
+                        </button>
+                        <span className="text-blue-600 text-[10px] font-bold flex items-center gap-0.5 ml-1">View <ChevronRight size={12} /></span>
+                      </div>
                     </td>
                   </tr>
                 ))}

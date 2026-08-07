@@ -4,7 +4,7 @@ import { PhaseProvider, usePhase } from '../../contexts/PhaseContext';
 import { SessionProvider, useSession } from '../../contexts/SessionContext';
 import { showToast as toast } from '../AppToast';
 import { logoutUser, getCurrentUser } from '../../services/auth.service';
-import { AlertCircle, BarChart3, Bell, Calendar, ChevronDown, ChevronLeft, ChevronRight, ClipboardList, GraduationCap, GitBranch, History, Home, Layers, Lock, LogOut, Menu, Scale, ToggleRight, Users, X } from 'lucide-react';
+import { AlertCircle, BarChart3, Bell, Calendar, ChevronDown, ChevronLeft, ChevronRight, ClipboardList, File, GraduationCap, GitBranch, History, Home, Layers, Loader2, Lock, LogOut, Mail, Menu, Presentation, Scale, ToggleRight, Users, X } from 'lucide-react';
 
 const SessionDropdown = () => {
   const { sessions, selectedSession, setSelectedSession, loading } = useSession();
@@ -136,29 +136,34 @@ const LayoutInner = () => {
 
   const roleLabel = 'FYP Office In-charge';
 
-  const navLinks = [
-    { to: '/office-incharge/dashboard', icon: Home, label: 'Dashboard', section: 'Overview' },
-    { to: '/office-incharge/phases', icon: ToggleRight, label: 'Phase Control', section: 'Overview' },
-    { to: '/office-incharge/eval-committee', icon: Layers, label: 'Evaluation Committees', section: 'Committees & Scheduling' },
-    { to: '/office-incharge/committee-oversight', icon: Users, label: 'Committee Oversight', section: 'Committees & Scheduling' },
-    { to: '/office-incharge/timetable', icon: Calendar, label: 'Timetable Management', section: 'Committees & Scheduling' },
-    { to: '/office-incharge/meeting-timetable', icon: Users, label: 'Meeting Timetable', section: 'Committees & Scheduling' },
-    { to: '/office-incharge/rubrics', icon: ClipboardList, label: 'Rubric Builder', section: 'Curriculum' },
-    { to: '/office-incharge/sessions', icon: Calendar, label: 'Academic Sessions', section: 'Curriculum' },
-    { to: '/office-incharge/projects', icon: GitBranch, label: 'Project Directory', section: 'Records' },
-    { to: '/office-incharge/student-reports', icon: GraduationCap, label: 'Student Records', section: 'Records' },
-    { to: '/office-incharge/forwarded-proposals', icon: GitBranch, label: 'Forwarded Proposals', section: 'Records' },
-    { to: '/office-incharge/phase1-marks', icon: BarChart3, label: 'Phase 1 (10%) Marks', section: 'Marks', showPhaseKey: 'phase1_evaluation' },
-    { to: '/office-incharge/phase2-marks', icon: BarChart3, label: 'Phase 2 (30%) Marks', section: 'Marks', showPhaseKey: 'phase2_evaluation' },
-    { to: '/office-incharge/phase3-marks', icon: BarChart3, label: 'Phase 3 (60%) Marks', section: 'Marks', showPhaseKey: 'phase3_evaluation' },
-    { to: '/office-incharge/phase4-marks', icon: BarChart3, label: 'Phase 4 (100%) Marks', section: 'Marks', showPhaseKey: 'phase4_evaluation' },
-    { to: '/office-incharge/final-marks', icon: ClipboardList, label: 'Final Calculated Marks', section: 'Marks' },
-    { to: '/office-incharge/grievances', icon: Scale, label: 'Grievances & SLAs', section: 'Audit & Logs' },
-    { to: '/office-incharge/audit-log', icon: History, label: 'System Audit Logs', section: 'Audit & Logs' },
-  ].filter(link => {
-    if (!link.showPhaseKey) return true;
-    return currentPhase?.key === link.showPhaseKey;
-  });
+  const allNavLinks = [
+    { to: '/office-incharge/dashboard', icon: Home, label: 'Dashboard', section: 'Overview', phases: ['registration', 'proposal_submission', 'proposal_defense', 'phase1_development', 'phase1_evaluation'] },
+    { to: '/office-incharge/phases', icon: ToggleRight, label: 'Phase Control', section: 'Overview', phases: ['registration', 'proposal_submission', 'proposal_defense', 'phase1_development', 'phase1_evaluation'] },
+    { to: '/office-incharge/users', icon: Users, label: 'User Management', section: 'Accounts', phases: ['registration', 'proposal_submission', 'proposal_defense', 'phase1_development', 'phase1_evaluation'] },
+    { to: '/office-incharge/students', icon: GraduationCap, label: 'Student Records', section: 'Accounts', phases: ['registration', 'proposal_submission', 'proposal_defense', 'phase1_development', 'phase1_evaluation'] },
+    { to: '/office-incharge/faculty', icon: Presentation, label: 'Faculty Profiles', section: 'Accounts', phases: ['registration', 'proposal_submission', 'proposal_defense', 'phase1_development', 'phase1_evaluation'] },
+    { to: '/office-incharge/eval-committee', icon: Layers, label: 'Evaluation Committees', section: 'Committees & Scheduling', phases: ['proposal_submission', 'proposal_defense'] },
+    { to: '/office-incharge/committee-oversight', icon: Users, label: 'Committee Oversight', section: 'Committees & Scheduling', phases: ['proposal_submission', 'proposal_defense'] },
+    { to: '/office-incharge/timetable', icon: Calendar, label: 'Timetable Management', section: 'Committees & Scheduling', phases: ['proposal_submission', 'proposal_defense'] },
+    { to: '/office-incharge/meeting-timetable', icon: Users, label: 'Meeting Timetable', section: 'Committees & Scheduling', phases: ['proposal_submission', 'proposal_defense'] },
+    { to: '/office-incharge/rubrics', icon: ClipboardList, label: 'Rubric Builder', section: 'Curriculum', phases: ['proposal_submission', 'proposal_defense', 'phase1_evaluation'] },
+    { to: '/office-incharge/sessions', icon: Calendar, label: 'Academic Sessions', section: 'Curriculum', phases: ['proposal_submission', 'proposal_defense', 'phase1_development'] },
+    { to: '/office-incharge/projects', icon: GitBranch, label: 'Project Directory', section: 'Records', phases: ['registration', 'proposal_submission', 'proposal_defense', 'phase1_development', 'phase1_evaluation'] },
+    { to: '/office-incharge/forwarded-proposals', icon: GitBranch, label: 'Forwarded Proposals', section: 'Records', phases: ['proposal_submission', 'proposal_defense'] },
+    { to: '/office-incharge/student-reports', icon: GraduationCap, label: 'Student Reports', section: 'Reports', phases: ['registration', 'proposal_submission', 'proposal_defense', 'phase1_development', 'phase1_evaluation'] },
+    { to: '/office-incharge/faculty-reports', icon: Presentation, label: 'Faculty Reports', section: 'Reports', phases: ['registration', 'proposal_submission', 'proposal_defense', 'phase1_development', 'phase1_evaluation'] },
+    { to: '/office-incharge/phase1-marks', icon: BarChart3, label: 'Phase 1 (10%) Marks', section: 'Marks', phases: ['phase1_evaluation'] },
+    { to: '/office-incharge/phase2-marks', icon: BarChart3, label: 'Phase 2 (30%) Marks', section: 'Marks', phases: [] },
+    { to: '/office-incharge/phase3-marks', icon: BarChart3, label: 'Phase 3 (60%) Marks', section: 'Marks', phases: [] },
+    { to: '/office-incharge/phase4-marks', icon: BarChart3, label: 'Phase 4 (100%) Marks', section: 'Marks', phases: [] },
+    { to: '/office-incharge/final-marks', icon: ClipboardList, label: 'Final Calculated Marks', section: 'Marks', phases: [] },
+    { to: '/office-incharge/content', icon: File, label: 'Content Management', section: 'Audit & Logs', phases: ['registration', 'proposal_submission', 'proposal_defense', 'phase1_development', 'phase1_evaluation'] },
+    { to: '/office-incharge/email', icon: Mail, label: 'Email Center', section: 'Audit & Logs', phases: ['registration', 'proposal_submission', 'proposal_defense', 'phase1_development', 'phase1_evaluation'] },
+    { to: '/office-incharge/grievances', icon: Scale, label: 'Grievances & SLAs', section: 'Audit & Logs', phases: ['registration', 'proposal_submission', 'proposal_defense', 'phase1_development', 'phase1_evaluation'] },
+    { to: '/office-incharge/audit-log', icon: History, label: 'System Audit Logs', section: 'Audit & Logs', phases: ['registration', 'proposal_submission', 'proposal_defense', 'phase1_development', 'phase1_evaluation'] },
+  ];
+  const phaseKey = currentPhase?.key || '';
+  const navLinks = allNavLinks.filter(link => link.phases.includes(phaseKey));
 
   return (
     <div className="flex h-screen overflow-hidden relative bg-surface selection:bg-blue-100 selection:text-blue-900 font-poppins">

@@ -14,10 +14,12 @@ export default function Header() {
     }, []);
 
     const navLinks = [
+        { name: "Home", href: "/" },
         { name: "About", href: "/about" },
         { name: "Eligibility", href: "/eligibility" },
         { name: "Process", href: "/process" },
         { name: "Guidelines", href: "/guidelines" },
+        { name: "Announcements", href: "/announcements" },
         { name: "Team", href: "/team" },
         { name: "FAQ", href: "/faq" },
         { name: "Contact", href: "/contact" },

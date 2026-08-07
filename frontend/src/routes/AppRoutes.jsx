@@ -5,7 +5,8 @@ import About from "../pages/About";
 import Contact from "../pages/Contact";
 import FAQ from "../pages/FAQ";
 import Team from "../pages/Team";
-import StudentPortal from "../pages/StudentPortal";
+import AnnouncementsPage from "../pages/Announcements";
+
 import Guidelines from "../pages/Guidelines";
 import Eligibility from "../pages/Eligibility";
 import Login from "../pages/Login";
@@ -27,9 +28,7 @@ import MyPresentations from "../pages/shared/MyPresentations";
 import HodLayout from '../components/hod/HodLayout';
 import HodDashboard from '../pages/hod/HodDashboard';
 import HodEscalations from '../pages/hod/HodEscalations';
-import HodFacultyOversight from '../pages/hod/HodFacultyOversight';
 import HodGovernance from '../pages/hod/HodGovernance';
-import HodAnalytics from '../pages/hod/HodAnalytics';
 import HodStudents from '../pages/hod/HodStudents';
 import HodCommittees from '../pages/hod/HodCommittees';
 import HodFaculty from '../pages/hod/HodFaculty';
@@ -87,6 +86,8 @@ import InchargeCommitteeOversight from '../pages/office-incharge/InchargeCommitt
 import TimetableManagement from '../pages/office-incharge/TimetableManagement';
 import MeetingTimetable from '../pages/office-incharge/MeetingTimetable';
 import InchargeGrievances from '../pages/office-incharge/InchargeGrievances';
+import EmailCenter from '../pages/shared/EmailCenter';
+import ContentManagement from '../pages/shared/ContentManagement';
 import InchargeFacultyReports from '../pages/office-incharge/InchargeFacultyReports';
 import InchargeStudentReports from '../pages/office-incharge/InchargeStudentReports';
 import InchargeAuditLog from '../pages/office-incharge/InchargeAuditLog';
@@ -114,10 +115,10 @@ const AppRoutes = () => {
             <Route path="/contact" element={<Contact />} />
             <Route path="/faq" element={<FAQ />} />
             <Route path="/team" element={<Team />} />
+            <Route path="/announcements" element={<AnnouncementsPage />} />
             <Route path="/guidelines" element={<Guidelines />} />
             <Route path="/eligibility" element={<Eligibility />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/student-portal" element={<StudentPortal />} />
             <Route path="/set-password" element={<SetPassword />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
 
@@ -144,9 +145,7 @@ const AppRoutes = () => {
                 <Route index element={<Navigate to="dashboard" replace />} />
                 <Route path="dashboard" element={<HodDashboard />} />
                 <Route path="escalations" element={<HodEscalations />} />
-                <Route path="faculty-oversight" element={<HodFacultyOversight />} />
                 <Route path="governance" element={<HodGovernance />} />
-                <Route path="analytics" element={<HodAnalytics />} />
                 <Route path="students" element={<HodStudents />} />
                 <Route path="committees" element={<HodCommittees />} />
                 <Route path="faculty" element={<HodFaculty />} />
@@ -175,6 +174,9 @@ const AppRoutes = () => {
                 <Route path="phase3-marks" element={<AssistantPhase3Marks />} />
                 <Route path="phase4-marks" element={<AssistantPhase4Marks />} />
                 <Route path="final-marks" element={<AssistantFinalMarks />} />
+                <Route path="grievances" element={<InchargeGrievances />} />
+                <Route path="email" element={<EmailCenter />} />
+                <Route path="content" element={<ContentManagement />} />
             </Route>
 
             {/* Faculty Supervisor Layout Routes */}
@@ -208,6 +210,8 @@ const AppRoutes = () => {
                 <Route path="phases" element={<InchargePhaseControl />} />
                 <Route path="rubrics" element={<InchargeRubrics />} />
                 <Route path="sessions" element={<InchargeSessions />} />
+                <Route path="users" element={<AssistantUsers />} />
+                <Route path="students" element={<AssistantStudents />} />
                 <Route path="projects" element={<AssistantProjects />} />
                 <Route path="eval-committee" element={<AssistantEvalCommittees />} />
                 <Route path="committee-oversight" element={<InchargeCommitteeOversight />} />
@@ -223,6 +227,10 @@ const AppRoutes = () => {
                 <Route path="phase3-marks" element={<InchargePhase3Marks />} />
                 <Route path="phase4-marks" element={<InchargePhase4Marks />} />
                 <Route path="final-marks" element={<InchargeFinalMarks />} />
+                <Route path="faculty" element={<AssistantFaculty />} />
+                <Route path="faculty/:id" element={<SupervisorDetail />} />
+                <Route path="email" element={<EmailCenter />} />
+                <Route path="content" element={<ContentManagement />} />
             </Route>
 
             {/* Catch-all */}

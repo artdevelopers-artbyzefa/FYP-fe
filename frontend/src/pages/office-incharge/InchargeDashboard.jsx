@@ -18,16 +18,18 @@ const InchargeDashboard = () => {
       .finally(() => setLoading(false));
   }, []);
 
-  const quickLinks = [
-    { onClick: () => navigate('/office-incharge/phases'), icon: ToggleRight, title: 'Phase Control', desc: 'Activate or switch academic phases.' },
-    { onClick: () => navigate('/office-incharge/rubrics'), icon: ClipboardList, title: 'Rubric Builder', desc: 'Design proposal & CLO evaluation rubrics.' },
-    { onClick: () => navigate('/office-incharge/sessions'), icon: Calendar, title: 'Academic Sessions', desc: 'Configure milestone deadlines.' },
-    { onClick: () => navigate('/office-incharge/supervision-requests'), icon: UserPlus, title: 'Supervision Requests', desc: 'Review and process faculty supervision requests.' },
-    { onClick: () => navigate('/office-incharge/committee-oversight'), icon: Users, title: 'Committee Oversight', desc: 'Monitor active boards and manage head change requests.' },
-    { onClick: () => navigate('/office-incharge/faculty-reports'), icon: BarChart3, title: 'Faculty Overview', desc: 'View faculty reports and performance.' },
-    { onClick: () => navigate('/office-incharge/grievances'), icon: Scale, title: 'Grievance & SLAs', desc: 'Resolve student disputes and monitor SLA windows.' },
-    { locked: true, icon: GraduationCap, title: 'Student Reports', desc: 'Locked during Phase 2.' },
+  const allQuickLinks = [
+    { onClick: () => navigate('/office-incharge/phases'), icon: ToggleRight, title: 'Phase Control', desc: 'Activate or switch academic phases.', phases: ['registration', 'proposal_submission', 'proposal_defense', 'phase1_development', 'phase1_evaluation'] },
+    { onClick: () => navigate('/office-incharge/rubrics'), icon: ClipboardList, title: 'Rubric Builder', desc: 'Design proposal & CLO evaluation rubrics.', phases: ['proposal_submission', 'proposal_defense', 'phase1_evaluation'] },
+    { onClick: () => navigate('/office-incharge/sessions'), icon: Calendar, title: 'Academic Sessions', desc: 'Configure milestone deadlines.', phases: ['proposal_submission', 'proposal_defense', 'phase1_development'] },
+    { onClick: () => navigate('/office-incharge/supervision-requests'), icon: UserPlus, title: 'Supervision Requests', desc: 'Review and process faculty supervision requests.', phases: ['proposal_submission', 'proposal_defense'] },
+    { onClick: () => navigate('/office-incharge/committee-oversight'), icon: Users, title: 'Committee Oversight', desc: 'Monitor active boards and manage head change requests.', phases: ['proposal_submission', 'proposal_defense'] },
+    { onClick: () => navigate('/office-incharge/faculty-reports'), icon: BarChart3, title: 'Faculty Overview', desc: 'View faculty reports and performance.', phases: ['proposal_submission', 'proposal_defense', 'phase1_development', 'phase1_evaluation'] },
+    { onClick: () => navigate('/office-incharge/grievances'), icon: Scale, title: 'Grievance & SLAs', desc: 'Resolve student disputes and monitor SLA windows.', phases: ['registration', 'proposal_submission', 'proposal_defense', 'phase1_development', 'phase1_evaluation'] },
+    { locked: true, icon: GraduationCap, title: 'Student Reports', desc: 'Locked during Phase 2.', phases: ['registration', 'proposal_submission', 'proposal_defense', 'phase1_development', 'phase1_evaluation'] },
   ];
+  const phaseKey = currentPhase?.key || '';
+  const quickLinks = allQuickLinks.filter(link => link.phases.includes(phaseKey));
 
   return (
     <div className="space-y-6">

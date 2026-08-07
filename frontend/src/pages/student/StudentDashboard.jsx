@@ -72,20 +72,25 @@ export default function Dashboard() {
           <div className="bg-white/50 rounded-2xl border border-line overflow-hidden grid grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0 divide-slate-50">
             <div className="p-3 md:p-4 flex flex-col items-center md:items-start transition-colors hover:bg-white">
               <p className="text-[8px] md:text-[9px] font-bold text-slate-900 tracking-widest mb-1 md:mb-1.5">Father's Name</p>
-              <p className="text-[10px] md:text-xs font-bold text-slate-900 truncate w-full text-center md:text-left">{profile.fatherName}</p>
+              <p className="text-[10px] md:text-xs font-bold text-slate-900 truncate w-full text-center md:text-left">{profile.fatherName || 'Not set'}</p>
             </div>
             <div className="p-3 md:p-4 flex flex-col items-center md:items-start transition-colors hover:bg-white">
               <p className="text-[8px] md:text-[9px] font-bold text-slate-900 tracking-widest mb-1 md:mb-1.5">Classification</p>
-              <p className="text-[10px] md:text-xs font-bold text-slate-900 text-center md:text-left">Sem {profile.semester} / {profile.section}</p>
+              <p className="text-[10px] md:text-xs font-bold text-slate-900 text-center md:text-left">Sem {profile.semester || '?'} / {profile.section || '?'}</p>
             </div>
             <div className="p-3 md:p-4 flex flex-col items-center md:items-start transition-colors hover:bg-white">
               <p className="text-[8px] md:text-[9px] font-bold text-slate-900 tracking-widest mb-1 md:mb-1.5">Academic Merit</p>
-              <p className="text-[10px] md:text-xs font-bold text-slate-900 text-center md:text-left">{profile.cgpa} CGPA</p>
+              <p className="text-[10px] md:text-xs font-bold text-slate-900 text-center md:text-left">{profile.cgpa || '0'} CGPA</p>
             </div>
             <div className="p-3 md:p-4 flex flex-col items-center md:items-start transition-colors hover:bg-white">
               <p className="text-[8px] md:text-[9px] font-bold text-slate-900 tracking-widest mb-1 md:mb-1.5">Course</p>
               <p className="text-[10px] md:text-xs font-bold text-slate-900 truncate w-full text-center md:text-left">FYP-1</p>
             </div>
+          </div>
+          <div className="mt-4 flex justify-end">
+            <Link to="/profile" className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 hover:text-blue-800 transition-colors">
+              Edit Profile <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
           </div>
         </div>
       </motion.div>
